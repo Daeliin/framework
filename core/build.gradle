@@ -1,5 +1,7 @@
 version = '0.1-SNAPSHOT'
+apply plugin: 'application'
+mainClassName = 'com.daeliin.framework.core.Main'
 
 dependencies {
-	compile project(':commons')
+    compile project(':commons')
 }
