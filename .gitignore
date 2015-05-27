@@ -1,12 +1,18 @@
-*.class
+# Netbeans
+.gradle
+nbproject
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+# Gradle
+build
 
-# Package Files #
-*.jar
-*.war
-*.ear
+# Maven
+target
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+# Node & Bower
+node_modules
+dist
+.tmp
+.sass-cache
+bower_components
+npm-debug.log
+/.nb-gradle/

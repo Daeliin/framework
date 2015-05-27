@@ -1,0 +1,39 @@
+subprojects {
+    apply plugin: 'java'
+    
+    ext {
+        commonsLangVersion = '3.4'
+        lombockVersion = '1.16.4'
+    }
+
+    configurations {
+        provided
+    }
+     
+    sourceSets {
+        main.compileClasspath += configurations.provided
+        test.compileClasspath += configurations.provided
+        test.runtimeClasspath += configurations.provided
+    }
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {    
+        // Apache commons
+        compile "org.apache.commons:commons-lang3:$commonsLangVersion"
+        
+        // Lombock
+        provided "org.projectlombok:lombok:$lombockVersion"
+    }
+}
+
+version = '0.1-SNAPSHOT'
+
+task wrapper(type: Wrapper) { 
+    gradleVersion = '2.4' 
+}
