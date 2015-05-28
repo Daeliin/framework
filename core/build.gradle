@@ -1,7 +1,13 @@
 version = '0.1-SNAPSHOT'
-apply plugin: 'application'
-mainClassName = 'com.daeliin.framework.core.Main'
+
+ext {
+    springDataJpaVersion = '1.8.0.RELEASE';
+}
 
 dependencies {
+    // Daeliin
     compile project(':commons')
+    
+    // Spring
+    compile "org.springframework.data:spring-data-jpa:$springDataJpaVersion"
 }
