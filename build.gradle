@@ -2,14 +2,25 @@ version = '0.1-SNAPSHOT'
 
 subprojects {
     apply plugin: 'java'
-    
+    group = 'com.daeliin.framework'
+
     ext {
-        groovyVersion = '2.4.3'
+        springBootVersion = '1.2.4.RELEASE'
         logbackVersion = '1.1.3'
         commonsLangVersion = '3.4'
         lombockVersion = '1.16.4'
     }
+    
+    buildscript {
+        repositories {
+            mavenCentral()
+        }
 
+        dependencies {
+            classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
+        }
+    }
+    
     configurations {
         provided
     }
@@ -28,9 +39,6 @@ subprojects {
     }
 
     dependencies {    
-        // Groovy
-        compile "org.codehaus.groovy:groovy-all:$groovyVersion"
-
         // Logback
         compile "ch.qos.logback:logback-classic:$logbackVersion"
         

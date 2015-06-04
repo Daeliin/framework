@@ -1,10 +1,18 @@
-apply plugin: 'application'
-
 version = '0.1-SNAPSHOT'
 
-mainClassName = 'com.daeliin.framework.Main'
+apply plugin: 'spring-boot'
+
+ext {
+    groovyVersion = '2.4.3'
+}
 
 dependencies {
     // Daeliin
     compile project(':core')
+    
+    // Groovy
+    compile "org.codehaus.groovy:groovy-all:$groovyVersion"
+    
+    // Spring
+    compile "org.springframework.boot:spring-boot-starter-web"
 }

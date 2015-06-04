@@ -1,7 +1,21 @@
 version = '0.1-SNAPSHOT'
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
+    }
+}
+
+apply plugin: 'spring-boot'
+
+mainClassName = 'com.daeliin.framework.core.Main'
+
 ext {
-    springDataJpaVersion = '1.8.0.RELEASE';
+    springWebMvcVersion = '4.1.6.RELEASE'
 }
 
 dependencies {
@@ -9,5 +23,9 @@ dependencies {
     compile project(':commons')
     
     // Spring
-    compile "org.springframework.data:spring-data-jpa:$springDataJpaVersion"
+    compile "org.springframework.boot:spring-boot-starter-data-jpa"
+    compile "org.springframework:spring-webmvc:$springWebMvcVersion"
+    
+    // H2 Database
+    compile "com.h2database:h2"
 }

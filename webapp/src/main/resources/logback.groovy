@@ -10,4 +10,4 @@ appender("STDOUT", ConsoleAppender) {
 }
 
 root(DEBUG, ["STDOUT"])
-logger("com.daleiin.framework.core", DEBUG)
+logger("com.daleiin.framework", DEBUG)
