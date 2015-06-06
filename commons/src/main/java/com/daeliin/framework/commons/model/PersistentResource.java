@@ -4,10 +4,11 @@ import java.io.Serializable;
 
 /**
  * Entity saved in a RDBMS.
+ * @param <ID> id column type
  */
-public interface PersistentResource extends Serializable {
+public interface PersistentResource<ID extends Serializable> {
     
-    Long getId();
+    ID getId();
 
-    PersistentResource setId(Long id);
+    void setId(ID id);
 }

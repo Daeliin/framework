@@ -6,9 +6,11 @@ subprojects {
 
     ext {
         springBootVersion = '1.2.4.RELEASE'
+        groovyVersion = '2.4.3'
         logbackVersion = '1.1.3'
         commonsLangVersion = '3.4'
         lombockVersion = '1.16.4'
+        testNgVersion = '6.9.4'
     }
     
     buildscript {
@@ -38,7 +40,10 @@ subprojects {
         mavenCentral()
     }
 
-    dependencies {    
+    dependencies {
+        // Groovy
+        compile "org.codehaus.groovy:groovy-all:$groovyVersion"
+    
         // Logback
         compile "ch.qos.logback:logback-classic:$logbackVersion"
         
@@ -47,6 +52,9 @@ subprojects {
         
         // Lombock
         provided "org.projectlombok:lombok:$lombockVersion"
+        
+        // Test
+        testCompile "org.testng:testng:$testNgVersion"
     }
 }
 

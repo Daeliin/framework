@@ -1,15 +1,5 @@
 version = '0.1-SNAPSHOT'
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
-    }
-}
-
 apply plugin: 'spring-boot'
 
 mainClassName = 'com.daeliin.framework.core.Main'
@@ -23,5 +13,5 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
     
     // H2 Database
-    compile "com.h2database:h2"
+    testCompile "com.h2database:h2"
 }
