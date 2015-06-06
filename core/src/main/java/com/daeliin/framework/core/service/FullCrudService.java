@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-public interface RepositoryBasedService<E extends PersistentResource, ID extends Serializable> {
+public interface FullCrudService<E extends PersistentResource, ID extends Serializable> {
     
     E save(E resource);
 

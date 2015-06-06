@@ -15,6 +15,7 @@ public class User implements PersistentResource {
     @GeneratedValue
     private Long id;
     
+    @NotBlank
     private String name;
 
     public User() {
