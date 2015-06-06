@@ -14,17 +14,13 @@ apply plugin: 'spring-boot'
 
 mainClassName = 'com.daeliin.framework.core.Main'
 
-ext {
-    springWebMvcVersion = '4.1.6.RELEASE'
-}
-
 dependencies {
     // Daeliin
     compile project(':commons')
     
     // Spring
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
-    compile "org.springframework:spring-webmvc:$springWebMvcVersion"
+    compile "org.springframework.boot:spring-boot-starter-web"
     
     // H2 Database
     compile "com.h2database:h2"

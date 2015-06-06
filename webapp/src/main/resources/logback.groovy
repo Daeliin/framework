@@ -9,5 +9,5 @@ appender("STDOUT", ConsoleAppender) {
     }
 }
 
-root(DEBUG, ["STDOUT"])
+root(INFO, ["STDOUT"])
 logger("com.daleiin.framework", DEBUG)
