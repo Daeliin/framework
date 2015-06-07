@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Resource saved in a RDBMS and identified by a numeric id, equality is only based on id.
+ */
 @Getter
 @Setter
 @EqualsAndHashCode(of = "id")

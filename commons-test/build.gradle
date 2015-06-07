@@ -1,0 +1,20 @@
+version = '0.1-SNAPSHOT'
+
+apply plugin: 'spring-boot'
+
+mainClassName = 'com.daeliin.framework.commons.test.Main'
+
+ext {
+    testNgVersion = '6.9.4'
+}
+
+dependencies {
+    // Daeliin
+    compile project(':commons')
+    
+    // Spring
+    compile "org.testng:testng:$testNgVersion"
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-data-jpa"
+    compile "org.springframework.boot:spring-boot-starter-test"
+}

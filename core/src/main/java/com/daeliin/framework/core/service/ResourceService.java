@@ -1,7 +1,7 @@
 package com.daeliin.framework.core.service;
 
 import com.daeliin.framework.commons.model.PersistentResource;
-import com.daeliin.framework.core.repository.ResourceRepository;
+import com.daeliin.framework.core.repository.FullCrudRepository;
 import java.io.Serializable;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +9,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+/**
+ * Provides CRUD operations and pagination for a resource.
+ * @param <E> resource type
+ * @param <ID> resource id type
+ * @param <R> resource repository 
+ */
 @Service
-public abstract class ResourceService<E extends PersistentResource, ID extends Serializable, R extends ResourceRepository<E, ID>> implements FullCrudService<E, ID>  {
+public abstract class ResourceService<E extends PersistentResource, ID extends Serializable, R extends FullCrudRepository<E, ID>> implements FullCrudService<E, ID>  {
     
     @Autowired
     protected R repository;
@@ -79,6 +85,4 @@ public abstract class ResourceService<E extends PersistentResource, ID extends S
     public void deleteAll() {
         repository.deleteAll();
     }
-    
-    
 }

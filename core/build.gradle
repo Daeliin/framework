@@ -11,7 +11,8 @@ dependencies {
     // Spring
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
     compile "org.springframework.boot:spring-boot-starter-web"
-    
-    // H2 Database
+        
+    // Test
+    testCompile project(':commons-test')
     testCompile "com.h2database:h2"
 }

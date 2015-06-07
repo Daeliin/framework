@@ -10,7 +10,6 @@ subprojects {
         logbackVersion = '1.1.3'
         commonsLangVersion = '3.4'
         lombockVersion = '1.16.4'
-        testNgVersion = '6.9.4'
     }
     
     buildscript {
@@ -52,12 +51,11 @@ subprojects {
         
         // Lombock
         provided "org.projectlombok:lombok:$lombockVersion"
-        
-        // Test
-        testCompile "org.testng:testng:$testNgVersion"
     }
 }
 
-task wrapper(type: Wrapper) { 
-    gradleVersion = '2.4' 
+allprojects {
+    task wrapper(type: Wrapper) { 
+        gradleVersion = '2.4' 
+    }
 }
