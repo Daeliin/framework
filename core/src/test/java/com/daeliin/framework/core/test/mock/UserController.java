@@ -1,4 +1,4 @@
-package com.daeliin.framework;
+package com.daeliin.framework.core.test.mock;
 
 import com.daeliin.framework.core.controller.ResourceController;
 import org.springframework.web.bind.annotation.RequestMapping;

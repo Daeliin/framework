@@ -1,4 +1,4 @@
-package com.daeliin.framework;
+package com.daeliin.framework.sample;
 
 import com.daeliin.framework.commons.model.LongIdPersistentResource;
 import javax.persistence.Entity;

@@ -1,4 +1,4 @@
-package com.daeliin.framework;
+package com.daeliin.framework.sample;
 
 import com.daeliin.framework.core.service.ResourceService;
 import org.springframework.stereotype.Service;

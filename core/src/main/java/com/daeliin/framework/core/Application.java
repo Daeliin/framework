@@ -1,4 +1,4 @@
-package com.daeliin.framework;
+package com.daeliin.framework.core;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

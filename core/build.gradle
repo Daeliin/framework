@@ -2,8 +2,6 @@ version = '0.1-SNAPSHOT'
 
 apply plugin: 'spring-boot'
 
-mainClassName = 'com.daeliin.framework.core.Main'
-
 dependencies {
     // Daeliin
     compile project(':commons')

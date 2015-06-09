@@ -15,7 +15,6 @@ public abstract class IntegrationTest extends AbstractTransactionalTestNGSpringC
     @Autowired 
     protected WebApplicationContext webApplicationContext;
     
-    @Autowired
     protected MockMvc mockMvc;
     
     @BeforeClass

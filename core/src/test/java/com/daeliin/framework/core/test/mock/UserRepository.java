@@ -1,4 +1,4 @@
-package com.daeliin.framework;
+package com.daeliin.framework.core.test.mock;
 
 import com.daeliin.framework.core.repository.FullCrudRepository;
 import org.springframework.stereotype.Repository;
