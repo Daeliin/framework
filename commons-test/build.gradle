@@ -2,8 +2,6 @@ version = '0.1-SNAPSHOT'
 
 apply plugin: 'spring-boot'
 
-mainClassName = 'com.daeliin.framework.commons.test.Main'
-
 ext {
     testNgVersion = '6.9.4'
 }

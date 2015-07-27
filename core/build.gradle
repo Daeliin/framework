@@ -2,6 +2,10 @@ version = '0.1-SNAPSHOT'
 
 apply plugin: 'spring-boot'
 
+ext {
+    testNgVersion = '6.9.4'
+}
+
 dependencies {
     // Daeliin
     compile project(':commons')

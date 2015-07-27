@@ -52,6 +52,10 @@ subprojects {
         // Lombock
         provided "org.projectlombok:lombok:$lombockVersion"
     }
+    
+    test {
+        useTestNG() 
+    }
 }
 
 allprojects {

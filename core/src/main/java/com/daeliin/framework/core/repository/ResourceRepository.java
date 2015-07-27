@@ -11,5 +11,5 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  * @param <ID> resource id type  
  */
 @NoRepositoryBean
-public interface FullCrudRepository<E extends PersistentResource, ID extends Serializable> extends PagingAndSortingRepository<E, ID> {
+public interface ResourceRepository<E extends PersistentResource, ID extends Serializable> extends PagingAndSortingRepository<E, ID> {
 }

@@ -20,5 +20,15 @@ public abstract class LongIdPersistentResource implements PersistentResource<Lon
     
     @Id
     @GeneratedValue
-    private Long id;
+    protected Long id;
+    
+    @Override
+    public Long getId() {
+        return this.id;
+    }
+    
+    @Override
+    public void setId(final Long id) {
+        this.id = id;
+    }
 }

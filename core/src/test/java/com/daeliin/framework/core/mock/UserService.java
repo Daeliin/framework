@@ -1,4 +1,4 @@
-package com.daeliin.framework.sample;
+package com.daeliin.framework.core.mock;
 
 import com.daeliin.framework.core.service.ResourceService;
 import org.springframework.stereotype.Service;
