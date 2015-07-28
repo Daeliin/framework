@@ -55,6 +55,10 @@ subprojects {
     
     test {
         useTestNG() 
+        
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
     }
 }
 

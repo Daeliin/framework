@@ -1,6 +1,7 @@
 package com.daeliin.framework.core.controller;
 
 import com.daeliin.framework.commons.model.PersistentResource;
+import com.daeliin.framework.core.exception.ResourceNotFoundException;
 import com.daeliin.framework.core.service.FullCrudService;
 import java.io.Serializable;
 import javax.validation.Valid;
@@ -61,7 +62,7 @@ public abstract class ResourceController<E extends PersistentResource, ID extend
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     @Override
-    public E getOne(@PathVariable ID id) {
+    public E getOne(@PathVariable ID id) throws ResourceNotFoundException {
         return service.findOne(id);
     }
     

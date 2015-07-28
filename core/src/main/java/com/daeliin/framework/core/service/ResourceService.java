@@ -1,6 +1,7 @@
 package com.daeliin.framework.core.service;
 
 import com.daeliin.framework.commons.model.PersistentResource;
+import com.daeliin.framework.core.exception.ResourceNotFoundException;
 import com.daeliin.framework.core.repository.ResourceRepository;
 import java.io.Serializable;
 import org.springframework.stereotype.Service;
@@ -42,8 +43,18 @@ public abstract class ResourceService<E extends PersistentResource, ID extends S
     }
 
     @Override
-    public E findOne(ID id) {
-        return repository.findOne(id);
+    public E findOne(ID id) throws ResourceNotFoundException {
+        E resource = null;
+        
+        if (id != null) {
+            resource = repository.findOne(id);
+        }
+        
+        if (resource == null) {
+            throw new ResourceNotFoundException();
+        }
+        
+        return resource;
     }
 
     @Override
