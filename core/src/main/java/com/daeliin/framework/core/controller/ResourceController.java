@@ -40,7 +40,7 @@ public abstract class ResourceController<E extends PersistentResource, ID extend
     protected S service;
 
     /**
-     * Exposes a create entry point, returns the created resource and a 201 if the resource is valid and a 412 otherwise.
+     * Exposes a create entry point, returns the created resource and a 201 if the resource is valid and a 400 otherwise.
      * @param resource resource to create
      * @return created resource
      */
@@ -89,7 +89,7 @@ public abstract class ResourceController<E extends PersistentResource, ID extend
     }
     
     /**
-     * Exposes an update entry point, returns the updated resource and a 200 if the resource is valid, and a 412 otherwise.
+     * Exposes an update entry point, returns the updated resource and a 200 if the resource is valid, and a 400 otherwise.
      * @param resource resource to update
      * @return updated resource 
      */
