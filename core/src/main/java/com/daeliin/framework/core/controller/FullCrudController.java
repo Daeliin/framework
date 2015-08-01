@@ -38,11 +38,12 @@ public interface FullCrudController<E extends PersistentResource, ID extends Ser
     Page<E> getAll(int pageNumber, int pageSize, Sort.Direction direction, String... properties);
     
     /**
-     * Exposes an update entry point.
+     * Exposes an update by id entry point.
+     * @param id resource id
      * @param resource resource to update
      * @return updated resource 
      */
-    E update(E resource);
+    E update(ID id, E resource);
     
     /**
      * Exposes a delete by id entry point.

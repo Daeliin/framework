@@ -14,12 +14,20 @@ import org.springframework.data.domain.Sort;
 public interface FullCrudService<E extends PersistentResource, ID extends Serializable> {
    
     /**
-     * Saves or updates a resource.
+     * Creates a resource.
      * @param resource resource to create or update
      * @return updated resource
      */
-    E save(E resource);
-
+    E create(E resource);
+    
+    /**
+     * Updates a resource by id.
+     * @param id resource id 
+     * @param resource resource to create or update
+     * @return updated resource
+     */
+    E update(ID id, E resource);
+    
     /**
      * Saves or updates mulitple resources.
      * @param iterable resources to create or update

@@ -23,7 +23,16 @@ public abstract class ResourceService<E extends PersistentResource, ID extends S
     protected R repository;
     
     @Override
-    public E save(E resource) {
+    public E create(E resource) {
+        return repository.save(resource);
+    }
+    
+    @Override
+    public E update(ID id, E resource) throws ResourceNotFoundException {
+        if (id == null || !repository.exists(id) || !resource.getId().equals(id)) {
+            throw new ResourceNotFoundException();
+        }
+        
         return repository.save(resource);
     }
 
@@ -79,6 +88,10 @@ public abstract class ResourceService<E extends PersistentResource, ID extends S
 
     @Override
     public void delete(ID id) {
+        if (!repository.exists(id)) {
+            throw new ResourceNotFoundException();
+        }
+        
         repository.delete(id);
     }
 

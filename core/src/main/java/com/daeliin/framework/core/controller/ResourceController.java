@@ -31,10 +31,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public abstract class ResourceController<E extends PersistentResource, ID extends Serializable, S extends FullCrudService<E, ID>> implements FullCrudController<E, ID> {
     
-    private static final String DEFAULT_PAGE_NUMBER = "1";
-    private static final String DEFAULT_PAGE_SIZE = "20";
-    private static final String DEFAULT_PAGE_DIRECTION = "ASC";
-    private static final String DEFAULT_PAGE_PROPERTIES = "id";
+    public static final String DEFAULT_PAGE_NUMBER = "1";
+    public static final String DEFAULT_PAGE_SIZE = "20";
+    public static final String DEFAULT_PAGE_DIRECTION = "ASC";
+    public static final String DEFAULT_PAGE_PROPERTIES = "id";
     
     @Autowired
     protected S service;
@@ -49,7 +49,7 @@ public abstract class ResourceController<E extends PersistentResource, ID extend
     @ResponseBody
     @Override
     public E create(@RequestBody @Valid E resource) {
-        return service.save(resource);
+        return service.create(resource);
     }
     
     /**
@@ -89,26 +89,29 @@ public abstract class ResourceController<E extends PersistentResource, ID extend
     }
     
     /**
-     * Exposes an update entry point, returns the updated resource and a 200 if the resource is valid, and a 400 otherwise.
+     * Exposes an update by id entry point, returns :
+     * - the updated resource and a 200 if the resource is valid and found
+     * - a 400 if the resource is not valid
+     * - a 404 if the resource is not found.
      * @param resource resource to update
      * @return updated resource 
      */
-    @RequestMapping(method = PUT)
+    @RequestMapping(value="{id}", method = PUT)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     @Override
-    public E update(@RequestBody @Valid E resource) {
-        return service.save(resource);
+    public E update(@PathVariable ID id, @RequestBody @Valid E resource) throws ResourceNotFoundException {
+        return service.update(id, resource);
     }
 
     /**
-     * Exposes a delete by id entry point, returns a 410.
+     * Exposes a delete by id entry point, returns a 410 if the resource is found, a 404 otherwise.
      * @param id resource id to delete
      */
     @RequestMapping(value="{id}", method = DELETE)
     @ResponseStatus(HttpStatus.GONE)
     @Override
-    public void delete(@PathVariable ID id) {
+    public void delete(@PathVariable ID id) throws ResourceNotFoundException {
         service.delete(id);
     }
     

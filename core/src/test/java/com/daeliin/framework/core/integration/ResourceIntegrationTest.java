@@ -1,4 +1,4 @@
-package com.daeliin.framework.core.controller;
+package com.daeliin.framework.core.integration;
 
 import com.daeliin.framework.commons.test.IntegrationTest;
 import com.daeliin.framework.core.Application;
@@ -6,6 +6,7 @@ import com.daeliin.framework.core.json.JsonObject;
 import com.daeliin.framework.core.json.JsonString;
 import com.daeliin.framework.core.mock.User;
 import com.daeliin.framework.core.mock.UserRepository;
+import static org.hamcrest.CoreMatchers.is;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
@@ -14,19 +15,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
 import org.testng.annotations.Test;
 
 @ContextConfiguration(classes = Application.class)
-public class ResourceControllerTest extends IntegrationTest {
+public class ResourceIntegrationTest extends IntegrationTest {
     
     @Autowired
     private UserRepository repository;
     
     @Test
-    public void create_validResource_returnsHttpCreatedAndPersistedResource() throws Exception {
-        User validUser = new User().withName("Test");
+    public void create_validResource_returnsHttpCreatedAndCreatedResource() throws Exception {
+        User validUser = new User().withName("validUserName");
         
         MvcResult result = 
             mockMvc
@@ -36,8 +41,27 @@ public class ResourceControllerTest extends IntegrationTest {
                 .andExpect(status().isCreated())
                 .andReturn();
         
-        User persistedUser = new JsonObject<>(result.getResponse().getContentAsString(), User.class).value().get();
-        assertNotNull(persistedUser.getId());
+        User createdUser = new JsonObject<>(result.getResponse().getContentAsString(), User.class).value().get();
+        assertNotNull(createdUser.getId());
+        assertEquals(createdUser.getName(), validUser.getName());
+    }
+    
+    @Test
+    public void create_validResource_persistsResource() throws Exception {
+        User validUser = new User().withName("validUserName");
+        long userCountBeforeCreate = repository.count();
+        
+        mockMvc
+            .perform(post("/user")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(new JsonString(validUser).value()));
+        
+        User persistedUser = repository.findFirstByName(validUser.getName());
+        long userCountAfterCreate = repository.count();
+        
+        assertNotNull(persistedUser);
+        assertEquals(persistedUser.getName(), validUser.getName());
+        assertEquals(userCountAfterCreate, userCountBeforeCreate + 1);
     }
     
     @Test
@@ -49,6 +73,23 @@ public class ResourceControllerTest extends IntegrationTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(new JsonString(invalidUser).value()))
             .andExpect(status().isBadRequest());
+    }
+    
+    @Test
+    public void create_invalidResource_doesntPersistResource() throws Exception {
+        User invalidUser = new User().withName("");
+        long userCountBeforeCreate = repository.count();
+        
+        mockMvc
+            .perform(post("/user")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(new JsonString(invalidUser).value()));
+        
+        User persistedUser = repository.findFirstByName(invalidUser.getName());
+        long userCountAfterCreate = repository.count();
+        
+        assertNull(persistedUser);
+        assertEquals(userCountAfterCreate, userCountBeforeCreate);
     }
     
     @Test
@@ -83,7 +124,7 @@ public class ResourceControllerTest extends IntegrationTest {
         
         MvcResult result = 
             mockMvc
-                .perform(put("/user")
+                .perform(put("/user/" + validUpdatedUser.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new JsonString(validUpdatedUser).value()))
                 .andExpect(status().isOk())
@@ -99,7 +140,7 @@ public class ResourceControllerTest extends IntegrationTest {
         User validUpdatedUser = new User().withId(originalUser.getId()).withName("updatedName");
         
         mockMvc
-            .perform(put("/user")
+            .perform(put("/user/" + validUpdatedUser.getId())
             .contentType(MediaType.APPLICATION_JSON)
             .content(new JsonString(validUpdatedUser).value()));
         
@@ -112,7 +153,7 @@ public class ResourceControllerTest extends IntegrationTest {
         invalidUpdatedUser.setName("");
         
         mockMvc
-            .perform(put("/user")
+            .perform(put("/user/" + invalidUpdatedUser.getId())
             .contentType(MediaType.APPLICATION_JSON)
             .content(new JsonString(invalidUpdatedUser).value()))
             .andExpect(status().isBadRequest());
@@ -124,10 +165,82 @@ public class ResourceControllerTest extends IntegrationTest {
         User invalidUpdatedUser = new User().withId(originalUser.getId()).withName("");
         
         mockMvc
-            .perform(put("/user")
+            .perform(put("/user/" + invalidUpdatedUser.getId())
             .contentType(MediaType.APPLICATION_JSON)
             .content(new JsonString(invalidUpdatedUser).value()));
         
         assertEquals(repository.findOne(1L).getName(), originalUser.getName());
+    }
+    
+    @Test
+    public void update_nonExistingResourceId_returnsHttpNotFound() throws Exception {
+        User user = new User().withId(-1L).withName("name");
+        
+        mockMvc
+            .perform(put("/user/" + user.getId())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(new JsonString(user).value()))
+            .andExpect(status().isNotFound());
+    }
+    
+    @Test
+    public void update_existingResourceIdButDiffersFromActualResourceId_returnsHttpNotFound() throws Exception {
+        User user = repository.findOne(1L);
+        
+        mockMvc
+            .perform(put("/user/" + -1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(new JsonString(user).value()))
+            .andExpect(status().isNotFound());
+    }
+    
+    @Test
+    public void update_existingResourceIdButDiffersFromActualResourceId_doesntUpdateResource() throws Exception {
+        User originalUser = repository.findOne(1L);
+        User updatedUser = new User().withId(originalUser.getId()).withName("updatedName");
+        
+        mockMvc
+            .perform(put("/user/" + -1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(new JsonString(updatedUser).value()));
+        
+        assertEquals(repository.findOne(1L).getName(), originalUser.getName());
+    }
+    
+    @Test
+    public void delete_existingResource_returnsHttpGone() throws Exception {
+        mockMvc
+            .perform(delete("/user/1"))
+            .andExpect(status().isGone());
+    }
+    
+    @Test
+    public void delete_existingResource_deletesResource() throws Exception {
+        mockMvc
+            .perform(delete("/user/1"));
+        
+        assertFalse(repository.exists(1L));
+    }
+    
+    @Test
+    public void delete_nonExistingResource_returnsHttpNotFound() throws Exception {
+        mockMvc
+            .perform(delete("/user/-1"))
+            .andExpect(status().isNotFound());
+    }
+    
+    @Test
+    public void deleteAll_returnsHttpGone() throws Exception {
+        mockMvc
+            .perform(delete("/user"))
+            .andExpect(status().isGone());
+    }
+    
+    @Test
+    public void deleteAll_deletesAllResources() throws Exception {
+        mockMvc
+            .perform(delete("/user"));
+        
+        assertEquals(repository.count(), 0);
     }
 }
