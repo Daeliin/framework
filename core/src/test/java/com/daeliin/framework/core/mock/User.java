@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @Setter
 @Entity
 @ToString(of = {"name"}, callSuper = true)
-public class User extends LongIdPersistentResource {
+public class User extends LongIdPersistentResource implements Comparable<User> {
     
     private static final long serialVersionUID = 6434352024112491080L;
     
@@ -29,5 +29,10 @@ public class User extends LongIdPersistentResource {
     public User withName(final String name) {
         this.name = name;
         return this;
+    }
+
+    @Override
+    public int compareTo(User other) {
+        return this.getName().compareTo(other.getName());
     }
 }

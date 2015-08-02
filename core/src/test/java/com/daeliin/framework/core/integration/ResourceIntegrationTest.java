@@ -150,6 +150,25 @@ public class ResourceIntegrationTest extends IntegrationTest {
     }
     
     @Test
+    public void getAll_sortedByNameDescThenByIdDesc_returnsPageSortedByNameDescThenByIdDesc() throws Exception {
+        mockMvc
+            .perform(get("/user?direction=DESC&properties=name,id")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.sort[0].direction").value("DESC"))
+            .andExpect(jsonPath("$.sort[0].property").value("name"))
+            .andExpect(jsonPath("$.sort[1].direction").value("DESC"))
+            .andExpect(jsonPath("$.sort[1].property").value("id"));
+    }
+
+    @Test
+    public void getAll_invalidDirection_returnsPageSortedAsc() throws Exception {
+        mockMvc
+            .perform(get("/user?direction=invalidDirection")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.sort[0].direction").value("ASC"));
+    }
+    
+    @Test
     public void update_validUpdatedResource_returnsHttpOkAndUpdatedResource() throws Exception {
         User validUpdatedUser = repository.findOne(1L);
         validUpdatedUser.setName("updatedName");

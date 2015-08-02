@@ -15,25 +15,32 @@ public interface FullCrudService<E extends PersistentResource, ID extends Serial
    
     /**
      * Creates a resource.
-     * @param resource resource to create or update
-     * @return updated resource
+     * @param resource resource to create
+     * @return created resource
      */
     E create(E resource);
     
     /**
      * Updates a resource by id.
      * @param id resource id 
-     * @param resource resource to create or update
+     * @param resource resource to update
      * @return updated resource
      */
     E update(ID id, E resource);
     
     /**
-     * Saves or updates mulitple resources.
-     * @param iterable resources to create or update
+     * Creates multiple resources.
+     * @param iterable resources to create
+     * @return created resources
+     */
+    Iterable<E> create(Iterable<E> iterable);
+    
+    /**
+     * Updates multiple resources.
+     * @param iterable resources to update
      * @return updated resources
      */
-    Iterable<E> save(Iterable<E> iterable);
+    Iterable<E> update(Iterable<E> iterable);
     
     /**
      * Returns true if the resource exists, false otherwise
