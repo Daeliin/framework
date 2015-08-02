@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public abstract class ResourceController<E extends PersistentResource, ID extends Serializable, S extends FullCrudService<E, ID>> implements FullCrudController<E, ID> {
     
-    public static final String DEFAULT_PAGE_NUMBER = "1";
+    public static final String DEFAULT_PAGE_NUMBER = "0";
     public static final String DEFAULT_PAGE_SIZE = "20";
     public static final String DEFAULT_PAGE_DIRECTION = "ASC";
     public static final String DEFAULT_PAGE_PROPERTIES = "id";
@@ -68,7 +68,7 @@ public abstract class ResourceController<E extends PersistentResource, ID extend
     
     /**
      * Exposes a pagination entry point, returns the resource page and a 200.
-     * @param pageNumber page number
+     * @param pageNumber page number 0-based
      * @param pageSize page size
      * @param direction sort direction
      * @param properties resource properties to sort on

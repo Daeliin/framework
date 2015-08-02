@@ -6,7 +6,7 @@ import com.daeliin.framework.core.json.JsonObject;
 import com.daeliin.framework.core.json.JsonString;
 import com.daeliin.framework.core.mock.User;
 import com.daeliin.framework.core.mock.UserRepository;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasSize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
@@ -115,6 +115,38 @@ public class ResourceIntegrationTest extends IntegrationTest {
             .perform(get("/user/" + nonExistingUser.getId())
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());
+    }
+    
+    @Test
+    public void getAll_noParameters_returnsHttpOkAndPage0WithSize20SortedByIdAsc() throws Exception {
+        mockMvc
+            .perform(get("/user")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content", hasSize(20)))
+            .andExpect(jsonPath("$.totalPages").value(2))
+            .andExpect(jsonPath("$.totalElements").value(22))
+            .andExpect(jsonPath("$.sort[0].direction").value("ASC"))
+            .andExpect(jsonPath("$.sort[0].property").value("id"))
+            .andExpect(jsonPath("$.numberOfElements").value(20))
+            .andExpect(jsonPath("$.size").value(20))
+            .andExpect(jsonPath("$.number").value(0));
+    }
+    
+    @Test
+    public void getAll_page1WithSize2SortedByNameDesc_returnsHttpOkAndPage1WithSize2SortedByNameDesc() throws Exception {
+        mockMvc
+            .perform(get("/user?pageNumber=1&pageSize=2&direction=DESC&properties=name")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content", hasSize(2)))
+            .andExpect(jsonPath("$.totalPages").value(11))
+            .andExpect(jsonPath("$.totalElements").value(22))
+            .andExpect(jsonPath("$.sort[0].direction").value("DESC"))
+            .andExpect(jsonPath("$.sort[0].property").value("name"))
+            .andExpect(jsonPath("$.numberOfElements").value(2))
+            .andExpect(jsonPath("$.size").value(2))
+            .andExpect(jsonPath("$.number").value(1));
     }
     
     @Test

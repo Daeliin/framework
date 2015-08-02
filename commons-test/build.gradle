@@ -12,9 +12,14 @@ dependencies {
     // Daeliin
     compile project(':commons')
     
+    
+    
     // Spring
     compile "org.testng:testng:$testNgVersion"
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
     compile "org.springframework.boot:spring-boot-starter-test"
+    
+    // JsonPath
+    compile "com.jayway.jsonpath:json-path"
 }

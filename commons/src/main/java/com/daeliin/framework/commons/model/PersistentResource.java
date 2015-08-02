@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Resource persisted in a RDBMS.
  * @param <ID> id type
  */
-public interface PersistentResource<ID extends Serializable> {
+public interface PersistentResource<ID extends Serializable> extends Serializable {
 
     /**
      * Gets the resource id.

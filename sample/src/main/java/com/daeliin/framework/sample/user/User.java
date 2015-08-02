@@ -1,4 +1,4 @@
-package com.daeliin.framework.core.mock;
+package com.daeliin.framework.sample.user;
 
 import com.daeliin.framework.commons.model.LongIdPersistentResource;
 import javax.persistence.Entity;
@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @ToString(of = {"name"}, callSuper = true)
 public class User extends LongIdPersistentResource {
     
-    private static final long serialVersionUID = 6434352024112491080L;
+    private static final long serialVersionUID = 5595845507147199458L;
     
     @NotBlank
     private String name;

@@ -20,4 +20,7 @@ INSERT INTO `user`(`id`, `name`) VALUES
 (19, 'Kim'),
 (20, 'Cindy'),
 (21, 'Melany'),
+(25, 'Grace'),
+(23, 'Grace'),
+(24, 'Grace'),
 (22, 'Grace');

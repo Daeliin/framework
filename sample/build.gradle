@@ -5,6 +5,7 @@ apply plugin: 'spring-boot'
 dependencies {
     // Daeliin
     compile project(':core')
+    compile "com.h2database:h2";
     
     // Spring
     compile "org.springframework.boot:spring-boot-starter-web"
