@@ -1,6 +1,7 @@
 package com.daeliin.framework.core.controller;
 
 import com.daeliin.framework.commons.model.PersistentResource;
+import com.daeliin.framework.core.exception.PageRequestException;
 import com.daeliin.framework.core.exception.ResourceNotFoundException;
 import com.daeliin.framework.core.service.FullCrudService;
 import java.io.Serializable;
@@ -8,7 +9,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,7 +33,7 @@ public abstract class ResourceController<E extends PersistentResource, ID extend
     
     public static final String DEFAULT_PAGE_NUMBER = "0";
     public static final String DEFAULT_PAGE_SIZE = "20";
-    public static final String DEFAULT_PAGE_DIRECTION = "ASC";
+    public static final String DEFAULT_PAGE_DIRECTION = "asc";
     public static final String DEFAULT_PAGE_PROPERTIES = "id";
     
     @Autowired
@@ -67,24 +67,33 @@ public abstract class ResourceController<E extends PersistentResource, ID extend
     }
     
     /**
-     * Exposes a pagination entry point, returns the resource page and a 200.
+     * Exposes a pagination entry point, returns the resource page and a 200, or a 400 if one of the parameters is not valid.
      * @param pageNumber page number 0-based
      * @param pageSize page size
      * @param direction sort direction
      * @param properties resource properties to sort on
      * @return resource page
+     * @throws PageRequestException if pageNumber &lt; 0, pageSize &lt; 0, direction doesnt equal "asc" or "desc  
      */
     @RequestMapping(method = GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     @Override
     public Page<E> getAll(
-        @RequestParam(value = "pageNumber", required = false, defaultValue = DEFAULT_PAGE_NUMBER) int pageNumber, 
-        @RequestParam(value = "pageSize", required = false, defaultValue = DEFAULT_PAGE_SIZE) int pageSize, 
-        @RequestParam(value = "direction", required = false, defaultValue = DEFAULT_PAGE_DIRECTION) Sort.Direction direction, 
-        @RequestParam(value = "properties", required = false, defaultValue = DEFAULT_PAGE_PROPERTIES) String... properties) {
+        @RequestParam(value = "pageNumber", defaultValue = DEFAULT_PAGE_NUMBER) String pageNumber, 
+        @RequestParam(value = "pageSize", defaultValue = DEFAULT_PAGE_SIZE) String pageSize, 
+        @RequestParam(value = "direction", defaultValue = DEFAULT_PAGE_DIRECTION) String direction, 
+        @RequestParam(value = "properties", defaultValue = DEFAULT_PAGE_PROPERTIES) String... properties) throws PageRequestException {
         
-        PageRequest pageRequest = new PageRequest(pageNumber, pageSize, direction, properties);
+        PageRequestParameters pageRequestParameters = new PageRequestParameters(pageNumber, pageSize, direction, properties);
+        
+        PageRequest pageRequest =
+            new PageRequest(
+                pageRequestParameters.getPageNumber(), 
+                pageRequestParameters.getPageSize(), 
+                pageRequestParameters.getDirection(), 
+                pageRequestParameters.getProperties());
+        
         return service.findAll(pageRequest);
     }
     

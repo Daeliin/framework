@@ -1,9 +1,9 @@
 package com.daeliin.framework.core.controller;
 
 import com.daeliin.framework.commons.model.PersistentResource;
+import com.daeliin.framework.core.exception.PageRequestException;
 import java.io.Serializable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 
 /**
  * Exposes CRUD operations and pagination for a resource.
@@ -34,8 +34,9 @@ public interface FullCrudController<E extends PersistentResource, ID extends Ser
      * @param direction sort direction
      * @param properties resource properties to sort on
      * @return resource page
+     * @throws PageRequestException if one of the parameter is not valid
      */
-    Page<E> getAll(int pageNumber, int pageSize, Sort.Direction direction, String... properties);
+    Page<E> getAll(String pageNumber, String pageSize, String direction, String... properties) throws PageRequestException;
     
     /**
      * Exposes an update by id entry point.

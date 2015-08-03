@@ -1,6 +1,7 @@
 # Netbeans
 .gradle
 nbproject
+.nb-gradle-properties
 
 # Gradle
 build

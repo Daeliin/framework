@@ -161,11 +161,37 @@ public class ResourceIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void getAll_invalidDirection_returnsPageSortedAsc() throws Exception {
+    public void getAll_invalidPageNumber_returnsHttpBadRequest() throws Exception {
+        mockMvc
+            .perform(get("/user?pageNumber=-1")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest());
+        
+        mockMvc
+            .perform(get("/user?pageNumber=invalidPageNumber")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest());
+    }
+    
+    @Test
+    public void getAll_invalidPageSize_returnsHttpBadRequest() throws Exception {
+        mockMvc
+            .perform(get("/user?pageSize=-1")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest());
+        
+        mockMvc
+            .perform(get("/user?pageSize=invalidPageSize")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest());
+    }
+    
+    @Test
+    public void getAll_invalidDirection_returnsHttpBadRequest() throws Exception {
         mockMvc
             .perform(get("/user?direction=invalidDirection")
             .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.sort[0].direction").value("ASC"));
+            .andExpect(status().isBadRequest());
     }
     
     @Test
