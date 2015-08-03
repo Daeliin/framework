@@ -19,6 +19,8 @@ import org.springframework.data.domain.Sort;
 @Service
 public abstract class ResourceService<E extends PersistentResource, ID extends Serializable, R extends ResourceRepository<E, ID>> implements FullCrudService<E, ID>  {
     
+    private static final String MESSAGE_RESOURCE_NOT_FOUND = "Resource was not found";
+    
     @Autowired
     protected R repository;
 
@@ -33,22 +35,6 @@ public abstract class ResourceService<E extends PersistentResource, ID extends S
     }
     
     /**
-     * Updates a resource.
-     * @param id resource id
-     * @param resource resource to update
-     * @return updated resource
-     * @throws ResourceNotFoundException if the resource id is not found or if the resource id doesnt match its actual id
-     */
-    @Override
-    public E update(ID id, E resource) throws ResourceNotFoundException {
-        if (id == null || !repository.exists(id) || !resource.getId().equals(id)) {
-            throw new ResourceNotFoundException("Resource was not found");
-        }
-        
-        return repository.save(resource);
-    }
-
-    /**
      * Creates multiple resources.
      * @param iterable resources to create
      * @return created resources
@@ -58,6 +44,22 @@ public abstract class ResourceService<E extends PersistentResource, ID extends S
         return repository.save(iterable);
     }
     
+    /**
+     * Updates a resource.
+     * @param id resource id
+     * @param resource resource to update
+     * @return updated resource
+     * @throws ResourceNotFoundException if the resource id is not found or if the resource id doesnt match its actual id
+     */
+    @Override
+    public E update(ID id, E resource) throws ResourceNotFoundException {
+        if (id == null || !repository.exists(id) || !resource.getId().equals(id)) {
+            throw new ResourceNotFoundException(MESSAGE_RESOURCE_NOT_FOUND);
+        }
+        
+        return repository.save(resource);
+    }
+
     /**
      * Updates multiple resources.
      * @param iterable resources to update
@@ -102,7 +104,7 @@ public abstract class ResourceService<E extends PersistentResource, ID extends S
         }
         
         if (resource == null) {
-            throw new ResourceNotFoundException("Resource was not found");
+            throw new ResourceNotFoundException(MESSAGE_RESOURCE_NOT_FOUND);
         }
         
         return resource;
@@ -155,7 +157,7 @@ public abstract class ResourceService<E extends PersistentResource, ID extends S
     @Override
     public void delete(ID id) throws ResourceNotFoundException {
         if (!repository.exists(id)) {
-            throw new ResourceNotFoundException("Resource was not found");
+            throw new ResourceNotFoundException(MESSAGE_RESOURCE_NOT_FOUND);
         }
         
         repository.delete(id);

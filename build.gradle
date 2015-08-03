@@ -58,6 +58,11 @@ subprojects {
         
         testLogging {
             events "passed", "skipped", "failed"
+            afterSuite { desc, result ->
+                if (!desc.parent) { 
+                  println "\nResults: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)\n"
+                }
+            }
         }
     }
 }

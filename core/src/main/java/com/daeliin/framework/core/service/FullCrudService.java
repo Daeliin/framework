@@ -21,19 +21,19 @@ public interface FullCrudService<E extends PersistentResource, ID extends Serial
     E create(E resource);
     
     /**
+     * Creates multiple resources.
+     * @param iterable resources to create
+     * @return created resources
+     */
+    Iterable<E> create(Iterable<E> iterable);
+    
+    /**
      * Updates a resource by id.
      * @param id resource id 
      * @param resource resource to update
      * @return updated resource
      */
     E update(ID id, E resource);
-    
-    /**
-     * Creates multiple resources.
-     * @param iterable resources to create
-     * @return created resources
-     */
-    Iterable<E> create(Iterable<E> iterable);
     
     /**
      * Updates multiple resources.
