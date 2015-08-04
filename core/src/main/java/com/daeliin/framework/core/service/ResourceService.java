@@ -45,38 +45,16 @@ public abstract class ResourceService<E extends PersistentResource, ID extends S
     }
     
     /**
-     * Updates a resource.
-     * @param id resource id
-     * @param resource resource to update
-     * @return updated resource
-     * @throws ResourceNotFoundException if the resource id is not found or if the resource id doesnt match its actual id
-     */
-    @Override
-    public E update(ID id, E resource) throws ResourceNotFoundException {
-        if (id == null || !repository.exists(id) || !resource.getId().equals(id)) {
-            throw new ResourceNotFoundException(MESSAGE_RESOURCE_NOT_FOUND);
-        }
-        
-        return repository.save(resource);
-    }
-
-    /**
-     * Updates multiple resources.
-     * @param iterable resources to update
-     * @return updated resources
-     */
-    @Override
-    public Iterable<E> update(Iterable<E> iterable) {
-        return repository.save(iterable);
-    }
-
-    /**
      * Returns true if the resource exists, false otherwise
      * @param id resource id
      * @return true of the resource exists, false otherwise
      */
     @Override
     public boolean exists(ID id) { 
+        if(id == null) {
+            return false;
+        }
+        
         return repository.exists(id);
     }
 
@@ -148,7 +126,33 @@ public abstract class ResourceService<E extends PersistentResource, ID extends S
     public Iterable<E> findAll(Iterable<ID> iterable) {
         return repository.findAll(iterable);
     }
+    
+    /**
+     * Updates a resource.
+     * @param id resource id
+     * @param resource resource to update
+     * @return updated resource
+     * @throws ResourceNotFoundException if the resource id is not found or if the resource id doesnt match its actual id
+     */
+    @Override
+    public E update(ID id, E resource) throws ResourceNotFoundException {
+        if (id == null || !repository.exists(id) || resource == null || !resource.getId().equals(id)) {
+            throw new ResourceNotFoundException(MESSAGE_RESOURCE_NOT_FOUND);
+        }
+        
+        return repository.save(resource);
+    }
 
+    /**
+     * Updates multiple resources.
+     * @param iterable resources to update
+     * @return updated resources
+     */
+    @Override
+    public Iterable<E> update(Iterable<E> iterable) {
+        return repository.save(iterable);
+    }
+    
     /**
      * Delete a resource by its id.
      * @param id id of the resource to delete
@@ -171,7 +175,7 @@ public abstract class ResourceService<E extends PersistentResource, ID extends S
     public void delete(E resource) {
         repository.delete(resource);
     }
-
+    
     /**
      * Deletes multiple resources.
      * @param iterable resources to delete

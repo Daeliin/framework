@@ -1,6 +1,7 @@
 package com.daeliin.framework.core.service;
 
 import com.daeliin.framework.core.Application;
+import com.daeliin.framework.core.exception.ResourceNotFoundException;
 import com.daeliin.framework.core.mock.User;
 import com.daeliin.framework.core.mock.UserRepository;
 import com.daeliin.framework.core.mock.UserService;
@@ -17,6 +18,8 @@ import org.mockito.Mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import static org.testng.Assert.assertEquals;
@@ -30,10 +33,10 @@ import org.testng.annotations.Test;
 public class ResourceServiceTest extends AbstractTransactionalTestNGSpringContextTests {
     
     @Mock
-    private UserRepository userRepository;
+    private UserRepository repository;
     
     @InjectMocks
-    private UserService userService;
+    private UserService service;
     
     @BeforeMethod
     public void init() {
@@ -45,11 +48,11 @@ public class ResourceServiceTest extends AbstractTransactionalTestNGSpringContex
         User validUser = new User().withName("validUserName");
         User savedValidUser = new User().withId(1L).withName("validUserName");
         
-        when(userRepository.save(validUser)).thenReturn(savedValidUser);
+        when(repository.save(validUser)).thenReturn(savedValidUser);
         
-        User createdUser = userService.create(validUser);
+        User createdUser = service.create(validUser);
         
-        verify(userRepository).save(validUser);
+        verify(repository).save(validUser);
         assertEquals(createdUser, savedValidUser);
     }
     
@@ -58,15 +61,15 @@ public class ResourceServiceTest extends AbstractTransactionalTestNGSpringContex
         User invalidUser = new User().withName("");
         Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-        when(userRepository.save(invalidUser))
+        when(repository.save(invalidUser))
             .thenThrow(
                 new ConstraintViolationException(
                     validator.validateProperty(invalidUser, "name")));
         
         try {
-            userService.create(invalidUser);
+            service.create(invalidUser);
         } catch (ConstraintViolationException e) {
-            verify(userRepository).save(invalidUser);
+            verify(repository).save(invalidUser);
             return;
         }
         
@@ -85,11 +88,11 @@ public class ResourceServiceTest extends AbstractTransactionalTestNGSpringContex
                 new User().withId(1L).withName("validUserName1"),
                 new User().withId(2L).withName("validUserName2"));
         
-        when(userRepository.save(validUsers)).thenReturn(savedValidUsers);
+        when(repository.save(validUsers)).thenReturn(savedValidUsers);
         
-        List<User> createdUsers = (List<User>)userService.create(validUsers);
+        List<User> createdUsers = (List<User>)service.create(validUsers);
         
-        verify(userRepository).save(validUsers);
+        verify(repository).save(validUsers);
         
         assertEquals(createdUsers, savedValidUsers);
     }
@@ -105,14 +108,14 @@ public class ResourceServiceTest extends AbstractTransactionalTestNGSpringContex
         Set<? extends ConstraintViolation<User>> constraintViolations = new HashSet<>();
         invalidUsers.forEach((User invalidUser) -> constraintViolations.addAll((Set)validator.validateProperty(invalidUser, "name")));
         
-        when(userRepository.save(invalidUsers))
+        when(repository.save(invalidUsers))
             .thenThrow(
                 new ConstraintViolationException(constraintViolations));
         
         try {
-            userService.create(invalidUsers);
+            service.create(invalidUsers);
         } catch (ConstraintViolationException e) {
-            verify(userRepository).save(invalidUsers);
+            verify(repository).save(invalidUsers);
             return;
         }
         
@@ -120,22 +123,206 @@ public class ResourceServiceTest extends AbstractTransactionalTestNGSpringContex
     }
     
     @Test
-    public void exists_callsRepositoryExistsAndReturnsSameResult() {
-        when(userRepository.exists(1L)).thenReturn(true);
-        when(userRepository.exists(-1L)).thenReturn(false);
+    public void exists_nullResourceId_returnsFalse() {
+        assertFalse(service.exists(null));
+    }
+    
+    @Test
+    public void exists_existingResourceId_callsRepositoryExistsAndReturnsTrue() {
+        when(repository.exists(1L)).thenReturn(true);
         
-        assertTrue(userService.exists(1L));
-        verify(userRepository).exists(1L);
+        assertTrue(service.exists(1L));
+        verify(repository).exists(1L);
+    }
+    
+    @Test
+    public void exists_nonExistingResourceId_callsRepositoryExistsAndReturnsFalse() {
+        when(repository.exists(-1L)).thenReturn(false);
         
-        assertFalse(userService.exists(-1L));
-        verify(userRepository).exists(-1L);
+        assertFalse(service.exists(-1L));
+        verify(repository).exists(-1L);
     }
     
     @Test
     public void count_callsRepositoryCountAndReturnsSameResult() {
-        when(userRepository.count()).thenReturn(22L);
+        when(repository.count()).thenReturn(22L);
         
-        assertEquals(userService.count(), 22);
-        verify(userRepository).count();
+        assertEquals(service.count(), 22);
+        verify(repository).count();
+    }
+    
+    @Test(expectedExceptions = ResourceNotFoundException.class)
+    public void findOne_nullId_throwsResourceNotFoundException() {
+        service.findOne(null);
+    }
+    
+    @Test
+    public void findOne_nonExistingResourceId_throwsResourceNotFoundException() {
+        when(repository.findOne(-1L)).thenThrow(new ResourceNotFoundException(""));
+        
+        try {
+             service.findOne(-1L);
+        } catch (ResourceNotFoundException e) {
+            verify(repository).findOne(-1L);
+            return;
+        }
+        
+        fail();
+    }
+    
+    @Test
+    public void findOne_existingResourceId_callsRepositoryFindOneAndReturnsResource() {
+        User existingUser = new User().withId(1L).withName("existingUserName");
+        
+        when(repository.findOne(existingUser.getId())).thenReturn(existingUser);
+        
+        User foundUser = service.findOne(existingUser.getId());
+        
+        verify(repository).findOne(existingUser.getId());
+        assertEquals(foundUser, existingUser);
+    }
+    
+    @Test
+    public void findAll_callsRepositoryFindAllAndReturnsAllResources() {
+        List<User> allUsers = 
+            Arrays.asList(
+                new User().withId(1L).withName("userName1"),
+                new User().withId(2L).withName("userName2"),
+                new User().withId(3L).withName("userName3"));
+        
+        when(repository.findAll()).thenReturn(allUsers);
+        
+        List<User> users = (List<User>)service.findAll();
+        
+        verify(repository).findAll();
+        assertEquals(users, allUsers);
+    }
+    
+    @Test
+    public void findAll_sort_callsRepositoryFindAllWithSort() {
+        Sort sort = new Sort(Sort.Direction.ASC, "id", "name");
+        
+        service.findAll(sort);
+        verify(repository).findAll(sort);
+    }
+    
+    @Test
+    public void findAll_pageRequest_callsRepositoryFindAllWithPageRequest() {
+        PageRequest userPageRequest = new PageRequest(1, 10, Sort.Direction.ASC, "id", "name");
+        
+        service.findAll(userPageRequest);
+        verify(repository).findAll(userPageRequest);
+    }
+    
+    @Test
+    public void findAll_multipleResourcesIds_callsRepositoryFindAllWithMultipleResourcesIds() {
+        List<Long> usersIds = Arrays.asList(1L, 2L);
+        
+        service.findAll(usersIds);
+        verify(repository).findAll(usersIds);
+    }
+    
+    @Test(expectedExceptions = ResourceNotFoundException.class)
+    public void update_nullResourceId_throwsResourceNotFoundException() {
+        service.update(null, null);
+    }
+    
+    @Test
+    public void update_nonExistingResourceId_callsRepositoryExistsAndThrowsResourceNotFoundException() {
+        when(repository.exists(-1L)).thenReturn(false);
+        
+        try {
+            service.update(-1L, null);
+        } catch (ResourceNotFoundException e) {
+            verify(repository).exists(-1L);
+            return;
+        }
+        
+        fail();
+    }
+    
+    @Test(expectedExceptions = ResourceNotFoundException.class)
+    public void update_nullResource_throwsResourceNotFoundException() {
+        when(repository.exists(1L)).thenReturn(true);
+        
+        service.update(1L, null);
+    }
+    
+    @Test(expectedExceptions = ResourceNotFoundException.class)
+    public void update_existingResourceIdButDiffersFromActualResourceId_throwsResourceNotFoundException() {
+        when(repository.exists(1L)).thenReturn(true);
+        
+        service.update(1L, new User().withId(2L).withName("userName"));
+    }
+    
+    @Test
+    public void update_existingResourceIdAndValidResource_callsRepositorySaveWithResourceAndReturnsResource() {
+        User user = new User().withId(1L).withName("userName");
+        when(repository.exists(user.getId())).thenReturn(true);
+        when(repository.save(user)).thenReturn(user);
+        
+        User updatedUser = service.update(user.getId(), user);
+        
+        verify(repository).save(user);
+        assertEquals(updatedUser, user);
+    }
+    
+    @Test
+    public void update_multipleResources_callsReposiotrySaveWithMultipleResources() {
+        List<User> users = 
+            Arrays.asList(
+                new User().withId(1L).withName("userName1"),
+                new User().withId(2L).withName("userName2"));
+        
+        service.update(users);
+        verify(repository).save(users);
+    }
+    
+    @Test
+    public void delete_nonExistingResourceId_callsRepositoryExistsAndThrowsResourceNotFoundException() {
+        when(repository.exists(-1L)).thenThrow(new ResourceNotFoundException(""));
+        
+        try {
+             service.delete(-1L);
+        } catch (ResourceNotFoundException e) {
+            verify(repository).exists(-1L);
+            return;
+        }
+        
+        fail();
+    }
+    
+    @Test
+    public void delete_existingResourceId_callsRepositoryExistsAndDelete() {
+        when(repository.exists(1L)).thenReturn(true);
+        
+        service.delete(1L);
+        verify(repository).exists(1L);
+        verify(repository).delete(1L);
+    }
+
+    @Test
+    public void delete_resource_callsRepositoryDeleteWithResource() {
+        User user = new User().withId(1L).withName("userName");
+        
+        service.delete(user);
+        verify(repository).delete(user);
+    }
+    
+    @Test
+    public void delete_multipleResources_callsRepositoryDeleteWithResources() {
+        List<User> users = 
+            Arrays.asList(
+                new User().withId(1L).withName("userName1"),
+                new User().withId(2L).withName("userName2"));
+        
+        service.delete(users);
+        verify(repository).delete(users);
+    }
+    
+    @Test
+    public void deleteAll_callsRepositoryDeleteAll() {
+        service.deleteAll();
+        verify(repository).deleteAll();
     }
 }
