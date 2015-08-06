@@ -2,6 +2,7 @@ package com.daeliin.framework.sample.user;
 
 import com.daeliin.framework.commons.model.LongIdPersistentResource;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -9,25 +10,19 @@ import org.hibernate.validator.constraints.NotBlank;
 
 @Getter
 @Setter
+@ToString(of = {"username"}, callSuper = true)
 @Entity
-@ToString(of = {"name"}, callSuper = true)
 public class User extends LongIdPersistentResource {
     
     private static final long serialVersionUID = 5595845507147199458L;
     
     @NotBlank
-    private String name;
+    private String username;
+    
+    private String password;
+    
+    private boolean enabled = false;
 
     public User() {
-    }
-    
-    public User withId(final Long id) {
-        this.id = id;
-        return this;
-    }
-    
-    public User withName(final String name) {
-        this.name = name;
-        return this;
     }
 }
