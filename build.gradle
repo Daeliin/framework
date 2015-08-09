@@ -2,6 +2,7 @@ version = '0.1-SNAPSHOT'
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'maven'
     group = 'com.daeliin.framework'
 
     ext {
@@ -36,6 +37,7 @@ subprojects {
     targetCompatibility = 1.8
 
     repositories {
+        mavenLocal()
         mavenCentral()
     }
 
