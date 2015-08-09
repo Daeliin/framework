@@ -1,7 +1,8 @@
-package com.daeliin.framework.sample.user;
+package com.daeliin.framework.sample.api.user.controller;
 
+import com.daeliin.framework.sample.api.user.model.User;
 import com.daeliin.framework.core.controller.ResourceController;
-import com.daeliin.framework.security.details.User;
+import com.daeliin.framework.sample.api.user.service.UserService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

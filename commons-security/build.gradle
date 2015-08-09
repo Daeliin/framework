@@ -1,0 +1,12 @@
+version = '0.1-SNAPSHOT'
+
+apply plugin: 'spring-boot'
+
+dependencies {
+    // Daeliin
+    compile project(':core')
+    
+    // Spring
+    compile "org.springframework.boot:spring-boot-starter-data-jpa"
+    compile "org.springframework.boot:spring-boot-starter-web"
+}

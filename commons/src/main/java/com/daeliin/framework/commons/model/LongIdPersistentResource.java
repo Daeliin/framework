@@ -18,6 +18,8 @@ import lombok.ToString;
 @MappedSuperclass
 public abstract class LongIdPersistentResource implements PersistentResource<Long> {
     
+    private static final long serialVersionUID = -5886577401324234159L;
+    
     @Id
     @GeneratedValue
     protected Long id;

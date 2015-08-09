@@ -1,5 +1,6 @@
 include 'commons'
 include 'commons-test'
 include 'core'
+include 'commons-security'
 include 'security'
 include 'sample'
