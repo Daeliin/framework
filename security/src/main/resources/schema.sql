@@ -5,15 +5,17 @@ CREATE TABLE user(
     enabled BOOLEAN NOT NULL DEFAULT FALSE
 ); 
 
-CREATE TABLE credential(
+CREATE TABLE permission(
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     label VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE user_credential(
+CREATE TABLE user_permission(
+    id BIGINT,
     user_id BIGINT,
-    credential_id BIGINT,
-    PRIMARY KEY(user_id, credential_id),
+    permission_id BIGINT,
+    PRIMARY KEY(id),
+    UNIQUE(user_id, permission_id),
     FOREIGN KEY (user_id) REFERENCES user(id),
-    FOREIGN KEY (credential_id) REFERENCES credential(id)
+    FOREIGN KEY (permission_id) REFERENCES permission(id)
 );

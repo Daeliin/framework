@@ -1,4 +1,4 @@
-package com.daeliin.framework.security.authentication.basic;
+package com.daeliin.framework.security.authentication.form;
 
 import java.io.IOException;
 import javax.servlet.FilterChain;

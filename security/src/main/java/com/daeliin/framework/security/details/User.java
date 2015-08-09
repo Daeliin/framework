@@ -1,8 +1,8 @@
-package com.daeliin.framework.sample.user;
+package com.daeliin.framework.security.details;
 
 import com.daeliin.framework.commons.model.LongIdPersistentResource;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.Entity;
-import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,6 +19,7 @@ public class User extends LongIdPersistentResource {
     @NotBlank
     private String username;
     
+    @JsonIgnore
     private String password;
     
     private boolean enabled = false;

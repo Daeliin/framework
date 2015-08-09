@@ -8,10 +8,9 @@ ext {
 
 dependencies {
     // Daeliin
-    compile project(':commons')
+    compile project(':core')
     
     // Spring
-    compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-security"
     compile "org.springframework.security.oauth:spring-security-oauth2:$springOAuth2Version"
     

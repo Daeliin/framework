@@ -11,7 +11,7 @@ import org.springframework.data.domain.Page;
  * @param <E> resource type
  * @param <ID> resource id type
  */
-public interface FullCrudController<E extends PersistentResource, ID extends Serializable> {
+public interface FullCrudController<E extends Serializable, ID extends Serializable> {
     
     /**
      * Exposes a create entry point.

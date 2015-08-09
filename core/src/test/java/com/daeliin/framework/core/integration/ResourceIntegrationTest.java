@@ -6,6 +6,8 @@ import com.daeliin.framework.core.json.JsonObject;
 import com.daeliin.framework.core.json.JsonString;
 import com.daeliin.framework.core.mock.User;
 import com.daeliin.framework.core.mock.UserRepository;
+import java.util.Arrays;
+import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
