@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/permission")
+@RequestMapping("/api/permissions")
 public class PermissionController extends ResourceController<Permission, Long, PermissionService>{
 }

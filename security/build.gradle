@@ -11,10 +11,10 @@ dependencies {
     compile project(':commons-security')
     
     // Spring
-    compile "org.springframework.boot:spring-boot-starter-security"
+    compile "org.springframework.boot:spring-boot-starter-security:$springBootVersion"
     compile "org.springframework.security.oauth:spring-security-oauth2:$springOAuth2Version"
     
     // Test
     testCompile project(':commons-test')
-    testCompile "com.h2database:h2"
+    testCompile "com.h2database:h2:$h2databaseVersion"
 }

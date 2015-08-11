@@ -1,13 +1,71 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'spring-boot'
+
+group = 'com.daeliin.framework'
 version = '0.1-SNAPSHOT'
 
-apply plugin: 'spring-boot'
+ext {
+    daeliinFrameworkVersion = '0.1-SNAPSHOT'
+    groovyVersion = '2.4.3'
+    logbackVersion = '1.1.3'
+    commonsLangVersion = '3.4'
+    lombockVersion = '1.16.4'
+}
+
+configurations {
+    provided
+}
+
+sourceSets {
+    main.compileClasspath += configurations.provided
+    test.compileClasspath += configurations.provided
+    test.runtimeClasspath += configurations.provided
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
 
 dependencies {
     // Daeliin
-    compile project(':core')
-    compile project(':security')
+    compile "com.daeliin.framework:core:$daeliinFrameworkVersion";
+    compile "com.daeliin.framework:security:$daeliinFrameworkVersion";
+    
+    // H2 Database
     compile "com.h2database:h2";
     
-    // Spring
-    compile "org.springframework.boot:spring-boot-starter-web"
+    // Testing
+    testCompile "com.daeliin.framework:commons-test:$daeliinFrameworkVersion";
+}
+
+test {
+    useTestNG() 
+
+    testLogging {
+        events "passed", "skipped", "failed"
+        afterSuite { desc, result ->
+            if (!desc.parent) { 
+                println "\n${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)\n"
+            }
+        }
+    }
+}
+
+task wrapper(type: Wrapper) { 
+    gradleVersion = '2.5' 
 }

@@ -3,6 +3,7 @@ version = '0.1-SNAPSHOT'
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
+    
     group = 'com.daeliin.framework'
 
     ext {
@@ -11,6 +12,7 @@ subprojects {
         logbackVersion = '1.1.3'
         commonsLangVersion = '3.4'
         lombockVersion = '1.16.4'
+        h2databaseVersion= '1.4.187'
     }
     
     buildscript {
@@ -63,6 +65,22 @@ subprojects {
             afterSuite { desc, result ->
                 if (!desc.parent) { 
                   println "\n${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)\n"
+                }
+            }
+        }
+    }
+    
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                pom {
+                    project {
+                        parent {
+                            groupId "org.springframework.boot"
+                            artifactId "spring-boot-starter-parent"
+                            version "1.2.5.RELEASE"
+                        }
+                    }
                 }
             }
         }
