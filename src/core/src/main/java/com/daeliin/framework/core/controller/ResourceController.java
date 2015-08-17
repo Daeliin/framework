@@ -89,10 +89,10 @@ public abstract class ResourceController<E extends PersistentResource, ID extend
         
         PageRequest pageRequest =
             new PageRequest(
-                pageRequestParameters.getPageNumber(), 
-                pageRequestParameters.getPageSize(), 
-                pageRequestParameters.getDirection(), 
-                pageRequestParameters.getProperties());
+                pageRequestParameters.pageNumber(), 
+                pageRequestParameters.pageSize(), 
+                pageRequestParameters.direction(), 
+                pageRequestParameters.properties());
         
         return service.findAll(pageRequest);
     }

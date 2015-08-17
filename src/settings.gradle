@@ -1,3 +1,5 @@
+rootProject.name = 'rest framework'
+
 include 'commons'
 include 'commons-test'
 include 'core'

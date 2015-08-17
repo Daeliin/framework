@@ -17,3 +17,5 @@ dist
 bower_components
 npm-debug.log
 /.nb-gradle/
+/sample/.nb-gradle/
+/src/.nb-gradle/

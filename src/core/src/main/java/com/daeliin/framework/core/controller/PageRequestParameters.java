@@ -22,19 +22,19 @@ public class PageRequestParameters {
         buildProperties(propertiesParameter);
     }
 
-    public int getPageNumber() {
+    public int pageNumber() {
         return pageNumber;
     }
 
-    public int getPageSize() {
+    public int pageSize() {
         return pageSize;
     }
 
-    public Sort.Direction getDirection() {
+    public Sort.Direction direction() {
         return direction;
     }
 
-    public String[] getProperties() {
+    public String[] properties() {
         return properties;
     }
     

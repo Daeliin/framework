@@ -1,6 +1,5 @@
 package com.daeliin.framework.core.controller;
 
-import com.daeliin.framework.commons.model.PersistentResource;
 import com.daeliin.framework.core.exception.PageRequestException;
 import java.io.Serializable;
 import org.springframework.data.domain.Page;
