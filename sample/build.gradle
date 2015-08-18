@@ -17,10 +17,6 @@ version = '0.1-SNAPSHOT'
 
 ext {
     daeliinFrameworkVersion = '0.1-SNAPSHOT'
-    groovyVersion = '2.4.3'
-    logbackVersion = '1.1.3'
-    commonsLangVersion = '3.4'
-    lombockVersion = '1.16.4'
 }
 
 configurations {
@@ -43,14 +39,17 @@ repositories {
 
 dependencies {
     // Daeliin
-    compile "com.daeliin.framework:core:$daeliinFrameworkVersion";
-    compile "com.daeliin.framework:security:$daeliinFrameworkVersion";
+    compile "com.daeliin.framework:core:$daeliinFrameworkVersion"
+    compile "com.daeliin.framework:security:$daeliinFrameworkVersion"
     
     // H2 Database
-    compile "com.h2database:h2";
+    compile "com.h2database:h2"
+    
+    // Flyway
+    compile "org.flywaydb:flyway-core"
     
     // Testing
-    testCompile "com.daeliin.framework:commons-test:$daeliinFrameworkVersion";
+    testCompile "com.daeliin.framework:commons-test:$daeliinFrameworkVersion"
 }
 
 test {

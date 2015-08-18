@@ -1,0 +1,6 @@
+CREATE TABLE user(
+    id BIGINT PRIMARY KEY AUTO_INCREMENT, 
+    username VARCHAR(255) NOT NULL, 
+    password VARCHAR(255),
+    enabled BOOLEAN NOT NULL DEFAULT FALSE
+); 
