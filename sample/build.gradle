@@ -11,6 +11,7 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'spring-boot'
+apply plugin: "sonar-runner"
 
 group = 'com.daeliin.framework'
 version = '0.1-SNAPSHOT'
@@ -65,6 +66,17 @@ test {
     }
 }
 
+sonarRunner {
+    sonarProperties {
+        property "sonar.host.url", "$sonarHostUrl"
+        property "sonar.jdbc.url", "$sonarJdbcUrl"
+        property "sonar.jdbc.driverClassName", "$sonarJdbcDriver"
+        property "sonar.jdbc.username", "$sonarJdbcUsername"
+        property "sonar.jdbc.password", "$sonarJdbcPassword"
+    }
+}
+
 task wrapper(type: Wrapper) { 
     gradleVersion = '2.5' 
 }
+
