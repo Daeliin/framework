@@ -40,11 +40,6 @@ subprojects {
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
-    repositories {
-        mavenLocal()
-        mavenCentral()
-    }
-
     dependencies {
         // Groovy
         compile "org.codehaus.groovy:groovy-all:$groovyVersion"
@@ -101,6 +96,11 @@ sonarRunner {
 }
 
 allprojects {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    
     task wrapper(type: Wrapper) { 
         gradleVersion = '2.5' 
     }
