@@ -66,16 +66,6 @@ test {
     }
 }
 
-sonarRunner {
-    sonarProperties {
-        property "sonar.host.url", "$sonarHostUrl"
-        property "sonar.jdbc.url", "$sonarJdbcUrl"
-        property "sonar.jdbc.driverClassName", "$sonarJdbcDriver"
-        property "sonar.jdbc.username", "$sonarJdbcUsername"
-        property "sonar.jdbc.password", "$sonarJdbcPassword"
-    }
-}
-
 task wrapper(type: Wrapper) { 
     gradleVersion = '2.5' 
 }
