@@ -1,4 +1,4 @@
-rootProject.name = 'rest framework'
+rootProject.name = 'rest-framework'
 
 include 'commons'
 include 'commons-test'
