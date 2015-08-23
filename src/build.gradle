@@ -5,6 +5,7 @@ apply plugin: "sonar-runner"
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
+    apply plugin: 'jacoco'
     
     group = 'com.daeliin.framework'
 
