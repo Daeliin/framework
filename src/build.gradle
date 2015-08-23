@@ -92,6 +92,8 @@ sonarRunner {
         property "sonar.jdbc.driverClassName", "$sonarJdbcDriver"
         property "sonar.jdbc.username", "$sonarJdbcUsername"
         property "sonar.jdbc.password", "$sonarJdbcPassword"
+        property "sonar.login", "$sonarLogin"
+        property "sonar.password", "$sonarPassword"
     }
 }
 
