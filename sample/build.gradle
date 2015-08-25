@@ -17,6 +17,7 @@ version = '0.1-SNAPSHOT'
 
 ext {
     daeliinFrameworkVersion = '0.1-SNAPSHOT'
+    lombockVersion= '1.16.4'
 }
 
 configurations {
@@ -50,11 +51,14 @@ dependencies {
     
     // Testing
     testCompile "com.daeliin.framework:commons-test:$daeliinFrameworkVersion"
+    
+    // Lombock
+    provided "org.projectlombok:lombok:$lombockVersion"
 }
 
 test {
     useTestNG() 
-
+    
     testLogging {
         events "passed", "skipped", "failed"
         afterSuite { desc, result ->
