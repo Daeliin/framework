@@ -2,6 +2,9 @@ package com.daeliin.framework.commons.test;
 
 import javax.servlet.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithSecurityContextTestExecutionListener;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -12,6 +15,7 @@ import org.testng.annotations.BeforeMethod;
 /**
  * Provides a set up for a secured integration testing of a resource endpoint.
  */
+@TestExecutionListeners(listeners = {WithSecurityContextTestExecutionListener.class})
 @WebAppConfiguration
 public abstract class SecuredIntegrationTest extends AbstractTransactionalTestNGSpringContextTests {
     
@@ -19,16 +23,16 @@ public abstract class SecuredIntegrationTest extends AbstractTransactionalTestNG
     protected WebApplicationContext webApplicationContext;
     
     @Autowired
-    private Filter springSecurityFilterChain;
+    protected Filter springSecurityFilterChain;
     
     protected MockMvc mockMvc;
     
     @BeforeMethod
-    protected void setUpMethod() {
+    public void setUpMethod() {
         mockMvc = 
             MockMvcBuilders
                 .webAppContextSetup(webApplicationContext)
-                .addFilters(springSecurityFilterChain)
+                .apply(springSecurity())
                 .build();
-    };
+    }
 }

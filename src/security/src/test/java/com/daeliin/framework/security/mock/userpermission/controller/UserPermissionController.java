@@ -1,9 +1,9 @@
-package com.daeliin.framework.sample.api.userpermission.controller;
+package com.daeliin.framework.security.mock.userpermission.controller;
 
-import com.daeliin.framework.sample.api.userpermission.service.UserPermissionService;
 import com.daeliin.framework.core.controller.ResourceController;
-import static com.daeliin.framework.sample.Application.API_ROOT_PATH;
-import com.daeliin.framework.sample.api.userpermission.model.UserPermission;
+import static com.daeliin.framework.security.mock.Application.API_ROOT_PATH;
+import com.daeliin.framework.security.mock.userpermission.model.UserPermission;
+import com.daeliin.framework.security.mock.userpermission.service.UserPermissionService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

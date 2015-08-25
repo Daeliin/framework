@@ -1,8 +1,6 @@
 package com.daeliin.framework.core.json;
 
 import com.daeliin.framework.core.mock.User;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import static org.testng.Assert.assertEquals;

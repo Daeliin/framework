@@ -1,4 +1,4 @@
-package com.daeliin.framework.sample;
+package com.daeliin.framework.security.mock;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ComponentScan(basePackages = "com.daeliin")
 @EntityScan(basePackages = "com.daeliin")
 @EnableJpaRepositories(basePackages = "com.daeliin")
-public class Application  {
+public class Application {
     
     public static final String API_ROOT_PATH = "/api";
     
