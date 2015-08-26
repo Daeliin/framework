@@ -1,6 +1,5 @@
 package com.daeliin.framework.commons.test;
 
-import javax.servlet.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithSecurityContextTestExecutionListener;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -21,9 +20,6 @@ public abstract class SecuredIntegrationTest extends AbstractTransactionalTestNG
     
     @Autowired 
     protected WebApplicationContext webApplicationContext;
-    
-    @Autowired
-    protected Filter springSecurityFilterChain;
     
     protected MockMvc mockMvc;
     
