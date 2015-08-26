@@ -2,11 +2,9 @@ package com.daeliin.framework.core.json;
 
 import com.daeliin.framework.core.mock.User;
 import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
 import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
 
-@Slf4j
 public class JsonObjectTest {
     
     @Test

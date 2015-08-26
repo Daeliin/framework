@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(API_ROOT_PATH + "/users")
-public class UserController extends ResourceController<User, Long, UserService>{
+public class UserController extends ResourceController<User, Long, UserService> {
 }

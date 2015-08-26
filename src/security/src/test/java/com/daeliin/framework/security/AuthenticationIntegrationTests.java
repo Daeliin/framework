@@ -10,6 +10,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.testng.annotations.Test;
 
@@ -86,6 +87,24 @@ public class AuthenticationIntegrationTests extends SecuredIntegrationTest {
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isUnauthorized());
     }
+    
+    @WithMockUser(roles = "USER")
+    @Test
+    public void userWithoutAdminPermissions_requestsResourcesProtectedByAdmin_returnsHttpForbidden() throws Exception {
+        mockMvc
+            .perform(delete(API_ROOT_PATH + "/users")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isForbidden());
+    }
+    
+    @WithMockUser(roles = "ADMIN")
+    @Test
+    public void userWithAdminPermissions_requestsResourcesProtectedByAdmin_returnsCorrespondingHttpCode() throws Exception {
+        mockMvc
+            .perform(delete(API_ROOT_PATH + "/users")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isGone());
+    } 
     
     private ResultActions login(final String username, final String password) throws Exception {
         return 

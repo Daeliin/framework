@@ -59,6 +59,9 @@ subprojects {
         useTestNG() 
         
         testLogging {
+            showStackTraces true
+            showExceptions true
+            showCauses true
             events "passed", "skipped", "failed"
             afterSuite { desc, result ->
                 if (!desc.parent) { 
