@@ -3,6 +3,9 @@ package com.daeliin.framework.core.controller;
 import com.daeliin.framework.core.exception.PageRequestException;
 import org.springframework.data.domain.Sort;
 
+/**
+ * Builds parameters of a page request from their String value.
+ */
 public class PageRequestParameters {
     
     private int pageNumber;
@@ -22,18 +25,34 @@ public class PageRequestParameters {
         buildProperties(propertiesParameter);
     }
 
+    /**
+     * Returns the page number.
+     * @return the page number
+     */
     public int pageNumber() {
         return pageNumber;
     }
 
+    /**
+     * Returns the page size.
+     * @return the page size
+     */
     public int pageSize() {
         return pageSize;
     }
-
+    
+    /**
+     * Returns the sort direction.
+     * @return the sort direction
+     */
     public Sort.Direction direction() {
         return direction;
     }
 
+    /**
+     * Returns the array of property.
+     * @return the array of property.
+     */
     public String[] properties() {
         return properties;
     }
