@@ -61,7 +61,7 @@ public class PageRequestParameters {
         boolean pageNumberParameterIsNotCorrect = false;
         
         try {
-            int pageNumberValue = Integer.valueOf(pageNumberParameter);
+            int pageNumberValue = Integer.parseInt(pageNumberParameter);
             
             if (pageNumberValue < 0) {
                 pageNumberParameterIsNotCorrect = true;
@@ -81,7 +81,7 @@ public class PageRequestParameters {
         boolean pageSizeParameterIsNotCorrect = false;
         
         try {
-            int pageSizeValue = Integer.valueOf(pageSizeParameter);
+            int pageSizeValue = Integer.parseInt(pageSizeParameter);
             
             if (pageSizeValue < 0) {
                 pageSizeParameterIsNotCorrect = true;
@@ -98,9 +98,9 @@ public class PageRequestParameters {
     }
     
     private void buildDirection(final String directionParameter) throws PageRequestException {
-        if (directionParameter.equalsIgnoreCase("asc")) {
+        if ("asc".equalsIgnoreCase(directionParameter)) {
             this.direction = Sort.Direction.ASC;
-        } else if (directionParameter.equalsIgnoreCase("desc")) {
+        } else if ("desc".equalsIgnoreCase(directionParameter)) {
             this.direction = Sort.Direction.DESC;
         } else {
             throw new PageRequestException("Page direction must be 'asc' or 'desc'");

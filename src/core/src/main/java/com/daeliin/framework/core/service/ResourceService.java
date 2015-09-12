@@ -74,7 +74,7 @@ public abstract class ResourceService<E extends PersistentResource, ID extends S
      * @throws ResourceNotFoundException if the resource is not found
      */
     @Override
-    public E findOne(ID id) throws ResourceNotFoundException {
+    public E findOne(ID id) {
         E resource = null;
         
         if (id != null) {
@@ -135,7 +135,7 @@ public abstract class ResourceService<E extends PersistentResource, ID extends S
      * @throws ResourceNotFoundException if the resource id is not found or if the resource id doesnt match its actual id
      */
     @Override
-    public E update(ID id, E resource) throws ResourceNotFoundException {
+    public E update(ID id, E resource) {
         if (id == null || !repository.exists(id) || resource == null || !resource.getId().equals(id)) {
             throw new ResourceNotFoundException(MESSAGE_RESOURCE_NOT_FOUND);
         }
@@ -159,7 +159,7 @@ public abstract class ResourceService<E extends PersistentResource, ID extends S
      * @throws ResourceNotFoundException if the resource is not found
      */
     @Override
-    public void delete(ID id) throws ResourceNotFoundException {
+    public void delete(ID id) {
         if (!repository.exists(id)) {
             throw new ResourceNotFoundException(MESSAGE_RESOURCE_NOT_FOUND);
         }

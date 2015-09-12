@@ -62,7 +62,7 @@ public abstract class ResourceController<E extends PersistentResource, ID extend
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     @Override
-    public E getOne(@PathVariable ID id) throws ResourceNotFoundException {
+    public E getOne(@PathVariable ID id) {
         return service.findOne(id);
     }
     
@@ -109,7 +109,7 @@ public abstract class ResourceController<E extends PersistentResource, ID extend
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     @Override
-    public E update(@PathVariable ID id, @RequestBody @Valid E resource) throws ResourceNotFoundException {
+    public E update(@PathVariable ID id, @RequestBody @Valid E resource) {
         return service.update(id, resource);
     }
 
@@ -120,7 +120,7 @@ public abstract class ResourceController<E extends PersistentResource, ID extend
     @RequestMapping(value="{id}", method = DELETE)
     @ResponseStatus(HttpStatus.GONE)
     @Override
-    public void delete(@PathVariable ID id) throws ResourceNotFoundException {
+    public void delete(@PathVariable ID id) {
         service.delete(id);
     }
     

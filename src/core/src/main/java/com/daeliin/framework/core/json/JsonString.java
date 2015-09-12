@@ -9,13 +9,13 @@ import lombok.ToString;
  * Serializes an Object into a JSON String,
  * if the object can't be serialized, the value is an empty String.
  */
-@EqualsAndHashCode(of = {"jsonString"})
-@ToString(of = {"jsonString"})
+@EqualsAndHashCode(of = {"json"})
+@ToString(of = {"json"})
 public final class JsonString {
     
     private final ObjectMapper mapper;
     private final Object objectToSerialize;
-    private String jsonString;
+    private String json;
     
     /**
      * Builds a JSON String from an object.
@@ -32,14 +32,14 @@ public final class JsonString {
      * @return the ojbect as a JSON String
      */
     public String value() {
-        return this.jsonString;
+        return this.json;
     }
 
     private void serialize() {
         try {
-            this.jsonString = mapper.writeValueAsString(objectToSerialize);
+            this.json = mapper.writeValueAsString(objectToSerialize);
         } catch (JsonProcessingException e) {
-            this.jsonString = "";
+            this.json = "";
         }
     }
 }

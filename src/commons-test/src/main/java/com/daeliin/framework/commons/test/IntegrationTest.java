@@ -22,5 +22,5 @@ public abstract class IntegrationTest extends AbstractTransactionalTestNGSpringC
     @BeforeMethod
     protected void setUpMethod() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    };
+    }
 }
