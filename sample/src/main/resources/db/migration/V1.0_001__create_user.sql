@@ -1,6 +1,8 @@
 CREATE TABLE user(
     id BIGINT PRIMARY KEY AUTO_INCREMENT, 
     username VARCHAR(255) NOT NULL, 
-    password VARCHAR(255),
+    password VARCHAR(255) NOT NULL,
+    token VARCHAR(128) NOT NULL,
+    signedup_date DATETIME,
     enabled BOOLEAN NOT NULL DEFAULT FALSE
 ); 

@@ -1,11 +1,13 @@
 package com.daeliin.framework.commons.security.details;
 
 import com.daeliin.framework.commons.model.LongIdPersistentResource;
+import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.NotBlank;
 
 @Getter
 @Setter
@@ -16,5 +18,7 @@ public abstract class PersistentPermissionDetails extends LongIdPersistentResour
     
     private static final long serialVersionUID = -4768460974607663983L;
     
+    @Column(unique = true)
+    @NotBlank
     private String label;
 }

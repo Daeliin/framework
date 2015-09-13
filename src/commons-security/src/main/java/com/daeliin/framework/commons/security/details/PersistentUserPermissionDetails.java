@@ -4,6 +4,7 @@ import com.daeliin.framework.commons.model.LongIdPersistentResource;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -18,8 +19,10 @@ public abstract class PersistentUserPermissionDetails<E extends UserDetails, P e
     private static final long serialVersionUID = 956187325117395404L;
     
     @ManyToOne(fetch = FetchType.EAGER)
+    @NotNull
     E user;
     
     @ManyToOne(fetch = FetchType.EAGER)
+    @NotNull
     P permission;
 }

@@ -14,8 +14,6 @@ dependencies {
     // Daeliin
     compile project(':commons')
     
-    
-    
     // Spring
     compile "org.testng:testng:$testNgVersion"
     compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
