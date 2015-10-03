@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.testng.annotations.Test;
 
 @ContextConfiguration(classes = Application.class)
-public class AuthenticationIntegrationTests extends SecuredIntegrationTest {
+public class AuthenticationIntegrationTest extends SecuredIntegrationTest {
     
     @Value("${authentication.endpoint}")
     private String authenticationEndpoint;
