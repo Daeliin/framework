@@ -6,6 +6,10 @@ import java.util.Date;
 
 public interface UserDetails<ID extends Serializable> extends PersistentResource<ID> {
 
+    String getEmail();
+    
+    void setEmail(final String email);
+    
     String getUsername();
     
     void setUsername(final String username);

@@ -10,19 +10,27 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Setter
 @Getter
-@EqualsAndHashCode(of = {"username"}, callSuper = true)
-@ToString(of = {"username", "enabled"}, callSuper = true)
+@EqualsAndHashCode(of = {"email", "username"}, callSuper = true)
+@ToString(of = {"email", "username", "enabled"}, callSuper = true)
 @MappedSuperclass
 public abstract class PersistentUserDetails extends LongIdPersistentResource implements UserDetails<Long>  {
     
     private static final long serialVersionUID = -1898848122717107177L;
     
+    @Email
     @Column(unique = true)
     @NotBlank
+    private String email;
+    
+    @Column(unique = true)
+    @NotBlank
+    @Length(min = 6, max = 30)
     private String username;
     
     @JsonIgnore

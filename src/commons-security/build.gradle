@@ -2,9 +2,16 @@ version = '0.1-SNAPSHOT'
 
 apply plugin: 'spring-boot'
 
+ext {
+    commonsCodecVersion = '1.10' 
+}
+
 dependencies {
     // Daeliin
     compile project(':core')
+    
+    // Apache commons
+    compile "commons-codec:commons-codec:$commonsCodecVersion"
     
     // Spring
     compile "org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion"
