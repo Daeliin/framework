@@ -1,35 +1,59 @@
 package com.daeliin.framework.commons.security.cryptography;
 
-import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 public class Token {
     
-    public static enum ALGORITHM {
-        MD5, SHA512
-    }
-    
-    private final Collection<String> datas;
-    private final ALGORITHM algorithm;
+    private final List<String> datas;
+    private final DigestAlgorithm algorithm;
     private final boolean random;
     private String asString;
     
-    public Token(final Collection<String> datas, final ALGORITHM algorithm, final boolean random) {
+    /**
+     * Builds a token based on list of datas, according to a digest algorithm, random flag can be added to add random salt.
+     * @param datas datas to generate the token from
+     * @param algorithm digest algorithm 
+     * @param random whether random salt should be added or not
+     */
+    public Token(final List<String> datas, final DigestAlgorithm algorithm, final boolean random) {
         this.datas = datas;
         this.algorithm = algorithm;
         this.random = random;
+        this.asString = "";
         
         generate();
     }
     
-    public Token(final Collection<String> datas) {
-        this(datas, ALGORITHM.SHA512, false);
+    public Token(final List<String> datas, final boolean random) {
+        this(datas, new Sha512(), random);
     }
     
+    public Token(final List<String> datas, final DigestAlgorithm algorithm) {
+        this(datas, algorithm, false);
+    }
+    
+    public Token(final List<String> datas) {
+        this(datas, new Sha512(), false);
+    }
+    
+    /**
+     * Returns the token as a string.
+     * @return the token as  a string
+     */
     public String asString() {
         return this.asString;
     }
     
     private void generate() {
-        this.asString = "generated";
+        StringBuilder dataBuilder = new StringBuilder();
+        
+        if (random) {
+            dataBuilder.append(new Date());
+        }
+        
+        datas.forEach(dataBuilder::append);
+    
+        asString = algorithm.digest(dataBuilder.toString());
     }
 }

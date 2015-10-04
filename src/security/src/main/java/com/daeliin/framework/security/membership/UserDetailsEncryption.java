@@ -1,8 +1,10 @@
 package com.daeliin.framework.security.membership;
 
+import com.daeliin.framework.commons.security.cryptography.Sha512;
+import com.daeliin.framework.commons.security.cryptography.Token;
 import com.daeliin.framework.commons.security.details.UserDetails;
-import java.util.Date;
-import org.apache.commons.codec.digest.DigestUtils;
+import java.util.LinkedList;
+import java.util.List;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class UserDetailsEncryption {
@@ -19,19 +21,14 @@ public class UserDetailsEncryption {
     }
     
     private void generatePassword() {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        this.password = passwordEncoder.encode(this.userDetails.getPassword());
+        this.password = new BCryptPasswordEncoder().encode(this.userDetails.getPassword());
     }
     
     private void generateToken() {
-        StringBuilder sb = new StringBuilder();
-        String randomData = new Date().toString();
+        List<String> data = new LinkedList<>();
+        data.add(userDetails.getEmail());
         
-        sb
-            .append(this.userDetails.getUsername())
-            .append(randomData);
-        
-        this.token = DigestUtils.sha512Hex(sb.toString());
+        this.token = new Token(data, new Sha512(), true).asString();
     }
     
     public String password() {
