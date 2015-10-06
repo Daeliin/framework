@@ -1,4 +1,4 @@
-package com.daeliin.framework.security;
+package com.daeliin.framework.security.authentication.form;
 
 import com.daeliin.framework.commons.test.SecuredIntegrationTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.testng.annotations.Test;
 
 @ContextConfiguration(classes = Application.class)
-public class AuthenticationIntegrationTest extends SecuredIntegrationTest {
+public class FormAuthenticationIntegrationTest extends SecuredIntegrationTest {
     
     @Value("${authentication.endpoint}")
     private String authenticationEndpoint;
