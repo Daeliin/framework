@@ -21,7 +21,7 @@ public class UserDetailsEncryption {
     }
     
     private void generatePassword() {
-        this.password = new BCryptPasswordEncoder().encode(this.userDetails.getPassword());
+        this.password = new BCryptPasswordEncoder().encode(this.userDetails.getClearPassword());
     }
     
     private void generateToken() {

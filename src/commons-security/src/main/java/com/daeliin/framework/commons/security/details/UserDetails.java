@@ -14,6 +14,10 @@ public interface UserDetails<ID extends Serializable> extends PersistentResource
     
     void setUsername(final String username);
     
+    String getClearPassword();
+    
+    void setClearPassword(final String clearPassword);
+    
     String getPassword();
     
     void setPassword(final String password);

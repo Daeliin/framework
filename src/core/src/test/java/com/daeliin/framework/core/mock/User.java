@@ -2,6 +2,7 @@ package com.daeliin.framework.core.mock;
 
 import com.daeliin.framework.commons.model.LongIdPersistentResource;
 import javax.persistence.Entity;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -10,6 +11,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @Getter
 @Setter
 @Entity
+@EqualsAndHashCode(of = {"name"}, callSuper = false)
 @ToString(of = {"name"}, callSuper = true)
 public class User extends LongIdPersistentResource implements Comparable<User> {
     

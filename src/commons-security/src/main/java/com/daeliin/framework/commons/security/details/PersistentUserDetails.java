@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Transient;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +16,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 @Setter
 @Getter
-@EqualsAndHashCode(of = {"email", "username"}, callSuper = true)
+@EqualsAndHashCode(of = {"email", "username"}, callSuper = false)
 @ToString(of = {"email", "username", "enabled"}, callSuper = true)
 @MappedSuperclass
 public abstract class PersistentUserDetails extends LongIdPersistentResource implements UserDetails<Long>  {
@@ -30,19 +30,21 @@ public abstract class PersistentUserDetails extends LongIdPersistentResource imp
     
     @Column(unique = true)
     @NotBlank
-    @Length(min = 6, max = 30)
+    @Length(min = 3, max = 30)
     private String username;
     
-    @JsonIgnore
+    @Transient
     @NotBlank
+    @Length(min = 8)
+    private String clearPassword;
+    
+    @JsonIgnore
     private String password;
     
-    @NotBlank
     private String token;
     
     @Column(name = "signedup_date")
     private Date signedUpDate;
     
-    @NotNull
     private boolean enabled = false;
 }

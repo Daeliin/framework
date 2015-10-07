@@ -25,14 +25,14 @@ import org.springframework.stereotype.Service;
 public class PersistentUserDetailsService implements UserDetailsService {
     
     @Autowired
-    private UserDetailsRepository userRepository;
+    private UserDetailsRepository userDetailsRepository;
     
     @Autowired
     private UserPermissionDetailsRepository permissionRepository;
     
     @Override
     public org.springframework.security.core.userdetails.UserDetails loadUserByUsername(String username) {
-        UserDetails user = userRepository.findByUsernameIgnoreCaseAndEnabled(username, true);
+        UserDetails user = userDetailsRepository.findByUsernameIgnoreCaseAndEnabled(username, true);
         
         if (user == null) {
             throw new UsernameNotFoundException("Username not found");
@@ -43,6 +43,11 @@ public class PersistentUserDetailsService implements UserDetailsService {
         permissions.forEach(userPermission -> authorities.add(new SimpleGrantedAuthority(userPermission.getPermission().getLabel())));
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
+    }
+    
+    public boolean exists(final UserDetails userDetails) {
+        UserDetails existingUserDetails = userDetailsRepository.findByUsernameIgnoreCase(userDetails.getUsername());
+        return existingUserDetails != null;
     }
     
     public void generate(UserDetails userDetails) {
@@ -70,11 +75,9 @@ public class PersistentUserDetailsService implements UserDetailsService {
         
         assignNewToken(userDetails);
         userDetails.setEnabled(true);
-        //TODO: send activation mail to user
     }
     
     public void requestNewPassword(final UserDetails userDetails) {
-        //TODO: send reset password mail to user
     }
     
     public void resetPassword(UserDetails userDetails, final String resetPasswordToken, final String newPassword) throws InvalidTokenException {
@@ -85,6 +88,5 @@ public class PersistentUserDetailsService implements UserDetailsService {
         UserDetailsEncryption userDetailsEncryption = new UserDetailsEncryption(userDetails);
         userDetails.setPassword(userDetailsEncryption.password());
         userDetails.setToken(userDetailsEncryption.token());
-        //TODO: send password reseted  mail to user
     }
 }

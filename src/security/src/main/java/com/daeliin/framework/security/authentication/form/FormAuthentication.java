@@ -73,7 +73,7 @@ public abstract class FormAuthentication extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
                 .antMatchers(
                     apiRootPath + authenticationEndpoint,
-                    apiRootPath + "/public")
+                    apiRootPath + "/public/**")
                     .permitAll()
                 .antMatchers(
                     apiRootPath + "/**")

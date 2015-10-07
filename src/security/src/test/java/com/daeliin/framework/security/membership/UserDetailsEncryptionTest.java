@@ -30,7 +30,7 @@ public class UserDetailsEncryptionTest {
     private User createUser(final String username, final String password) {
         User user = new User();
         user.setUsername(username);
-        user.setPassword(password);
+        user.setClearPassword(password);
     
         return user;
     }

@@ -3,6 +3,7 @@ package com.daeliin.framework.security.membership;
 import com.daeliin.framework.commons.security.details.UserDetails;
 import com.daeliin.framework.commons.security.details.UserDetailsRepository;
 import com.daeliin.framework.commons.security.exception.InvalidTokenException;
+import com.daeliin.framework.commons.security.exception.UserDetailsAlreadyExistException;
 import com.daeliin.framework.commons.security.exception.WrongAccessException;
 import com.daeliin.framework.core.exception.ResourceNotFoundException;
 import com.daeliin.framework.core.service.ResourceService;
@@ -26,9 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 public abstract class MembershipController<E extends UserDetails, ID extends Serializable, R extends UserDetailsRepository<E, ID>, S extends ResourceService<E, ID, R>> {
     
     @Autowired
-    protected SessionHelper sessionHelper;
-    
-    @Autowired
     protected S service;
     
     @Autowired
@@ -38,6 +36,10 @@ public abstract class MembershipController<E extends UserDetails, ID extends Ser
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public void signUp(@RequestBody @Valid E userDetails) {
+        if (userDetailsService.exists(userDetails)) {
+            throw new UserDetailsAlreadyExistException("The username already exist");
+        }
+        
         userDetailsService.generate(userDetails);
         UserDetails createdUserDetails = service.create(userDetails);
         
@@ -51,14 +53,14 @@ public abstract class MembershipController<E extends UserDetails, ID extends Ser
         @RequestParam(value = "id") ID userDetailsId,
         @RequestParam(value = "token") String activationToken) {
         if (!service.exists(userDetailsId)) {
-            throw new ResourceNotFoundException("User[" + userDetailsId + "] not found");
+            throw new ResourceNotFoundException("user[" + userDetailsId + "] not found");
         }
         
         try {
             userDetailsService.activate(service.findOne(userDetailsId), activationToken);
-            log.info("user [" + userDetailsId + "] activated");
+            log.info("user[" + userDetailsId + "] activated");
         } catch(InvalidTokenException e) {
-            log.warn("An attempt to activate user[" + userDetailsId + "] with an invalid token[" + activationToken + " has been made");
+            log.warn("an attempt to activate user[" + userDetailsId + "] with an invalid token[" + activationToken + " has been made");
             throw new WrongAccessException("Actication token is not valid");
         }
     }
@@ -73,7 +75,7 @@ public abstract class MembershipController<E extends UserDetails, ID extends Ser
         
         userDetailsService.requestNewPassword(service.findOne(userDetailsId));
         
-        log.info("user [" + userDetailsId + "] requested a new password");
+        log.info("user[" + userDetailsId + "] requested a new password");
     }
     
     @RequestMapping(value = "resetpassword", method = RequestMethod.PUT)
@@ -91,7 +93,7 @@ public abstract class MembershipController<E extends UserDetails, ID extends Ser
             userDetailsService.resetPassword(service.findOne(userDetailsId), resetPasswordToken, newPassword);
             log.info("user [" + userDetailsId + "] reseted its password");
         } catch (InvalidTokenException e) {
-            log.warn("An attempt to reset user[" + userDetailsId + "] password with an invalid token[" + resetPasswordToken + " has been made");
+            log.warn("an attempt to reset user[" + userDetailsId + "] password with an invalid token[" + resetPasswordToken + " has been made");
             throw new WrongAccessException("Reset password token is not valid");
         }
     }

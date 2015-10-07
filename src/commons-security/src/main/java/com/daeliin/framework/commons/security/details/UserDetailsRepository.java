@@ -8,4 +8,8 @@ import org.springframework.data.repository.NoRepositoryBean;
 public interface UserDetailsRepository<E extends UserDetails, ID extends Serializable> extends ResourceRepository<E, ID> {
     
     public E findByUsernameIgnoreCaseAndEnabled(final String username, final boolean enabled);
+    
+    public E findByEmailIgnoreCase(final String email);
+    
+    public E findByUsernameIgnoreCase(final String username);
 }
