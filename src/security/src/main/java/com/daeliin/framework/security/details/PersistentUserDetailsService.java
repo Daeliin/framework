@@ -85,8 +85,10 @@ public class PersistentUserDetailsService implements UserDetailsService {
             throw new InvalidTokenException("Activation token is not valid for user[" + userDetails.getId() + "]");
         }
         
+        userDetails.setClearPassword(newPassword);
         UserDetailsEncryption userDetailsEncryption = new UserDetailsEncryption(userDetails);
         userDetails.setPassword(userDetailsEncryption.password());
         userDetails.setToken(userDetailsEncryption.token());
+        userDetails.setEnabled(true);
     }
 }

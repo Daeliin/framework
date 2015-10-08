@@ -1,5 +1,6 @@
 package com.daeliin.framework.security.membership;
 
+import com.daeliin.framework.commons.security.membership.ResetPasswordRequest;
 import com.daeliin.framework.commons.security.details.UserDetails;
 import com.daeliin.framework.commons.security.details.UserDetailsRepository;
 import com.daeliin.framework.commons.security.exception.InvalidTokenException;
@@ -8,7 +9,6 @@ import com.daeliin.framework.commons.security.exception.WrongAccessException;
 import com.daeliin.framework.core.exception.ResourceNotFoundException;
 import com.daeliin.framework.core.service.ResourceService;
 import com.daeliin.framework.security.details.PersistentUserDetailsService;
-import com.daeliin.framework.security.session.SessionHelper;
 import java.io.Serializable;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -81,17 +81,18 @@ public abstract class MembershipController<E extends UserDetails, ID extends Ser
     @RequestMapping(value = "resetpassword", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void resetPassword(
-            @RequestParam(value = "id") ID userDetailsId,
-            @RequestParam(value = "token") String resetPasswordToken,
-            String newPassword) {
+    public void resetPassword(@RequestBody @Valid ResetPasswordRequest<ID> resetPasswordRequest) {
+        ID userDetailsId = resetPasswordRequest.getUserDetailsId();
+        String resetPasswordToken = resetPasswordRequest.getToken();
+        String newPassword = resetPasswordRequest.getNewPassword();
+        
         if (!service.exists(userDetailsId)) {
             throw new ResourceNotFoundException("User[" + userDetailsId + "] not found");
         }
         
         try {
             userDetailsService.resetPassword(service.findOne(userDetailsId), resetPasswordToken, newPassword);
-            log.info("user [" + userDetailsId + "] reseted its password");
+            log.info("user[" + userDetailsId + "] reseted its password");
         } catch (InvalidTokenException e) {
             log.warn("an attempt to reset user[" + userDetailsId + "] password with an invalid token[" + resetPasswordToken + " has been made");
             throw new WrongAccessException("Reset password token is not valid");
