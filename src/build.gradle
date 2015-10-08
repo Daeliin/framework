@@ -10,6 +10,7 @@ subprojects {
     group = 'com.daeliin.framework'
 
     ext {
+        springVersion = '4.2.1.RELEASE'
         springBootVersion = '1.2.5.RELEASE'
         groovyVersion = '2.4.3'
         logbackVersion = '1.1.3'

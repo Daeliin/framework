@@ -50,7 +50,7 @@ public class PersistentUserDetailsService implements UserDetailsService {
         return existingUserDetails != null;
     }
     
-    public void generate(UserDetails userDetails) {
+    public void signUp(UserDetails userDetails) {
         UserDetailsEncryption userDetailsEncryption = new UserDetailsEncryption(userDetails);
         
         userDetails.setSignedUpDate(new Date());
@@ -75,9 +75,6 @@ public class PersistentUserDetailsService implements UserDetailsService {
         
         assignNewToken(userDetails);
         userDetails.setEnabled(true);
-    }
-    
-    public void requestNewPassword(final UserDetails userDetails) {
     }
     
     public void resetPassword(UserDetails userDetails, final String resetPasswordToken, final String newPassword) throws InvalidTokenException {

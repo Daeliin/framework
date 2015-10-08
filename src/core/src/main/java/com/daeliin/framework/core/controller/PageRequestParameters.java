@@ -17,7 +17,7 @@ public class PageRequestParameters {
             final String pageNumberParameter, 
             final String pageSizeParameter, 
             final String directionParameter, 
-            final String... propertiesParameter) throws PageRequestException {
+            final String... propertiesParameter) throws PageRequestException{
         
         buildPageNumber(pageNumberParameter);
         buildPageSize(pageSizeParameter);

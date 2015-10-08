@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Serializes an Object into a JSON String,
@@ -11,7 +13,9 @@ import lombok.ToString;
  */
 @EqualsAndHashCode(of = {"json"})
 @ToString(of = {"json"})
-public final class JsonString {
+public class JsonString {
+    
+    Logger log = LoggerFactory.getLogger(JsonString.class.getName());
     
     private final ObjectMapper mapper;
     private final Object objectToSerialize;
@@ -39,6 +43,7 @@ public final class JsonString {
         try {
             this.json = mapper.writeValueAsString(objectToSerialize);
         } catch (JsonProcessingException e) {
+            log.warn("Error while json processing", e);
             this.json = "";
         }
     }
