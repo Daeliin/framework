@@ -1,7 +1,7 @@
 package com.daeliin.framework.core.integration;
 
 import com.daeliin.framework.commons.test.IntegrationTest;
-import com.daeliin.framework.core.Application;
+import com.daeliin.framework.core.mock.Application;
 import com.daeliin.framework.core.json.JsonObject;
 import com.daeliin.framework.core.json.JsonString;
 import com.daeliin.framework.core.mock.User;

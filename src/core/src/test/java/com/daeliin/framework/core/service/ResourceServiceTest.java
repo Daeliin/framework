@@ -1,6 +1,6 @@
 package com.daeliin.framework.core.service;
 
-import com.daeliin.framework.core.Application;
+import com.daeliin.framework.core.mock.Application;
 import com.daeliin.framework.core.exception.ResourceNotFoundException;
 import com.daeliin.framework.core.mock.User;
 import com.daeliin.framework.core.mock.UserRepository;

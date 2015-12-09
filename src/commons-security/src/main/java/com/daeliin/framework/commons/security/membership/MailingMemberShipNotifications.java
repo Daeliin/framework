@@ -18,13 +18,9 @@ public abstract class MailingMemberShipNotifications<E extends UserDetails> impl
     @Value("${mail.from}")
     private String from;
     
+    @Autowired
     protected Mails mails;
 
-    @Autowired
-    public MailingMemberShipNotifications(final Mails mails) {
-        this.mails = mails;
-    }
-    
     @Override
     public void signUp(final E userDetails) {
         Map<String, String> parameters = addUserDetailsParameters(userDetails);
@@ -35,7 +31,7 @@ public abstract class MailingMemberShipNotifications<E extends UserDetails> impl
                 .from(from)
                 .to(userDetails.getEmail())
                 .subject("Welcome, activate your account")
-                .templateName("signUp.html")
+                .templateName("signUp")
                 .parameters(parameters)
                 .build();
             
@@ -55,7 +51,7 @@ public abstract class MailingMemberShipNotifications<E extends UserDetails> impl
                 .from(from)
                 .to(userDetails.getEmail())
                 .subject("Thanks for activating your account")
-                .templateName("activate.html")
+                .templateName("activate")
                 .parameters(parameters)
                 .build();
             
@@ -75,7 +71,7 @@ public abstract class MailingMemberShipNotifications<E extends UserDetails> impl
                 .from(from)
                 .to(userDetails.getEmail())
                 .subject("You requested a  new password")
-                .templateName("newPassword.html")
+                .templateName("newPassword")
                 .parameters(parameters)
                 .build();
             
@@ -95,7 +91,7 @@ public abstract class MailingMemberShipNotifications<E extends UserDetails> impl
                 .from(from)
                 .to(userDetails.getEmail())
                 .subject("Your password has been changed")
-                .templateName("resetPassword.html")
+                .templateName("resetPassword")
                 .parameters(parameters)
                 .build();
             

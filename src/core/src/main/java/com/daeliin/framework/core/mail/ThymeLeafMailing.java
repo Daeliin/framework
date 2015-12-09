@@ -36,6 +36,7 @@ public abstract class ThymeLeafMailing {
         ClassLoaderTemplateResolver emailTemplateResolver = new ClassLoaderTemplateResolver();
         
         emailTemplateResolver.setPrefix(path);
+        emailTemplateResolver.setSuffix(".html");
         emailTemplateResolver.setTemplateMode("HTML5");
         emailTemplateResolver.setCharacterEncoding("UTF-8");
         emailTemplateResolver.setOrder(1);
@@ -46,12 +47,10 @@ public abstract class ThymeLeafMailing {
     @Bean
     @Autowired
     public SpringTemplateEngine templateEngine(ClassLoaderTemplateResolver emailTemplateResolver, ClassLoaderTemplateResolver webTemplateResolver) {
-        
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
         
         Set<TemplateResolver> templateResolvers = new HashSet<>();
         templateResolvers.add(emailTemplateResolver);
-        
         templateEngine.setTemplateResolvers(templateResolvers);
         
         return templateEngine;

@@ -1,6 +1,6 @@
 package com.daeliin.framework.core.repository;
 
-import com.daeliin.framework.core.Application;
+import com.daeliin.framework.core.mock.Application;
 import com.daeliin.framework.core.mock.User;
 import com.daeliin.framework.core.mock.UserRepository;
 import java.util.ArrayList;

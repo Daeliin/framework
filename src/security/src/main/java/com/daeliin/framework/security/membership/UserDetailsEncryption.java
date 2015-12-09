@@ -20,6 +20,14 @@ public class UserDetailsEncryption {
         generateToken();
     }
     
+    public String password() {
+        return this.password;
+    }
+    
+    public String token() {
+        return this.token;
+    }
+    
     private void generatePassword() {
         this.password = new BCryptPasswordEncoder().encode(this.userDetails.getClearPassword());
     }
@@ -29,13 +37,5 @@ public class UserDetailsEncryption {
         data.add(userDetails.getEmail());
         
         this.token = new Token(data, new Sha512(), true).asString();
-    }
-    
-    public String password() {
-        return this.password;
-    }
-    
-    public String token() {
-        return this.token;
     }
 }
