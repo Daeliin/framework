@@ -1,7 +1,5 @@
 language: java
 jdk:
   - oraclejdk8
-before_script:
-  - cd src/
 script:
   - gradle clean test assemble
