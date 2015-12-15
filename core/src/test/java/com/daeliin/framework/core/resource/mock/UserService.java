@@ -1,8 +1,6 @@
-package com.daeliin.framework.security.mock.user.service;
+package com.daeliin.framework.core.resource.mock;
 
 import com.daeliin.framework.core.resource.service.ResourceService;
-import com.daeliin.framework.security.mock.user.model.User;
-import com.daeliin.framework.security.mock.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 @Service

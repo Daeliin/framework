@@ -1,8 +1,8 @@
 package com.daeliin.framework.security.mock.user.controller;
 
 import com.daeliin.framework.security.mock.user.model.User;
-import com.daeliin.framework.core.controller.ResourceController;
-import com.daeliin.framework.core.exception.ResourceNotFoundException;
+import com.daeliin.framework.core.resource.controller.ResourceController;
+import com.daeliin.framework.core.resource.exception.ResourceNotFoundException;
 import static com.daeliin.framework.security.mock.Application.API_ROOT_PATH;
 import com.daeliin.framework.security.mock.user.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;

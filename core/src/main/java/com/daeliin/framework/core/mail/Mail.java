@@ -1,6 +1,6 @@
 package com.daeliin.framework.core.mail;
 
-import com.daeliin.framework.core.exception.MailBuildingException;
+import com.daeliin.framework.core.resource.exception.MailBuildingException;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;

@@ -1,9 +1,9 @@
 package com.daeliin.framework.commons.security.membership;
 
 import com.daeliin.framework.commons.security.details.UserDetails;
-import com.daeliin.framework.core.exception.MailBuildingException;
 import com.daeliin.framework.core.mail.Mail;
 import com.daeliin.framework.core.mail.Mails;
+import com.daeliin.framework.core.resource.exception.MailBuildingException;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;

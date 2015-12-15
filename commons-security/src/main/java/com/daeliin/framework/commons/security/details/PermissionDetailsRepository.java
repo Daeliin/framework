@@ -1,6 +1,6 @@
 package com.daeliin.framework.commons.security.details;
 
-import com.daeliin.framework.core.repository.ResourceRepository;
+import com.daeliin.framework.core.resource.repository.ResourceRepository;
 import java.io.Serializable;
 import org.springframework.data.repository.NoRepositoryBean;
 
