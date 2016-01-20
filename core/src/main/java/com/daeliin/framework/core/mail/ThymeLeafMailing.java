@@ -31,28 +31,28 @@ public abstract class ThymeLeafMailing {
         return mailSender;
     }
     
-    @Bean
-    public ClassLoaderTemplateResolver emailTemplateResolver() {
-        ClassLoaderTemplateResolver emailTemplateResolver = new ClassLoaderTemplateResolver();
-        
-        emailTemplateResolver.setPrefix(path);
-        emailTemplateResolver.setSuffix(".html");
-        emailTemplateResolver.setTemplateMode("HTML5");
-        emailTemplateResolver.setCharacterEncoding("UTF-8");
-        emailTemplateResolver.setOrder(1);
-        
-        return emailTemplateResolver;
-    }
-    
-    @Bean
-    @Autowired
-    public SpringTemplateEngine templateEngine(ClassLoaderTemplateResolver emailTemplateResolver, ClassLoaderTemplateResolver webTemplateResolver) {
-        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-        
-        Set<TemplateResolver> templateResolvers = new HashSet<>();
-        templateResolvers.add(emailTemplateResolver);
-        templateEngine.setTemplateResolvers(templateResolvers);
-        
-        return templateEngine;
-    }
+//    @Bean
+//    public ClassLoaderTemplateResolver emailTemplateResolver() {
+//        ClassLoaderTemplateResolver emailTemplateResolver = new ClassLoaderTemplateResolver();
+//        
+//        emailTemplateResolver.setPrefix(path);
+//        emailTemplateResolver.setSuffix(".html");
+//        emailTemplateResolver.setTemplateMode("HTML5");
+//        emailTemplateResolver.setCharacterEncoding("UTF-8");
+//        emailTemplateResolver.setOrder(1);
+//        
+//        return emailTemplateResolver;
+//    }
+//    
+//    @Bean
+//    @Autowired
+//    public SpringTemplateEngine templateEngine(ClassLoaderTemplateResolver emailTemplateResolver, ClassLoaderTemplateResolver webTemplateResolver) {
+//        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+//        
+//        Set<TemplateResolver> templateResolvers = new HashSet<>();
+//        templateResolvers.add(emailTemplateResolver);
+//        templateEngine.setTemplateResolvers(templateResolvers);
+//        
+//        return templateEngine;
+//    }
 }

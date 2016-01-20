@@ -34,7 +34,6 @@ public abstract class PersistentUserDetails extends LongIdPersistentResource imp
     private String username;
     
     @Transient
-    @NotBlank
     @Length(min = 8)
     private String clearPassword;
     

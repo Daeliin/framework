@@ -1,5 +1,6 @@
 package com.daeliin.framework.core.mail;
 
+import java.util.Date;
 import java.util.Map;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -37,7 +38,7 @@ public class Mails {
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setTo(mail.to());
-            helper.setSentDate(null);
+            helper.setSentDate(new Date());
             helper.setFrom(mail.from());
             helper.setSubject(mail.subject());
             helper.setText(processBody(mail.parameters(), mail.templateName()), true);
