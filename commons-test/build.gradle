@@ -23,4 +23,7 @@ dependencies {
     
     // JsonPath
     compile "com.jayway.jsonpath:json-path:$jsonPathVersion"
+    
+    // H2 Database
+    compile "com.h2database:h2"
 }
