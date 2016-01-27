@@ -45,7 +45,7 @@ public abstract class MembershipController<E extends UserDetails, ID extends Ser
         }
         
         userDetailsService.signUp(userDetails);
-        UserDetails createdUserDetails = service.create(userDetails);
+        E createdUserDetails = service.create(userDetails);
         membershipNotifications.signUp(createdUserDetails);
         
         log.info("user[" + createdUserDetails.getId() + "] signed up");
@@ -62,8 +62,9 @@ public abstract class MembershipController<E extends UserDetails, ID extends Ser
         }
         
         try {
-            UserDetails userDetails = service.findOne(userDetailsId);
+            E userDetails = service.findOne(userDetailsId);
             userDetailsService.activate(userDetails, activationToken);
+            service.update(userDetailsId, userDetails);
             membershipNotifications.activate(userDetails);
             log.info("user[" + userDetailsId + "] activated");
         } catch(InvalidTokenException e) {
@@ -98,8 +99,9 @@ public abstract class MembershipController<E extends UserDetails, ID extends Ser
         }
         
         try {
-            UserDetails userDetails = service.findOne(userDetailsId);
+            E userDetails = service.findOne(userDetailsId);
             userDetailsService.resetPassword(userDetails, resetPasswordToken, newPassword);
+            service.update(userDetailsId, userDetails);
             membershipNotifications.resetPassword(userDetails);
             log.info("user[" + userDetailsId + "] reseted its password");
         } catch (InvalidTokenException e) {

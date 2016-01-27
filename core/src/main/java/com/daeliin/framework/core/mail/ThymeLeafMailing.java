@@ -16,9 +16,6 @@ public class ThymeLeafMailing {
     @Value("${mail.port}")
     private int port;
     
-    @Value("${mail.path}")
-    private String path;
-    
     @Bean
     public JavaMailSenderImpl mailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
