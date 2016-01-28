@@ -7,25 +7,25 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class SimpleMemberShipNotifications implements MembershipNotifications<User> {
+public class LogMembershipNotifications implements MembershipNotifications<User> {
 
     @Override
     public void signUp(User userDetails) {
-        log.info("User signed up");
+        log.info("The user " + userDetails + " signeUp");
     }
 
     @Override
     public void activate(User userDetails) {
-        log.info("User activated");
+        log.info("The user " + userDetails + " activated");
     }
 
     @Override
     public void newPassword(User userDetails) {
-        log.info("User requested a new password");
+        log.info("The user " + userDetails + " requested a new password");
     }
 
     @Override
     public void resetPassword(User userDetails) {
-        log.info("User did reset his password");
+        log.info("The user " + userDetails + " reseted its password");
     }
 }
