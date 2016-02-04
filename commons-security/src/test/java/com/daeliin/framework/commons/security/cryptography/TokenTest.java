@@ -40,7 +40,7 @@ public class TokenTest {
     }
     
     @Test
-    public void newToken_dataAndSha512_buildsASha512TokenFromdata() {
+    public void newToken_dataAndSha512_buildsASha512TokenFromData() {
         String token = 
             new Token(
                 new ArrayList<>(Arrays.asList("data")),
