@@ -13,5 +13,3 @@ appender("STDOUT", ConsoleAppender) {
 
 root(INFO, ["STDOUT"])
 logger("com.daeliin.framework", DEBUG)
-logger("org.hibernate", INFO)
-logger("org.springframework", INFO)

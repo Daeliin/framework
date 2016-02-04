@@ -6,7 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
 @Configuration
-@PropertySource("classpath:security.properties")
+@PropertySource("classpath:application.properties")
 public class Authentication extends FormAuthentication {
 
     @Override
