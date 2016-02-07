@@ -1,6 +1,5 @@
 package com.daeliin.framework.core.resource.json;
 
-import com.daeliin.framework.core.resource.json.JsonString;
 import com.daeliin.framework.core.resource.mock.User;
 import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;

@@ -32,7 +32,7 @@ public class SessionHelper {
     public org.springframework.security.core.userdetails.UserDetails getCurrentUserDetails() {
         String currentUsername = getCurrentUsername();
         
-        return (org.springframework.security.core.userdetails.UserDetails)userDetailsService.loadUserByUsername(currentUsername);
+        return userDetailsService.loadUserByUsername(currentUsername);
     }
     
     public boolean currentUserIs(final UserDetails userDetails) {

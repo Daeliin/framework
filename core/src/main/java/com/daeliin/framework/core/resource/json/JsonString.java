@@ -4,18 +4,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Serializes an Object into a JSON String,
  * if the object can't be serialized, the value is an empty String.
  */
+@Slf4j
 @EqualsAndHashCode(of = {"json"})
 @ToString(of = {"json"})
 public class JsonString {
-    
-    Logger log = LoggerFactory.getLogger(JsonString.class.getName());
     
     private final ObjectMapper mapper;
     private final Object objectToSerialize;
