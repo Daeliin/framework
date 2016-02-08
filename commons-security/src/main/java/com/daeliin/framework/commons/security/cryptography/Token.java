@@ -2,7 +2,9 @@ package com.daeliin.framework.commons.security.cryptography;
 
 import java.util.Date;
 import java.util.List;
+import lombok.ToString;
 
+@ToString
 public class Token {
     
     private final List<String> datas;

@@ -8,4 +8,9 @@ public class Sha512 implements DigestAlgorithm {
     public String digest(final String data) {
         return DigestUtils.sha512Hex(data);
     }
+    
+    @Override
+    public String toString() {
+        return "Digest Algorithm (Sha512)";
+    }
 }

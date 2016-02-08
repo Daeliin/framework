@@ -32,10 +32,10 @@ public abstract class MailingMemberShipNotifications<E extends UserDetails> impl
                 .templateName("signUp")
                 .parameters(parameters)
                 .build();
-            
+                
                 mails.send(mail);
         } catch (MailBuildingException e) {
-            log.error("Sign up mail for user[" + userDetails.getId() + "] was invalid", e);
+            log.error(String.format("Sign up mail for user %s was invalid", userDetails), e);
         }
     }
 
@@ -55,7 +55,7 @@ public abstract class MailingMemberShipNotifications<E extends UserDetails> impl
             
             mails.send(mail);
         } catch (MailBuildingException e) {
-            log.error("Activate mail for user[" + userDetails.getId() + "] was invalid", e);
+            log.error(String.format("Activate mail for user %s was invalid", userDetails), e);
         }
     }
 
@@ -75,7 +75,7 @@ public abstract class MailingMemberShipNotifications<E extends UserDetails> impl
             
             mails.send(mail);
         } catch (MailBuildingException e) {
-            log.error("New password mail for user[" + userDetails.getId() + "] was invalid", e);
+            log.error(String.format("New password mail for user %s was invalid", userDetails), e);
         }
     }
 
@@ -95,7 +95,7 @@ public abstract class MailingMemberShipNotifications<E extends UserDetails> impl
             
             mails.send(mail);
         } catch (MailBuildingException e) {
-            log.error("Reset password mail for user[" + userDetails.getId() + "] was invalid", e);
+            log.error(String.format("Reset password mail for user %s was invalid", userDetails), e);
         }
     }
     
