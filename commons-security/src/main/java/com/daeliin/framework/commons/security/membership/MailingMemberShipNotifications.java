@@ -5,10 +5,12 @@ import com.daeliin.framework.core.mail.Mail;
 import com.daeliin.framework.core.mail.Mails;
 import com.daeliin.framework.core.resource.exception.MailBuildingException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 
 @Slf4j
 public abstract class MailingMemberShipNotifications<E extends UserDetails> implements MembershipNotifications<E> {
@@ -19,6 +21,9 @@ public abstract class MailingMemberShipNotifications<E extends UserDetails> impl
     @Autowired
     protected Mails mails;
 
+    @Autowired
+    protected MessageSource messages;
+    
     @Override
     public void signUp(final E userDetails) {
         Map<String, String> parameters = addUserDetailsParameters(userDetails);
@@ -28,7 +33,7 @@ public abstract class MailingMemberShipNotifications<E extends UserDetails> impl
                 Mail.builder()
                 .from(from)
                 .to(userDetails.getEmail())
-                .subject("Welcome, activate your account")
+                .subject(messages.getMessage("membership.mail.signup.subject", null, Locale.getDefault()))
                 .templateName("signUp")
                 .parameters(parameters)
                 .build();
@@ -48,7 +53,7 @@ public abstract class MailingMemberShipNotifications<E extends UserDetails> impl
                 Mail.builder()
                 .from(from)
                 .to(userDetails.getEmail())
-                .subject("Thanks for activating your account")
+                .subject(messages.getMessage("membership.mail.activate.subject", null, Locale.getDefault()))
                 .templateName("activate")
                 .parameters(parameters)
                 .build();
@@ -68,7 +73,7 @@ public abstract class MailingMemberShipNotifications<E extends UserDetails> impl
                 Mail.builder()
                 .from(from)
                 .to(userDetails.getEmail())
-                .subject("You requested a  new password")
+                .subject(messages.getMessage("membership.mail.newPassword.subject", null, Locale.getDefault()))
                 .templateName("newPassword")
                 .parameters(parameters)
                 .build();
@@ -88,7 +93,7 @@ public abstract class MailingMemberShipNotifications<E extends UserDetails> impl
                 Mail.builder()
                 .from(from)
                 .to(userDetails.getEmail())
-                .subject("Your password has been changed")
+                .subject(messages.getMessage("membership.mail.resetPassword.subject", null, Locale.getDefault()))
                 .templateName("resetPassword")
                 .parameters(parameters)
                 .build();
