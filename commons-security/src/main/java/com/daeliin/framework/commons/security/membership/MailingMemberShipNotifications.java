@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
+import org.springframework.scheduling.annotation.Async;
 
 @Slf4j
 public abstract class MailingMemberShipNotifications<E extends UserDetails> implements MembershipNotifications<E> {
@@ -24,6 +25,7 @@ public abstract class MailingMemberShipNotifications<E extends UserDetails> impl
     @Autowired
     protected MessageSource messages;
     
+    @Async
     @Override
     public void signUp(final E userDetails) {
         Map<String, String> parameters = addUserDetailsParameters(userDetails);
@@ -44,6 +46,7 @@ public abstract class MailingMemberShipNotifications<E extends UserDetails> impl
         }
     }
 
+    @Async
     @Override
     public void activate(final E userDetails) {
         Map<String, String> parameters = addUserDetailsParameters(userDetails);
@@ -64,6 +67,7 @@ public abstract class MailingMemberShipNotifications<E extends UserDetails> impl
         }
     }
 
+    @Async
     @Override
     public void newPassword(final E userDetails) {
         Map<String, String> parameters = addUserDetailsParameters(userDetails);
@@ -84,6 +88,7 @@ public abstract class MailingMemberShipNotifications<E extends UserDetails> impl
         }
     }
 
+    @Async
     @Override
     public void resetPassword(final E userDetails) {
         Map<String, String> parameters = addUserDetailsParameters(userDetails);
