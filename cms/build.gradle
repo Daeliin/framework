@@ -1,0 +1,12 @@
+version = '0.1-SNAPSHOT'
+
+apply plugin: 'spring-boot'
+
+dependencies {
+    // Daeliin
+    compile project(':core')
+    
+    // Test
+    testCompile project(':commons-test')
+    testCompile "com.h2database:h2:$h2databaseVersion"
+}
