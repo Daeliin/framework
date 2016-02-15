@@ -5,3 +5,4 @@ Provides REST basic layers with Spring 4.
 
 ## Modules documentation
 [Security](https://github.com/Daeliin/rest-framework/wiki/Module-:-security)
+[CMS](https://github.com/Daeliin/rest-framework/wiki/Module-:-cms)
