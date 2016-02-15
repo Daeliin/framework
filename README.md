@@ -4,4 +4,4 @@
 Provides REST basic layers with Spring 4.
 
 ## Modules documentation
-[Ssecurity](https://github.com/Daeliin/rest-framework/wiki/Module-:-security)
+[Security](https://github.com/Daeliin/rest-framework/wiki/Module-:-security)
