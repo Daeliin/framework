@@ -5,6 +5,7 @@ apply plugin: 'spring-boot'
 dependencies {
     // Daeliin
     compile project(':core')
+    compile project(':security')
     
     // Test
     testCompile project(':commons-test')

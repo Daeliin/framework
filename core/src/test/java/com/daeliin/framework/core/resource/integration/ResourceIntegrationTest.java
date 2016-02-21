@@ -357,12 +357,12 @@ public class ResourceIntegrationTest extends IntegrationTest {
     }
     
     @Test
-    public void delete_null_returnsHttpGone() throws Exception {
+    public void delete_null_returnsHttpBadRequest() throws Exception {
         mockMvc
             .perform(post("/user/deleteSeveral")
             .contentType(MediaType.APPLICATION_JSON)
             .content(new JsonString(null).value()))
-            .andExpect(status().isGone());
+            .andExpect(status().isBadRequest());
     }
     
     @Test
