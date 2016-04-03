@@ -1,13 +1,13 @@
 package com.daeliin.framework.security.membership;
 
+import com.daeliin.framework.commons.security.credentials.account.Account;
+import com.daeliin.framework.commons.security.credentials.account.PersistentAccount;
+import com.daeliin.framework.commons.security.credentials.account.PersistentAccountRepository;
 import com.daeliin.framework.commons.security.membership.ResetPasswordRequest;
-import com.daeliin.framework.commons.security.details.UserDetails;
 import com.daeliin.framework.commons.test.SecuredIntegrationTest;
 import com.daeliin.framework.core.resource.json.JsonString;
 import com.daeliin.framework.security.mock.Application;
 import static com.daeliin.framework.security.mock.Application.API_ROOT_PATH;
-import com.daeliin.framework.security.mock.user.model.User;
-import com.daeliin.framework.security.mock.user.repository.UserRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -28,98 +28,98 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     private static final String MEMBERSHIP_PATH = API_ROOT_PATH + "/public/membership";
     
     @Autowired
-    private UserRepository userDetailsRepository;
+    private PersistentAccountRepository persistentAccountRepository;
     
     @Test
     public void signup_invalidEmail_returnsHttpBadRequest() throws Exception {
-        UserDetails invalidEmailUserDetails = createUserDetails("username", "invalid.email", "password");
+        Account invalidEmailAccount = createAccount("username", "invalid.email", "password");
         
         mockMvc
             .perform(post(MEMBERSHIP_PATH + "/signup")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(new JsonString(invalidEmailUserDetails).value()))
+            .content(new JsonString(invalidEmailAccount).value()))
             .andExpect(status().isBadRequest());
     }
     
     @Test
     public void signup_invalidUsername_returnsHttpBadRequest() throws Exception {
-        UserDetails invalidUsernameUserDetails = createUserDetails("a", "email@email.com", "password");
+        Account invalidUsernameAccount = createAccount("a", "email@email.com", "password");
         
         mockMvc
             .perform(post(MEMBERSHIP_PATH + "/signup")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(new JsonString(invalidUsernameUserDetails).value()))
+            .content(new JsonString(invalidUsernameAccount).value()))
             .andExpect(status().isBadRequest());
     }
     
     @Test
     public void signup_invalidPassword_returnsHttpBadRequest() throws Exception {
-        UserDetails invalidPasswordUserDetails = createUserDetails("username", "email@email.com", "123");
+        Account invalidPasswordAccount = createAccount("username", "email@email.com", "123");
         
         mockMvc
             .perform(post(MEMBERSHIP_PATH + "/signup")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(new JsonString(invalidPasswordUserDetails).value()))
+            .content(new JsonString(invalidPasswordAccount).value()))
             .andExpect(status().isBadRequest());
     }
     
     @Test
-    public void signup_existingUserDetails_returnsHttpPreconditionFailed() throws Exception {
-        UserDetails existingUserDetails = userDetailsRepository.findOne(1L);
-        existingUserDetails.setClearPassword("password");
+    public void signup_existingAccount_returnsHttpPreconditionFailed() throws Exception {
+        Account existingAccount = persistentAccountRepository.findOne(1L);
+        existingAccount.setClearPassword("password");
         
         mockMvc
             .perform(post(MEMBERSHIP_PATH + "/signup")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(new JsonString(existingUserDetails).value()))
+            .content(new JsonString(existingAccount).value()))
             .andExpect(status().isPreconditionFailed());
     }
     
     @Test
-    public void signup_existingUserDetails_doesntCreateUserDetails() throws Exception {
-        long userDetailsCountBeforeSignUp = userDetailsRepository.count();
-        UserDetails existingUserDetails = userDetailsRepository.findOne(1L);
-        existingUserDetails.setClearPassword("password");
+    public void signup_existingAccount_doesntCreateAccount() throws Exception {
+        long userDetailsCountBeforeSignUp = persistentAccountRepository.count();
+        Account existingAccount = persistentAccountRepository.findOne(1L);
+        existingAccount.setClearPassword("password");
         
         mockMvc
             .perform(post(MEMBERSHIP_PATH + "/signup")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(new JsonString(existingUserDetails).value()));
+            .content(new JsonString(existingAccount).value()));
         
-        long userDetailsCountAfterSignUp = userDetailsRepository.count();
+        long userDetailsCountAfterSignUp = persistentAccountRepository.count();
         
         assertEquals(userDetailsCountAfterSignUp, userDetailsCountBeforeSignUp);
     }
     
     @Test
-    public void signup_validUserDetails_returnsHttpOk() throws Exception {
-        UserDetails validUserDetails = createUserDetails("username", "email@email.com", "password");
+    public void signup_validAccount_returnsHttpOk() throws Exception {
+        Account validAccount = createAccount("username", "email@email.com", "password");
         
         mockMvc
             .perform(post(MEMBERSHIP_PATH + "/signup")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(new JsonString(validUserDetails).value()))
+            .content(new JsonString(validAccount).value()))
             .andExpect(status().isOk());
     }
     
     @Test
-    public void signup_validUserDetails_createsUserDetails() throws Exception {
-        UserDetails validUserDetails = createUserDetails("username", "email@email.com", "password");
+    public void signup_validAccount_createsAccount() throws Exception {
+        Account validAccount = createAccount("username", "email@email.com", "password");
         
         mockMvc
             .perform(post(MEMBERSHIP_PATH + "/signup")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(new JsonString(validUserDetails).value()));
+            .content(new JsonString(validAccount).value()));
         
-        UserDetails createdUserDetails = userDetailsRepository.findByUsernameIgnoreCase("username");
+        Account createdAccount = persistentAccountRepository.findByUsernameIgnoreCase("username");
         
-        assertEquals(createdUserDetails, validUserDetails);
-        assertTrue(StringUtils.isNotBlank(createdUserDetails.getPassword()));
-        assertTrue(StringUtils.isNotBlank(createdUserDetails.getToken()));
+        assertEquals(createdAccount, validAccount);
+        assertTrue(StringUtils.isNotBlank(createdAccount.getPassword()));
+        assertTrue(StringUtils.isNotBlank(createdAccount.getToken()));
     }
     
     @Test
-    public void activate_nonExistentUserDetailsId_returnsHttpNotFound() throws Exception {
+    public void activate_nonExistentAccountId_returnsHttpNotFound() throws Exception {
         mockMvc
             .perform(get(MEMBERSHIP_PATH + "/activate")
             .param("id", "-1")
@@ -129,7 +129,7 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     
     @Test
     public void activate_wrongActivationToken_returnsHttpUnauthorized() throws Exception {
-        UserDetails userDetails = userDetailsRepository.findOne(1L);
+        Account userDetails = persistentAccountRepository.findOne(1L);
         
         mockMvc
             .perform(get(MEMBERSHIP_PATH + "/activate")
@@ -139,8 +139,8 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     }
     
     @Test
-    public void activate_wrongActivationToken_doesntActivateUserDetails() throws Exception {
-        UserDetails userDetails = userDetailsRepository.findOne(3L);
+    public void activate_wrongActivationToken_doesntActivateAccount() throws Exception {
+        Account userDetails = persistentAccountRepository.findOne(3L);
         
         mockMvc
             .perform(get(MEMBERSHIP_PATH + "/activate")
@@ -151,8 +151,8 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     }
     
     @Test
-    public void activate_validUserDetailsIdAndActivationToken_returnsHttpOk() throws Exception {
-        UserDetails userDetails = userDetailsRepository.findOne(3L);
+    public void activate_validAccountIdAndActivationToken_returnsHttpOk() throws Exception {
+        Account userDetails = persistentAccountRepository.findOne(3L);
         
         mockMvc
             .perform(get(MEMBERSHIP_PATH + "/activate")
@@ -162,8 +162,8 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     }
     
     @Test
-    public void activate_validUserDetailsIdAndActivationToken_activatesUserDetails() throws Exception {
-        UserDetails userDetails = userDetailsRepository.findOne(3L);
+    public void activate_validAccountIdAndActivationToken_activatesAccount() throws Exception {
+        Account userDetails = persistentAccountRepository.findOne(3L);
         
         mockMvc
             .perform(get(MEMBERSHIP_PATH + "/activate")
@@ -174,8 +174,8 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     }
     
     @Test
-    public void activate_validUserDetailsIdAndActivationToken_setsNewToken() throws Exception {
-        UserDetails userDetails = userDetailsRepository.findOne(3L);
+    public void activate_validAccountIdAndActivationToken_setsNewToken() throws Exception {
+        Account userDetails = persistentAccountRepository.findOne(3L);
         String activationToken = userDetails.getToken();
         
         mockMvc
@@ -187,7 +187,7 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     }
     
     @Test
-    public void newPassword_nonExistentUserDetailsId_returnsHttpNotFound() throws Exception {
+    public void newPassword_nonExistentAccountId_returnsHttpNotFound() throws Exception {
         mockMvc
             .perform(get(MEMBERSHIP_PATH + "/newpassword")
             .param("id", "-1"))
@@ -195,8 +195,8 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     }
     
     @Test
-    public void newPassword_validUserDetailsId_returnsHttpOk() throws Exception {
-        UserDetails userDetails = userDetailsRepository.findOne(3L);
+    public void newPassword_validAccountId_returnsHttpOk() throws Exception {
+        Account userDetails = persistentAccountRepository.findOne(3L);
         
         mockMvc
             .perform(get(MEMBERSHIP_PATH + "/newpassword")
@@ -205,13 +205,13 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     }
     
     @Test
-    public void resetPassword_invalidUserDetailsId_returnsHttpBadRequest() throws Exception {
-        ResetPasswordRequest invalidUserDetailsIdResetPasswordRequest = createResetPasswordRequest(null, "token", "newPassword");
+    public void resetPassword_invalidAccountId_returnsHttpBadRequest() throws Exception {
+        ResetPasswordRequest invalidAccountIdResetPasswordRequest = createResetPasswordRequest(null, "token", "newPassword");
         
         mockMvc
             .perform(put(MEMBERSHIP_PATH + "/resetpassword")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(new JsonString(invalidUserDetailsIdResetPasswordRequest).value()))
+            .content(new JsonString(invalidAccountIdResetPasswordRequest).value()))
             .andExpect(status().isBadRequest());
     }
     
@@ -238,7 +238,7 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     }
     
     @Test
-    public void resetPassword_nonExistentUserDetailsId_returnsHttpNotFound() throws Exception {
+    public void resetPassword_nonExistentAccountId_returnsHttpNotFound() throws Exception {
         ResetPasswordRequest resetPasswordRequest = createResetPasswordRequest(-1L, "token", "newPassword");
         
         mockMvc
@@ -250,8 +250,8 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     
     @Test
     public void resetPassword_wrongActivationToken_returnsHttpUnauthorized() throws Exception {
-        User userDetails = userDetailsRepository.findOne(3L);
-        ResetPasswordRequest resetPasswordRequest = createResetPasswordRequest(userDetails.getId(), "wrong" + userDetails.getToken(), "newPassword");
+        Account account = persistentAccountRepository.findOne(3L);
+        ResetPasswordRequest resetPasswordRequest = createResetPasswordRequest(account.getId(), "wrong" + account.getToken(), "newPassword");
         
         mockMvc
             .perform(put(MEMBERSHIP_PATH + "/resetpassword")
@@ -261,29 +261,29 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     }
     
     @Test
-    public void resetPassword_wrongActivationToken_doesntResetUserDetailsPassword() throws Exception {
-        User userDetails = userDetailsRepository.findOne(3L);
-        ResetPasswordRequest resetPasswordRequest = createResetPasswordRequest(userDetails.getId(), "wrong" + userDetails.getToken(), "newPassword");
-        String tokenBeforeResetPassword = userDetails.getToken();
-        String passwordBeforeResetPassword = userDetails.getPassword();
+    public void resetPassword_wrongActivationToken_doesntResetAccountPassword() throws Exception {
+        Account account = persistentAccountRepository.findOne(3L);
+        ResetPasswordRequest resetPasswordRequest = createResetPasswordRequest(account.getId(), "wrong" + account.getToken(), "newPassword");
+        String tokenBeforeResetPassword = account.getToken();
+        String passwordBeforeResetPassword = account.getPassword();
         
         mockMvc
             .perform(put(MEMBERSHIP_PATH + "/resetpassword")
             .contentType(MediaType.APPLICATION_JSON)
             .content(new JsonString(resetPasswordRequest).value()));
         
-        String tokenAfterResetPassword = userDetails.getToken();
-        String passwordAfterResetPassword = userDetails.getPassword();
+        String tokenAfterResetPassword = account.getToken();
+        String passwordAfterResetPassword = account.getPassword();
         
         assertEquals(passwordAfterResetPassword, passwordBeforeResetPassword);
         assertEquals(tokenAfterResetPassword, tokenBeforeResetPassword);
-        assertFalse(userDetails.isEnabled());
+        assertFalse(account.isEnabled());
     }
     
     @Test
     public void resetPassword_validResetPasswordRequest_returnsHttpOk() throws Exception {
-        User userDetails = userDetailsRepository.findOne(3L);
-        ResetPasswordRequest resetPasswordRequest = createResetPasswordRequest(userDetails.getId(), userDetails.getToken(), "newPassword");
+        Account account = persistentAccountRepository.findOne(3L);
+        ResetPasswordRequest resetPasswordRequest = createResetPasswordRequest(account.getId(), account.getToken(), "newPassword");
         
         mockMvc
             .perform(put(MEMBERSHIP_PATH + "/resetpassword")
@@ -293,38 +293,38 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     }
     
     @Test
-    public void resetPassword_validResetPasswordRequest_resetUserDetailsPassword() throws Exception {
-        User userDetails = userDetailsRepository.findOne(3L);
-        ResetPasswordRequest resetPasswordRequest = createResetPasswordRequest(userDetails.getId(), userDetails.getToken(), "newPassword");
-        String passwordBeforeResetPassword = userDetails.getPassword();
-        String tokenBeforeResetPassword = userDetails.getToken();
+    public void resetPassword_validResetPasswordRequest_resetAccountPassword() throws Exception {
+        Account account = persistentAccountRepository.findOne(3L);
+        ResetPasswordRequest resetPasswordRequest = createResetPasswordRequest(account.getId(), account.getToken(), "newPassword");
+        String passwordBeforeResetPassword = account.getPassword();
+        String tokenBeforeResetPassword = account.getToken();
         
         mockMvc
             .perform(put(MEMBERSHIP_PATH + "/resetpassword")
             .contentType(MediaType.APPLICATION_JSON)
             .content(new JsonString(resetPasswordRequest).value()));
         
-        String tokenAfterResetPassword = userDetails.getToken();
-        String passwordAfterResetPassword = userDetails.getPassword();
+        String tokenAfterResetPassword = account.getToken();
+        String passwordAfterResetPassword = account.getPassword();
         
         assertNotEquals(passwordAfterResetPassword, passwordBeforeResetPassword);
         assertNotEquals(tokenAfterResetPassword, tokenBeforeResetPassword);
-        assertTrue(userDetails.isEnabled());
+        assertTrue(account.isEnabled());
     }
     
-    private UserDetails createUserDetails(final String username, final String email, final String password) {
-        UserDetails user = new User();
+    private Account createAccount(final String username, final String email, final String password) {
+        Account account = new PersistentAccount();
         
-        user.setUsername(username);
-        user.setEmail(email);
-        user.setClearPassword(password);
+        account.setUsername(username);
+        account.setEmail(email);
+        account.setClearPassword(password);
         
-        return user;
+        return account;
     }
     
     private ResetPasswordRequest createResetPasswordRequest(final Long id, final String token, final String newPassword) {  
-        ResetPasswordRequest<Long> resetPasswordRequest = new ResetPasswordRequest();
-        resetPasswordRequest.setUserDetailsId(id);
+        ResetPasswordRequest resetPasswordRequest = new ResetPasswordRequest();
+        resetPasswordRequest.setAccountId(id);
         resetPasswordRequest.setToken(token);
         resetPasswordRequest.setNewPassword(newPassword);
         

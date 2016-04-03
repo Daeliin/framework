@@ -1,30 +1,30 @@
 package com.daeliin.framework.commons.security.membership;
 
-import com.daeliin.framework.commons.security.details.UserDetails;
+import com.daeliin.framework.commons.security.credentials.account.Account;
 
-public interface MembershipNotifications<E extends UserDetails> {
+public interface MembershipNotifications {
     
     /**
      * Notifiy the sign up event.
-     * @param userDetails the user details which signed up
+     * @param account the account which signed up
      */
-    void signUp(final E userDetails);
+    void signUp(final Account account);
     
     /**
      * Notifiy the activation event.
-     * @param userDetails the user details which activated
+     * @param account the account which activated
      */
-    void activate(final E userDetails);
+    void activate(final Account account);
     
     /**
      * Notifiy the new password request event.
-     * @param userDetails the user details which requested a new password
+     * @param account the account which requested a new password
      */
-    void newPassword(final E userDetails);
+    void newPassword(final Account account);
     
     /**
      * Notifiy the reset password event.
-     * @param userDetails the user details which reseted its password
+     * @param account the account which reseted its password
      */
-    void resetPassword(final E userDetails);
+    void resetPassword(final Account account);
 }

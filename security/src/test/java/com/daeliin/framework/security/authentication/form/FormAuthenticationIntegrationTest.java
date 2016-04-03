@@ -24,7 +24,7 @@ public class FormAuthenticationIntegrationTest extends SecuredIntegrationTest {
     private String authenticationLogoutEndpoint;
     
     @Value("${authentication.username.parameter}")
-    private String authenticationUsernameParameter;
+    private String authenticationAccountnameParameter;
     
     @Value("${authentication.password.parameter}")
     private String authenticationPasswordParameter;
@@ -32,22 +32,22 @@ public class FormAuthenticationIntegrationTest extends SecuredIntegrationTest {
     @Test
     public void request_unauthenticated_returnsHttpUnauthorized() throws Exception {
         mockMvc
-            .perform(get(API_ROOT_PATH + "/users")
+            .perform(get(API_ROOT_PATH + "/accounts")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isUnauthorized());
     }
     
     @Test
     public void authenticate_invalidCredentials_returnsHttpForbidden() throws Exception {
-        login("invalidUser", "invalidPassword").andExpect(status().isForbidden());
+        login("invalidAccount", "invalidPassword").andExpect(status().isForbidden());
     }
     
     @Test
     public void authenticate_invalidCredentials_isNotLoggedIn() throws Exception {
-        login("invalidUser", "invalidPassword");
+        login("invalidAccount", "invalidPassword");
         
         mockMvc
-            .perform(get(API_ROOT_PATH + "/users")
+            .perform(get(API_ROOT_PATH + "/accounts")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isUnauthorized());
     }
@@ -66,7 +66,7 @@ public class FormAuthenticationIntegrationTest extends SecuredIntegrationTest {
     @Test
     public void authenticated_canRequestSecuredResources() throws Exception {
         mockMvc
-            .perform(get(API_ROOT_PATH + "/users")
+            .perform(get(API_ROOT_PATH + "/accounts")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
     }
@@ -83,25 +83,25 @@ public class FormAuthenticationIntegrationTest extends SecuredIntegrationTest {
         logout();
         
         mockMvc
-            .perform(get(API_ROOT_PATH + "/users")
+            .perform(get(API_ROOT_PATH + "/accounts")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isUnauthorized());
     }
     
     @WithMockUser(roles = "USER")
     @Test
-    public void userWithoutAdminPermissions_requestsResourcesProtectedByAdmin_returnsHttpForbidden() throws Exception {
+    public void accountWithoutAdminPermissions_requestsResourcesProtectedByAdmin_returnsHttpForbidden() throws Exception {
         mockMvc
-            .perform(delete(API_ROOT_PATH + "/users")
+            .perform(delete(API_ROOT_PATH + "/accounts")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isForbidden());
     }
     
     @WithMockUser(roles = "ADMIN")
     @Test
-    public void userWithAdminPermissions_requestsResourcesProtectedByAdmin_returnsCorrespondingHttpCode() throws Exception {
+    public void accountWithAdminPermissions_requestsResourcesProtectedByAdmin_returnsCorrespondingHttpCode() throws Exception {
         mockMvc
-            .perform(delete(API_ROOT_PATH + "/users")
+            .perform(delete(API_ROOT_PATH + "/accounts")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isGone());
     } 
@@ -110,7 +110,7 @@ public class FormAuthenticationIntegrationTest extends SecuredIntegrationTest {
         return 
             mockMvc
                 .perform(post(API_ROOT_PATH + authenticationEndpoint)
-                .param(authenticationUsernameParameter, username)
+                .param(authenticationAccountnameParameter, username)
                 .param(authenticationPasswordParameter, password));
     }
     

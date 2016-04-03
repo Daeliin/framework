@@ -1,31 +1,31 @@
 package com.daeliin.framework.security.mock.membership;
 
+import com.daeliin.framework.commons.security.credentials.account.Account;
 import com.daeliin.framework.commons.security.membership.MembershipNotifications;
-import com.daeliin.framework.security.mock.user.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class LogMembershipNotifications implements MembershipNotifications<User> {
+public class LogMembershipNotifications implements MembershipNotifications {
 
     @Override
-    public void signUp(User userDetails) {
-        log.info("The user " + userDetails + " signeUp");
+    public void signUp(Account account) {
+        log.info("The account " + account + " signeUp");
     }
 
     @Override
-    public void activate(User userDetails) {
-        log.info("The user " + userDetails + " activated");
+    public void activate(Account account) {
+        log.info("The account " + account + " activated");
     }
 
     @Override
-    public void newPassword(User userDetails) {
-        log.info("The user " + userDetails + " requested a new password");
+    public void newPassword(Account account) {
+        log.info("The account " + account + " requested a new password");
     }
 
     @Override
-    public void resetPassword(User userDetails) {
-        log.info("The user " + userDetails + " reseted its password");
+    public void resetPassword(Account account) {
+        log.info("The account " + account + " reseted its password");
     }
 }

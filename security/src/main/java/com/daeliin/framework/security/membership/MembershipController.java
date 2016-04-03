@@ -1,16 +1,15 @@
 package com.daeliin.framework.security.membership;
 
-import com.daeliin.framework.commons.security.membership.ResetPasswordRequest;
-import com.daeliin.framework.commons.security.details.UserDetails;
-import com.daeliin.framework.commons.security.details.UserDetailsRepository;
+import com.daeliin.framework.commons.security.credentials.account.PersistentAccount;
+import com.daeliin.framework.commons.security.credentials.account.PersistentAccountService;
 import com.daeliin.framework.commons.security.exception.InvalidTokenException;
-import com.daeliin.framework.commons.security.exception.UserDetailsAlreadyExistException;
+import com.daeliin.framework.commons.security.exception.AccountAlreadyExistException;
 import com.daeliin.framework.commons.security.exception.WrongAccessException;
 import com.daeliin.framework.commons.security.membership.MembershipNotifications;
+import com.daeliin.framework.commons.security.membership.ResetPasswordRequest;
 import com.daeliin.framework.core.resource.exception.ResourceNotFoundException;
-import com.daeliin.framework.core.resource.service.ResourceService;
-import com.daeliin.framework.security.details.PersistentUserDetailsService;
-import java.io.Serializable;
+import static com.daeliin.framework.security.Application.API_ROOT_PATH;
+import com.daeliin.framework.security.credentials.details.AccountDetailsService;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,50 +24,58 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-public abstract class MembershipController<E extends UserDetails, ID extends Serializable, R extends UserDetailsRepository<E, ID>, S extends ResourceService<E, ID, R>> {
+@RequestMapping(API_ROOT_PATH + "/public/membership")
+public class MembershipController {
     
+    protected final PersistentAccountService accountService;
+    protected final AccountDetailsService accountDetailsService;
+    protected final MembershipNotifications membershipNotifications;
+
     @Autowired
-    protected S service;
-    
-    @Autowired
-    protected PersistentUserDetailsService userDetailsService;
-    
-    @Autowired
-    protected MembershipNotifications membershipNotifications;
+    public MembershipController(
+        final PersistentAccountService accountService, 
+        final AccountDetailsService accountDetailsService, 
+        final MembershipNotifications membershipNotifications) {
+        
+        this.accountService = accountService;
+        this.accountDetailsService = accountDetailsService;
+        this.membershipNotifications = membershipNotifications;
+    }
     
     @RequestMapping(value = "signup", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void signUp(@RequestBody @Valid E userDetails) {
-        if (userDetailsService.exists(userDetails)) {
-            throw new UserDetailsAlreadyExistException("The username already exist");
+    public void signUp(@RequestBody @Valid PersistentAccount account) {
+        if (accountDetailsService.exists(account)) {
+            throw new AccountAlreadyExistException("The username already exist");
         }
         
-        userDetailsService.signUp(userDetails);
-        E createdUserDetails = service.create(userDetails);
-        membershipNotifications.signUp(createdUserDetails);
+        accountDetailsService.signUp(account);
+        PersistentAccount createdAccount = accountService.create(account);
+        membershipNotifications.signUp(createdAccount);
         
-        log.info("user[" + createdUserDetails.getId() + "] signed up");
+        log.info(String.format("account[%s] signed up", createdAccount.getId()));
     }
     
     @RequestMapping(value = "activate", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public void activate(
-        @RequestParam(value = "id") ID userDetailsId,
+        @RequestParam(value = "id") Long accountId,
         @RequestParam(value = "token") String activationToken) {
-        if (!service.exists(userDetailsId)) {
-            throw new ResourceNotFoundException("user[" + userDetailsId + "] not found");
+        
+        if (!accountService.exists(accountId)) {
+            throw new ResourceNotFoundException(String.format("account[%s] not found", accountId));
         }
         
         try {
-            E userDetails = service.findOne(userDetailsId);
-            userDetailsService.activate(userDetails, activationToken);
-            service.update(userDetailsId, userDetails);
-            membershipNotifications.activate(userDetails);
-            log.info("user[" + userDetailsId + "] activated");
+            PersistentAccount account = accountService.findOne(accountId);
+            accountDetailsService.activate(account, activationToken);
+            accountService.update(accountId, account);
+            membershipNotifications.activate(account);
+            log.info(String.format("account[%s] activated", accountId));
         } catch(InvalidTokenException e) {
-            log.warn("an attempt to activate user[" + userDetailsId + "] with an invalid token[" + activationToken + " has been made");
+            log.warn(String.format("an attempt to activate account[%s] with an invalid token[%s] has been made", accountId, activationToken));
             throw new WrongAccessException("Actication token is not valid");
         }
     }
@@ -76,36 +83,36 @@ public abstract class MembershipController<E extends UserDetails, ID extends Ser
     @RequestMapping(value = "newpassword", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void newPassword(@RequestParam(value = "id") ID userDetailsId) {
-        if (!service.exists(userDetailsId)) {
-            throw new ResourceNotFoundException("User[" + userDetailsId + "] not found");
+    public void newPassword(@RequestParam(value = "id") Long accountId) {
+        if (!accountService.exists(accountId)) {
+            throw new ResourceNotFoundException(String.format("Account[%s] not found", accountId));
         }
         
-        membershipNotifications.newPassword(service.findOne(userDetailsId));
+        membershipNotifications.newPassword(accountService.findOne(accountId));
                 
-        log.info("user[" + userDetailsId + "] requested a new password");
+        log.info(String.format("account[%s] requested a new password", accountId));
     }
     
     @RequestMapping(value = "resetpassword", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void resetPassword(@RequestBody @Valid ResetPasswordRequest<ID> resetPasswordRequest) {
-        ID userDetailsId = resetPasswordRequest.getUserDetailsId();
+    public void resetPassword(@RequestBody @Valid ResetPasswordRequest resetPasswordRequest) {
+        Long accountId = resetPasswordRequest.getAccountId();
         String resetPasswordToken = resetPasswordRequest.getToken();
         String newPassword = resetPasswordRequest.getNewPassword();
         
-        if (!service.exists(userDetailsId)) {
-            throw new ResourceNotFoundException("User[" + userDetailsId + "] not found");
+        if (!accountService.exists(accountId)) {
+            throw new ResourceNotFoundException(String.format("Account[%s] not found", accountId));
         }
         
         try {
-            E userDetails = service.findOne(userDetailsId);
-            userDetailsService.resetPassword(userDetails, resetPasswordToken, newPassword);
-            service.update(userDetailsId, userDetails);
-            membershipNotifications.resetPassword(userDetails);
-            log.info("user[" + userDetailsId + "] reseted its password");
+            PersistentAccount account = accountService.findOne(accountId);
+            accountDetailsService.resetPassword(account, resetPasswordToken, newPassword);
+            accountService.update(accountId, account);
+            membershipNotifications.resetPassword(account);
+            log.info(String.format("account[%s] reseted its password", accountId));
         } catch (InvalidTokenException e) {
-            log.warn("an attempt to reset user[" + userDetailsId + "] password with an invalid token[" + resetPasswordToken + " has been made");
+            log.warn(String.format("an attempt to reset account[%s] password with an invalid token[%s] has been made", accountId, resetPasswordToken));
             throw new WrongAccessException("Reset password token is not valid");
         }
     }

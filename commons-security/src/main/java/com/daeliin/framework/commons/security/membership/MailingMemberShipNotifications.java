@@ -1,6 +1,6 @@
 package com.daeliin.framework.commons.security.membership;
 
-import com.daeliin.framework.commons.security.details.UserDetails;
+import com.daeliin.framework.commons.security.credentials.account.Account;
 import com.daeliin.framework.core.mail.Mail;
 import com.daeliin.framework.core.mail.Mails;
 import com.daeliin.framework.core.resource.exception.MailBuildingException;
@@ -11,10 +11,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
 
 @Slf4j
-public abstract class MailingMemberShipNotifications<E extends UserDetails> implements MembershipNotifications<E> {
+@Service
+@Profile("mail")
+public class MailingMemberShipNotifications implements MembershipNotifications {
 
     @Value("${mail.from}")
     private String from;
@@ -27,14 +31,14 @@ public abstract class MailingMemberShipNotifications<E extends UserDetails> impl
     
     @Async
     @Override
-    public void signUp(final E userDetails) {
-        Map<String, String> parameters = addUserDetailsParameters(userDetails);
+    public void signUp(final Account account) {
+        Map<String, String> parameters = addAccountParameters(account);
         
         try {
             Mail mail = 
                 Mail.builder()
                 .from(from)
-                .to(userDetails.getEmail())
+                .to(account.getEmail())
                 .subject(messages.getMessage("membership.mail.signup.subject", null, Locale.getDefault()))
                 .templateName("signUp")
                 .parameters(parameters)
@@ -42,20 +46,20 @@ public abstract class MailingMemberShipNotifications<E extends UserDetails> impl
                 
                 mails.send(mail);
         } catch (MailBuildingException e) {
-            log.error(String.format("Sign up mail for user %s was invalid", userDetails), e);
+            log.error(String.format("Sign up mail for account %s was invalid", account), e);
         }
     }
 
     @Async
     @Override
-    public void activate(final E userDetails) {
-        Map<String, String> parameters = addUserDetailsParameters(userDetails);
+    public void activate(final Account account) {
+        Map<String, String> parameters = addAccountParameters(account);
         
         try {
             Mail mail = 
                 Mail.builder()
                 .from(from)
-                .to(userDetails.getEmail())
+                .to(account.getEmail())
                 .subject(messages.getMessage("membership.mail.activate.subject", null, Locale.getDefault()))
                 .templateName("activate")
                 .parameters(parameters)
@@ -63,20 +67,20 @@ public abstract class MailingMemberShipNotifications<E extends UserDetails> impl
             
             mails.send(mail);
         } catch (MailBuildingException e) {
-            log.error(String.format("Activate mail for user %s was invalid", userDetails), e);
+            log.error(String.format("Activate mail for account %s was invalid", account), e);
         }
     }
 
     @Async
     @Override
-    public void newPassword(final E userDetails) {
-        Map<String, String> parameters = addUserDetailsParameters(userDetails);
+    public void newPassword(final Account account) {
+        Map<String, String> parameters = addAccountParameters(account);
         
         try {
             Mail mail = 
                 Mail.builder()
                 .from(from)
-                .to(userDetails.getEmail())
+                .to(account.getEmail())
                 .subject(messages.getMessage("membership.mail.newPassword.subject", null, Locale.getDefault()))
                 .templateName("newPassword")
                 .parameters(parameters)
@@ -84,20 +88,20 @@ public abstract class MailingMemberShipNotifications<E extends UserDetails> impl
             
             mails.send(mail);
         } catch (MailBuildingException e) {
-            log.error(String.format("New password mail for user %s was invalid", userDetails), e);
+            log.error(String.format("New password mail for account %s was invalid", account), e);
         }
     }
 
     @Async
     @Override
-    public void resetPassword(final E userDetails) {
-        Map<String, String> parameters = addUserDetailsParameters(userDetails);
+    public void resetPassword(final Account account) {
+        Map<String, String> parameters = addAccountParameters(account);
         
         try {
             Mail mail = 
                 Mail.builder()
                 .from(from)
-                .to(userDetails.getEmail())
+                .to(account.getEmail())
                 .subject(messages.getMessage("membership.mail.resetPassword.subject", null, Locale.getDefault()))
                 .templateName("resetPassword")
                 .parameters(parameters)
@@ -105,17 +109,17 @@ public abstract class MailingMemberShipNotifications<E extends UserDetails> impl
             
             mails.send(mail);
         } catch (MailBuildingException e) {
-            log.error(String.format("Reset password mail for user %s was invalid", userDetails), e);
+            log.error(String.format("Reset password mail for account %s was invalid", account), e);
         }
     }
     
-    private Map<String, String> addUserDetailsParameters(final E userDetails) {
-        Map<String, String> userDetailsParameters = new HashMap<>();
+    private Map<String, String> addAccountParameters(final Account account) {
+        Map<String, String> accountParameters = new HashMap<>();
         
-        userDetailsParameters.put("userName", userDetails.getUsername());
-        userDetailsParameters.put("userEmail", userDetails.getEmail());
-        userDetailsParameters.put("userToken", userDetails.getToken());
+        accountParameters.put("userName", account.getUsername());
+        accountParameters.put("userEmail", account.getEmail());
+        accountParameters.put("userToken", account.getToken());
             
-        return userDetailsParameters;
+        return accountParameters;
     }
 }

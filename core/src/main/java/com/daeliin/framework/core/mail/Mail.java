@@ -25,8 +25,8 @@ public class Mail {
         final String templateName,
         final Map<String, String> parameters) throws MailBuildingException {
         
-        this.from = new Email(from).toString();
-        this.to = new Email(to).toString();
+        this.from = new EmailAddress(from).toString();
+        this.to = new EmailAddress(to).toString();
         this.subject = subject;
         buildTemplateName(templateName);
         buildParameters(parameters);

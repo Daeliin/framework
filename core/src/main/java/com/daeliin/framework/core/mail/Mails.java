@@ -56,8 +56,7 @@ public class Mails {
         
         addGlobalParameters(parameters);
         
-        parameters.entrySet().forEach(parameter -> 
-            context.setVariable(parameter.getKey(), parameter.getValue()));
+        parameters.entrySet().forEach(parameter -> context.setVariable(parameter.getKey(), parameter.getValue()));
         
         return this.templateEngine.process(templateName, context);
     }

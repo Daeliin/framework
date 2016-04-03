@@ -1,6 +1,6 @@
 package com.daeliin.framework.security.authentication.form;
 
-import com.daeliin.framework.security.details.PersistentUserDetailsService;
+import com.daeliin.framework.security.credentials.details.AccountDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -48,7 +48,7 @@ public abstract class FormAuthentication extends WebSecurityConfigurerAdapter {
     private RestLogoutSuccessHandler logoutSuccessHandler;
     
     @Autowired
-    private PersistentUserDetailsService userDetailsService;
+    private AccountDetailsService accountDetailsService;
     
     @Bean
     protected PasswordEncoder passwordEncoder() {
@@ -59,7 +59,7 @@ public abstract class FormAuthentication extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-            .userDetailsService(userDetailsService)
+            .userDetailsService(accountDetailsService)
             .passwordEncoder(passwordEncoder());
     }
     

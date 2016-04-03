@@ -1,17 +1,17 @@
 package com.daeliin.framework.security.session;
 
-import com.daeliin.framework.commons.security.details.UserDetails;
-import com.daeliin.framework.security.details.PersistentUserDetailsService;
+import com.daeliin.framework.commons.security.credentials.account.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SessionHelper {
     
     @Autowired
-    protected PersistentUserDetailsService userDetailsService;
+    protected UserDetailsService accountService;
     
     private String getCurrentUsername() {
         String currentUsername = "";
@@ -25,24 +25,24 @@ public class SessionHelper {
         return currentUsername;
     }
     
-    public boolean isUserLoggedIn() {
-        return getCurrentUserDetails() != null;
+    public boolean isAccountLoggedIn() {
+        return getCurrentAccount() != null;
     }
     
-    public org.springframework.security.core.userdetails.UserDetails getCurrentUserDetails() {
+    public org.springframework.security.core.userdetails.UserDetails getCurrentAccount() {
         String currentUsername = getCurrentUsername();
         
-        return userDetailsService.loadUserByUsername(currentUsername);
+        return accountService.loadUserByUsername(currentUsername);
     }
     
-    public boolean currentUserIs(final UserDetails userDetails) {
-        boolean currentUserIsUser = false;
-        org.springframework.security.core.userdetails.UserDetails currentUserDetails = getCurrentUserDetails();
+    public boolean currentAccountIs(final Account account) {
+        boolean currentAccountIsAccount = false;
+        org.springframework.security.core.userdetails.UserDetails currentAccount = getCurrentAccount();
         
-        if (currentUserDetails != null && userDetails != null) {
-            currentUserIsUser = currentUserDetails.getUsername().equals(userDetails.getUsername());
+        if (currentAccount != null && account != null) {
+            currentAccountIsAccount = currentAccount.getUsername().equals(account.getUsername());
         }
         
-        return currentUserIsUser;
+        return currentAccountIsAccount;
     }
 }
