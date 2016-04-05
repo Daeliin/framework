@@ -1,8 +1,7 @@
 package com.daeliin.framework.security.membership;
 
 import com.daeliin.framework.commons.security.credentials.account.Account;
-import com.daeliin.framework.commons.security.credentials.account.PersistentAccount;
-import com.daeliin.framework.commons.security.credentials.account.PersistentAccountRepository;
+import com.daeliin.framework.commons.security.credentials.account.Account;
 import com.daeliin.framework.commons.security.membership.ResetPasswordRequest;
 import com.daeliin.framework.commons.test.SecuredIntegrationTest;
 import com.daeliin.framework.core.resource.json.JsonString;
@@ -21,6 +20,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertTrue;
+import com.daeliin.framework.commons.security.credentials.account.AccountRepository;
 
 @ContextConfiguration(classes = Application.class)
 public class MembershipIntegrationTest extends SecuredIntegrationTest {
@@ -28,7 +28,7 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     private static final String MEMBERSHIP_PATH = API_ROOT_PATH + "/public/membership";
     
     @Autowired
-    private PersistentAccountRepository persistentAccountRepository;
+    private AccountRepository persistentAccountRepository;
     
     @Test
     public void signup_invalidEmail_returnsHttpBadRequest() throws Exception {
@@ -313,7 +313,7 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     }
     
     private Account createAccount(final String username, final String email, final String password) {
-        Account account = new PersistentAccount();
+        Account account = new Account();
         
         account.setUsername(username);
         account.setEmail(email);

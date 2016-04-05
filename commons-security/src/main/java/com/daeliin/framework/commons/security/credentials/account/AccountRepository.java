@@ -4,7 +4,7 @@ import com.daeliin.framework.core.resource.repository.ResourceRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PersistentAccountRepository extends ResourceRepository<PersistentAccount, Long> {
+public interface AccountRepository extends ResourceRepository<Account, Long> {
     
     public Account findByUsernameIgnoreCaseAndEnabled(final String username, final boolean enabled);
     

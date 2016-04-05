@@ -1,7 +1,7 @@
 package com.daeliin.framework.security.membership;
 
-import com.daeliin.framework.commons.security.credentials.account.PersistentAccount;
-import com.daeliin.framework.commons.security.credentials.account.PersistentAccountService;
+import com.daeliin.framework.commons.security.credentials.account.Account;
+import com.daeliin.framework.commons.security.credentials.account.AccountService;
 import com.daeliin.framework.commons.security.exception.InvalidTokenException;
 import com.daeliin.framework.commons.security.exception.AccountAlreadyExistException;
 import com.daeliin.framework.commons.security.exception.WrongAccessException;
@@ -27,13 +27,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(API_ROOT_PATH + "/public/membership")
 public class MembershipController {
     
-    protected final PersistentAccountService accountService;
+    protected final AccountService accountService;
     protected final AccountDetailsService accountDetailsService;
     protected final MembershipNotifications membershipNotifications;
 
     @Autowired
     public MembershipController(
-        final PersistentAccountService accountService, 
+        final AccountService accountService, 
         final AccountDetailsService accountDetailsService, 
         final MembershipNotifications membershipNotifications) {
         
@@ -45,13 +45,13 @@ public class MembershipController {
     @RequestMapping(value = "signup", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void signUp(@RequestBody @Valid PersistentAccount account) {
+    public void signUp(@RequestBody @Valid Account account) {
         if (accountDetailsService.exists(account)) {
             throw new AccountAlreadyExistException("The username already exist");
         }
         
         accountDetailsService.signUp(account);
-        PersistentAccount createdAccount = accountService.create(account);
+        Account createdAccount = accountService.create(account);
         membershipNotifications.signUp(createdAccount);
         
         log.info(String.format("account[%s] signed up", createdAccount.getId()));
@@ -69,7 +69,7 @@ public class MembershipController {
         }
         
         try {
-            PersistentAccount account = accountService.findOne(accountId);
+            Account account = accountService.findOne(accountId);
             accountDetailsService.activate(account, activationToken);
             accountService.update(accountId, account);
             membershipNotifications.activate(account);
@@ -106,7 +106,7 @@ public class MembershipController {
         }
         
         try {
-            PersistentAccount account = accountService.findOne(accountId);
+            Account account = accountService.findOne(accountId);
             accountDetailsService.resetPassword(account, resetPasswordToken, newPassword);
             accountService.update(accountId, account);
             membershipNotifications.resetPassword(account);

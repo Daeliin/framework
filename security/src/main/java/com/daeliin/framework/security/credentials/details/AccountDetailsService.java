@@ -1,9 +1,7 @@
 package com.daeliin.framework.security.credentials.details;
 
 import com.daeliin.framework.commons.security.credentials.account.Account;
-import com.daeliin.framework.commons.security.credentials.account.PersistentAccountRepository;
 import com.daeliin.framework.commons.security.credentials.accountpermission.AccountPermission;
-import com.daeliin.framework.commons.security.credentials.accountpermission.PersistentAccountPermissionRepository;
 import com.daeliin.framework.commons.security.cryptography.Sha512;
 import com.daeliin.framework.commons.security.cryptography.Token;
 import com.daeliin.framework.commons.security.exception.InvalidTokenException;
@@ -19,16 +17,18 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import com.daeliin.framework.commons.security.credentials.account.AccountRepository;
+import com.daeliin.framework.commons.security.credentials.accountpermission.AccountPermissionRepository;
 
 @Slf4j
 @Service
 public class AccountDetailsService implements UserDetailsService {
     
     @Autowired
-    private PersistentAccountRepository accountRepository;
+    private AccountRepository accountRepository;
     
     @Autowired
-    private PersistentAccountPermissionRepository permissionRepository;
+    private AccountPermissionRepository permissionRepository;
     
     @Override
     public org.springframework.security.core.userdetails.UserDetails loadUserByUsername(String username) {

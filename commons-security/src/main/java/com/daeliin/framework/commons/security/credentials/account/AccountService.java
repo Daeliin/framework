@@ -4,5 +4,5 @@ import com.daeliin.framework.core.resource.service.ResourceService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PersistentAccountService extends ResourceService<PersistentAccount, Long, PersistentAccountRepository> {
+public class AccountService extends ResourceService<Account, Long, AccountRepository> {
 }

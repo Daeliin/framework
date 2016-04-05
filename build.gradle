@@ -60,6 +60,7 @@ subprojects {
         useTestNG() 
         
         testLogging {
+            exceptionFormat = 'full'
             showStackTraces true
             showExceptions true
             showCauses true
@@ -108,6 +109,6 @@ allprojects {
     }
     
     task wrapper(type: Wrapper) { 
-        gradleVersion = '2.5' 
+        gradleVersion = '2.12' 
     }
 }

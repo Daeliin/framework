@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PersistentAccountPermissionRepository extends ResourceRepository<PersistentAccountPermission, Long> {
+public interface AccountPermissionRepository extends ResourceRepository<AccountPermission, Long> {
     
     public List<AccountPermission> findByAccount(final Account account);
 }

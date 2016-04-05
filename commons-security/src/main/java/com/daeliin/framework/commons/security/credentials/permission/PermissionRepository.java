@@ -4,5 +4,5 @@ import com.daeliin.framework.core.resource.repository.ResourceRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PersistentPermissionRepository extends ResourceRepository<PersistentPermission, Long> {
+public interface PermissionRepository extends ResourceRepository<Permission, Long> {
 }

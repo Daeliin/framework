@@ -4,5 +4,5 @@ import com.daeliin.framework.core.resource.service.ResourceService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PersistentPermissionService extends ResourceService<PersistentPermission, Long, PersistentPermissionRepository> {
+public class PermissionService extends ResourceService<Permission, Long, PermissionRepository> {
 }
