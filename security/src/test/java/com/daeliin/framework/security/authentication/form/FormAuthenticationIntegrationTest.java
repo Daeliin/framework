@@ -2,8 +2,8 @@ package com.daeliin.framework.security.authentication.form;
 
 import com.daeliin.framework.commons.test.SecuredIntegrationTest;
 import org.springframework.test.context.ContextConfiguration;
-import com.daeliin.framework.security.mock.Application;
-import static com.daeliin.framework.security.mock.Application.API_ROOT_PATH;
+import com.daeliin.framework.security.Application;
+import static com.daeliin.framework.security.Application.API_ROOT_PATH;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;

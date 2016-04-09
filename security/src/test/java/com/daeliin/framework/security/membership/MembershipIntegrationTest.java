@@ -1,12 +1,11 @@
 package com.daeliin.framework.security.membership;
 
 import com.daeliin.framework.commons.security.credentials.account.Account;
-import com.daeliin.framework.commons.security.credentials.account.Account;
 import com.daeliin.framework.commons.security.membership.ResetPasswordRequest;
 import com.daeliin.framework.commons.test.SecuredIntegrationTest;
 import com.daeliin.framework.core.resource.json.JsonString;
-import com.daeliin.framework.security.mock.Application;
-import static com.daeliin.framework.security.mock.Application.API_ROOT_PATH;
+import com.daeliin.framework.security.Application;
+import static com.daeliin.framework.security.Application.API_ROOT_PATH;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

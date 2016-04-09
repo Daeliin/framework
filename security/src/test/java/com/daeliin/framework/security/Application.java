@@ -1,4 +1,4 @@
-package com.daeliin.framework.security.mock;
+package com.daeliin.framework.security;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

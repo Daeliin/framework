@@ -1,7 +1,6 @@
 package com.daeliin.framework.security.membership;
 
 import com.daeliin.framework.commons.security.credentials.account.Account;
-import com.daeliin.framework.commons.security.credentials.account.Account;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.testng.annotations.Test;
 import static org.testng.Assert.assertEquals;
