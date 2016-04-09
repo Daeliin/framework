@@ -1,6 +1,7 @@
 package com.daeliin.framework.security.session;
 
 import com.daeliin.framework.commons.security.credentials.account.Account;
+import com.daeliin.framework.commons.security.credentials.account.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,10 +12,12 @@ import org.springframework.stereotype.Component;
 public class SessionHelper {
     
     private final UserDetailsService userDetailsService;
+    private final AccountRepository accountRepository;
     
     @Autowired
-    public SessionHelper(final UserDetailsService userDetailsService) {
+    public SessionHelper(final UserDetailsService userDetailsService, final AccountRepository accountRepository) {
         this.userDetailsService = userDetailsService;
+        this.accountRepository = accountRepository;
     }
     
     private String getCurrentUsername() {
@@ -33,7 +36,12 @@ public class SessionHelper {
         return getCurrentAccount() != null;
     }
     
-    public org.springframework.security.core.userdetails.UserDetails getCurrentAccount() {
+    public Account getCurrentAccount() {
+        String currentUsername = getCurrentUsername();
+        return accountRepository.findByUsernameIgnoreCase(currentUsername);
+    }
+    
+    public org.springframework.security.core.userdetails.UserDetails getCurrentAccountDetails() {
         String currentUsername = getCurrentUsername();
         
         return userDetailsService.loadUserByUsername(currentUsername);
@@ -41,7 +49,7 @@ public class SessionHelper {
     
     public boolean currentAccountIs(final Account account) {
         boolean currentAccountIsAccount = false;
-        org.springframework.security.core.userdetails.UserDetails currentAccount = getCurrentAccount();
+        org.springframework.security.core.userdetails.UserDetails currentAccount = getCurrentAccountDetails();
         
         if (currentAccount != null && account != null) {
             currentAccountIsAccount = currentAccount.getUsername().equals(account.getUsername());

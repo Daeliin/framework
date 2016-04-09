@@ -66,7 +66,7 @@ public class FormAuthenticationIntegrationTest extends SecuredIntegrationTest {
     @Test
     public void authenticated_canRequestSecuredResources() throws Exception {
         mockMvc
-            .perform(get(API_ROOT_PATH + "/accounts/2")
+            .perform(get(API_ROOT_PATH + "/accounts/current")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
     }
