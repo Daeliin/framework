@@ -42,6 +42,7 @@ public class Account extends LongIdPersistentResource {
     @JsonIgnore
     private String password;
     
+    @JsonIgnore
     private String token;
     
     @Column(name = "signup_date")

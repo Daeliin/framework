@@ -62,11 +62,11 @@ public class FormAuthenticationIntegrationTest extends SecuredIntegrationTest {
         login("john", "password").andExpect(status().isOk());
     }
     
-    @WithMockUser
+    @WithMockUser(username = "john")
     @Test
     public void authenticated_canRequestSecuredResources() throws Exception {
         mockMvc
-            .perform(get(API_ROOT_PATH + "/accounts")
+            .perform(get(API_ROOT_PATH + "/accounts/2")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
     }

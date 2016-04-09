@@ -10,8 +10,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class SessionHelper {
     
+    private final UserDetailsService userDetailsService;
+    
     @Autowired
-    protected UserDetailsService accountService;
+    public SessionHelper(final UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
     
     private String getCurrentUsername() {
         String currentUsername = "";
@@ -32,7 +36,7 @@ public class SessionHelper {
     public org.springframework.security.core.userdetails.UserDetails getCurrentAccount() {
         String currentUsername = getCurrentUsername();
         
-        return accountService.loadUserByUsername(currentUsername);
+        return userDetailsService.loadUserByUsername(currentUsername);
     }
     
     public boolean currentAccountIs(final Account account) {
@@ -44,5 +48,6 @@ public class SessionHelper {
         }
         
         return currentAccountIsAccount;
+    
     }
 }
