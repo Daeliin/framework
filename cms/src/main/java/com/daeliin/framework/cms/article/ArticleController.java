@@ -13,25 +13,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ArticleController extends ResourceController<Article, Long, ArticleService> {
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
     @Override
     public Article create(@Valid Article resource) {
         return super.create(resource);
     }
     
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
     @Override
     public Article update(@PathVariable Long id, @Valid Article resource) {
         return super.update(id, resource);
     }
     
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
     @Override
     public void delete(List<Long> ids) {
         super.delete(ids);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR')")
     @Override
     public void delete(@PathVariable Long id) {
         super.delete(id);

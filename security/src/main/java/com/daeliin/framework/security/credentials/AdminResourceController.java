@@ -22,19 +22,19 @@ import org.springframework.web.bind.annotation.RestController;
 public abstract class AdminResourceController<E extends PersistentResource, ID extends Serializable, S extends FullCrudService<E, ID>> 
     extends ResourceController<E, ID, S> {
     
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public E create(@Valid E resource) {
         return super.create(resource);
     }
     
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public E update(@PathVariable ID id, @Valid E resource) {
         return super.update(id, resource);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public Page<E> getAll(
         @RequestParam(value = "pageNumber", defaultValue = DEFAULT_PAGE_NUMBER) String pageNumber, 
@@ -45,19 +45,19 @@ public abstract class AdminResourceController<E extends PersistentResource, ID e
         return super.getAll(pageNumber, pageSize, direction, properties);
     }
     
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public E getOne(@PathVariable ID id) {
         return super.getOne(id);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public void delete(@PathVariable ID id) throws ResourceNotFoundException {
         super.delete(id);
     }
     
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public void delete(List<ID> ids) {
         super.delete(ids);
