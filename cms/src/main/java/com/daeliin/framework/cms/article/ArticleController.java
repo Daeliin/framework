@@ -1,10 +1,11 @@
 package com.daeliin.framework.cms.article;
 
+import static com.daeliin.framework.cms.Application.API_ROOT_PATH;
 import com.daeliin.framework.core.resource.controller.ResourceController;
-import java.io.Serializable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@RequestMapping(API_ROOT_PATH + "/articles")
 @RestController
-public abstract class ArticleController<A extends Article, ID extends Serializable, S extends ArticleService<A, ID, ? extends ArticleRepository>> 
-    extends ResourceController<A, ID, S> {
+public class ArticleController extends ResourceController<Article, Long, ArticleService> {
 }

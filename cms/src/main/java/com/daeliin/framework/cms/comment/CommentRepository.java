@@ -1,9 +1,8 @@
 package com.daeliin.framework.cms.comment;
 
 import com.daeliin.framework.core.resource.repository.ResourceRepository;
-import java.io.Serializable;
-import org.springframework.data.repository.NoRepositoryBean;
+import org.springframework.stereotype.Repository;
 
-@NoRepositoryBean
-public interface CommentRepository<E extends Comment, ID extends Serializable> extends ResourceRepository<E, ID> {
+@Repository
+public interface CommentRepository extends ResourceRepository<Comment, Long> {
 }

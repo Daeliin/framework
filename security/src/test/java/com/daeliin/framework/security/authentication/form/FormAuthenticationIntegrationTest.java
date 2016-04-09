@@ -92,7 +92,7 @@ public class FormAuthenticationIntegrationTest extends SecuredIntegrationTest {
     @Test
     public void accountWithoutAdminPermissions_requestsResourcesProtectedByAdmin_returnsHttpForbidden() throws Exception {
         mockMvc
-            .perform(delete(API_ROOT_PATH + "/accounts")
+            .perform(delete(API_ROOT_PATH + "/accounts/1")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isForbidden());
     }
@@ -101,7 +101,7 @@ public class FormAuthenticationIntegrationTest extends SecuredIntegrationTest {
     @Test
     public void accountWithAdminPermissions_requestsResourcesProtectedByAdmin_returnsCorrespondingHttpCode() throws Exception {
         mockMvc
-            .perform(delete(API_ROOT_PATH + "/accounts")
+            .perform(delete(API_ROOT_PATH + "/accounts/1")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isGone());
     } 

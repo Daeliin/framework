@@ -38,22 +38,22 @@ public class Article extends LongIdPersistentResource implements Comparable<Arti
     @Type(type = "text")
     private String content;
 
-    @Column(name = "creation_datetime")
+    @Column(name = "creation_date")
     private Date creationDate;
     
-    @Column(name = "publication_datetime")
+    @Column(name = "publication_date")
     private Date publicationDate;
     
     @NotNull
     private boolean published = false;
 
     public Article() {
-        setCreationDateToCurrentDate();
+        this.creationDate = new Date();
     }
     
     public Article(Account author, String title, String description, String content, Date creationDate, Date publicationDate) {
         if (creationDate == null) {
-            setCreationDateToCurrentDate();
+            this.creationDate = new Date();
         } else {
             this.creationDate = creationDate;
         }
@@ -81,9 +81,5 @@ public class Article extends LongIdPersistentResource implements Comparable<Arti
         } else {
             return -1;
         }
-    }
-    
-    private void setCreationDateToCurrentDate() {
-        this.creationDate = new Date();
     }
 }

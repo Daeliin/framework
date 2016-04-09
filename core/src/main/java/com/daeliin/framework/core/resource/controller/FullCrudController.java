@@ -57,9 +57,4 @@ public interface FullCrudController<E extends Serializable, ID extends Serializa
      * @param ids resources ids to delete
      */
     void delete(List<ID> ids);
-    
-    /**
-     * Exposes a delete entry point.
-     */
-    void deleteAll();
 }

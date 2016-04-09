@@ -1,10 +1,12 @@
-package com.daeliin.framework.cms.comment;
+package com.daeliin.framework.cms.news;
 
+import com.daeliin.framework.cms.article.Article;
 import com.daeliin.framework.commons.model.LongIdPersistentResource;
 import com.daeliin.framework.commons.security.credentials.account.Account;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
@@ -16,12 +18,16 @@ import org.hibernate.validator.constraints.NotBlank;
 
 @Getter
 @Setter
-@EqualsAndHashCode(of = {"author", "content", "creationDate"}, callSuper = false)
-@ToString(of = {"author", "content", "creationDate"}, callSuper = true)
+@EqualsAndHashCode(of = {"article", "author", "content", "creationDate"}, callSuper = false)
+@ToString(of = {"article", "author", "content", "creationDate"}, callSuper = true)
 @Entity
-public class Comment extends LongIdPersistentResource implements Comparable<Comment> {
+public class News extends LongIdPersistentResource implements Comparable<News> {
+
+    private static final long serialVersionUID = -4011303518879793138L;
     
-    private static final long serialVersionUID = 7753778128988279460L;
+    @NotNull
+    @ManyToOne
+    private Article article;
     
     @NotNull
     @OneToOne
@@ -33,30 +39,31 @@ public class Comment extends LongIdPersistentResource implements Comparable<Comm
     
     @Column(name = "creation_date")
     private Date creationDate;
-
-    public Comment() {
+    
+    public News() {
         this.creationDate = new Date();
     }
-    
-    public Comment(Account author, String content, Date additionDate) {
-        if (additionDate == null) {
+
+    public News(Article article, Account author, String content, Date creationDate) {
+        if (creationDate == null) {
             this.creationDate = new Date();
-        } else {
-            this.creationDate = additionDate;
         }
         
+        this.article = article;
         this.author = author;
         this.content = content;
+        this.creationDate = creationDate;
     }
     
     @Override
-    public int compareTo(Comment other) {
+    public int compareTo(News other) {
         boolean creationDatesAreNotNull = this.creationDate != null && other.creationDate != null;
+        boolean sameArticle = this.article != null && other.article != null && this.article.equals(other.article);
         boolean sameAuthor = this.author != null && other.author != null && this.author.equals(other.author);
         boolean sameContent = this.content != null && other.content != null && this.content.equals(other.content);
         boolean sameCreationDate = creationDatesAreNotNull && this.creationDate.equals(other.creationDate);
         
-        if (sameAuthor && sameContent && sameCreationDate) {
+        if (sameArticle && sameAuthor && sameContent && sameCreationDate) {
             return 0;
         }
         

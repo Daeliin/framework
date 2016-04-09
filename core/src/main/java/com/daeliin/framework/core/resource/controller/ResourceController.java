@@ -137,14 +137,4 @@ public abstract class ResourceController<E extends PersistentResource, ID extend
     public void delete(@RequestBody List<ID> ids) {
         service.delete(ids);
     }
-    
-    /**
-     * Exposes a delete entry point, returns a 410.
-     */
-    @RequestMapping(method = DELETE)
-    @ResponseStatus(HttpStatus.GONE)
-    @Override
-    public void deleteAll() {
-        service.deleteAll();
-    }
 }

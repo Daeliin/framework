@@ -44,7 +44,7 @@ public class Account extends LongIdPersistentResource {
     
     private String token;
     
-    @Column(name = "signup_datetime")
+    @Column(name = "signup_date")
     private Date signUpDate;
     
     private boolean enabled = false;

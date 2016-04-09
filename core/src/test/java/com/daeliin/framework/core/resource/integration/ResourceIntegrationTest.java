@@ -364,19 +364,4 @@ public class ResourceIntegrationTest extends IntegrationTest {
             .content(new JsonString(null).value()))
             .andExpect(status().isBadRequest());
     }
-    
-    @Test
-    public void deleteAll_returnsHttpGone() throws Exception {
-        mockMvc
-            .perform(delete("/user"))
-            .andExpect(status().isGone());
-    }
-    
-    @Test
-    public void deleteAll_deletesAllResources() throws Exception {
-        mockMvc
-            .perform(delete("/user"));
-        
-        assertEquals(repository.count(), 0);
-    }
 }
