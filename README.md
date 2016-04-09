@@ -8,5 +8,6 @@ Provides REST basic layers with Spring Boot 1.4
 * Email templating : Thymeleaf 2.1.4.RELEASE
 
 ## Modules documentation
+* [Core](https://github.com/Daeliin/rest-framework/wiki/Module-:-core)
 * [Security](https://github.com/Daeliin/rest-framework/wiki/Module-:-security)
 * [CMS](https://github.com/Daeliin/rest-framework/wiki/Module-:-cms)
