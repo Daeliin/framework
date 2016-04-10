@@ -1,7 +1,5 @@
 package com.daeliin.framework.security.membership;
 
-import com.daeliin.framework.commons.security.credentials.account.Account;
-import com.daeliin.framework.commons.security.membership.ResetPasswordRequest;
 import com.daeliin.framework.commons.test.SecuredIntegrationTest;
 import com.daeliin.framework.core.resource.json.JsonString;
 import com.daeliin.framework.security.Application;
@@ -11,15 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.testng.annotations.Test;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.daeliin.framework.security.credentials.account.Account;
+import com.daeliin.framework.security.credentials.account.AccountRepository;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertTrue;
-import com.daeliin.framework.commons.security.credentials.account.AccountRepository;
 
 @ContextConfiguration(classes = Application.class)
 public class MembershipIntegrationTest extends SecuredIntegrationTest {
@@ -27,7 +26,7 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     private static final String MEMBERSHIP_PATH = API_ROOT_PATH + "/public/membership";
     
     @Autowired
-    private AccountRepository persistentAccountRepository;
+    private AccountRepository accountRepository;
     
     @Test
     public void signup_invalidEmail_returnsHttpBadRequest() throws Exception {
@@ -64,7 +63,7 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     
     @Test
     public void signup_existingAccount_returnsHttpPreconditionFailed() throws Exception {
-        Account existingAccount = persistentAccountRepository.findOne(1L);
+        Account existingAccount = accountRepository.findOne(1L);
         existingAccount.setClearPassword("password");
         
         mockMvc
@@ -76,8 +75,8 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     
     @Test
     public void signup_existingAccount_doesntCreateAccount() throws Exception {
-        long userDetailsCountBeforeSignUp = persistentAccountRepository.count();
-        Account existingAccount = persistentAccountRepository.findOne(1L);
+        long userDetailsCountBeforeSignUp = accountRepository.count();
+        Account existingAccount = accountRepository.findOne(1L);
         existingAccount.setClearPassword("password");
         
         mockMvc
@@ -85,7 +84,7 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(new JsonString(existingAccount).value()));
         
-        long userDetailsCountAfterSignUp = persistentAccountRepository.count();
+        long userDetailsCountAfterSignUp = accountRepository.count();
         
         assertEquals(userDetailsCountAfterSignUp, userDetailsCountBeforeSignUp);
     }
@@ -110,7 +109,7 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(new JsonString(validAccount).value()));
         
-        Account createdAccount = persistentAccountRepository.findByUsernameIgnoreCase("username");
+        Account createdAccount = accountRepository.findByUsernameIgnoreCase("username");
         
         assertEquals(createdAccount, validAccount);
         assertTrue(StringUtils.isNotBlank(createdAccount.getPassword()));
@@ -128,7 +127,7 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     
     @Test
     public void activate_wrongActivationToken_returnsHttpUnauthorized() throws Exception {
-        Account userDetails = persistentAccountRepository.findOne(1L);
+        Account userDetails = accountRepository.findOne(1L);
         
         mockMvc
             .perform(get(MEMBERSHIP_PATH + "/activate")
@@ -139,7 +138,7 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     
     @Test
     public void activate_wrongActivationToken_doesntActivateAccount() throws Exception {
-        Account userDetails = persistentAccountRepository.findOne(3L);
+        Account userDetails = accountRepository.findOne(3L);
         
         mockMvc
             .perform(get(MEMBERSHIP_PATH + "/activate")
@@ -151,7 +150,7 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     
     @Test
     public void activate_validAccountIdAndActivationToken_returnsHttpOk() throws Exception {
-        Account userDetails = persistentAccountRepository.findOne(3L);
+        Account userDetails = accountRepository.findOne(3L);
         
         mockMvc
             .perform(get(MEMBERSHIP_PATH + "/activate")
@@ -162,7 +161,7 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     
     @Test
     public void activate_validAccountIdAndActivationToken_activatesAccount() throws Exception {
-        Account userDetails = persistentAccountRepository.findOne(3L);
+        Account userDetails = accountRepository.findOne(3L);
         
         mockMvc
             .perform(get(MEMBERSHIP_PATH + "/activate")
@@ -174,7 +173,7 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     
     @Test
     public void activate_validAccountIdAndActivationToken_setsNewToken() throws Exception {
-        Account userDetails = persistentAccountRepository.findOne(3L);
+        Account userDetails = accountRepository.findOne(3L);
         String activationToken = userDetails.getToken();
         
         mockMvc
@@ -195,7 +194,7 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     
     @Test
     public void newPassword_validAccountId_returnsHttpOk() throws Exception {
-        Account userDetails = persistentAccountRepository.findOne(3L);
+        Account userDetails = accountRepository.findOne(3L);
         
         mockMvc
             .perform(get(MEMBERSHIP_PATH + "/newpassword")
@@ -249,7 +248,7 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     
     @Test
     public void resetPassword_wrongActivationToken_returnsHttpUnauthorized() throws Exception {
-        Account account = persistentAccountRepository.findOne(3L);
+        Account account = accountRepository.findOne(3L);
         ResetPasswordRequest resetPasswordRequest = createResetPasswordRequest(account.getId(), "wrong" + account.getToken(), "newPassword");
         
         mockMvc
@@ -261,7 +260,7 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     
     @Test
     public void resetPassword_wrongActivationToken_doesntResetAccountPassword() throws Exception {
-        Account account = persistentAccountRepository.findOne(3L);
+        Account account = accountRepository.findOne(3L);
         ResetPasswordRequest resetPasswordRequest = createResetPasswordRequest(account.getId(), "wrong" + account.getToken(), "newPassword");
         String tokenBeforeResetPassword = account.getToken();
         String passwordBeforeResetPassword = account.getPassword();
@@ -281,7 +280,7 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     
     @Test
     public void resetPassword_validResetPasswordRequest_returnsHttpOk() throws Exception {
-        Account account = persistentAccountRepository.findOne(3L);
+        Account account = accountRepository.findOne(3L);
         ResetPasswordRequest resetPasswordRequest = createResetPasswordRequest(account.getId(), account.getToken(), "newPassword");
         
         mockMvc
@@ -293,7 +292,7 @@ public class MembershipIntegrationTest extends SecuredIntegrationTest {
     
     @Test
     public void resetPassword_validResetPasswordRequest_resetAccountPassword() throws Exception {
-        Account account = persistentAccountRepository.findOne(3L);
+        Account account = accountRepository.findOne(3L);
         ResetPasswordRequest resetPasswordRequest = createResetPasswordRequest(account.getId(), account.getToken(), "newPassword");
         String passwordBeforeResetPassword = account.getPassword();
         String tokenBeforeResetPassword = account.getToken();

@@ -1,7 +1,7 @@
 package com.daeliin.framework.security.session;
 
-import com.daeliin.framework.commons.security.credentials.account.Account;
-import com.daeliin.framework.commons.security.credentials.account.AccountRepository;
+import com.daeliin.framework.security.credentials.account.Account;
+import com.daeliin.framework.security.credentials.account.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -1,14 +1,12 @@
 package com.daeliin.framework.security.membership;
 
-import com.daeliin.framework.commons.security.credentials.account.Account;
-import com.daeliin.framework.commons.security.credentials.account.AccountService;
 import com.daeliin.framework.commons.security.exception.InvalidTokenException;
 import com.daeliin.framework.commons.security.exception.AccountAlreadyExistException;
 import com.daeliin.framework.commons.security.exception.WrongAccessException;
-import com.daeliin.framework.commons.security.membership.MembershipNotifications;
-import com.daeliin.framework.commons.security.membership.ResetPasswordRequest;
 import com.daeliin.framework.core.resource.exception.ResourceNotFoundException;
 import static com.daeliin.framework.security.Application.API_ROOT_PATH;
+import com.daeliin.framework.security.credentials.account.Account;
+import com.daeliin.framework.security.credentials.account.AccountService;
 import com.daeliin.framework.security.credentials.details.AccountDetailsService;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;

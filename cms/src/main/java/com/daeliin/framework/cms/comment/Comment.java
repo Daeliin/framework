@@ -1,7 +1,7 @@
 package com.daeliin.framework.cms.comment;
 
 import com.daeliin.framework.commons.model.LongIdPersistentResource;
-import com.daeliin.framework.commons.security.credentials.account.Account;
+import com.daeliin.framework.security.credentials.account.Account;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;

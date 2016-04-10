@@ -1,8 +1,8 @@
 package com.daeliin.framework.security.membership;
 
-import com.daeliin.framework.commons.security.credentials.account.Account;
-import com.daeliin.framework.commons.security.cryptography.Sha512;
-import com.daeliin.framework.commons.security.cryptography.Token;
+import com.daeliin.framework.security.credentials.account.Account;
+import com.daeliin.framework.security.cryptography.hash.Sha512;
+import com.daeliin.framework.security.cryptography.hash.Token;
 import java.util.LinkedList;
 import java.util.List;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
