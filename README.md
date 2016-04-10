@@ -4,6 +4,7 @@ Provides REST basic layers with Spring Boot 1.4
 
 ## Technical stack
 * Build : Gradle 2.12
+* Testing : TestNG 6.9.4
 * Web tier : Spring Boot 1.4.0.M1
 * Email templating : Thymeleaf 2.1.4.RELEASE
 
