@@ -1,6 +1,8 @@
-version = '0.1-SNAPSHOT'
+plugins {
+    id "org.sonarqube" version "1.2"
+}
 
-apply plugin: "org.sonarqube"
+version = '0.1-SNAPSHOT'
 
 subprojects {
     apply plugin: 'java'
