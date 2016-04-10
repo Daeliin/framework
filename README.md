@@ -18,5 +18,5 @@ $ gradle test # unit tests
 * [Core](https://github.com/Daeliin/rest-framework/wiki/Module-:-core)
 * [Security](https://github.com/Daeliin/rest-framework/wiki/Module-:-security)
 * [CMS](https://github.com/Daeliin/rest-framework/wiki/Module-:-cms)
-* 
+
 
