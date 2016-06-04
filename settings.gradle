@@ -1,4 +1,4 @@
-rootProject.name = 'rest-framework'
+rootProject.name = 'java-components'
 
 include 'commons'
 include 'commons-test'
