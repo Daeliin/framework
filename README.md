@@ -1,4 +1,4 @@
-# Java Components [![Build Status](https://travis-ci.org/Daeliin/rest-framework.svg?branch=master)](https://travis-ci.org/Daeliin/rest-framework)
+# Java Components [![Build Status](https://travis-ci.org/Daeliin/java-components.svg?branch=master)](https://travis-ci.org/Daeliin/java-components)
 
 Provides commons java components.
 
