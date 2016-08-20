@@ -1,7 +1,0 @@
-rootProject.name = 'java-components'
-
-include 'commons'
-include 'commons-test'
-include 'core'
-include 'security'
-include 'cms'
