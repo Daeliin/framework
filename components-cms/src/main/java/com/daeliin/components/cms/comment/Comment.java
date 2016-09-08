@@ -55,11 +55,8 @@ public class Comment extends UUIDPersistentResource implements Comparable<Commen
     @Override
     public int compareTo(Comment other) {
         boolean creationDatesAreNotNull = this.creationDate != null && other.creationDate != null;
-        boolean sameAuthor = this.author != null && other.author != null && this.author.equals(other.author);
-        boolean sameContent = this.content != null && other.content != null && this.content.equals(other.content);
-        boolean sameCreationDate = creationDatesAreNotNull && this.creationDate.equals(other.creationDate);
         
-        if (sameAuthor && sameContent && sameCreationDate) {
+        if (this.equals(other)) {
             return 0;
         }
         

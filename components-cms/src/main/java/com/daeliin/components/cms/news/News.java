@@ -61,12 +61,8 @@ public class News extends UUIDPersistentResource implements Comparable<News> {
     @Override
     public int compareTo(News other) {
         boolean creationDatesAreNotNull = this.creationDate != null && other.creationDate != null;
-        boolean sameArticle = this.article != null && other.article != null && this.article.equals(other.article);
-        boolean sameAuthor = this.author != null && other.author != null && this.author.equals(other.author);
-        boolean sameContent = this.content != null && other.content != null && this.content.equals(other.content);
-        boolean sameCreationDate = creationDatesAreNotNull && this.creationDate.equals(other.creationDate);
         
-        if (sameArticle && sameAuthor && sameContent && sameCreationDate) {
+        if (this.equals(other)) {
             return 0;
         }
         

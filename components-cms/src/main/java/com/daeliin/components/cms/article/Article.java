@@ -72,11 +72,8 @@ public class Article extends UUIDPersistentResource implements Comparable<Articl
     @Override
     public int compareTo(Article other) {
         boolean titlesAreNotNull = this.title != null && other.title != null;
-        boolean sameTitle = titlesAreNotNull && this.title.equals(other.title);
-        boolean sameDescription = this.description != null && other.description != null && this.description.equals(other.description);
-        boolean sameContent = this.content != null && other.content != null && this.content.equals(other.content);
         
-        if (sameTitle && sameDescription && sameContent) {
+        if (this.equals(other)) {
             return 0;
         }
         

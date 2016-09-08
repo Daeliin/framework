@@ -1,10 +1,13 @@
 package com.daeliin.components.cms.article;
 
 import com.daeliin.components.cms.Application;
+import java.util.Arrays;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertNotNull;
 import static org.testng.AssertJUnit.assertTrue;
 import org.testng.annotations.Test;
 
@@ -22,6 +25,7 @@ public class ArticleServiceTest extends AbstractTransactionalTestNGSpringContext
         
         Article publishedArticle = articleService.findOne(2L);
         
+        assertNotNull(publishedArticle.getPublicationDate());
         assertTrue(publishedArticle.isPublished());
     }
     
@@ -31,8 +35,33 @@ public class ArticleServiceTest extends AbstractTransactionalTestNGSpringContext
         
         articleService.publish(alreadyPublishedArticle);
         
-        Article publishedArticle = articleService.findOne(1L);
+        Article republishedArticle = articleService.findOne(1L);
         
-        assertEquals(publishedArticle, alreadyPublishedArticle);
+        assertEquals(republishedArticle, alreadyPublishedArticle);
+    }
+    
+    @Test
+    public void publish_notPublishedArticles_makesAllOfThemPublished() {
+        List<Article> notPublishedArticles = Arrays.asList(articleService.findOne(2L), articleService.findOne(3L));
+        
+        articleService.publish(notPublishedArticles);
+        
+        List<Article> publishedArticles = Arrays.asList(articleService.findOne(2L), articleService.findOne(3L));
+        
+        publishedArticles.forEach(publishedArticle -> {
+            assertNotNull(publishedArticle.getPublicationDate());
+            assertTrue(publishedArticle.isPublished());
+        });
+    }
+    
+    @Test
+    public void publish_alreadyPublishedArticles_doesntChangeAnything() {
+        List<Article> alreadyPublishedArticles = Arrays.asList(articleService.findOne(1L), articleService.findOne(4L));
+        
+        articleService.publish(alreadyPublishedArticles);
+        
+        List<Article> publishedArticle = Arrays.asList(articleService.findOne(1L), articleService.findOne(4L));
+        
+        assertEquals(alreadyPublishedArticles, publishedArticle);
     }
 }
