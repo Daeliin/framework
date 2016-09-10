@@ -12,6 +12,7 @@
         <groupId>com.daeliin.components</groupId>
         <artifactId>components-main</artifactId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath/>
     </parent>
     
     <dependencies>
