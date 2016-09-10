@@ -18,5 +18,5 @@ public interface PersistentResource<ID extends Serializable> extends Serializabl
      * Sets the resource id.
      * @param id the new resource id
      */
-    void setId(Long id);
+    void setId(ID id);
 }

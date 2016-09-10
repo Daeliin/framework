@@ -8,7 +8,6 @@ import com.daeliin.components.security.exception.InvalidTokenException;
 import com.daeliin.components.security.exception.WrongAccessException;
 import com.daeliin.components.security.membership.details.AccountDetailsService;
 import com.daeliin.components.security.membership.notifications.MembershipNotifications;
-import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 

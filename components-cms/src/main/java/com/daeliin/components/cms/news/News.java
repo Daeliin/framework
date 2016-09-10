@@ -40,6 +40,8 @@ public class News extends UUIDPersistentResource implements Comparable<News> {
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
     
+    private String source;
+    
     public News() {
         this.creationDate = LocalDateTime.now();
     }
