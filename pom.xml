@@ -123,4 +123,15 @@
             </plugins>
         </pluginManagement>
     </build>
+    
+    <distributionManagement>
+        <snapshotRepository>
+            <id>daeliin-nexus-snapshots</id>
+            <url>http://nexus.daeliin.com/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>daeliin-nexus-releases</id>
+            <url>http://nexus.daeliin.com/content/repositories/releases</url>
+        </repository>
+    </distributionManagement>
 </project>
