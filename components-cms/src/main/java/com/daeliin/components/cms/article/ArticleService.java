@@ -1,7 +1,7 @@
 package com.daeliin.components.cms.article;
 
 import com.daeliin.components.core.resource.service.ResourceService;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +28,7 @@ public class ArticleService extends ResourceService<Article, Long, ArticleReposi
     
     private void setInPublishedState(Article article) {
         if (!article.isPublished()) {
-            article.setPublicationDate(new Date());
+            article.setPublicationDate(LocalDateTime.now());
             article.setPublished(true);
         }
     }

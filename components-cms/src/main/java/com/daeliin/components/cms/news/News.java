@@ -3,13 +3,11 @@ package com.daeliin.components.cms.news;
 import com.daeliin.components.cms.article.Article;
 import com.daeliin.components.domain.resource.UUIDPersistentResource;
 import com.daeliin.components.security.credentials.account.Account;
-import java.util.Date;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -39,17 +37,16 @@ public class News extends UUIDPersistentResource implements Comparable<News> {
     @Type(type = "text")
     private String content;
     
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "creation_date")
-    private Date creationDate;
+    private LocalDateTime creationDate;
     
     public News() {
-        this.creationDate = new Date();
+        this.creationDate = LocalDateTime.now();
     }
 
-    public News(Article article, Account author, String content, Date creationDate) {
+    public News(Article article, Account author, String content, LocalDateTime creationDate) {
         if (creationDate == null) {
-            this.creationDate = new Date();
+            this.creationDate = LocalDateTime.now();
         }
         
         this.article = article;

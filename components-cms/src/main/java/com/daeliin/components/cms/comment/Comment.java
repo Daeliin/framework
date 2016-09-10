@@ -2,12 +2,10 @@ package com.daeliin.components.cms.comment;
 
 import com.daeliin.components.domain.resource.UUIDPersistentResource;
 import com.daeliin.components.security.credentials.account.Account;
-import java.util.Date;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -33,17 +31,16 @@ public class Comment extends UUIDPersistentResource implements Comparable<Commen
     @Type(type = "text")
     private String content;
     
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "creation_date")
-    private Date creationDate;
+    private LocalDateTime creationDate;
 
     public Comment() {
-        this.creationDate = new Date();
+        this.creationDate = LocalDateTime.now();
     }
     
-    public Comment(Account author, String content, Date additionDate) {
+    public Comment(Account author, String content, LocalDateTime additionDate) {
         if (additionDate == null) {
-            this.creationDate = new Date();
+            this.creationDate = LocalDateTime.now();
         } else {
             this.creationDate = additionDate;
         }

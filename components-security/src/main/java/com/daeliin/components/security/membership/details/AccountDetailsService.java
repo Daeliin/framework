@@ -7,11 +7,10 @@ import com.daeliin.components.security.credentials.accountpermission.AccountPerm
 import com.daeliin.components.security.cryptography.Sha512;
 import com.daeliin.components.security.cryptography.Token;
 import com.daeliin.components.security.exception.InvalidTokenException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -60,7 +59,7 @@ public class AccountDetailsService implements UserDetailsService {
         
         AccountEncryption accountEncryption = new AccountEncryption(account);
         
-        account.setSignUpDate(new Date());
+        account.setSignUpDate(LocalDateTime.now());
         account.setPassword(accountEncryption.password());
         account.setToken(accountEncryption.token());
         account.setEnabled(false);

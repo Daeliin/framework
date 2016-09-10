@@ -2,12 +2,10 @@ package com.daeliin.components.cms.article;
 
 import com.daeliin.components.domain.resource.UUIDPersistentResource;
 import com.daeliin.components.security.credentials.account.Account;
-import java.util.Date;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -40,24 +38,22 @@ public class Article extends UUIDPersistentResource implements Comparable<Articl
     @Type(type = "text")
     private String content;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "creation_date")
-    private Date creationDate;
+    private LocalDateTime creationDate;
     
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "publication_date")
-    private Date publicationDate;
+    private LocalDateTime publicationDate;
     
     @NotNull
     private boolean published = false;
 
     public Article() {
-        this.creationDate = new Date();
+        this.creationDate = LocalDateTime.now();
     }
     
-    public Article(Account author, String title, String description, String content, Date creationDate, Date publicationDate) {
+    public Article(Account author, String title, String description, String content, LocalDateTime creationDate, LocalDateTime publicationDate) {
         if (creationDate == null) {
-            this.creationDate = new Date();
+            this.creationDate = LocalDateTime.now();
         } else {
             this.creationDate = creationDate;
         }
