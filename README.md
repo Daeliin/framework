@@ -6,7 +6,7 @@ Provides commons java components.
 * Build : Maven
 * Testing : TestNG 6.9.4
 * Web tier : Spring Boot 1.4.0.RELEASE
-* Templating : Thymeleaf 2.1.4.RELEASE
+* Templating : Thymeleaf 2.1.5.RELEASE
 
 ## Tasks
 ```bash
