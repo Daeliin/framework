@@ -10,8 +10,10 @@ import com.daeliin.components.security.membership.details.AccountDetailsService;
 import com.daeliin.components.security.membership.notifications.MembershipNotifications;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Slf4j
+@Service
 public class MembershipService {
     
     protected final AccountService accountService;
@@ -41,7 +43,7 @@ public class MembershipService {
         log.info(String.format("account[%s] signed up", createdAccount.getId()));
     }
     
-    public void activate(Long accountId, String activationToken) {
+    public void activate(Long accountId, String activationToken) throws InvalidTokenException {
         if (!accountService.exists(accountId)) {
             throw new ResourceNotFoundException(String.format("account[%s] not found", accountId));
         }
@@ -54,7 +56,7 @@ public class MembershipService {
             log.info(String.format("account[%s] activated", accountId));
         } catch(InvalidTokenException e) {
             log.warn(String.format("an attempt to activate account[%s] with an invalid token[%s] has been made", accountId, activationToken));
-            throw new WrongAccessException("Actication token is not valid");
+            throw e;
         }
     }
     
@@ -68,7 +70,7 @@ public class MembershipService {
         log.info(String.format("account[%s] requested a new password", accountId));
     }
     
-    public void resetPassword(Long accountId, String resetPasswordToken, String newPassword) {
+    public void resetPassword(Long accountId, String resetPasswordToken, String newPassword) throws InvalidTokenException {
         if (!accountService.exists(accountId)) {
             throw new ResourceNotFoundException(String.format("Account[%s] not found", accountId));
         }
@@ -81,7 +83,7 @@ public class MembershipService {
             log.info(String.format("account[%s] reseted its password", accountId));
         } catch (InvalidTokenException e) {
             log.warn(String.format("an attempt to reset account[%s] password with an invalid token[%s] has been made", accountId, resetPasswordToken));
-            throw new WrongAccessException("Reset password token is not valid");
+            throw e;
         }
     }
 }
