@@ -27,7 +27,6 @@
         <commons-lang.version>3.4</commons-lang.version>
         <commons-codec.version>1.10</commons-codec.version>
         <testng.version>6.8.21</testng.version>
-        <sonar.maven-plugin.version>3.1.1</sonar.maven-plugin.version>
         <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.jacoco.reportPath>target/jacoco.exec</sonar.jacoco.reportPath>     
@@ -152,13 +151,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            
-            <!-- Sonar -->
-            <plugin>
-                <groupId>org.sonarsource.scanner.maven</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-                <version>${sonar.maven-plugin.version}</version>
             </plugin>
         </plugins>
     </build>
