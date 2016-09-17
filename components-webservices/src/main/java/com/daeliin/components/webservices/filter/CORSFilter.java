@@ -9,10 +9,12 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 
+@Slf4j
 @Profile("cors")
 @Configuration
 public class CORSFilter implements Filter {
@@ -23,7 +25,7 @@ public class CORSFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest)req;
         HttpServletResponse response = (HttpServletResponse)res;
         
-        if (request.getMethod().equals("OPTIONS")) {
+        if ("OPTIONS".equals(request.getMethod())) {
             response.setStatus(HttpStatus.OK.value());
         }
         
@@ -32,10 +34,12 @@ public class CORSFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) {
+        // Do nothing
     }
 
     @Override
     public void destroy() {
+        // Do nothing
     }
     
     public static void addCORSHeadersToResponse(HttpServletResponse response) {
