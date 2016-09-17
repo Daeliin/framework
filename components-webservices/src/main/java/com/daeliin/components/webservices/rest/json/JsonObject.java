@@ -40,7 +40,10 @@ public final class JsonObject<T> {
     private void deserialize() {
         try {
             deserializedObject = Optional.ofNullable(mapper.readValue(jsonString, deserializedObjectClass));
-        } catch (NullPointerException | IOException e) {
+        } catch (NullPointerException e) {
+            log.debug("Cannot deserialize null");
+            deserializedObject = Optional.empty();
+        } catch (IOException e) {
             log.debug(String.format("Error while deserializing JSON string : %s", jsonString), e);
             deserializedObject = Optional.empty();
         }
