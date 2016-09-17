@@ -2,7 +2,6 @@ package com.daeliin.components.domain.resource;
 
 import com.daeliin.components.domain.resource.mock.UUIDEntity;
 import java.util.UUID;
-import lombok.extern.slf4j.Slf4j;
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNotNull;
