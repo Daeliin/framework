@@ -21,7 +21,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <surefire-plugin.version>2.19.1</surefire-plugin.version>
-        <jacoco-plugin.version>0.7.4.201502262128</jacoco-plugin.version>
+        <jacoco-plugin.version>0.7.7.201606060606</jacoco-plugin.version>
         <daeliin.components.version>1.0-SNAPSHOT</daeliin.components.version>
         <jpa.version>1.0.0.Final</jpa.version>
         <commons-lang.version>3.4</commons-lang.version>

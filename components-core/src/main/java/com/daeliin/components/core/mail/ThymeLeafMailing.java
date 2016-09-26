@@ -10,10 +10,10 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 @Configuration
 public class ThymeLeafMailing {
     
-    @Value("${mail.host}")
+    @Value("${daeliin.mail.host}")
     private String host;
     
-    @Value("${mail.port}")
+    @Value("${daeliin.mail.port}")
     private int port;
     
     @Bean

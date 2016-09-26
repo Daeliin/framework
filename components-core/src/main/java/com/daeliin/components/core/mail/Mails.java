@@ -19,10 +19,10 @@ import org.thymeleaf.context.Context;
 @Component
 public class Mails {
     
-    @Value("${mail.domain.name}")
+    @Value("${daeliin.mail.domain.name}")
     private String domainName;
     
-    @Value("${mail.domain.url}")
+    @Value("${daeliin.mail.domain.url}")
     private String domainUrl;
     
     private final TemplateEngine templateEngine;
