@@ -31,6 +31,9 @@ public class Article extends UUIDPersistentResource implements Comparable<Articl
     private String title;
     
     @NotBlank
+    private String urlFriendlyTitle;
+    
+    @NotBlank
     @Type(type = "text")
     private String description;
     
