@@ -7,16 +7,16 @@ public class UrlFriendlyStringTest {
 
     @Test
     public void putsEveryCharactersToLowerCase() {
-        assertEquals(new UrlFriendlyString("ThiS iS A TeST").value(), "this-is-a-test");
+        assertEquals(new UrlFriendlyString("ThiSiSATeST").value(), "thisisatest");
     }
     
     @Test
-    public void replacesSpecialCharacters() {
+    public void deletesSpecialCharacters() {
         assertEquals(new UrlFriendlyString("test#ezt!a").value(), "testezta");
     }
     
     @Test
-    public void replacesSpaces() {
+    public void replacesSpaceWithDash() {
         assertEquals(new UrlFriendlyString("this is a test").value(), "this-is-a-test");
     }
 }
