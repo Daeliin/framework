@@ -1,4 +1,4 @@
-# Java Components [![Build Status](https://travis-ci.org/Daeliin/java-components.svg?branch=master)](https://travis-ci.org/Daeliin/java-components)
+# Java Components [![Build Status](https://travis-ci.org/baptistelebail/java-components.svg?branch=master)](https://travis-ci.org/baptistelebail/java-components)
 
 Provides commons java components.
 
