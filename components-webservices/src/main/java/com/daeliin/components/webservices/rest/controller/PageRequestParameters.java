@@ -83,7 +83,7 @@ public class PageRequestParameters {
         try {
             int pageSizeValue = Integer.parseInt(pageSizeParameter);
             
-            if (pageSizeValue < 0) {
+            if (pageSizeValue <= 0) {
                 pageSizeParameterIsNotCorrect = true;
             }
             
@@ -93,7 +93,7 @@ public class PageRequestParameters {
         }
         
         if (pageSizeParameterIsNotCorrect) {
-            throw new PageRequestException("Page size must be an integer, equal to or greater than 0");
+            throw new PageRequestException("Page size must be an integer, greater than 0");
         }
     }
     
