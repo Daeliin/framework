@@ -8,12 +8,6 @@ Provides commons java components.
 * Web tier : Spring Boot 1.4.4.RELEASE
 * Templating : Thymeleaf 2.1.5.RELEASE
 
-## Tasks
-```bash
-$ mvn clean package # jar
-$ mvn test # unit tests
-```
-
 ## Modules documentation
 * [Domain](https://github.com/Daeliin/java-components/wiki/Module-:-domain)
 * [Core](https://github.com/Daeliin/java-components/wiki/Module-:-core)
