@@ -24,9 +24,9 @@
         <jacoco-plugin.version>0.7.7.201606060606</jacoco-plugin.version>
         <daeliin.components.version>1.0-SNAPSHOT</daeliin.components.version>
         <jpa.version>1.0.0.Final</jpa.version>
-        <commons-lang.version>3.4</commons-lang.version>
+        <commons-lang.version>3.5</commons-lang.version>
         <commons-codec.version>1.10</commons-codec.version>
-        <testng.version>6.8.21</testng.version>
+        <testng.version>6.10</testng.version>
         <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.jacoco.reportPath>target/jacoco.exec</sonar.jacoco.reportPath>     
