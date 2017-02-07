@@ -10,10 +10,12 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
+@NoArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
@@ -31,6 +33,11 @@ public class AccountPermission extends UUIDPersistentResource implements Compara
     @ManyToOne(fetch = FetchType.EAGER)
     @NotNull
     private Permission permission;
+
+    public AccountPermission(Account account, Permission permission) {
+        this.account = account;
+        this.permission = permission;
+    }
     
     @Override
     public int compareTo(AccountPermission other) {

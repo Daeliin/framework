@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * Resource saved in a RDBMS and identified by an UUID, 
@@ -22,6 +23,7 @@ public abstract class UUIDPersistentResource implements PersistentResource<Long>
     @GeneratedValue
     protected Long id;
     
+    @NotBlank
     @Column(unique = true)
     protected String uuid = java.util.UUID.randomUUID().toString();
     

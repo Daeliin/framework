@@ -5,10 +5,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.NotBlank;
 
+@NoArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
@@ -21,6 +23,10 @@ public class Permission extends UUIDPersistentResource implements Comparable<Per
     @Column(unique = true)
     @NotBlank
     private String label;
+
+    public Permission(String label) {
+        this.label = label;
+    }
     
     @Override
     public int compareTo(Permission other) {

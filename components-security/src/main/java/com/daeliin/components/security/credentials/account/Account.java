@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Transient;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +16,7 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
+@NoArgsConstructor
 @Setter
 @Getter
 @EqualsAndHashCode(callSuper = true)
@@ -49,6 +51,15 @@ public class Account extends UUIDPersistentResource implements Comparable<Accoun
     
     private boolean enabled = false;
 
+    public Account(String email, String username, String clearPassword, String password, String token, LocalDateTime signUpDate) {
+        this.email = email;
+        this.username = username;
+        this.clearPassword = clearPassword;
+        this.password = password;
+        this.token = token;
+        this.signUpDate = signUpDate;
+    }
+    
     @Override
     public int compareTo(Account other) {
         boolean usernamesAreNotBlanks = StringUtils.isNotBlank(this.username) && StringUtils.isNotBlank(other.username);

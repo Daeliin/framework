@@ -21,6 +21,13 @@
             <artifactId>hibernate-jpa-2.1-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+        
+        
+        <!-- Test -->
+        <dependency>
             <groupId>com.daeliin.components</groupId>
             <artifactId>components-test</artifactId>
             <scope>test</scope>

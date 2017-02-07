@@ -7,10 +7,12 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.NotBlank;
 
+@NoArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
@@ -26,6 +28,11 @@ public class EventLog extends UUIDPersistentResource implements Comparable<Event
     @NotNull
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
+
+    public EventLog(String descriptionKey, LocalDateTime creationDate) {
+        this.descriptionKey = descriptionKey;
+        this.creationDate = creationDate;
+    }
     
     @Override
     public int compareTo(EventLog other) {
