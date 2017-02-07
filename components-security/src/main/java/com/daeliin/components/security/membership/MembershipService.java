@@ -5,7 +5,6 @@ import com.daeliin.components.security.credentials.account.Account;
 import com.daeliin.components.security.credentials.account.AccountService;
 import com.daeliin.components.security.exception.AccountAlreadyExistException;
 import com.daeliin.components.security.exception.InvalidTokenException;
-import com.daeliin.components.security.exception.WrongAccessException;
 import com.daeliin.components.security.membership.details.AccountDetailsService;
 import com.daeliin.components.security.membership.notifications.MembershipNotifications;
 import lombok.extern.slf4j.Slf4j;
