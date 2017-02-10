@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.4.4.RELEASE</version>
+        <version>1.5.1.RELEASE</version>
         <relativePath/>
     </parent>
     
@@ -159,7 +159,7 @@
     <distributionManagement>
         <repository>
             <id>daeliin-repository</id>
-            <url>scp://repository.daeliin.com/repository/</url>
+            <url>scp://daeliin.com/repository/</url>
         </repository>
     </distributionManagement>
 </project>
