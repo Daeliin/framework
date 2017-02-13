@@ -1,1 +1,73 @@
+# IDE
+*.class
+*.jar
+*.war
+*.ear
+*.pydevproject
+.project
+.metadata
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+.classpath
+.settings/
+.loadpath
+.externalToolBuilders/
+*.launch
+.cproject
+.buildpath
+*.iml
+*.ipr
+*.iws
+.idea/
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+!.gitignore
+*~
+src/liferay.properties
+target/
+test-output/
+test_output/
+/target
+/src/main/webapp/ui
+/src/main/webapp/ui_*
+*.log
+nb-configuration.xml
+/src/main/resources/jasper/MyReports/*
+nbactions.xml
+nbproject/
+ 
+# dev
+application-dev.yml
+dev.js
+ 
+# Maven
 target
+report
+.class
+ 
+# Bower
+bower_components/
+ 
+# NodeJS
+node_modules/
+npm-debug.log
+ 
+# Build
+dist/
+ 
+# JSPM
+jspm_packages/
