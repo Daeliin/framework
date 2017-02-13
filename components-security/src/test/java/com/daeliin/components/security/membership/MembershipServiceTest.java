@@ -8,14 +8,14 @@ import com.daeliin.components.security.exception.AccountAlreadyExistException;
 import com.daeliin.components.security.exception.InvalidTokenException;
 import com.daeliin.components.test.IntegrationTest;
 import org.apache.commons.lang3.StringUtils;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNotEquals;
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.fail;
-import org.testng.annotations.Test;
 
 @ContextConfiguration(classes = Application.class)
 public class MembershipServiceTest extends IntegrationTest {
@@ -27,7 +27,7 @@ public class MembershipServiceTest extends IntegrationTest {
     private AccountRepository accountRepository;
     
     
-    @Test(expectedExceptions = AccountAlreadyExistException.class)
+    @Test(expected = AccountAlreadyExistException.class)
     public void signup_existingAccount_throwsException() {
         Account existingAccount = accountRepository.findOne(1L);
         existingAccount.setClearPassword("password");
@@ -64,12 +64,12 @@ public class MembershipServiceTest extends IntegrationTest {
         assertTrue(StringUtils.isNotBlank(createdAccount.getToken()));
     }
     
-    @Test(expectedExceptions = ResourceNotFoundException.class)
+    @Test(expected = ResourceNotFoundException.class)
     public void activate_nonExistentAccountId_throwsException() throws InvalidTokenException {
         membershipService.activate(-1L, "token");
     }
     
-    @Test(expectedExceptions = InvalidTokenException.class)
+    @Test(expected = InvalidTokenException.class)
     public void activate_wrongActivationToken_throwsException() throws Exception {
         Account userDetails = accountRepository.findOne(1L);
         
@@ -113,7 +113,7 @@ public class MembershipServiceTest extends IntegrationTest {
         assertNotEquals(userDetails.getToken(), activationToken);
     }
     
-    @Test(expectedExceptions = ResourceNotFoundException.class)
+    @Test(expected = ResourceNotFoundException.class)
     public void newPassword_nonExistentAccountId_returnsHttpNotFound() throws Exception {
         membershipService.newPassword(-1L);
     }
@@ -130,13 +130,13 @@ public class MembershipServiceTest extends IntegrationTest {
     }
 
         
-    @Test(expectedExceptions = ResourceNotFoundException.class)
+    @Test(expected = ResourceNotFoundException.class)
     public void resetPassword_nonExistentAccountId_throwsException() throws Exception {
         membershipService.resetPassword(-1L, "token", "newPassword");
     }
     
     
-    @Test(expectedExceptions = InvalidTokenException.class)
+    @Test(expected = InvalidTokenException.class)
     public void resetPassword_invalidToken_throwsException() throws Exception { 
         Account account = accountRepository.findOne(3L);
         membershipService.resetPassword(account.getId(), "wrong" + account.getToken(), "newPassword");

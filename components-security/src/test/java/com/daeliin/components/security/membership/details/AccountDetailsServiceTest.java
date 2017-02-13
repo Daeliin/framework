@@ -5,19 +5,19 @@ import com.daeliin.components.security.credentials.account.Account;
 import com.daeliin.components.security.credentials.account.AccountRepository;
 import com.daeliin.components.security.exception.InvalidTokenException;
 import org.apache.commons.lang3.StringUtils;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNotEquals;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.fail;
-import org.testng.annotations.Test;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 @ContextConfiguration(classes = Application.class)
-public class AccountDetailsServiceTest extends AbstractTransactionalTestNGSpringContextTests {
+public class AccountDetailsServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
     
     @Autowired
     private AccountRepository accountRepository;
@@ -45,7 +45,7 @@ public class AccountDetailsServiceTest extends AbstractTransactionalTestNGSpring
         assertTrue(accountDetailsService.exists(existingAccount));
     }
     
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void signUp_nullAccount_throwsIllegalArgumentException() {
         accountDetailsService.signUp(null);
     }
@@ -63,7 +63,7 @@ public class AccountDetailsServiceTest extends AbstractTransactionalTestNGSpring
         assertFalse(account.isEnabled());
     }
     
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void tokensAreNotTheSame_nullAccount_throwsIllegalArgumentException() {
         accountDetailsService.tokensAreNotTheSame(null, "token");
     }
@@ -92,7 +92,7 @@ public class AccountDetailsServiceTest extends AbstractTransactionalTestNGSpring
         assertTrue(accountDetailsService.tokensAreNotTheSame(account, "differentToken"));
     }
     
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void assignNewToken_nullAccount_throwsIllegalArgumentException() {
         accountDetailsService.assignNewToken(null);
     }

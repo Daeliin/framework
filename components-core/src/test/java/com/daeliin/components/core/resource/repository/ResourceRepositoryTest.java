@@ -8,6 +8,15 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import javax.validation.ConstraintViolationException;
+import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
@@ -16,26 +25,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
-import org.testng.Assert;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNotEquals;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.fail;
-import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNotEquals;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.fail;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 @ContextConfiguration(classes = Application.class)
-public class ResourceRepositoryTest extends AbstractTransactionalTestNGSpringContextTests {
+public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
     
     @Autowired
     private UserRepository repository;
@@ -54,7 +47,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalTestNGSpringCon
         assertNotNull(persistedUser.getId());
     }
     
-    @Test(expectedExceptions = ConstraintViolationException.class)
+    @Test(expected = ConstraintViolationException.class)
     public void save_invalidResource_throwsConstraintViolationException() {
         User user = new User().withName("");
         
@@ -93,7 +86,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalTestNGSpringCon
         assertFalse(repository.exists(-1L));
     }
     
-    @Test(expectedExceptions = InvalidDataAccessApiUsageException.class)
+    @Test(expected = InvalidDataAccessApiUsageException.class)
     public void exists_nullResourceId_throwsInvalidDataAccessApiUsageException() {
         repository.exists(null);
     }
@@ -151,7 +144,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalTestNGSpringCon
         List<User> users = (List<User>)repository.findAll(usersIds);
         
         assertEquals(users.size(), 2);
-        users.forEach((User user) -> assertNotEquals(user.getId(), -1L));
+        users.forEach((User user) -> assertNotEquals(user.getId().longValue(), -1L));
     }
     
     @Test
@@ -175,7 +168,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalTestNGSpringCon
         assertEquals(users, usersSortedByNameDesc);
     }
     
-    @Test(expectedExceptions = PropertyReferenceException.class)
+    @Test(expected = PropertyReferenceException.class)
     public void findAll_sortByInvalidProperty_throwsPropertyReferenceException() {
         List<User> users = (List<User>)repository.findAll(new Sort(Sort.Direction.DESC, "invalidProperty"));
     }
@@ -210,7 +203,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalTestNGSpringCon
         assertNull(repository.findOne(1L));
     }
     
-    @Test(expectedExceptions = EmptyResultDataAccessException.class)
+    @Test(expected = EmptyResultDataAccessException.class)
     public void delete_nonExistingResourceId_throwsEmptyResultDataAccessException() {
         repository.delete(-1L);
     }

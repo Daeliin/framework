@@ -14,30 +14,25 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.fail;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 import static org.mockito.Mockito.verify;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.fail;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 @ContextConfiguration(classes = Application.class)
-public class ResourceServiceTest extends AbstractTransactionalTestNGSpringContextTests {
+public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
     
     @Mock
     private UserRepository repository;
@@ -45,7 +40,7 @@ public class ResourceServiceTest extends AbstractTransactionalTestNGSpringContex
     @InjectMocks
     private UserService service;
     
-    @BeforeMethod
+    @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
     }
@@ -158,7 +153,7 @@ public class ResourceServiceTest extends AbstractTransactionalTestNGSpringContex
         verify(repository).count();
     }
     
-    @Test(expectedExceptions = ResourceNotFoundException.class)
+    @Test(expected = ResourceNotFoundException.class)
     public void findOne_nullId_throwsResourceNotFoundException() {
         service.findOne(null);
     }
@@ -229,7 +224,7 @@ public class ResourceServiceTest extends AbstractTransactionalTestNGSpringContex
         verify(repository).findAll(usersIds);
     }
     
-    @Test(expectedExceptions = ResourceNotFoundException.class)
+    @Test(expected = ResourceNotFoundException.class)
     public void update_nullResourceId_throwsResourceNotFoundException() {
         service.update(null, null);
     }
@@ -248,14 +243,14 @@ public class ResourceServiceTest extends AbstractTransactionalTestNGSpringContex
         fail();
     }
     
-    @Test(expectedExceptions = ResourceNotFoundException.class)
+    @Test(expected = ResourceNotFoundException.class)
     public void update_nullResource_throwsResourceNotFoundException() {
         when(repository.exists(1L)).thenReturn(true);
         
         service.update(1L, null);
     }
     
-    @Test(expectedExceptions = ResourceNotFoundException.class)
+    @Test(expected = ResourceNotFoundException.class)
     public void update_existingResourceIdButDiffersFromActualResourceId_throwsResourceNotFoundException() {
         when(repository.exists(1L)).thenReturn(true);
         

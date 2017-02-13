@@ -1,7 +1,5 @@
 package com.daeliin.components.security.credentials.accountpermission;
 
-import com.daeliin.components.security.credentials.accountpermission.AccountPermissionRepository;
-import com.daeliin.components.security.credentials.accountpermission.AccountPermission;
 import com.daeliin.components.security.Application;
 import com.daeliin.components.security.credentials.account.Account;
 import com.daeliin.components.security.credentials.account.AccountRepository;
@@ -10,15 +8,15 @@ import com.daeliin.components.security.credentials.permission.PermissionReposito
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
-import org.testng.annotations.Test;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 @ContextConfiguration(classes = Application.class)
-public class AccountPermissionRepositoryTest extends AbstractTransactionalTestNGSpringContextTests {
+public class AccountPermissionRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
     
     @Autowired
     private AccountRepository accountRepository;

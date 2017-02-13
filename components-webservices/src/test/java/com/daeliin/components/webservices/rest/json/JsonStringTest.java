@@ -1,8 +1,8 @@
 package com.daeliin.components.webservices.rest.json;
 
 import com.daeliin.components.webservices.mock.User;
-import static org.testng.Assert.assertEquals;
-import org.testng.annotations.Test;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 public class JsonStringTest {
     

@@ -2,12 +2,12 @@ package com.daeliin.components.domain.resource;
 
 import com.daeliin.components.domain.resource.mock.UUIDEntity;
 import java.util.UUID;
-import static org.testng.Assert.assertNotEquals;
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertNotNull;
-import static org.testng.AssertJUnit.assertTrue;
-import static org.testng.AssertJUnit.fail;
-import org.testng.annotations.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import org.junit.Test;
 
 public class UUIDPersistentResourceTest {
     

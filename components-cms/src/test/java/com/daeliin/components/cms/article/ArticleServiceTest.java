@@ -3,16 +3,16 @@ package com.daeliin.components.cms.article;
 import com.daeliin.components.cms.Application;
 import java.util.Arrays;
 import java.util.List;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertNotNull;
-import static org.testng.AssertJUnit.assertTrue;
-import org.testng.annotations.Test;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 @ContextConfiguration(classes = Application.class)
-public class ArticleServiceTest extends AbstractTransactionalTestNGSpringContextTests {
+public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Autowired
     private ArticleService articleService; 

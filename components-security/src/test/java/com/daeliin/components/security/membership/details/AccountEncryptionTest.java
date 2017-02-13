@@ -2,10 +2,10 @@ package com.daeliin.components.security.membership.details;
 
 import com.daeliin.components.security.credentials.account.Account;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotEquals;
-import static org.testng.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
 public class AccountEncryptionTest {
     

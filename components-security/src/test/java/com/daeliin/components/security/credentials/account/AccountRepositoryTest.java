@@ -1,20 +1,18 @@
 package com.daeliin.components.security.credentials.account;
 
-import com.daeliin.components.security.credentials.account.AccountRepository;
-import com.daeliin.components.security.credentials.account.Account;
 import com.daeliin.components.security.Application;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
-import org.testng.annotations.Test;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 @ContextConfiguration(classes = Application.class)
-public class AccountRepositoryTest extends AbstractTransactionalTestNGSpringContextTests {
+public class AccountRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Autowired
     private AccountRepository accountRepository;

@@ -1,22 +1,22 @@
 package com.daeliin.components.core.mail;
 
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.fail;
-import org.testng.annotations.Test;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import org.junit.Test;
 
 public class EmailAddressTest {
 
-    @Test(expectedExceptions = MailBuildingException.class)
+    @Test(expected = MailBuildingException.class)
     public void new_nullAddress_throwsMailBuildingException() throws Exception {
         new EmailAddress(null);
     }
     
-    @Test(expectedExceptions = MailBuildingException.class)
+    @Test(expected = MailBuildingException.class)
     public void new_blankAddress_throwsMailBuildingException() throws Exception {
         new EmailAddress(" ");
     }
     
-    @Test(expectedExceptions = MailBuildingException.class)
+    @Test(expected = MailBuildingException.class)
     public void new_invalidAddress_throwsMailBuildingException() throws Exception {
         new EmailAddress("a@");
     }

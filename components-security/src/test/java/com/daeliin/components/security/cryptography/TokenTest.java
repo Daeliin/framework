@@ -1,14 +1,11 @@
 package com.daeliin.components.security.cryptography;
 
-import com.daeliin.components.security.cryptography.Sha512;
-import com.daeliin.components.security.cryptography.Md5;
-import com.daeliin.components.security.cryptography.Token;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import org.junit.Test;
 
 public class TokenTest {
     
