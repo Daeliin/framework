@@ -7,7 +7,7 @@ Provides commons java components.
 ## Technical stack
 * Build : Maven
 * Testing : TestNG 6.10
-* Web tier : Spring Boot 1.4.4.RELEASE
+* Web tier : Spring Boot 1.5.1.RELEASE
 * Templating : Thymeleaf 2.1.5.RELEASE
 
 ## Modules documentation
