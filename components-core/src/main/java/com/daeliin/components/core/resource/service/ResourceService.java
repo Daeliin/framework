@@ -19,7 +19,7 @@ import org.springframework.util.CollectionUtils;
  * @param <R> resource repository 
  */
 @Service
-public abstract class ResourceService<E extends PersistentResource, ID extends Serializable, R extends ResourceRepository<E, ID>> implements FullCrudService<E, ID>  {
+public abstract class ResourceService<E extends PersistentResource<ID>, ID extends Serializable, R extends ResourceRepository<E, ID>> implements FullCrudService<E, ID>  {
     
     private static final String MESSAGE_RESOURCE_NOT_FOUND = "Resource was not found";
     
@@ -143,6 +143,17 @@ public abstract class ResourceService<E extends PersistentResource, ID extends S
         }
         
         return repository.save(resource);
+    }
+    
+    /**
+     * Updates a resource.
+     * @param resource resource to update
+     * @return updated resource
+     * @throws ResourceNotFoundException if the resource id is not found
+     */
+    @Override
+    public E update(E resource) {
+        return update(resource.getId(), resource);
     }
 
     /**

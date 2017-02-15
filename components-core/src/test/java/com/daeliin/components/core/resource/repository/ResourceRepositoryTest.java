@@ -34,11 +34,21 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
     private UserRepository repository;
     
     @Test
+    public void save_validResource_returnsPersistedResource() {
+        User user = new User().withName("newUser");
+        
+        User returnedUser = repository.save(user);
+        
+        assertNotNull(returnedUser);
+        assertNotNull(returnedUser.getId());
+    }
+    
+    @Test
     public void save_validResource_persistsResource() {
         User user = new User().withName("newUser");
         long userCountBeforeCreate = repository.count();
         
-        User persistedUser = repository.save(user);
+        User persistedUser = repository.findOne(repository.save(user).getId());
         
         long userCountAfterCreate = repository.count();
         
@@ -55,6 +65,23 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
     }
     
     @Test
+    public void save_multipleValidResources_returnsPersistedResources() {
+        List<User> users = 
+            Arrays.asList(
+                new User().withName("newUser1"),
+                new User().withName("newUser2"));
+                
+        List<User> returnedUsers = (List<User>)repository.save(users);
+        
+        returnedUsers.forEach(Assert::assertNotNull);
+        returnedUsers.forEach((User user) -> assertNotNull(user));
+        
+        for (int i = 0; i < returnedUsers.size(); i++) {
+            assertEquals(returnedUsers.get(i).getName(), users.get(i).getName());
+        }
+    }
+    
+    @Test
     public void save_multipleValidResources_persistsResources() {
         List<User> users = 
             Arrays.asList(
@@ -62,8 +89,11 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
                 new User().withName("newUser2"));
                 
         long userCountBeforeCreate = repository.count();
+
+        List<Long> persistedUsersIds = new ArrayList<>();
+        repository.save(users).forEach(user -> persistedUsersIds.add(user.getId()));
         
-        List<User> persistedUsers = (List<User>)repository.save(users);
+        List<User> persistedUsers = (List<User>)repository.findAll(persistedUsersIds);
         
         long userCountAfterCreate = repository.count();
         

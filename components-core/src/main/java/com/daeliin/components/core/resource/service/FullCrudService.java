@@ -35,6 +35,13 @@ public interface FullCrudService<E extends PersistentResource, ID extends Serial
      * @return updated resource
      */
     E update(ID id, E resource);
+
+    /**
+     * Updates a resource.
+     * @param resource resource to update
+     * @return updated resource
+     */
+    E update(E resource);
     
     /**
      * Updates multiple resources.

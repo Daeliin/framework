@@ -23,6 +23,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.PageRequest;
@@ -267,6 +268,19 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
         
         verify(repository).save(user);
         assertEquals(updatedUser, user);
+    }
+    
+    @Test
+    public void update_callsUpdateWithId() {
+        User user = new User().withId(1L).withName("userName");
+        
+        UserService spiedService = spy(service);
+        when(repository.exists(user.getId())).thenReturn(true);
+        when(repository.save(user)).thenReturn(user);
+        
+        service.update(user);
+        
+        verify(spiedService.update(user.getId(), user));
     }
     
     @Test
