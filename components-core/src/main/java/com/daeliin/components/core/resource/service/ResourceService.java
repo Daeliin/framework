@@ -146,17 +146,6 @@ public abstract class ResourceService<E extends PersistentResource<ID>, ID exten
     }
     
     /**
-     * Updates a resource.
-     * @param resource resource to update
-     * @return updated resource
-     * @throws ResourceNotFoundException if the resource id is not found
-     */
-    @Override
-    public E update(E resource) {
-        return update(resource.getId(), resource);
-    }
-
-    /**
      * Updates multiple resources.
      * @param iterable resources to update
      * @return updated resources

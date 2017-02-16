@@ -23,7 +23,6 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.PageRequest;
@@ -271,27 +270,18 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
     }
     
     @Test
-    public void update_callsUpdateWithId() {
-        User user = new User().withId(1L).withName("userName");
-        
-        UserService spiedService = spy(service);
-        when(repository.exists(user.getId())).thenReturn(true);
-        when(repository.save(user)).thenReturn(user);
-        
-        service.update(user);
-        
-        verify(spiedService.update(user.getId(), user));
-    }
-    
-    @Test
-    public void update_multipleResources_callsReposiotrySaveWithMultipleResources() {
+    public void update_multipleResources_callsRepositorySaveWithMultipleResources() {
         List<User> users = 
             Arrays.asList(
                 new User().withId(1L).withName("userName1"),
                 new User().withId(2L).withName("userName2"));
         
-        service.update(users);
+        when(repository.save(users)).thenReturn(users);
+        
+        Iterable<User> updatedUsers = service.update(users);
+        
         verify(repository).save(users);
+        assertEquals(updatedUsers, users);
     }
     
     @Test
