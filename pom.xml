@@ -107,6 +107,7 @@
     
     <build>
         <extensions>
+            <!-- SSH -->
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>
                 <artifactId>wagon-ssh</artifactId>
@@ -115,6 +116,7 @@
         </extensions>
 
         <plugins>
+            <!-- Compiler -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -124,6 +126,7 @@
                 </configuration>
             </plugin>
                  
+            <!-- Java Sources -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
