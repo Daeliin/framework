@@ -71,3 +71,6 @@ dist/
  
 # JSPM
 jspm_packages/
+
+# CI
+shippable/
