@@ -9,13 +9,13 @@ public class UrlFriendlyString {
     public UrlFriendlyString(final String originalString) {
         value = "";
         
-        if (!StringUtils.isBlank(originalString)) {
+        if (StringUtils.isNotBlank(originalString)) {
             value = 
                 originalString.toLowerCase()
                     .replaceAll("[^a-zA-Z0-9 ]", "")
                     .trim()
                     .replace(' ', '-');
-        } 
+        }
     }
     
     public String value() {

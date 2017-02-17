@@ -6,6 +6,13 @@ import org.junit.Test;
 public class UrlFriendlyStringTest {
 
     @Test
+    public void handlesNullAndBlankStrings() {
+        assertEquals(new UrlFriendlyString(null).value(), "");
+        assertEquals(new UrlFriendlyString("").value(), "");
+        assertEquals(new UrlFriendlyString(" ").value(), "");
+    }
+    
+    @Test
     public void putsEveryCharactersToLowerCase() {
         assertEquals(new UrlFriendlyString("ThiSiSATeST").value(), "thisisatest");
     }
