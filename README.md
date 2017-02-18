@@ -1,6 +1,5 @@
 # Java Components 
-[![Run Status](https://api.shippable.com/projects/589dbac854b6ed0f002572d2/badge?branch=master)](https://app.shippable.com/projects/589dbac854b6ed0f002572d2)
-[![Coverage Status](https://api.shippable.com/projects/589dbac854b6ed0f002572d2/coverageBadge?branch=master)](https://app.shippable.com/projects/589dbac854b6ed0f002572d2)
+[![Build Status](https://travis-ci.org/baptistelebail/java-components.svg?branch=master)](https://travis-ci.org/baptistelebail/java-components)
 [![Dependencies Status](https://www.versioneye.com/user/projects/5899d3661e07ae0048c8e4c9/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5899d3661e07ae0048c8e4c9)
 
 Provides commons java components.
