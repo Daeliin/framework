@@ -21,6 +21,7 @@
         <maven.wagon-ssh-plugin.version>2.10</maven.wagon-ssh-plugin.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <jacoco.plugin.version>0.7.9</jacoco.plugin.version>
         <daeliin.components.version>1.0-SNAPSHOT</daeliin.components.version>
         <jpa.version>1.0.0.Final</jpa.version>
         <commons-lang.version>3.5</commons-lang.version>
@@ -136,6 +137,27 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Test reports -->
+            <plugin>
+			    <groupId>org.jacoco</groupId>
+			    <artifactId>jacoco-maven-plugin</artifactId>
+			    <version>${jacoco.plugin.version}</version>
+			    <executions>
+			        <execution>
+			            <goals>
+			                <goal>prepare-agent</goal>
+			            </goals>
+			        </execution>
+			        <execution>
+			            <id>report</id>
+			            <phase>prepare-package</phase>
+			            <goals>
+			                <goal>report</goal>
+			            </goals>
+			        </execution>
+			    </executions>
+			</plugin>
         </plugins>
     </build>
     
