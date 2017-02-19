@@ -284,18 +284,11 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
         assertEquals(updatedUsers, users);
     }
     
-    @Test
-    public void delete_nonExistingResourceId_callsRepositoryExistsAndThrowsResourceNotFoundException() {
-        when(repository.exists(-1L)).thenThrow(new ResourceNotFoundException(""));
+    @Test(expected = ResourceNotFoundException.class)
+    public void delete_nonExistingResourceId_throwsResourceNotFoundException() {
+        when(repository.exists(-1L)).thenReturn(false);
         
-        try {
-             service.delete(-1L);
-        } catch (ResourceNotFoundException e) {
-            verify(repository).exists(-1L);
-            return;
-        }
-        
-        fail();
+        service.delete(-1L);
     }
     
     @Test
