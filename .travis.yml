@@ -3,3 +3,5 @@ jdk:
   - oraclejdk8
 script:
   - mvn clean deploy --settings settings.xml
+addons:
+  ssh_known_hosts: daeliin.com
