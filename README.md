@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/baptistelebail/java-components.svg?branch=master)](https://travis-ci.org/baptistelebail/java-components)
 [![Dependencies Status](https://www.versioneye.com/user/projects/5899d3661e07ae0048c8e4c9/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5899d3661e07ae0048c8e4c9)
 
-Provides commons java components.
+Provides commons java components with Spring Boot.
 
 ## Technical stack
 * Build : Maven
