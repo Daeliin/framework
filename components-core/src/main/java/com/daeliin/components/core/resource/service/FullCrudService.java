@@ -23,10 +23,10 @@ public interface FullCrudService<E extends PersistentResource, ID extends Serial
     
     /**
      * Creates multiple resources.
-     * @param iterable resources to create
+     * @param resources resources to create
      * @return created resources
      */
-    Iterable<E> create(Iterable<E> iterable);
+    Iterable<E> create(Iterable<E> resources);
     
     /**
      * Updates a resource by id.
@@ -38,10 +38,10 @@ public interface FullCrudService<E extends PersistentResource, ID extends Serial
 
     /**
      * Updates multiple resources.
-     * @param iterable resources to update
+     * @param resources resources to update
      * @return updated resources
      */
-    Iterable<E> update(Iterable<E> iterable);
+    Iterable<E> update(Iterable<E> resources);
     
     /**
      * Returns true if the resource exists, false otherwise
@@ -85,10 +85,10 @@ public interface FullCrudService<E extends PersistentResource, ID extends Serial
     
     /**
      * Finds multiple resources by their ids.
-     * @param iterable resources ids
+     * @param resources resources ids
      * @return resources
      */
-    Iterable<E> findAll(Iterable<ID> iterable);
+    Iterable<E> findAll(Iterable<ID> resources);
 
     /**
      * Delete a resource by its id.
@@ -110,9 +110,9 @@ public interface FullCrudService<E extends PersistentResource, ID extends Serial
 
     /**
      * Deletes multiple resources.
-     * @param iterable resources to delete
+     * @param resources resources to delete
      */
-    void delete(Iterable<? extends E> iterable);
+    void delete(Iterable<? extends E> resources);
 
     /**
      * Deletes all resources.
