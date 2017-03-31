@@ -22,7 +22,7 @@ import org.springframework.util.CollectionUtils;
 public abstract class ResourceService<E extends PersistentResource<ID>, ID extends Serializable, R extends ResourceRepository<E, ID>> implements FullCrudService<E, ID>  {
     
     private static final String MESSAGE_RESOURCE_NOT_FOUND = "Resource was not found";
-    
+
     @Autowired
     protected R repository;
 
@@ -38,12 +38,12 @@ public abstract class ResourceService<E extends PersistentResource<ID>, ID exten
     
     /**
      * Creates multiple resources.
-     * @param iterable resources to create
+     * @param resources resources to create
      * @return created resources
      */
     @Override
-    public Iterable<E> create(Iterable<E> iterable) {
-        return repository.save(iterable);
+    public Iterable<E> create(Iterable<E> resources) {
+        return repository.save(resources);
     }
     
     /**
@@ -121,12 +121,12 @@ public abstract class ResourceService<E extends PersistentResource<ID>, ID exten
 
     /**
      * Finds multiple resources by their ids.
-     * @param iterable resources ids
+     * @param resources resources ids
      * @return resources
      */
     @Override
-    public Iterable<E> findAll(Iterable<ID> iterable) {
-        return repository.findAll(iterable);
+    public Iterable<E> findAll(Iterable<ID> resources) {
+        return repository.findAll(resources);
     }
     
     /**
@@ -147,12 +147,12 @@ public abstract class ResourceService<E extends PersistentResource<ID>, ID exten
     
     /**
      * Updates multiple resources.
-     * @param iterable resources to update
+     * @param resources resources to update
      * @return updated resources
      */
     @Override
-    public Iterable<E> update(Iterable<E> iterable) {
-        return repository.save(iterable);
+    public Iterable<E> update(Iterable<E> resources) {
+        return repository.save(resources);
     }
     
     /**
@@ -195,11 +195,11 @@ public abstract class ResourceService<E extends PersistentResource<ID>, ID exten
     
     /**
      * Deletes multiple resources.
-     * @param iterable resources to delete
+     * @param resources resources to delete
      */
     @Override
-    public void delete(Iterable<? extends E> iterable) {
-        repository.delete(iterable);
+    public void delete(Iterable<? extends E> resources) {
+        repository.delete(resources);
     }
 
     /**

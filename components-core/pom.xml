@@ -38,7 +38,13 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
         </dependency>
-        
+
+        <!-- Caffeine -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
+
         <!-- Hibernate -->
         <dependency>
             <groupId>org.hibernate</groupId>
