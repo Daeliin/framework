@@ -4,7 +4,7 @@
     <groupId>com.daeliin.components</groupId>
     <artifactId>components-test</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.1</version>
     <name>components-test</name>
     <description>Daeliin Java Test Components</description>
     

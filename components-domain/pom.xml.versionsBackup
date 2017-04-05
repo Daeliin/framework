@@ -2,11 +2,11 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.daeliin.components</groupId>
-    <artifactId>components-security</artifactId>
+    <artifactId>components-domain</artifactId>
     <packaging>jar</packaging>
-    <version>0.1</version>
-    <name>components-security</name>
-    <description>Daeliin Java Security Components</description>
+    <version>1.0-SNAPSHOT</version>
+    <name>components-domain</name>
+    <description>Daeliin Java Domain Components</description>
     
     <parent>
         <groupId>com.daeliin.components</groupId>
@@ -15,25 +15,18 @@
     </parent>
     
     <dependencies>
-        <!-- Daeliin -->
+        <!-- JPA -->
         <dependency>
-            <groupId>com.daeliin.components</groupId>
-            <artifactId>components-core</artifactId>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
         </dependency>
         
-        <!-- Spring -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
         
-        <!-- Utils -->
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-        </dependency>
-        
-        <!-- Tests -->
+        <!-- Test -->
         <dependency>
             <groupId>com.daeliin.components</groupId>
             <artifactId>components-test</artifactId>
