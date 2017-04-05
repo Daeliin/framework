@@ -4,14 +4,14 @@
     <groupId>com.daeliin.components</groupId>
     <artifactId>components-security</artifactId>
     <packaging>jar</packaging>
-    <version>0.1</version>
+    <version>0.2-SNAPSHOT</version>
     <name>components-security</name>
     <description>Daeliin Java Security Components</description>
     
     <parent>
         <groupId>com.daeliin.components</groupId>
         <artifactId>java-components</artifactId>
-        <version>0.1</version>
+        <version>0.2-SNAPSHOT</version>
     </parent>
     
     <dependencies>
