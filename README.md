@@ -5,11 +5,12 @@
 Provides commons java components with Spring Boot.
 
 ## Technical stack
-* Build : Maven
-* Testing : JUnit 4.12
-* Data access : Querydsl 3.7.4, MySQL Dialect 
-* Web tier : Spring Boot 1.5.2.RELEASE
-* Templating : Thymeleaf 2.1.5.RELEASE
+* Build : [Maven](https://maven.apache.org/)
+* Testing : [JUnit 4.12](http://junit.org)
+* Data access : [Querydsl 3.7.4](http://www.querydsl.com/), [MySQL Dialect](https://www.mysql.com/)
+* Caching : [Caffeine](https://github.com/ben-manes/caffeine)
+* Web tier : [Spring Boot 1.5.2.RELEASE](https://projects.spring.io/spring-boot/)
+* Templating : [Thymeleaf 2.1.5.RELEASE](http://www.thymeleaf.org/)
 
 ## Modules documentation
 * [Domain](https://github.com/Daeliin/java-components/wiki/Module-:-domain)
