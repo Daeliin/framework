@@ -26,6 +26,7 @@
         <jpa.version>1.0.0.Final</jpa.version>
         <querydsl.version>4.1.4</querydsl.version>
         <commons-lang.version>3.5</commons-lang.version>
+        <guava.version>21.0</guava.version>
         <commons-codec.version>1.10</commons-codec.version>
     </properties>
     
@@ -90,6 +91,11 @@
     
     <dependencies>
         <!-- Utils -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
