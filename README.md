@@ -7,6 +7,7 @@ Provides commons java components with Spring Boot.
 ## Technical stack
 * Build : Maven
 * Testing : JUnit 4.12
+* Data access : Querydsl 3.7.4, MySQL Dialect 
 * Web tier : Spring Boot 1.5.2.RELEASE
 * Templating : Thymeleaf 2.1.5.RELEASE
 
