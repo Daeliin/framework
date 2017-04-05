@@ -24,6 +24,7 @@
         <jacoco.plugin.version>0.7.9</jacoco.plugin.version>
         <daeliin.components.version>0.2-SNAPSHOT</daeliin.components.version>
         <jpa.version>1.0.0.Final</jpa.version>
+        <querydsl.version>4.1.4</querydsl.version>
         <commons-lang.version>3.5</commons-lang.version>
         <commons-codec.version>1.10</commons-codec.version>
     </properties>
@@ -73,6 +74,11 @@
                 <groupId>org.hibernate.javax.persistence</groupId>
                 <artifactId>hibernate-jpa-2.1-api</artifactId>
                 <version>${jpa.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-sql</artifactId>
+                <version>${querydsl.version}</version>
             </dependency>
             <dependency>
                 <groupId>commons-codec</groupId>
