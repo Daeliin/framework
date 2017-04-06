@@ -1,128 +1,112 @@
 package com.daeliin.components.domain.resource;
 
 import com.daeliin.components.domain.resource.mock.UUIDEntity;
-import java.util.UUID;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 public class UUIDPersistentResourceTest {
     
-    private static final String UUID_STRING = "c4726093-fa44-4b4c-8108-3fdcacffabd6";
-    
+    private static final Long ID = 1L;
+    private static final String UUID = "c4726093-fa44-4b4c-8108-3fdcacffabd6";
+
     @Test
-    public void new_defaultConstructor_assignsAnUUID() {
-        UUIDEntity newUUIDEntity = new UUIDEntity();
-        
-        assertNotNull(newUUIDEntity.getUuid());
+    public void shouldAssignAnId() {
+        UUIDEntity newUUIDEntity = new UUIDEntity(ID, UUID);
+
+        assertThat(newUUIDEntity.id()).isNotNull();
     }
-    
+
     @Test
-    public void new_defaultConstructor_assignsUUIDToId() {
-        UUIDEntity newUUIDEntity = new UUIDEntity();
-        
-        try {
-            UUID.fromString(newUUIDEntity.getUuid());
-        } catch(IllegalArgumentException e) {
-            fail();
-        }
+    public void shouldAssignAnUuid() {
+        UUIDEntity newUUIDEntity = new UUIDEntity(ID, UUID);
+
+        assertThat(newUUIDEntity.uuid()).isNotNull();
     }
-    
+
+    @Test(expected = Exception.class)
+    public void shouldThrowException_whenIdIsNull() {
+        new UUIDEntity(null, UUID);
+    }
+
+    @Test(expected = Exception.class)
+    public void shouldThrowException_whenUuidIsNull() {
+        new UUIDEntity(ID, null);
+    }
+
     @Test
-    public void equals_otherType_returnsFalse() {
-        UUIDEntity newUUIDEntity = new UUIDEntity();
+    public void shouldNotBeEqualToOtherTypes() {
+        UUIDEntity newUUIDEntity = new UUIDEntity(ID, UUID);
         Object otherTypeObject = new Object();
         
-        assertNotEquals(newUUIDEntity, otherTypeObject);
+        assertThat(newUUIDEntity).isNotEqualTo(otherTypeObject);
     }
     
     @Test
-    public void equals_null_returnsFalse() {
-        UUIDEntity newUUIDEntity = new UUIDEntity();
-        
-        assertNotEquals(newUUIDEntity, null);
+    public void shouldNotBeEqualToNull() {
+        UUIDEntity newUUIDEntity = new UUIDEntity(ID, UUID);
+
+        assertThat(newUUIDEntity).isNotEqualTo(null);
     }
     
     @Test
-    public void equals_itself_returnsTrue() {
-        UUIDEntity newUUIDEntity = new UUIDEntity();
-        
-        assertEquals(newUUIDEntity, newUUIDEntity);
+    public void shouldBeEqualToItself() {
+        UUIDEntity newUUIDEntity = new UUIDEntity(ID, UUID);
+
+        assertThat(newUUIDEntity).isEqualTo(newUUIDEntity);
     }
     
     @Test
-    public void equals_otherInstanceWithSameId_returnsTrue() {
-        UUIDEntity newUUIDEntity = new UUIDEntity();
-        UUIDEntity sameUUIDEntity = new UUIDEntity();
-        
-        newUUIDEntity.setUUID(UUID_STRING);
-        sameUUIDEntity.setUUID(UUID_STRING);
-        
-        assertEquals(newUUIDEntity, sameUUIDEntity);
+    public void shouldBeEqualToOtherInstanceWithSameUuid() {
+        UUIDEntity newUUIDEntity = new UUIDEntity(ID, UUID);
+        UUIDEntity sameUUIDEntity = new UUIDEntity(ID, UUID);
+
+        assertThat(newUUIDEntity).isEqualTo(sameUUIDEntity);
     }
     
     @Test
-    public void equals_isSymetric() {
-        UUIDEntity newUUIDEntity = new UUIDEntity();
-        UUIDEntity sameUUIDEntity = new UUIDEntity();
-        
-        newUUIDEntity.setUUID(UUID_STRING);
-        sameUUIDEntity.setUUID(UUID_STRING);
-        
-        assertEquals(newUUIDEntity, sameUUIDEntity);
-        assertEquals(sameUUIDEntity, newUUIDEntity);
+    public void shouldBeEqualSymmetrically() {
+        UUIDEntity newUUIDEntity = new UUIDEntity(ID, UUID);
+        UUIDEntity sameUUIDEntity = new UUIDEntity(ID, UUID);
+
+        assertThat(newUUIDEntity).isEqualTo(sameUUIDEntity);
+        assertThat(sameUUIDEntity).isEqualTo(newUUIDEntity);
     }
     
     @Test
-    public void equals_isTransitive() {
-        UUIDEntity newUUIDEntity = new UUIDEntity();
-        UUIDEntity sameUUIDEntity = new UUIDEntity();
-        UUIDEntity anotherSameUUIDEntity = new UUIDEntity();
-        
-        newUUIDEntity.setUUID(UUID_STRING);
-        sameUUIDEntity.setUUID(UUID_STRING);
-        anotherSameUUIDEntity.setUUID(UUID_STRING);
-        
-        assertEquals(newUUIDEntity, sameUUIDEntity);
-        assertEquals(sameUUIDEntity, anotherSameUUIDEntity);
-        assertEquals(newUUIDEntity, anotherSameUUIDEntity);
+    public void shouldBeEqualTransitively() {
+        UUIDEntity newUUIDEntity = new UUIDEntity(ID, UUID);
+        UUIDEntity sameUUIDEntity = new UUIDEntity(ID, UUID);
+        UUIDEntity anotherSameUUIDEntity = new UUIDEntity(ID, UUID);
+
+        assertThat(newUUIDEntity).isEqualTo(sameUUIDEntity);
+        assertThat(sameUUIDEntity).isEqualTo(anotherSameUUIDEntity);
+        assertThat(newUUIDEntity).isEqualTo(anotherSameUUIDEntity);
     }
     
     @Test
-    public void hashCode_areNotTheSameWhenNotEqual() {
-        UUIDEntity newUUIDEntity = new UUIDEntity();
-        UUIDEntity otherUUIDEntity = new UUIDEntity();
-        
-        assertNotEquals(newUUIDEntity, otherUUIDEntity);
-        assertNotEquals(newUUIDEntity.hashCode(), otherUUIDEntity.hashCode());
+    public void shouldNotHaveSameHashCodeWhenNotEqual() {
+        UUIDEntity newUUIDEntity = new UUIDEntity(ID, UUID);
+        UUIDEntity otherUUIDEntity = new UUIDEntity(ID, "anotherUuid");
+
+        assertThat(newUUIDEntity).isNotEqualTo(otherUUIDEntity);
+        assertThat(newUUIDEntity.hashCode()).isNotEqualTo(otherUUIDEntity.hashCode());
     }
     
     @Test
-    public void hashCode_areTheSameWhenEqual() {
-        UUIDEntity newUUIDEntity = new UUIDEntity();
-        UUIDEntity sameUUIDEntity = new UUIDEntity();
-        
-        newUUIDEntity.setUUID(UUID_STRING);
-        sameUUIDEntity.setUUID(UUID_STRING);
-        
-        assertEquals(newUUIDEntity, sameUUIDEntity);
-        assertEquals(newUUIDEntity.hashCode(), sameUUIDEntity.hashCode());
+    public void shouldHaveSameHashCodeWhenEqual() {
+        UUIDEntity newUUIDEntity = new UUIDEntity(ID, UUID);
+        UUIDEntity sameUUIDEntity = new UUIDEntity(ID, UUID);
+
+        assertThat(newUUIDEntity).isEqualTo(sameUUIDEntity);
+        assertThat(newUUIDEntity.hashCode()).isEqualTo(sameUUIDEntity.hashCode());
     }
     
     @Test
-    public void hashCode_isTheHashCodeOfId() {
-        UUIDEntity newUUIDEntity = new UUIDEntity();
-        
-        assertEquals(newUUIDEntity.hashCode(), newUUIDEntity.getUuid().hashCode());
-    }
-    
-    @Test
-    public void toString_containsUUID() {
-        UUIDEntity newUUIDEntity = new UUIDEntity();
-        
-        assertTrue(newUUIDEntity.toString().contains(newUUIDEntity.getUuid()));
+    public void shouldPrintsItsUuid() {
+        UUIDEntity newUUIDEntity = new UUIDEntity(ID, UUID);
+
+        assertThat(newUUIDEntity.toString()).contains(newUUIDEntity.uuid());
     }
 }

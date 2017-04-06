@@ -1,61 +1,49 @@
 package com.daeliin.components.domain.resource;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.validator.constraints.NotBlank;
+import java.util.Objects;
 
 /**
- * Resource saved in a RDBMS and identified by an UUID, 
- * equality is only based on this UUID.
+ * Resource saved in a RDBMS and identified by an ID,
+ * Equality is only based on the UUID.
  */
-@Getter
-@Setter
-@MappedSuperclass
-public abstract class UUIDPersistentResource implements PersistentResource<Long>, UUIDResource {
+public abstract class UUIDPersistentResource implements PersistentResource<Long> {
     
     private static final long serialVersionUID = -5886577401324234159L;
     
-    @Id
-    @GeneratedValue
-    protected Long id;
-    
-    @NotBlank
-    @Column(unique = true)
-    protected String uuid = java.util.UUID.randomUUID().toString();
-    
+    private final Long id;
+    private final String uuid;
+
+    protected UUIDPersistentResource(Long id, String uuid) {
+        this.id = Objects.requireNonNull(id, "id should not be null");
+        this.uuid = Objects.requireNonNull(uuid, "uuid should not be null");
+    }
+
+    public Long id() {
+        return id;
+    }
+
+    public String uuid() {
+        return uuid;
+    }
+
     @Override
-    public boolean equals(Object other) {
-        if (this == other) {
-            return true;
-        }
-        
-        if (other == null || !(other instanceof UUIDPersistentResource)) {
-            return false;
-        }
-
-        UUIDPersistentResource otherUUIDPersistentResource = (UUIDPersistentResource)other;
-
-        return uuid.equals(otherUUIDPersistentResource.getUuid());
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UUIDPersistentResource that = (UUIDPersistentResource) o;
+        return Objects.equals(uuid, that.uuid);
     }
 
     @Override
     public int hashCode() {
-        return uuid.hashCode();
+        return Objects.hash(uuid.hashCode());
     }
 
     @Override
     public String toString() {
-        StringBuilder toStringBuilder = new StringBuilder();
-        
-        toStringBuilder
-            .append(" [uuid=")
-            .append(uuid)
-            .append("]");
-        
-        return toStringBuilder.toString();
+        return "UUIDPersistentResource{" +
+                "id=" + id +
+                ", uuid='" + uuid + '\'' +
+                '}';
     }
 }

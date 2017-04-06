@@ -3,7 +3,7 @@ package com.daeliin.components.domain.resource;
 import java.io.Serializable;
 
 /**
- * Resource persisted in a RDBMS.
+ * Resource persisted in a RDBMS, with an id and an uuid.
  * @param <ID> id type
  */
 public interface PersistentResource<ID extends Serializable> extends Serializable {
@@ -12,11 +12,11 @@ public interface PersistentResource<ID extends Serializable> extends Serializabl
      * Returns the resource id.
      * @return resource id
      */
-    ID getId();
-    
+    ID id();
+
     /**
-     * Sets the resource id.
-     * @param id the new resource id
+     * Returns the resource UUID.
+     * @return the resource UUID
      */
-    void setId(ID id);
+    String uuid();
 }
