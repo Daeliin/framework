@@ -1,11 +1,11 @@
 package com.daeliin.components.security.credentials.account;
 
-import com.daeliin.components.core.resource.repository.ResourceRepository;
+import com.daeliin.components.core.resource.repository.PagingRepository;
 import java.util.List;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AccountRepository extends ResourceRepository<Account, Long> {
+public interface AccountRepository extends PagingRepository<Account, Long> {
     
     public Account findByEmailIgnoreCase(String email);
     

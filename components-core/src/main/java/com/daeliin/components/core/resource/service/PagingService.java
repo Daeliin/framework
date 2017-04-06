@@ -12,7 +12,7 @@ import org.springframework.data.domain.Sort;
  * @param <E> resource type
  * @param <ID> resource id type
  */
-public interface FullCrudService<E extends PersistentResource, ID extends Serializable> {
+public interface PagingService<E extends PersistentResource, ID extends Serializable> {
    
     /**
      * Creates a resource.

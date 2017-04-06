@@ -1,29 +1,30 @@
 package com.daeliin.components.core.resource.service;
 
 import com.daeliin.components.core.exception.ResourceNotFoundException;
-import com.daeliin.components.core.resource.repository.ResourceRepository;
+import com.daeliin.components.core.resource.repository.PagingRepository;
 import com.daeliin.components.domain.resource.PersistentResource;
 import java.io.Serializable;
 import java.util.List;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.CollectionUtils;
 
+import javax.inject.Inject;
+
 /**
- * Provides CRUD operations and pagination for a resource.
+ * Provides CRUD operations and pagination for a resource, with caching.
  * @param <E> resource type
  * @param <ID> resource id type
  * @param <R> resource repository 
  */
 @Service
-public abstract class ResourceService<E extends PersistentResource<ID>, ID extends Serializable, R extends ResourceRepository<E, ID>> implements FullCrudService<E, ID>  {
+public abstract class ResourceService<E extends PersistentResource<ID>, ID extends Serializable, R extends PagingRepository<E, ID>> implements PagingService<E, ID> {
     
     private static final String MESSAGE_RESOURCE_NOT_FOUND = "Resource was not found";
 
-    @Autowired
+    @Inject
     protected R repository;
 
     /**
