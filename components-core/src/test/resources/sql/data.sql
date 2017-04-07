@@ -1,4 +1,4 @@
-INSERT INTO user(id, uuid, name) VALUES 
+INSERT INTO user(id, uuid, name) VALUES
 (1, RANDOM_UUID(), 'Tom'),
 (2, RANDOM_UUID(), 'John'),
 (3, RANDOM_UUID(), 'Fred'),
