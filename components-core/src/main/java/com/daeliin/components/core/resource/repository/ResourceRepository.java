@@ -1,7 +1,7 @@
 package com.daeliin.components.core.resource.repository;
 
-import com.daeliin.components.core.resource.pagination.Page;
-import com.daeliin.components.core.resource.pagination.PageRequest;
+import com.daeliin.components.domain.pagination.Page;
+import com.daeliin.components.domain.pagination.PageRequest;
 import com.daeliin.components.domain.resource.PersistentResource;
 
 import java.io.Serializable;
@@ -29,7 +29,12 @@ public final class ResourceRepository<E extends PersistentResource, ID extends S
     }
 
     @Override
-    public Page<E> findAll(PageRequest pageable) {
+    public Iterable<E> findAll(Iterable<ID> resources) {
+        return null;
+    }
+
+    @Override
+    public Page<E> findAll(PageRequest pageRequest) {
         return null;
     }
 

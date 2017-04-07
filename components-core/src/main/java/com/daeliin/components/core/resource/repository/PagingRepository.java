@@ -1,7 +1,7 @@
 package com.daeliin.components.core.resource.repository;
 
-import com.daeliin.components.core.resource.pagination.Page;
-import com.daeliin.components.core.resource.pagination.PageRequest;
+import com.daeliin.components.domain.pagination.Page;
+import com.daeliin.components.domain.pagination.PageRequest;
 
 /**
  * Provides CRUD operations and pagination for a resource.
@@ -15,6 +15,8 @@ public interface PagingRepository<E, ID> {
     Iterable<E> save(Iterable<E> resources);
 
     E findOne(ID resourceId);
+
+    Iterable<E> findAll(Iterable<ID> resources);
 
     Page<E> findAll(PageRequest pageRequest);
 

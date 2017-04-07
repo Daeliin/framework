@@ -86,7 +86,7 @@ public class UUIDPersistentResourceTest {
     }
     
     @Test
-    public void shouldNotHaveSameHashCodeWhenNotEqual() {
+    public void shouldNotHaveSameHashCode_whenNotEqual() {
         UUIDEntity newUUIDEntity = new UUIDEntity(ID, UUID);
         UUIDEntity otherUUIDEntity = new UUIDEntity(ID, "anotherUuid");
 
@@ -95,7 +95,7 @@ public class UUIDPersistentResourceTest {
     }
     
     @Test
-    public void shouldHaveSameHashCodeWhenEqual() {
+    public void shouldHaveSameHashCode_whenEqual() {
         UUIDEntity newUUIDEntity = new UUIDEntity(ID, UUID);
         UUIDEntity sameUUIDEntity = new UUIDEntity(ID, UUID);
 

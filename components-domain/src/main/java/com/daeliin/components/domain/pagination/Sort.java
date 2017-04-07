@@ -1,20 +1,21 @@
-package com.daeliin.components.core.resource.pagination;
+package com.daeliin.components.domain.pagination;
+
+import com.google.common.base.MoreObjects;
 
 import java.util.Objects;
 
-public final class Sort {
+public final class Sort implements Comparable<Sort> {
+
+    public enum Direction {
+        ASC, DESC
+    }
 
     public final String property;
-
     public final Direction direction;
 
     public Sort(String property, Direction direction) {
         this.property = Objects.requireNonNull(property, "property should not be null");
         this.direction = direction != null ? direction : Direction.ASC;
-    }
-
-    public enum Direction {
-        ASC, DESC
     }
 
     @Override
@@ -29,5 +30,22 @@ public final class Sort {
     @Override
     public int hashCode() {
         return Objects.hash(property, direction);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("property", property)
+                .add("direction", direction)
+                .toString();
+    }
+
+    @Override
+    public int compareTo(Sort other) {
+        if (this.equals(other)) {
+            return 0;
+        }
+
+        return property.compareTo(other.property);
     }
 }
