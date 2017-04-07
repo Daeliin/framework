@@ -5,8 +5,8 @@ import java.util.List;
 
 public final class PageRequest {
 
-    private static final int DEFAULT_INDEX = 0;
-    private static final int DEFAULT_SIZE = 25;
+    public static final int DEFAULT_INDEX = 0;
+    public static final int DEFAULT_SIZE = 25;
 
     public final int index;
     public final int size;
@@ -26,9 +26,9 @@ public final class PageRequest {
     }
 
     public PageRequest(int index, int size, List<Sort> sorts) {
-        this.index = index >= 0 && index <= Integer.MAX_VALUE ? index : DEFAULT_INDEX;
-        this.size = size >= 0 && size <= Integer.MAX_VALUE? size : DEFAULT_SIZE;
+        this.index = (index >= 0 && index <= Integer.MAX_VALUE) ? index : DEFAULT_INDEX;
+        this.size = (size >= 0 && size <= Integer.MAX_VALUE) ? size : DEFAULT_SIZE;
         this.offset = index * size;
-        this.sorts = sorts == null || sorts.isEmpty() ? Collections.EMPTY_LIST : sorts;
+        this.sorts = (sorts == null || sorts.isEmpty()) ? Collections.EMPTY_LIST : sorts;
     }
 }
