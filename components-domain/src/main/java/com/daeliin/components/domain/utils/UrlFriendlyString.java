@@ -1,4 +1,4 @@
-package com.daeliin.components.core.utils;
+package com.daeliin.components.domain.utils;
 
 import org.apache.commons.lang3.StringUtils;
 

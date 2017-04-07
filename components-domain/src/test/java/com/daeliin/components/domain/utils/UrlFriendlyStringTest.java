@@ -1,7 +1,8 @@
-package com.daeliin.components.core.utils;
+package com.daeliin.components.domain.utils;
+
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import org.junit.Test;
 
 public class UrlFriendlyStringTest {
 

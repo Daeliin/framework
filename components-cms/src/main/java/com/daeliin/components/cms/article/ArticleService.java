@@ -1,7 +1,7 @@
 package com.daeliin.components.cms.article;
 
 import com.daeliin.components.core.resource.service.ResourceService;
-import com.daeliin.components.core.utils.UrlFriendlyString;
+import com.daeliin.components.domain.utils.UrlFriendlyString;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Service;
