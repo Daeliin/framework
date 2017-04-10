@@ -1,5 +1,6 @@
 package com.daeliin.components.core.resource.repository;
 
+import com.daeliin.components.core.sql.QEventLog;
 import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
 import com.daeliin.components.domain.resource.PersistentResource;
@@ -30,6 +31,8 @@ public abstract class ResourceRepository<E extends PersistentResource, Q extends
 
     @Override
     public E save(E resource) {
+        sqlQueryFactory.select(QEventLog.eventLog).from(QEventLog.eventLog)
+                .fetch();
         return null;
     }
 
@@ -65,6 +68,8 @@ public abstract class ResourceRepository<E extends PersistentResource, Q extends
                 .limit(pageRequest.size)
                 .orderBy()
                 .fetch();
+
+        return null;
     }
 
     @Override

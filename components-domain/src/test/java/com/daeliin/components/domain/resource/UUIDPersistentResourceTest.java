@@ -15,6 +15,13 @@ public class UUIDPersistentResourceTest {
     private static final LocalDateTime CREATION_DATE = LocalDateTime.now();
 
     @Test
+    public void shouldAssignADefaultCreationDate() {
+        UUIDEntity newUUIDEntity = new UUIDEntity(ID, UUID, null);
+
+        assertThat(newUUIDEntity.creationDate()).isNotNull();
+    }
+
+    @Test
     public void shouldAssignAnId() {
         UUIDEntity newUUIDEntity = new UUIDEntity(ID, UUID, CREATION_DATE);
 
@@ -44,11 +51,6 @@ public class UUIDPersistentResourceTest {
     @Test(expected = Exception.class)
     public void shouldThrowException_whenUuidIsNull() {
         new UUIDEntity(ID, null, CREATION_DATE);
-    }
-
-    @Test(expected = Exception.class)
-    public void shouldThrowException_whenCreationDateIsNull() {
-        new UUIDEntity(ID, UUID, null);
     }
 
     @Test
