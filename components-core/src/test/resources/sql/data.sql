@@ -1,23 +1,5 @@
-INSERT INTO user(id, uuid, name) VALUES
-(1, RANDOM_UUID(), 'Tom'),
-(2, RANDOM_UUID(), 'John'),
-(3, RANDOM_UUID(), 'Fred'),
-(4, RANDOM_UUID(), 'Chino'),
-(5, RANDOM_UUID(), 'Corey'),
-(6, RANDOM_UUID(), 'Mat'),
-(7, RANDOM_UUID(), 'Chris'),
-(8, RANDOM_UUID(), 'Sean'),
-(9, RANDOM_UUID(), 'Wayne'),
-(10, RANDOM_UUID(), 'Brad'),
-(11, RANDOM_UUID(), 'Brian'),
-(12, RANDOM_UUID(), 'Marc'),
-(13, RANDOM_UUID(), 'Perry'),
-(14, RANDOM_UUID(), 'Bob'),
-(15, RANDOM_UUID(), 'Ted'),
-(16, RANDOM_UUID(), 'Eliot'),
-(17, RANDOM_UUID(), 'Keith'),
-(18, RANDOM_UUID(), 'Kate'),
-(19, RANDOM_UUID(), 'Kim'),
-(20, RANDOM_UUID(), 'Cindy'),
-(21, RANDOM_UUID(), 'Melany'),
-(22, RANDOM_UUID(), 'Grace');
+INSERT INTO user(id, uuid, creation_date, description_key) VALUES
+(1, RANDOM_UUID(), '2017-01-01 12:00:00', 'event.log1'),
+(2, RANDOM_UUID(), '2017-01-02 12:00:00', 'event.log2'),
+(3, RANDOM_UUID(), '2017-01-03 12:00:00', 'event.log3'),
+(4, RANDOM_UUID(), '2017-01-04 12:00:00', 'event.log4');

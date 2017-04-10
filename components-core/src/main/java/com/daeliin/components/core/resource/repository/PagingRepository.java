@@ -3,24 +3,26 @@ package com.daeliin.components.core.resource.repository;
 import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
 
+import java.util.Collection;
+
 /**
  * Provides CRUD operations and pagination for a resource.
  * @param <E> resource type
- * @param <ID> resource id type  
+ * @param <ID> resource id type
  */
 public interface PagingRepository<E, ID> {
 
     E save(E resource);
 
-    Iterable<E> save(Iterable<E> resources);
+    Collection<E> save(Collection<E> resources);
 
     E findOne(ID resourceId);
 
-    Iterable<E> findAll(Iterable<ID> resources);
+    Collection<E> findAll(Collection<ID> resourceIds);
 
     Page<E> findAll(PageRequest pageRequest);
 
-    Iterable<E> findAll();
+    Collection<E> findAll();
 
     boolean exists(ID resourceId);
 
@@ -28,9 +30,9 @@ public interface PagingRepository<E, ID> {
 
     E update(E resource);
 
-    void delete(ID resourceId);
+    boolean delete(ID resourceId);
 
-    void delete(Iterable<ID> resourceIds);
+    boolean delete(Collection<ID> resourceIds);
 
     void deleteAll();
 }
