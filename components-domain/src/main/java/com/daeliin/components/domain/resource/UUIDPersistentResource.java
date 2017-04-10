@@ -1,5 +1,6 @@
 package com.daeliin.components.domain.resource;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -12,10 +13,12 @@ public abstract class UUIDPersistentResource implements PersistentResource<Long>
     
     private final Long id;
     private final String uuid;
+    private final LocalDateTime creationDate;
 
-    protected UUIDPersistentResource(Long id, String uuid) {
+    protected UUIDPersistentResource(Long id, String uuid, LocalDateTime creationDate) {
         this.id = Objects.requireNonNull(id, "id should not be null");
         this.uuid = Objects.requireNonNull(uuid, "uuid should not be null");
+        this.creationDate = Objects.requireNonNull(creationDate, "creationDate should not be null");
     }
 
     public Long id() {
@@ -24,6 +27,10 @@ public abstract class UUIDPersistentResource implements PersistentResource<Long>
 
     public String uuid() {
         return uuid;
+    }
+
+    public LocalDateTime creationDate() {
+        return creationDate;
     }
 
     @Override

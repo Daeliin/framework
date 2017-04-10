@@ -1,6 +1,7 @@
 package com.daeliin.components.domain.resource;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * Resource persisted in a RDBMS, with an id and an uuid.
@@ -19,4 +20,10 @@ public interface PersistentResource<ID extends Serializable> extends Serializabl
      * @return the resource UUID
      */
     String uuid();
+
+    /**
+     * Returns the resource creation date.
+     * @return the resource creation date
+     */
+    LocalDateTime creationDate();
 }
