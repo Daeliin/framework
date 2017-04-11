@@ -28,11 +28,9 @@ public interface PagingRepository<E, ID> {
 
     long count();
 
-    E update(E resource);
-
     boolean delete(ID resourceId);
 
     boolean delete(Collection<ID> resourceIds);
 
-    void deleteAll();
+    boolean deleteAll();
 }

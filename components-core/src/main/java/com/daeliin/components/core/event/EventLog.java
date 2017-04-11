@@ -13,7 +13,7 @@ public final class EventLog extends UUIDPersistentResource implements Comparable
 
     public EventLog(Long id, String uuid, LocalDateTime creationDate, String descriptionKey) {
         super(id, uuid, creationDate);
-        this.descriptionKey = Objects.requireNonNull("descriptionKey should not be null", descriptionKey);
+        this.descriptionKey = Objects.requireNonNull(descriptionKey, "descriptionKey should not be null");
     }
 
     @Override
