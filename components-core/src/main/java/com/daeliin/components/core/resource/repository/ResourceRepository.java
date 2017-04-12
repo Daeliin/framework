@@ -166,7 +166,7 @@ public abstract class ResourceRepository<E extends PersistentResource, B,  C ext
         return queryFactory.delete(rowPath).execute() > 0;
     }
 
-    private Collection<Long> findAllIds(Collection<E> resources) {
+    protected Collection<Long> findAllIds(Collection<E> resources) {
         Collection<Long> resourceIds = resources.stream().map(E::id).collect(Collectors.toList());
 
         return queryFactory.select(idPath)
@@ -175,7 +175,7 @@ public abstract class ResourceRepository<E extends PersistentResource, B,  C ext
                 .fetch();
     }
 
-    private OrderSpecifier[] computeOrders(PageRequest pageRequest) {
+    protected OrderSpecifier[] computeOrders(PageRequest pageRequest) {
         List<OrderSpecifier> orders = new ArrayList<>();
 
         List<Sort> sorts = pageRequest.sorts;

@@ -1,6 +1,6 @@
 package com.daeliin.components.core.event;
 
-import com.daeliin.components.core.data.EventLogFixtures;
+import com.daeliin.components.core.fixtures.EventLogFixtures;
 import com.daeliin.components.core.sql.BEventLog;
 import org.junit.Test;
 
