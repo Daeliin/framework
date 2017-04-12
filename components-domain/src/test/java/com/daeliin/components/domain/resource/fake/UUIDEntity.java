@@ -1,4 +1,4 @@
-package com.daeliin.components.domain.resource.mock;
+package com.daeliin.components.domain.resource.fake;
 
 import com.daeliin.components.domain.resource.PersistentResource;
 

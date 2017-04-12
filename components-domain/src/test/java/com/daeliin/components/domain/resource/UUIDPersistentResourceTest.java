@@ -1,6 +1,6 @@
 package com.daeliin.components.domain.resource;
 
-import com.daeliin.components.domain.resource.mock.UUIDEntity;
+import com.daeliin.components.domain.resource.fake.UUIDEntity;
 import org.junit.Test;
 
 import java.time.LocalDateTime;

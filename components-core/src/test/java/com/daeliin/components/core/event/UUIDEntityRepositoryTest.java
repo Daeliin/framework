@@ -14,7 +14,7 @@ import java.util.Arrays;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ContextConfiguration(classes = Application.class)
-public class EventLogRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
+public class UUIDEntityRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Inject
     private EventLogRepository eventLogRepository;

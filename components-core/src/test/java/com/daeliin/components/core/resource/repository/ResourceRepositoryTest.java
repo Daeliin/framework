@@ -1,8 +1,8 @@
 //package com.daeliin.components.core.resource.repository;
 //
 //import com.daeliin.components.core.Application;
-//import com.daeliin.components.core.mock.User;
-//import com.daeliin.components.core.mock.UserRepository;
+//import com.daeliin.components.core.fake.User;
+//import com.daeliin.components.core.fake.UserRepository;
 //import java.util.ArrayList;
 //import java.util.Arrays;
 //import java.util.Collections;

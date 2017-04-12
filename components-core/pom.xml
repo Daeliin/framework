@@ -80,7 +80,7 @@
                 </executions>
                 <configuration>
                     <jdbcDriver>org.h2.Driver</jdbcDriver>
-                    <jdbcUrl>jdbc:h2:mem:;INIT=runscript from 'src/main/resources/schema.sql'</jdbcUrl>
+                    <jdbcUrl>jdbc:h2:mem:;INIT=runscript from 'src/test/resources/schema.sql'</jdbcUrl>
                     <jdbcUser>sa</jdbcUser>
                     <exportBeans>true</exportBeans>
                     <beanPrefix>B</beanPrefix>
