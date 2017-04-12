@@ -8,29 +8,28 @@ import java.util.Collection;
 /**
  * Provides CRUD operations and pagination for a resource.
  * @param <E> resource type
- * @param <ID> resource id type
  */
-public interface PagingRepository<E, ID> {
+public interface PagingRepository<E> {
 
     E save(E resource);
 
     Collection<E> save(Collection<E> resources);
 
-    E findOne(ID resourceId);
+    E findOne(Long resourceId);
 
-    Collection<E> findAll(Collection<ID> resourceIds);
+    Collection<E> findAll(Collection<Long> resourceIds);
 
     Page<E> findAll(PageRequest pageRequest);
 
     Collection<E> findAll();
 
-    boolean exists(ID resourceId);
+    boolean exists(Long resourceId);
 
     long count();
 
-    boolean delete(ID resourceId);
+    boolean delete(Long resourceId);
 
-    boolean delete(Collection<ID> resourceIds);
+    boolean delete(Collection<Long> resourceIds);
 
     boolean deleteAll();
 }

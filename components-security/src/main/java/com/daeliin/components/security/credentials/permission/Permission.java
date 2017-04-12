@@ -1,6 +1,6 @@
 package com.daeliin.components.security.credentials.permission;
 
-import com.daeliin.components.domain.resource.UUIDPersistentResource;
+import com.daeliin.components.domain.resource.PersistentResource;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import lombok.EqualsAndHashCode;
@@ -16,7 +16,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @EqualsAndHashCode(callSuper = true)
 @ToString(of = {"label"}, callSuper = true)
 @Entity
-public class Permission extends UUIDPersistentResource implements Comparable<Permission> {
+public class Permission extends PersistentResource implements Comparable<Permission> {
     
     private static final long serialVersionUID = -4768460974607663983L;
     

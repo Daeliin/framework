@@ -20,7 +20,7 @@ public class JsonString {
     private String json;
     
     /**
-     * Builds a JSON String from an object.
+     * Builds a JSON String instantiate an object.
      * @param objectToSerialize the object to serialize into a JSON String
      */
     public JsonString(final Object objectToSerialize) {

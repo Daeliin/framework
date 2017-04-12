@@ -1,7 +1,7 @@
 package com.daeliin.components.webservices.mock;
 
-import com.daeliin.components.domain.resource.UUIDPersistentResource;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.daeliin.components.domain.resource.PersistentResource;
+
 import javax.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +12,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @Setter
 @Entity
 @ToString(of = {"name"}, callSuper = true)
-public class User extends UUIDPersistentResource implements Comparable<User> {
+public class User extends PersistentResource implements Comparable<User> {
     
     private static final long serialVersionUID = 6434352024112491080L;
     

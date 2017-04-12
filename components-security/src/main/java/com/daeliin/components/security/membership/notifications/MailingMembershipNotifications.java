@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 @Profile("mail")
 public class MailingMembershipNotifications implements MembershipNotifications {
 
-    @Value("${daeliin.mail.from}")
+    @Value("${daeliin.mail.instantiate}")
     private String from;
     
     @Autowired

@@ -1,11 +1,11 @@
 package com.daeliin.components.core.event;
 
-import com.daeliin.components.domain.resource.UUIDPersistentResource;
+import com.daeliin.components.domain.resource.PersistentResource;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public final class EventLog extends UUIDPersistentResource implements Comparable<EventLog> {
+public final class EventLog extends PersistentResource implements Comparable<EventLog> {
 
     private static final long serialVersionUID = -5353349286441881283L;
 

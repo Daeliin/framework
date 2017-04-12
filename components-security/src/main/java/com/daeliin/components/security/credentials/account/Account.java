@@ -1,6 +1,6 @@
 package com.daeliin.components.security.credentials.account;
 
-import com.daeliin.components.domain.resource.UUIDPersistentResource;
+import com.daeliin.components.domain.resource.PersistentResource;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -22,7 +22,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @EqualsAndHashCode(callSuper = true)
 @ToString(of = {"email", "username", "enabled"}, callSuper = true)
 @Entity
-public class Account extends UUIDPersistentResource implements Comparable<Account> {
+public class Account extends PersistentResource implements Comparable<Account> {
     
     private static final long serialVersionUID = -1898848122717107177L;
     

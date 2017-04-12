@@ -4,7 +4,7 @@ import com.daeliin.components.webservices.exception.PageRequestException;
 import org.springframework.data.domain.Sort;
 
 /**
- * Builds parameters of a page request from their String value.
+ * Builds parameters of a page request instantiate their String value.
  */
 public class PageRequestParameters {
     

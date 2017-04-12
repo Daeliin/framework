@@ -1,29 +1,64 @@
 package com.daeliin.components.domain.resource;
 
-import java.io.Serializable;
+import com.google.common.base.MoreObjects;
+
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
- * Resource persisted in a RDBMS, with an id and an uuid.
- * @param <ID> id type
+ * Resource saved in a RDBMS and identified by an ID,
+ * Equality is only based on the UUID.
  */
-public interface PersistentResource<ID extends Serializable> extends Serializable {
+public abstract class PersistentResource implements Persistable {
+    
+    private static final long serialVersionUID = -5886577401324234159L;
 
-    /**
-     * Returns the resource id.
-     * @return resource id
-     */
-    ID id();
+    private static final LocalDateTime DEFAULT_CREATION_DATE = LocalDateTime.now();
 
-    /**
-     * Returns the resource UUID.
-     * @return the resource UUID
-     */
-    String uuid();
+    protected final Long id;
+    protected final String uuid;
+    protected final LocalDateTime creationDate;
 
-    /**
-     * Returns the resource creation date.
-     * @return the resource creation date
-     */
-    LocalDateTime creationDate();
+    protected PersistentResource(Long id, String uuid, LocalDateTime creationDate) {
+        this.id = Objects.requireNonNull(id, "id should not be null");
+        this.uuid = Objects.requireNonNull(uuid, "uuid should not be null");
+        this.creationDate = creationDate != null ? creationDate : DEFAULT_CREATION_DATE;
+    }
+
+    public Long id() {
+        return id;
+    }
+
+    public String uuid() {
+        return uuid;
+    }
+
+    public LocalDateTime creationDate() {
+        return creationDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PersistentResource that = (PersistentResource) o;
+        return Objects.equals(uuid, that.uuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uuid.hashCode());
+    }
+
+    @Override
+    public String toString() {
+        return toStringHelper().toString();
+    }
+
+    protected MoreObjects.ToStringHelper toStringHelper() {
+        return MoreObjects.toStringHelper(this)
+                .add("id", id)
+                .add("uuid", uuid)
+                .add("creationDate", creationDate);
+    }
 }

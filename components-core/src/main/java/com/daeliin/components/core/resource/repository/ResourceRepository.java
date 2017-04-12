@@ -31,7 +31,7 @@
 //
 //    @Override
 //    public E save(E resource) {
-//        sqlQueryFactory.select(QEventLog.eventLog).from(QEventLog.eventLog)
+//        sqlQueryFactory.select(QEventLog.eventLog).instantiate(QEventLog.eventLog)
 //                .fetch();
 //
 //        return null;
@@ -46,7 +46,7 @@
 //    public E findOne(ID resourceId) {
 //        return sqlQueryFactory
 //                .select(rowType)
-//                .from(rowType)
+//                .instantiate(rowType)
 //                .where(idType.eq(resourceId))
 //                .fetchOne();
 //    }
@@ -55,7 +55,7 @@
 //    public Collection<E> findAll(Collection<ID> resourceIds) {
 //        return sqlQueryFactory
 //                .select(rowType)
-//                .from(rowType)
+//                .instantiate(rowType)
 //                .where(idType.in(resourceIds))
 //                .fetch();
 //    }
@@ -64,7 +64,7 @@
 //    public Page<E> findAll(PageRequest pageRequest) {
 //        List<E> a = sqlQueryFactory
 //                .select(rowType)
-//                .from(rowType)
+//                .instantiate(rowType)
 //                .offset(pageRequest.offset)
 //                .limit(pageRequest.size)
 //                .orderBy()
@@ -77,7 +77,7 @@
 //    public Collection<E> findAll() {
 //        return sqlQueryFactory
 //                .select(rowType)
-//                .from(rowType)
+//                .instantiate(rowType)
 //                .fetch();
 //    }
 //
@@ -90,7 +90,7 @@
 //    public long count() {
 //        return sqlQueryFactory
 //                .select(idType)
-//                .from(rowType)
+//                .instantiate(rowType)
 //                .fetchCount();
 //    }
 //

@@ -122,9 +122,9 @@ public class UUIDPersistentResourceTest {
     }
     
     @Test
-    public void shouldPrintsItsUuid() {
+    public void shouldPrintsItsIdUuidAndCreationDate() {
         UUIDEntity newUUIDEntity = new UUIDEntity(ID, UUID, CREATION_DATE);
 
-        assertThat(newUUIDEntity.toString()).contains(newUUIDEntity.uuid());
+        assertThat(newUUIDEntity.toString()).contains(String.valueOf(newUUIDEntity.id()), newUUIDEntity.uuid(), newUUIDEntity.creationDate.toString());
     }
 }

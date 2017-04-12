@@ -2,7 +2,7 @@ package com.daeliin.components.core.resource.service;
 
 import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
-import com.daeliin.components.domain.resource.PersistentResource;
+import com.daeliin.components.domain.resource.Persistable;
 import java.io.Serializable;
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
  * @param <E> resource type
  * @param <ID> resource id type
  */
-public interface PagingService<E extends PersistentResource, ID extends Serializable> {
+public interface PagingService<E extends Persistable, ID extends Serializable> {
 
     /**
      * Creates a resource.

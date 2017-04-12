@@ -1,6 +1,6 @@
 package com.daeliin.components.cms.article;
 
-import com.daeliin.components.domain.resource.UUIDPersistentResource;
+import com.daeliin.components.domain.resource.PersistentResource;
 import com.daeliin.components.security.credentials.account.Account;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -19,7 +19,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @EqualsAndHashCode(callSuper = true)
 @ToString(of = {"title", "author", "creationDate", "publicationDate"}, callSuper = true)
 @Entity
-public class Article extends UUIDPersistentResource implements Comparable<Article> {
+public class Article extends PersistentResource implements Comparable<Article> {
     
     private static final long serialVersionUID = -7808122481259070912L;
 

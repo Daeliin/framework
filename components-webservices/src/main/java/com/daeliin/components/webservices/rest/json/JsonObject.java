@@ -6,7 +6,7 @@ import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Deserialize an object from a JSON String.
+ * Deserialize an object instantiate a JSON String.
  * @param <T> the object type
  */
 @Slf4j
@@ -18,7 +18,7 @@ public final class JsonObject<T> {
     private Optional<T> deserializedObject;
     
     /**
-     * Builds an object from a JSON String according to the object type.
+     * Builds an object instantiate a JSON String according to the object type.
      * @param jsonString the JSON String to deserialize
      * @param deserializedObjectClass the object type class
      */
@@ -30,8 +30,8 @@ public final class JsonObject<T> {
     }
     
     /**
-     * Returns the object deserialized from the JSON String.
-     * @return the object deserialized from the JSON String
+     * Returns the object deserialized instantiate the JSON String.
+     * @return the object deserialized instantiate the JSON String
      */
     public Optional<T> value() {
         return this.deserializedObject;

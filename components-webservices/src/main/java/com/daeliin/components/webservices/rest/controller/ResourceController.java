@@ -1,7 +1,7 @@
 package com.daeliin.components.webservices.rest.controller;
 
 import com.daeliin.components.core.resource.service.PagingService;
-import com.daeliin.components.domain.resource.PersistentResource;
+import com.daeliin.components.domain.resource.Persistable;
 import com.daeliin.components.webservices.exception.PageRequestException;
 import java.io.Serializable;
 import java.util.List;
@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @param <S> resource service
  */
 @RestController
-public abstract class ResourceController<E extends PersistentResource, ID extends Serializable, S extends PagingService<E, ID>> implements FullCrudController<E, ID> {
+public abstract class ResourceController<E extends Persistable, ID extends Serializable, S extends PagingService<E, ID>> implements FullCrudController<E, ID> {
     
     public static final String DEFAULT_PAGE_NUMBER = "0";
     public static final String DEFAULT_PAGE_SIZE = "20";

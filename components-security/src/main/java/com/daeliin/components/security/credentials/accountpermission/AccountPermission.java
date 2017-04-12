@@ -1,6 +1,6 @@
 package com.daeliin.components.security.credentials.accountpermission;
 
-import com.daeliin.components.domain.resource.UUIDPersistentResource;
+import com.daeliin.components.domain.resource.PersistentResource;
 import com.daeliin.components.security.credentials.account.Account;
 import com.daeliin.components.security.credentials.permission.Permission;
 import javax.persistence.Entity;
@@ -13,7 +13,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.apache.commons.lang3.StringUtils;
 
 @NoArgsConstructor
 @Getter
@@ -22,7 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 @ToString(of = {"account", "permission"}, callSuper = true)
 @Table(name = "account_permission")
 @Entity
-public class AccountPermission extends UUIDPersistentResource implements Comparable<AccountPermission> {
+public class AccountPermission extends PersistentResource implements Comparable<AccountPermission> {
     
     private static final long serialVersionUID = 956187325117395404L;
     

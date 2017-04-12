@@ -1,13 +1,15 @@
 package com.daeliin.components.core.event;
 
 import com.daeliin.components.core.Application;
+import com.daeliin.components.domain.pagination.Page;
+import com.daeliin.components.domain.pagination.PageRequest;
+import com.daeliin.components.domain.pagination.Sort;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 import javax.inject.Inject;
-
-import java.util.Collection;
+import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,8 +28,9 @@ public class EventLogRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void test2() {
-        Collection<EventLog> eventLogs = eventLogRepository.findAll();
+        PageRequest pageRequest = new PageRequest(0, 5, Arrays.asList(new Sort("creationDate"), new Sort("descriptionKey", Sort.Direction.DESC)));
+        Page<EventLog> eventLogs = eventLogRepository.findAll(pageRequest);
 
-        assertThat(eventLogs).isNotEmpty();
+        assertThat(eventLogs.items).isNotEmpty();
     }
 }

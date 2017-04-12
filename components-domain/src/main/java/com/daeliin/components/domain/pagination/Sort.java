@@ -13,6 +13,10 @@ public final class Sort implements Comparable<Sort> {
     public final String property;
     public final Direction direction;
 
+    public Sort(String property) {
+        this(property, Direction.ASC);
+    }
+
     public Sort(String property, Direction direction) {
         this.property = Objects.requireNonNull(property, "property should not be null");
         this.direction = direction != null ? direction : Direction.ASC;

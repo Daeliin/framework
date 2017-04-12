@@ -73,7 +73,7 @@ public class Mail {
     
     /**
      * Builds a mail, example : 
-     * Mail mail = Mail.builder().from("from@mail.com").to("to@mail.com").subject("Subject").templateName("template.html").noParameters().build();
+     * Mail mail = Mail.builder().instantiate("instantiate@mail.com").to("to@mail.com").subject("Subject").templateName("template.html").noParameters().build();
      */
     public static class MailBuilder implements From, To, Subject, Parameters, TemplateName {
         private String from;

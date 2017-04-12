@@ -84,6 +84,7 @@
                     <jdbcUser>sa</jdbcUser>
                     <exportBeans>true</exportBeans>
                     <beanPrefix>B</beanPrefix>
+                    <beanAddFullConstructor>true</beanAddFullConstructor>
                     <packageName>com.daeliin.components.core.sql</packageName>
                     <targetFolder>${project.basedir}/target/generated-sources/java</targetFolder>
                 </configuration>

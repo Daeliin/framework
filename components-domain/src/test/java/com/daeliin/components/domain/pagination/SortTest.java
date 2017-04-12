@@ -28,6 +28,7 @@ public final class SortTest {
 
     @Test
     public void shouldHaveADefaultAscDirection() {
+        assertThat(new Sort("id").direction).isEqualTo(Sort.Direction.ASC);
         assertThat(new Sort("id", null).direction).isEqualTo(Sort.Direction.ASC);
     }
 

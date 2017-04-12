@@ -1,6 +1,6 @@
 package com.daeliin.components.cms.comment;
 
-import com.daeliin.components.domain.resource.UUIDPersistentResource;
+import com.daeliin.components.domain.resource.PersistentResource;
 import com.daeliin.components.security.credentials.account.Account;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -19,7 +19,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @EqualsAndHashCode(callSuper = true)
 @ToString(of = {"author", "content", "creationDate"}, callSuper = true)
 @Entity
-public class Comment extends UUIDPersistentResource implements Comparable<Comment> {
+public class Comment extends PersistentResource implements Comparable<Comment> {
     
     private static final long serialVersionUID = 7753778128988279460L;
     
