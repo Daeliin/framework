@@ -1,12 +1,12 @@
 package com.daeliin.components.domain.pagination;
 
-import com.daeliin.components.domain.pagination.PageRequest;
-import com.daeliin.components.domain.pagination.Sort;
+import com.google.common.collect.Sets;
+import com.google.common.collect.SortedMapDifference;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.AbstractMap;
+import java.util.Map;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,15 +46,19 @@ public final class PageRequestTest {
         assertThat(new PageRequest(0).sorts).isEmpty();
         assertThat(new PageRequest(2, 25).sorts).isEmpty();
         assertThat(new PageRequest(2, 25, null).sorts).isEmpty();
-        assertThat(new PageRequest(2, 25, new ArrayList<>()).sorts).isEmpty();
+        assertThat(new PageRequest(2, 25, Sets.newHashSet()).sorts).isEmpty();
     }
 
     @Test
     public void shouldAssignSorts() {
         Sort idAsc = new Sort("id", Sort.Direction.ASC);
+        Sort idDesc = new Sort("id", Sort.Direction.DESC);
         Sort nameDesc = new Sort("name", Sort.Direction.DESC);
 
-        assertThat(new PageRequest(2, 25, Arrays.asList(idAsc, nameDesc)).sorts).containsOnly(idAsc, nameDesc);
+        Map<String, Sort.Direction> sorts = new PageRequest(2, 25, Sets.newHashSet(idAsc, idDesc, nameDesc)).sorts;
+
+        assertThat(sorts.get("id")).isEqualTo(Sort.Direction.ASC);
+        assertThat(sorts.get("name")).isEqualTo(Sort.Direction.DESC);
     }
 
     @Test
@@ -68,7 +72,7 @@ public final class PageRequestTest {
     public void shouldBeEqual_whenSameIndexSameSizeAndSameSorts() {
         int index = 5;
         int size = 10;
-        List<Sort> sorts = Arrays.asList(new Sort("id", Sort.Direction.ASC), new Sort("name", Sort.Direction.DESC));
+        Set<Sort> sorts = Sets.newHashSet(new Sort("id", Sort.Direction.ASC), new Sort("name", Sort.Direction.DESC));
 
         PageRequest pageRequest = new PageRequest(index, size, sorts);
         PageRequest samePageRequest = new PageRequest(index, size, sorts);

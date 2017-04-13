@@ -2,7 +2,7 @@ package com.daeliin.components.security.session;
 
 import com.daeliin.components.security.credentials.account.Account;
 import com.daeliin.components.security.credentials.account.AccountRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,7 +14,7 @@ public class SessionHelper {
     private final UserDetailsService userDetailsService;
     private final AccountRepository accountRepository;
     
-    @Autowired
+    @Inject
     public SessionHelper(final UserDetailsService userDetailsService, final AccountRepository accountRepository) {
         this.userDetailsService = userDetailsService;
         this.accountRepository = accountRepository;

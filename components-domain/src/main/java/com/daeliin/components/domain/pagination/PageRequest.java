@@ -2,10 +2,12 @@ package com.daeliin.components.domain.pagination;
 
 import com.google.common.base.MoreObjects;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
+/**
+ * The request for a page, with a zero based index.
+ * Page index, size, and sorts to be applied.
+ */
 public final class PageRequest implements Comparable<PageRequest> {
 
     public static final int DEFAULT_INDEX = 0;
@@ -14,7 +16,7 @@ public final class PageRequest implements Comparable<PageRequest> {
     public final int index;
     public final int size;
     public final int offset;
-    public final List<Sort> sorts;
+    public final Map<String, Sort.Direction> sorts;
 
     public PageRequest() {
         this(DEFAULT_INDEX);
@@ -25,14 +27,14 @@ public final class PageRequest implements Comparable<PageRequest> {
     }
 
     public PageRequest(int index, int size) {
-        this(index, size, Collections.EMPTY_LIST);
+        this(index, size, Collections.EMPTY_SET);
     }
 
-    public PageRequest(int index, int size, List<Sort> sorts) {
+    public PageRequest(int index, int size, Set<Sort> sorts) {
         this.index = (index >= 0 && index <= Integer.MAX_VALUE) ? index : DEFAULT_INDEX;
         this.size = (size >= 0 && size <= Integer.MAX_VALUE) ? size : DEFAULT_SIZE;
         this.offset = index * size;
-        this.sorts = (sorts == null || sorts.isEmpty()) ? Collections.EMPTY_LIST : sorts;
+        this.sorts = (sorts == null || sorts.isEmpty()) ? Collections.EMPTY_MAP : buildSorts(sorts);
     }
 
     @Override
@@ -66,5 +68,20 @@ public final class PageRequest implements Comparable<PageRequest> {
         }
 
         return Integer.compare(this.index, other.index);
+    }
+
+    private Map<String, Sort.Direction> buildSorts(Set<Sort> sorts) {
+        Map<String, Sort.Direction> sortMapping = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+
+        sorts
+            .stream()
+            .sorted()
+            .forEach(sort -> {
+                if (!sortMapping.containsKey(sort.property)) {
+                    sortMapping.put(sort.property, sort.direction);
+                }
+            });
+
+        return sortMapping;
     }
 }

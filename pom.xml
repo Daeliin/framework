@@ -23,10 +23,10 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <jacoco.plugin.version>0.7.9</jacoco.plugin.version>
         <daeliin.components.version>0.2-SNAPSHOT</daeliin.components.version>
-        <jpa.version>1.0.0.Final</jpa.version>
-        <querydsl.version>4.1.4</querydsl.version>
+        <javax-inject.version>1</javax-inject.version>
         <commons-lang.version>3.5</commons-lang.version>
         <guava.version>21.0</guava.version>
+        <querydsl.version>4.1.4</querydsl.version>
         <commons-codec.version>1.10</commons-codec.version>
     </properties>
     
@@ -72,11 +72,6 @@
                 <version>${daeliin.components.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.hibernate.javax.persistence</groupId>
-                <artifactId>hibernate-jpa-2.1-api</artifactId>
-                <version>${jpa.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.querydsl</groupId>
                 <artifactId>querydsl-sql</artifactId>
                 <version>${querydsl.version}</version>
@@ -90,6 +85,13 @@
     </dependencyManagement>
     
     <dependencies>
+        <!-- Java -->
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>${javax-inject.version}</version>
+        </dependency>
+
         <!-- Utils -->
         <dependency>
             <groupId>com.google.guava</groupId>

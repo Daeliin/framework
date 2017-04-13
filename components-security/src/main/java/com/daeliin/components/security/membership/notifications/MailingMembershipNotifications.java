@@ -2,13 +2,13 @@ package com.daeliin.components.security.membership.notifications;
 
 import com.daeliin.components.core.mail.Mail;
 import com.daeliin.components.core.mail.MailBuildingException;
-import com.daeliin.components.core.mail.Mails;
+import com.daeliin.components.core.mail.Mailing;
 import com.daeliin.components.security.credentials.account.Account;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Profile;
@@ -23,10 +23,10 @@ public class MailingMembershipNotifications implements MembershipNotifications {
     @Value("${daeliin.mail.instantiate}")
     private String from;
     
-    @Autowired
-    protected Mails mails;
+    @Inject
+    protected Mailing mails;
 
-    @Autowired
+    @Inject
     protected MessageSource messages;
     
     @Async

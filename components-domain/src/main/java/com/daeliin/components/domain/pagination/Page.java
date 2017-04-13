@@ -5,6 +5,10 @@ import com.google.common.base.MoreObjects;
 import java.util.Collection;
 import java.util.Objects;
 
+/**
+ * A page of items.
+ * @param <E> type of paginated items
+ */
 public final class Page<E> {
 
     public final Collection<E> items;

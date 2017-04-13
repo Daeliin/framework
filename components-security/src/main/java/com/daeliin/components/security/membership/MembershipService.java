@@ -2,7 +2,7 @@ package com.daeliin.components.security.membership;
 
 import com.daeliin.components.core.event.EventLog;
 import com.daeliin.components.core.event.EventLogService;
-import com.daeliin.components.core.exception.ResourceNotFoundException;
+import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
 import com.daeliin.components.security.credentials.account.Account;
 import com.daeliin.components.security.credentials.account.AccountService;
 import com.daeliin.components.security.exception.AccountAlreadyExistException;
@@ -11,7 +11,7 @@ import com.daeliin.components.security.membership.details.AccountDetailsService;
 import com.daeliin.components.security.membership.notifications.MembershipNotifications;
 import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +24,7 @@ public class MembershipService {
     protected final EventLogService eventLogService;
     protected final MembershipNotifications membershipNotifications;
 
-    @Autowired
+    @Inject
     public MembershipService(
         final AccountService accountService, 
         final AccountDetailsService accountDetailsService, 
@@ -54,7 +54,7 @@ public class MembershipService {
     @Transactional
     public void activate(Long accountId, String activationToken) throws InvalidTokenException {
         if (!accountService.exists(accountId)) {
-            throw new ResourceNotFoundException(String.format("account[%s] not found", accountId));
+            throw new PersistentResourceNotFoundException(String.format("account[%s] not found", accountId));
         }
         
         try {
@@ -73,7 +73,7 @@ public class MembershipService {
     @Transactional(readOnly = true)
     public void newPassword(Long accountId) {
         if (!accountService.exists(accountId)) {
-            throw new ResourceNotFoundException(String.format("Account[%s] not found", accountId));
+            throw new PersistentResourceNotFoundException(String.format("Account[%s] not found", accountId));
         }
         
         eventLogService.create(new EventLog("daeliin.membership.newpassword.event", LocalDateTime.now()));
@@ -85,7 +85,7 @@ public class MembershipService {
     @Transactional
     public void resetPassword(Long accountId, String resetPasswordToken, String newPassword) throws InvalidTokenException {
         if (!accountService.exists(accountId)) {
-            throw new ResourceNotFoundException(String.format("Account[%s] not found", accountId));
+            throw new PersistentResourceNotFoundException(String.format("Account[%s] not found", accountId));
         }
         
         try {

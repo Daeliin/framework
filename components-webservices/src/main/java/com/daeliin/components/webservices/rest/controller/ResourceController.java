@@ -6,7 +6,7 @@ import com.daeliin.components.webservices.exception.PageRequestException;
 import java.io.Serializable;
 import java.util.List;
 import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -36,7 +36,7 @@ public abstract class ResourceController<E extends Persistable, ID extends Seria
     public static final String DEFAULT_PAGE_DIRECTION = "asc";
     public static final String DEFAULT_PAGE_PROPERTIES = "id";
     
-    @Autowired
+    @Inject
     protected S service;
 
     /**

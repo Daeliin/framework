@@ -1,6 +1,5 @@
 package com.daeliin.components.domain.pagination;
 
-import com.daeliin.components.domain.pagination.Sort;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,6 +53,15 @@ public final class SortTest {
     public void shouldBeComparedOnProperty() {
         Sort sort1 = new Sort("id", Sort.Direction.ASC);
         Sort sort2 = new Sort("name", Sort.Direction.DESC);
+
+        assertThat(sort1.compareTo(sort2)).isNegative();
+        assertThat(sort2.compareTo(sort1)).isPositive();
+    }
+
+    @Test
+    public void shouldBeComparedOnDirection_whenPropertyAreEqual() {
+        Sort sort1 = new Sort("id", Sort.Direction.ASC);
+        Sort sort2 = new Sort("id", Sort.Direction.DESC);
 
         assertThat(sort1.compareTo(sort2)).isNegative();
         assertThat(sort2.compareTo(sort1)).isPositive();

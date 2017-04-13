@@ -7,7 +7,7 @@ import org.springframework.util.CollectionUtils;
 
 /**
  * Represents a mail.
- * @see com.daeliin.framework.core.mail.Mail.MailBuilder
+ * @see com.daeliin.components.core.mail.Mail.MailBuilder
  */
 public class Mail {
     

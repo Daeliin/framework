@@ -1,6 +1,5 @@
 package com.daeliin.components.domain.pagination;
 
-import com.daeliin.components.domain.pagination.Page;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
