@@ -12,17 +12,17 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 @ContextConfiguration(classes = Application.class)
 public class AccountDetailsServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
     
-    @Autowired
+    @Inject
     private AccountRepository accountRepository;
     
-    @Autowired
+    @Inject
     private AccountDetailsService accountDetailsService;
     
     @Test

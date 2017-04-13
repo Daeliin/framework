@@ -5,7 +5,7 @@ import java.util.Map;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -28,7 +28,7 @@ public class Mails {
     private final TemplateEngine templateEngine;
     private final JavaMailSenderImpl mailSender;
 
-    @Autowired
+    @Inject
     public Mails(final TemplateEngine templateEngine, final JavaMailSenderImpl mailSender) {
         this.templateEngine = templateEngine;
         this.mailSender = mailSender;

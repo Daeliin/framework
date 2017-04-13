@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Profile;
@@ -23,10 +23,10 @@ public class MailingMembershipNotifications implements MembershipNotifications {
     @Value("${daeliin.mail.instantiate}")
     private String from;
     
-    @Autowired
+    @Inject
     protected Mails mails;
 
-    @Autowired
+    @Inject
     protected MessageSource messages;
     
     @Async

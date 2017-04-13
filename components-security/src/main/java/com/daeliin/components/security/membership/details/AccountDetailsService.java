@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,10 +23,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountDetailsService implements UserDetailsService {
     
-    @Autowired
+    @Inject
     private AccountRepository accountRepository;
     
-    @Autowired
+    @Inject
     private AccountPermissionRepository permissionRepository;
     
     @Override

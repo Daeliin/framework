@@ -17,7 +17,7 @@
 //import static org.junit.Assert.assertTrue;
 //import static org.junit.Assert.fail;
 //import org.junit.Test;
-//import org.springframework.beans.factory.annotation.Autowired;
+//import javax.inject.Inject;
 //import org.springframework.dao.EmptyResultDataAccessException;
 //import org.springframework.dao.InvalidDataAccessApiUsageException;
 //import org.springframework.data.domain.Page;
@@ -30,7 +30,7 @@
 //@ContextConfiguration(classes = Application.class)
 //public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
 //
-//    @Autowired
+//    @Inject
 //    private UserRepository repository;
 //
 //    @Test

@@ -1,7 +1,7 @@
 package com.daeliin.components.test;
 
 import org.junit.Before;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.security.test.context.support.WithSecurityContextTestExecutionListener;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import org.springframework.test.context.TestExecutionListeners;
@@ -18,7 +18,7 @@ import org.springframework.web.context.WebApplicationContext;
 @WebAppConfiguration
 public abstract class SecuredIntegrationTest extends AbstractTransactionalJUnit4SpringContextTests {
     
-    @Autowired 
+    @Inject
     protected WebApplicationContext webApplicationContext;
     
     protected MockMvc mockMvc;

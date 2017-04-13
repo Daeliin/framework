@@ -11,7 +11,7 @@ import com.daeliin.components.security.membership.details.AccountDetailsService;
 import com.daeliin.components.security.membership.notifications.MembershipNotifications;
 import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +24,7 @@ public class MembershipService {
     protected final EventLogService eventLogService;
     protected final MembershipNotifications membershipNotifications;
 
-    @Autowired
+    @Inject
     public MembershipService(
         final AccountService accountService, 
         final AccountDetailsService accountDetailsService, 

@@ -14,16 +14,16 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.test.context.ContextConfiguration;
 
 @ContextConfiguration(classes = Application.class)
 public class MembershipServiceTest extends IntegrationTest {
     
-    @Autowired
+    @Inject
     private MembershipService membershipService;
     
-    @Autowired
+    @Inject
     private AccountRepository accountRepository;
     
     

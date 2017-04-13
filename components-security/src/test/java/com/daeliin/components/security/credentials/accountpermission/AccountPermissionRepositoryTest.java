@@ -11,20 +11,20 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 @ContextConfiguration(classes = Application.class)
 public class AccountPermissionRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
     
-    @Autowired
+    @Inject
     private AccountRepository accountRepository;
     
-    @Autowired
+    @Inject
     private PermissionRepository permissionRepository;
     
-    @Autowired
+    @Inject
     private AccountPermissionRepository accountPermissionRepository;
     
     @Test
