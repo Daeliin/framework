@@ -50,6 +50,12 @@ public final class Sort implements Comparable<Sort> {
             return 0;
         }
 
-        return property.compareTo(other.property);
+        int propertyCompare = property.compareTo(other.property);
+
+        if (propertyCompare != 0) {
+            return propertyCompare;
+        }
+
+        return direction.compareTo(other.direction);
     }
 }

@@ -4,6 +4,7 @@ import com.daeliin.components.core.Application;
 import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
 import com.daeliin.components.domain.pagination.Sort;
+import com.google.common.collect.Sets;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
@@ -28,7 +29,7 @@ public class UUIDEntityRepositoryTest extends AbstractTransactionalJUnit4SpringC
 
     @Test
     public void test2() {
-        PageRequest pageRequest = new PageRequest(0, 5, Arrays.asList(new Sort("creationDate"), new Sort("descriptionKey", Sort.Direction.DESC)));
+        PageRequest pageRequest = new PageRequest(0, 5, Sets.newHashSet(new Sort("creationDate"), new Sort("descriptionKey", Sort.Direction.DESC)));
         Page<EventLog> eventLogs = eventLogRepository.findAll(pageRequest);
 
         assertThat(eventLogs.items).isNotEmpty();

@@ -178,31 +178,29 @@ public abstract class ResourceRepository<E extends PersistentResource, B,  C ext
     private OrderSpecifier[] computeOrders(PageRequest pageRequest) {
         List<OrderSpecifier> orders = new ArrayList<>();
 
-        List<Sort> sorts = pageRequest.sorts;
         List<Path> sortablePaths =
                 rowPath.getColumns()
                         .stream()
                         .filter(path -> path instanceof ComparableExpressionBase)
                         .collect(toList());
 
-        for (Sort sort : sorts) {
-            for (Path<?> path : sortablePaths) {
-                String columnName = path.getMetadata().getName();
+        for (Path<?> path : sortablePaths) {
+            String columnName = path.getMetadata().getName();
 
-                if (sort.property.equalsIgnoreCase(columnName)) {
-                    ComparableExpressionBase comparableExpressionBase = (ComparableExpressionBase)path;
+            if (pageRequest.sorts.containsKey(columnName)) {
+                ComparableExpressionBase comparableExpressionBase = (ComparableExpressionBase)path;
+                Sort.Direction direction = pageRequest.sorts.get(columnName);
 
-                    switch(sort.direction) {
-                        case ASC: orders.add(comparableExpressionBase.asc());
-                            break;
-                        case DESC: orders.add(comparableExpressionBase.desc());
-                            break;
-                        default: orders.add(comparableExpressionBase.asc());
-                            break;
-                    }
-
-                    break;
+                switch(direction) {
+                    case ASC: orders.add(comparableExpressionBase.asc());
+                        break;
+                    case DESC: orders.add(comparableExpressionBase.desc());
+                        break;
+                    default: orders.add(comparableExpressionBase.asc());
+                        break;
                 }
+
+                break;
             }
         }
 
