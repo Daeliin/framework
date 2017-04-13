@@ -28,11 +28,11 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
     @Test
     public void shouldPersistsAResource() {
         UUIDEntity newUuuidEntity = new UUIDEntity(100L, UUID.randomUUID().toString(), LocalDateTime.now(), "label100");
-        long uuidEntityCountBeforeCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+        int uuidEntityCountBeforeCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
 
         UUIDEntity persistedUuidEntity = repository.findOne(repository.save(newUuuidEntity).id());
 
-        long uuidEntityCountAfterCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+        int uuidEntityCountAfterCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
 
         assertThat(uuidEntityCountAfterCreate).isEqualTo(uuidEntityCountBeforeCreate + 1);
         assertThat(persistedUuidEntity).isEqualTo(newUuuidEntity);
@@ -53,11 +53,11 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
         UUIDEntity newUuidEntity2 = new UUIDEntity(102L, UUID.randomUUID().toString(), LocalDateTime.now(), "label102");
         List<UUIDEntity> newUuidEntities = Arrays.asList(newUuidEntity1, newUuidEntity2);
 
-        long uuidEntityCountBeforeCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+        int uuidEntityCountBeforeCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
 
         repository.save(newUuidEntities);
 
-        long uuidEntityCountAterCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+        int uuidEntityCountAterCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
 
         assertThat(uuidEntityCountAterCreate).isEqualTo(uuidEntityCountBeforeCreate + newUuidEntities.size());
     }
@@ -92,19 +92,26 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
     public void shouldCountResources() {
         assertThat(repository.count()).isEqualTo(4);
     }
-//
-//    @Test
-//    public void findOne_existingResourceId_returnsResource() {
-//        UUIDEntity UUIDEntity = repository.findOne(1L);
-//
-//        assertEquals(UUIDEntity.getName(), "Tom");
-//    }
-//
-//    @Test
-//    public void findOne_nonExistingResourceId_returnsNull() {
-//        assertNull(repository.findOne(-1L));
-//    }
-//
+
+    @Test
+    public void shouldFindResource() {
+        UUIDEntity uuidEntity1 = UUIDEntityFixtures.uuidEntity1();
+
+        UUIDEntity foundUuidEntity = repository.findOne(uuidEntity1.id());
+
+        assertThat(foundUuidEntity).isEqualTo(UUIDEntityFixtures.uuidEntity1());
+    }
+
+    @Test
+    public void shouldReturnNull_whenFindingNonExistingResource() {
+        assertThat(repository.findOne(-1L)).isNull();
+    }
+
+    @Test
+    public void shouldReturnNull_whenFindingNull() {
+        assertThat(repository.findOne(null)).isNull();
+    }
+
 //    @Test
 //    public void findAll_returnsAllResources() {
 //        List<UUIDEntity> UUIDEntitys = (List<UUIDEntity>)repository.findAll();
@@ -190,44 +197,59 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 //
 //    @Test
 //    public void delete_existingResourceId_deletesResource() {
-//        long UUIDEntityCountBeforeDelete = repository.count();
+//        int UUIDEntityCountBeforeDelete = repository.count();
 //
 //        repository.delete(1L);
 //
-//        long UUIDEntityCountAfterDelete = repository.count();
+//        int UUIDEntityCountAfterDelete = repository.count();
 //
 //        assertEquals(UUIDEntityCountAfterDelete, UUIDEntityCountBeforeDelete - 1);
 //        assertNull(repository.findOne(1L));
 //    }
 //
-//    @Test(expected = EmptyResultDataAccessException.class)
-//    public void delete_nonExistingResourceId_throwsEmptyResultDataAccessException() {
-//        repository.delete(-1L);
-//    }
-//
-//    @Test
-//    public void delete_nonExistingResourceId_doesntDeleteAnyResource() {
-//        long UUIDEntityCountBeforeDelete = repository.count();
-//
-//        try {
-//            repository.delete(-1L);
-//        } catch (EmptyResultDataAccessException e) {
-//            long UUIDEntityCountAfterDelete = repository.count();
-//
-//            assertEquals(UUIDEntityCountAfterDelete, UUIDEntityCountBeforeDelete);
-//            return;
-//        }
-//
-//        fail();
-//    }
-//
+    @Test
+    public void shouldReturnFalse_whenDeletingNonExistingResource() {
+        assertThat(repository.delete(-1L)).isFalse();
+    }
+
+    @Test
+    public void shouldReturnFalse_whenDeletingNullId() {
+        Long nullId = null;
+
+        assertThat(repository.delete(nullId)).isFalse();
+    }
+
+    @Test
+    public void shouldNotDeleteAnyResources_whenDeletingNonExistingResource() {
+        int uuidEntityCountBeforeDelete = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+
+        repository.delete(-1L);
+
+        int uuidEntityCountAfterDelete = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+
+        assertThat(uuidEntityCountBeforeDelete).isEqualTo(uuidEntityCountAfterDelete);
+    }
+
+    @Test
+    public void shouldNotDeleteAnyResources_whenDeletingNullId() {
+        Long nullId = null;
+        int uuidEntityCountBeforeDelete = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+
+        repository.delete(nullId);
+
+        int uuidEntityCountAfterDelete = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+
+        assertThat(uuidEntityCountBeforeDelete).isEqualTo(uuidEntityCountAfterDelete);
+    }
+
+
 //    @Test
 //    public void delete_existingResource_deletesResource() {
-//        long UUIDEntityCountBeforeDelete = repository.count();
+//        int UUIDEntityCountBeforeDelete = repository.count();
 //
 //        repository.delete(repository.findOne(1L));
 //
-//        long UUIDEntityCountAfterDelete = repository.count();
+//        int UUIDEntityCountAfterDelete = repository.count();
 //
 //        assertEquals(UUIDEntityCountAfterDelete, UUIDEntityCountBeforeDelete - 1);
 //        assertNull(repository.findOne(1L));
@@ -235,11 +257,11 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 //
 //    @Test
 //    public void delete_nonExistingResource_doesntDeleteAnyResource() {
-//        long UUIDEntityCountBeforeDelete = repository.count();
+//        int UUIDEntityCountBeforeDelete = repository.count();
 //
 //        repository.delete(new UUIDEntity().withId(-1L).withName("nonExistingUUIDEntity"));
 //
-//        long UUIDEntityCountAfterDelete = repository.count();
+//        int UUIDEntityCountAfterDelete = repository.count();
 //
 //        assertEquals(UUIDEntityCountAfterDelete, UUIDEntityCountBeforeDelete);
 //    }
@@ -247,11 +269,11 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 //    @Test
 //    public void delete_multipleExistingResources_deletesResources() {
 //        List<UUIDEntity> UUIDEntitys = (List<UUIDEntity>)repository.findAll(Arrays.asList(1L, 2L));
-//        long UUIDEntityCountBeforeDelete = repository.count();
+//        int UUIDEntityCountBeforeDelete = repository.count();
 //
 //        repository.delete(UUIDEntitys);
 //
-//        long UUIDEntityCountAfterDelete = repository.count();
+//        int UUIDEntityCountAfterDelete = repository.count();
 //
 //        assertEquals(UUIDEntityCountAfterDelete, UUIDEntityCountBeforeDelete - UUIDEntitys.size());
 //        UUIDEntitys.forEach((UUIDEntity UUIDEntity) -> assertNull(repository.findOne(UUIDEntity.getId())));
@@ -264,11 +286,11 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 //                new UUIDEntity().withId(-1L).withName("nonExistingUUIDEntity1"),
 //                new UUIDEntity().withId(-2L).withName("nonExistingUUIDEntity2"));
 //
-//        long UUIDEntityCountBeforeDelete = repository.count();
+//        int UUIDEntityCountBeforeDelete = repository.count();
 //
 //        repository.delete(UUIDEntitys);
 //
-//        long UUIDEntityCountAfterDelete = repository.count();
+//        int UUIDEntityCountAfterDelete = repository.count();
 //
 //        assertEquals(UUIDEntityCountAfterDelete, UUIDEntityCountBeforeDelete);
 //    }
@@ -280,20 +302,22 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 //                new UUIDEntity().withId(-1L).withName("nonExistingUUIDEntity1"),
 //                new UUIDEntity().withId(1L).withName("Tom"));
 //
-//        long UUIDEntityCountBeforeDelete = repository.count();
+//        int UUIDEntityCountBeforeDelete = repository.count();
 //
 //        repository.delete(UUIDEntitys);
 //
-//        long UUIDEntityCountAfterDelete = repository.count();
+//        int UUIDEntityCountAfterDelete = repository.count();
 //
 //        assertEquals(UUIDEntityCountAfterDelete, UUIDEntityCountBeforeDelete - 1);
 //        assertNull(repository.findOne(1L));
 //    }
 //
-//    @Test
-//    public void deleteAll_deletesAllResources() {
-//        repository.deleteAll();
-//
-//        assertEquals(repository.count(), 0);
-//    }
+    @Test
+    public void shouldDeleteAllResources() {
+        repository.deleteAll();
+
+        int uuidEntityCountAfterDelete = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+
+        assertThat(uuidEntityCountAfterDelete).isEqualTo(0);
+    }
 }
