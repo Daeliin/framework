@@ -25,6 +25,13 @@ public final class EventLogTest {
     }
 
     @Test
+    public void shouldPrintsItsIdUuidAndCreationDate() {
+        EventLog eventLog = new EventLog(1L, UUID.randomUUID().toString(), LocalDateTime.now(), "descriptionKey");
+
+        assertThat(eventLog.toString()).contains(String.valueOf(eventLog.descriptionKey));
+    }
+
+    @Test
     public void shouldBeComparedOnCreationDate() {
         LocalDateTime creationDate1 = LocalDateTime.now();
         LocalDateTime creationDate2 = LocalDateTime.now().plus(10, ChronoUnit.SECONDS);
@@ -32,7 +39,7 @@ public final class EventLogTest {
         EventLog eventLog1 = new EventLog(1L, UUID.randomUUID().toString(), creationDate1, "descriptionKey");
         EventLog eventLog2 = new EventLog(2L, UUID.randomUUID().toString(), creationDate2, "descriptionKey");
 
-        Assertions.assertThat(eventLog1.compareTo(eventLog2)).isNegative();
-        Assertions.assertThat(eventLog2.compareTo(eventLog1)).isPositive();
+        assertThat(eventLog1.compareTo(eventLog2)).isNegative();
+        assertThat(eventLog2.compareTo(eventLog1)).isPositive();
     }
 }

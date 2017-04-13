@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class UUIDPersistentResourceTest {
+public class PersistentResourceTest {
     
     private static final Long ID = 1L;
     private static final String UUID = "c4726093-fa44-4b4c-8108-3fdcacffabd6";
