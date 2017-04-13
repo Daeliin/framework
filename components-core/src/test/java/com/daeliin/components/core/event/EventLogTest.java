@@ -1,6 +1,5 @@
 package com.daeliin.components.core.event;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import java.time.LocalDateTime;

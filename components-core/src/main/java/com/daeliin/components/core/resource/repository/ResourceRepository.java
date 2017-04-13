@@ -2,7 +2,6 @@ package com.daeliin.components.core.resource.repository;
 
 import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
-import com.daeliin.components.domain.pagination.Sort;
 import com.daeliin.components.domain.resource.Conversion;
 import com.daeliin.components.domain.resource.Persistable;
 import com.daeliin.components.domain.resource.PersistentResource;
@@ -10,14 +9,14 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.querydsl.core.types.dsl.NumberPath;
-import com.querydsl.sql.Configuration;
 import com.querydsl.sql.RelationalPathBase;
 import com.querydsl.sql.SQLQueryFactory;
-import com.querydsl.sql.SQLTemplates;
 import com.querydsl.sql.dml.SQLInsertClause;
 import com.querydsl.sql.dml.SQLUpdateClause;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.sql.DataSource;
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -25,15 +24,18 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
+@Transactional
+@Component
 public abstract class ResourceRepository<E extends PersistentResource, B,  C extends Conversion<E, B>> implements PagingRepository<E> {
 
-    protected final SQLQueryFactory queryFactory;
+    @Inject
+    protected SQLQueryFactory queryFactory;
+
     protected final Conversion<E, B> conversion;
     protected final RelationalPathBase<B> rowPath;
     protected final NumberPath<Long> idPath;
 
-    protected ResourceRepository(DataSource dataSource, Conversion<E, B> conversion, RelationalPathBase<B> rowPath, NumberPath<Long> idPath) {
-        this.queryFactory = new SQLQueryFactory(new Configuration(SQLTemplates.DEFAULT), dataSource);
+    protected ResourceRepository(Conversion<E, B> conversion, RelationalPathBase<B> rowPath, NumberPath<Long> idPath) {
         this.conversion = conversion;
         this.rowPath = rowPath;
         this.idPath = idPath;
@@ -43,6 +45,7 @@ public abstract class ResourceRepository<E extends PersistentResource, B,  C ext
     public E save(E resource) {
         if (exists(resource.id())) {
             queryFactory.update(rowPath)
+                    .where(idPath.eq(resource.id()))
                     .populate(conversion.map(resource))
                     .execute();
         } else {
@@ -61,14 +64,14 @@ public abstract class ResourceRepository<E extends PersistentResource, B,  C ext
         boolean insertBatchShouldBeExecuted = resourceIds.size() > persistedResourceIds.size();
         boolean updateBatchShouldBeExecuted = persistedResourceIds.size() > 0;
 
-        SQLInsertClause insertBatch = queryFactory.insert(rowPath).addBatch();
-        SQLUpdateClause updateBatch = queryFactory.update(rowPath).addBatch();
+        SQLInsertClause insertBatch = queryFactory.insert(rowPath);
+        SQLUpdateClause updateBatch = queryFactory.update(rowPath);
 
-        resources.forEach(eventLog -> {
-            if (persistedResourceIds.contains(eventLog.id())) {
-                updateBatch.populate(conversion.map(eventLog));
+        resources.forEach(resource -> {
+            if (persistedResourceIds.contains(resource.id())) {
+                updateBatch.populate(conversion.map(resource)).addBatch();
             } else {
-                insertBatch.populate(conversion.map(eventLog));
+                insertBatch.populate(conversion.map(resource)).addBatch();
             }
         });
 
@@ -83,8 +86,13 @@ public abstract class ResourceRepository<E extends PersistentResource, B,  C ext
         return resources;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public E findOne(Long resourceId) {
+        if (resourceId == null) {
+            return null;
+        }
+
         B persistedResource = queryFactory.select(rowPath)
                 .from(rowPath)
                 .where(idPath.eq(resourceId))
@@ -93,6 +101,7 @@ public abstract class ResourceRepository<E extends PersistentResource, B,  C ext
         return conversion.instantiate(persistedResource);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Collection<E> findAll(Collection<Long> resourceIds) {
         return queryFactory.select(rowPath)
@@ -104,6 +113,7 @@ public abstract class ResourceRepository<E extends PersistentResource, B,  C ext
                 .collect(toList());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Page<E> findAll(PageRequest pageRequest) {
         long totalElements = count();
@@ -122,6 +132,7 @@ public abstract class ResourceRepository<E extends PersistentResource, B,  C ext
         return new Page(collect, totalElements, totalPages);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Collection<E> findAll() {
         return queryFactory.select(rowPath)
@@ -132,14 +143,20 @@ public abstract class ResourceRepository<E extends PersistentResource, B,  C ext
                 .collect(toList());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public boolean exists(Long resourceId) {
+        if (resourceId == null) {
+            return false;
+        }
+
         return queryFactory.select(idPath)
                 .from(rowPath)
                 .where(idPath.eq(resourceId))
-                .fetch() != null;
+                .fetchOne() != null;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public long count() {
         return queryFactory.select(idPath)
@@ -149,6 +166,10 @@ public abstract class ResourceRepository<E extends PersistentResource, B,  C ext
 
     @Override
     public boolean delete(Long resourceId) {
+        if (resourceId == null) {
+            return false;
+        }
+
         return queryFactory.delete(rowPath)
                 .where(idPath.eq(resourceId))
                 .execute() == 1;
@@ -189,15 +210,19 @@ public abstract class ResourceRepository<E extends PersistentResource, B,  C ext
 
             if (pageRequest.sorts.containsKey(columnName)) {
                 ComparableExpressionBase comparableExpressionBase = (ComparableExpressionBase)path;
-                Sort.Direction direction = pageRequest.sorts.get(columnName);
 
-                switch(direction) {
-                    case ASC: orders.add(comparableExpressionBase.asc());
-                        break;
-                    case DESC: orders.add(comparableExpressionBase.desc());
-                        break;
-                    default: orders.add(comparableExpressionBase.asc());
-                        break;
+                if (pageRequest.sorts.containsKey(columnName)) {
+                    switch (pageRequest.sorts.get(columnName)) {
+                        case ASC:
+                            orders.add(comparableExpressionBase.asc());
+                            break;
+                        case DESC:
+                            orders.add(comparableExpressionBase.desc());
+                            break;
+                        default:
+                            orders.add(comparableExpressionBase.asc());
+                            break;
+                    }
                 }
 
                 break;

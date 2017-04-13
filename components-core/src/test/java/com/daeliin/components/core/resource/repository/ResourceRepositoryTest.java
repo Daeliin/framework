@@ -1,25 +1,21 @@
 package com.daeliin.components.core.resource.repository;
 
 import com.daeliin.components.core.Application;
-import com.daeliin.components.core.fake.UUIDEntityRepository;
 import com.daeliin.components.core.fake.UUIDEntity;
+import com.daeliin.components.core.fake.UUIDEntityRepository;
 import com.daeliin.components.core.fixtures.UUIDEntityFixtures;
-import org.junit.Assert;
+import com.daeliin.components.core.sql.QUuidEntity;
+import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.mapping.PropertyReferenceException;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 import javax.inject.Inject;
-import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,12 +27,12 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void shouldPersistsAResource() {
-        UUIDEntity newUuuidEntity = new UUIDEntity(100L, UUID.randomUUID().toString(), LocalDateTime.now(), "label5");
-        long uuidEntityCountBeforeCreate = repository.count();
+        UUIDEntity newUuuidEntity = new UUIDEntity(100L, UUID.randomUUID().toString(), LocalDateTime.now(), "label100");
+        long uuidEntityCountBeforeCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
 
         UUIDEntity persistedUuidEntity = repository.findOne(repository.save(newUuuidEntity).id());
 
-        long uuidEntityCountAfterCreate = repository.count();
+        long uuidEntityCountAfterCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
 
         assertThat(uuidEntityCountAfterCreate).isEqualTo(uuidEntityCountBeforeCreate + 1);
         assertThat(persistedUuidEntity).isEqualTo(newUuuidEntity);
@@ -44,95 +40,58 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void shouldReturnThePersistedResource() {
-        UUIDEntity newUuuidEntity = new UUIDEntity(100L, UUID.randomUUID().toString(), LocalDateTime.now(), "label5");
+        UUIDEntity newUuuidEntity = new UUIDEntity(100L, UUID.randomUUID().toString(), LocalDateTime.now(), "label100");
 
         UUIDEntity returnedUuidEntity = repository.save(newUuuidEntity);
 
         assertThat(returnedUuidEntity).isEqualTo(newUuuidEntity);
     }
 
-//    @Test
-//    public void save_validResource_persistsResource() {
-//        UUIDEntity UUIDEntity = new UUIDEntity().withName("newUUIDEntity");
-//        long UUIDEntityCountBeforeCreate = repository.count();
-//
-//        UUIDEntity persistedUUIDEntity = repository.findOne(repository.save(UUIDEntity).getId());
-//
-//        long UUIDEntityCountAfterCreate = repository.count();
-//
-//        assertEquals(UUIDEntityCountAfterCreate, UUIDEntityCountBeforeCreate + 1);
-//        assertNotNull(persistedUUIDEntity);
-//        assertNotNull(persistedUUIDEntity.getId());
-//    }
-//
-//    @Test(expected = ConstraintViolationException.class)
-//    public void save_invalidResource_throwsConstraintViolationException() {
-//        UUIDEntity UUIDEntity = new UUIDEntity().withName("");
-//
-//        repository.save(UUIDEntity);
-//    }
-//
-//    @Test
-//    public void save_multipleValidResources_returnsPersistedResources() {
-//        List<UUIDEntity> UUIDEntitys =
-//            Arrays.asList(
-//                new UUIDEntity().withName("newUUIDEntity1"),
-//                new UUIDEntity().withName("newUUIDEntity2"));
-//
-//        List<UUIDEntity> returnedUUIDEntitys = (List<UUIDEntity>)repository.save(UUIDEntitys);
-//
-//        returnedUUIDEntitys.forEach(Assert::assertNotNull);
-//        returnedUUIDEntitys.forEach((UUIDEntity UUIDEntity) -> assertNotNull(UUIDEntity));
-//
-//        for (int i = 0; i < returnedUUIDEntitys.size(); i++) {
-//            assertEquals(returnedUUIDEntitys.get(i).getName(), UUIDEntitys.get(i).getName());
-//        }
-//    }
-//
-//    @Test
-//    public void save_multipleValidResources_persistsResources() {
-//        List<UUIDEntity> UUIDEntitys =
-//            Arrays.asList(
-//                new UUIDEntity().withName("newUUIDEntity1"),
-//                new UUIDEntity().withName("newUUIDEntity2"));
-//
-//        long UUIDEntityCountBeforeCreate = repository.count();
-//
-//        List<Long> persistedUUIDEntitysIds = new ArrayList<>();
-//        repository.save(UUIDEntitys).forEach(UUIDEntity -> persistedUUIDEntitysIds.add(UUIDEntity.getId()));
-//
-//        List<UUIDEntity> persistedUUIDEntitys = (List<UUIDEntity>)repository.findAll(persistedUUIDEntitysIds);
-//
-//        long UUIDEntityCountAfterCreate = repository.count();
-//
-//        assertEquals(UUIDEntityCountAfterCreate, UUIDEntityCountBeforeCreate + UUIDEntitys.size());
-//        persistedUUIDEntitys.forEach(Assert::assertNotNull);
-//        persistedUUIDEntitys.forEach((UUIDEntity UUIDEntity) -> assertNotNull(UUIDEntity));
-//
-//        for (int i = 0; i < persistedUUIDEntitys.size(); i++) {
-//            assertEquals(persistedUUIDEntitys.get(i).getName(), UUIDEntitys.get(i).getName());
-//        }
-//    }
-//
+    @Test
+    public void shouldPersistResources() {
+        UUIDEntity newUuidEntity1 = new UUIDEntity(101L, UUID.randomUUID().toString(), LocalDateTime.now(), "label101");
+        UUIDEntity newUuidEntity2 = new UUIDEntity(102L, UUID.randomUUID().toString(), LocalDateTime.now(), "label102");
+        List<UUIDEntity> newUuidEntities = Arrays.asList(newUuidEntity1, newUuidEntity2);
+
+        long uuidEntityCountBeforeCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+
+        repository.save(newUuidEntities);
+
+        long uuidEntityCountAterCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+
+        assertThat(uuidEntityCountAterCreate).isEqualTo(uuidEntityCountBeforeCreate + newUuidEntities.size());
+    }
+
+    @Test
+    public void shouldReturnThePersistedResources() {
+        UUIDEntity newUuidEntity1 = new UUIDEntity(101L, UUID.randomUUID().toString(), LocalDateTime.now(), "label101");
+        UUIDEntity newUuidEntity2 = new UUIDEntity(102L, UUID.randomUUID().toString(), LocalDateTime.now(), "label102");
+        List<UUIDEntity> newUuidEntities = Arrays.asList(newUuidEntity1, newUuidEntity2);
+
+        List<UUIDEntity> returnedUuidEntities = (List<UUIDEntity>)repository.save(newUuidEntities);
+
+        assertThat(returnedUuidEntities).containsOnly(newUuidEntity1, newUuidEntity2);
+    }
+
     @Test
     public void shouldCheckIfResourceExists() {
         assertThat(repository.exists(UUIDEntityFixtures.uuidEntity1().id())).isTrue();
     }
 
     @Test
-    public void shouldCheckIfResourceDoesntExist() {
+    public void shouldCheckIfResourceDoesntExist_whenIdDoesntExist() {
         assertThat(repository.exists(-1L)).isFalse();
     }
-//
-//    @Test(expected = InvalidDataAccessApiUsageException.class)
-//    public void exists_nullResourceId_throwsInvalidDataAccessApiUsageException() {
-//        repository.exists(null);
-//    }
-//
-//    @Test
-//    public void count_returnsResourceCount() {
-//        assertEquals(repository.count(), 22);
-//    }
+
+    @Test
+    public void shouldCheckIfResourceDoesntExist_whenIdIsNull() {
+        assertThat(repository.exists(null)).isFalse();
+    }
+
+    @Test
+    public void shouldCountResources() {
+        assertThat(repository.count()).isEqualTo(4);
+    }
 //
 //    @Test
 //    public void findOne_existingResourceId_returnsResource() {

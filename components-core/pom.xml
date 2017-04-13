@@ -44,6 +44,10 @@
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-sql</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-sql-spring</artifactId>
+        </dependency>
 
         <!-- Caffeine -->
         <dependency>

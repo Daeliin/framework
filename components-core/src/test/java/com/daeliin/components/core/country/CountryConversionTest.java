@@ -1,10 +1,7 @@
 package com.daeliin.components.core.country;
 
-import com.daeliin.components.core.data.CountryFixtures;
-import com.daeliin.components.core.data.EventLogFixtures;
-import com.daeliin.components.core.event.EventLog;
+import com.daeliin.components.core.fixtures.CountryFixtures;
 import com.daeliin.components.core.sql.BCountry;
-import com.daeliin.components.core.sql.BEventLog;
 import org.junit.Test;
 
 import java.sql.Timestamp;

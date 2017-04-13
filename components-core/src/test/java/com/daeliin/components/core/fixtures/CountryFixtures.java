@@ -1,4 +1,4 @@
-package com.daeliin.components.core.data;
+package com.daeliin.components.core.fixtures;
 
 import com.daeliin.components.core.country.Country;
 
