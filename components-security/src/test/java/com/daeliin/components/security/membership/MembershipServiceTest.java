@@ -1,6 +1,6 @@
 package com.daeliin.components.security.membership;
 
-import com.daeliin.components.core.exception.ResourceNotFoundException;
+import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
 import com.daeliin.components.security.Application;
 import com.daeliin.components.security.credentials.account.Account;
 import com.daeliin.components.security.credentials.account.AccountRepository;
@@ -64,7 +64,7 @@ public class MembershipServiceTest extends IntegrationTest {
         assertTrue(StringUtils.isNotBlank(createdAccount.getToken()));
     }
     
-    @Test(expected = ResourceNotFoundException.class)
+    @Test(expected = PersistentResourceNotFoundException.class)
     public void activate_nonExistentAccountId_throwsException() throws InvalidTokenException {
         membershipService.activate(-1L, "token");
     }
@@ -113,7 +113,7 @@ public class MembershipServiceTest extends IntegrationTest {
         assertNotEquals(userDetails.getToken(), activationToken);
     }
     
-    @Test(expected = ResourceNotFoundException.class)
+    @Test(expected = PersistentResourceNotFoundException.class)
     public void newPassword_nonExistentAccountId_returnsHttpNotFound() throws Exception {
         membershipService.newPassword(-1L);
     }
@@ -130,7 +130,7 @@ public class MembershipServiceTest extends IntegrationTest {
     }
 
         
-    @Test(expected = ResourceNotFoundException.class)
+    @Test(expected = PersistentResourceNotFoundException.class)
     public void resetPassword_nonExistentAccountId_throwsException() throws Exception {
         membershipService.resetPassword(-1L, "token", "newPassword");
     }

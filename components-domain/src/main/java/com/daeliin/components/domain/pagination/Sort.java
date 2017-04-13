@@ -4,8 +4,14 @@ import com.google.common.base.MoreObjects;
 
 import java.util.Objects;
 
+/**
+ * A direction for a property.
+ */
 public final class Sort implements Comparable<Sort> {
 
+    /**
+     * Direction of sort, either ascending or descending.
+     */
     public enum Direction {
         ASC, DESC
     }

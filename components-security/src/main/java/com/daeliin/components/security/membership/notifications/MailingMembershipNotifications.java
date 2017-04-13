@@ -2,7 +2,7 @@ package com.daeliin.components.security.membership.notifications;
 
 import com.daeliin.components.core.mail.Mail;
 import com.daeliin.components.core.mail.MailBuildingException;
-import com.daeliin.components.core.mail.Mails;
+import com.daeliin.components.core.mail.Mailing;
 import com.daeliin.components.security.credentials.account.Account;
 import java.util.HashMap;
 import java.util.Locale;
@@ -24,7 +24,7 @@ public class MailingMembershipNotifications implements MembershipNotifications {
     private String from;
     
     @Inject
-    protected Mails mails;
+    protected Mailing mails;
 
     @Inject
     protected MessageSource messages;

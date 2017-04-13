@@ -4,6 +4,10 @@ import com.google.common.base.MoreObjects;
 
 import java.util.*;
 
+/**
+ * The request for a page, with a zero based index.
+ * Page index, size, and sorts to be applied.
+ */
 public final class PageRequest implements Comparable<PageRequest> {
 
     public static final int DEFAULT_INDEX = 0;
