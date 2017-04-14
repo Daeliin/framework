@@ -25,7 +25,7 @@ public interface PagingService<E> {
      * @param resources resources to create
      * @return created resources
      */
-    Iterable<E> create(Collection<E> resources);
+    Collection<E> create(Collection<E> resources);
 
     /**
      * Updates a resource by id.
@@ -40,7 +40,7 @@ public interface PagingService<E> {
      * @param resources resources to update
      * @return updated resources
      */
-    Iterable<E> update(Collection<E> resources);
+    Collection<E> update(Collection<E> resources);
 
     /**
      * Finds a resource by its id.
@@ -53,14 +53,14 @@ public interface PagingService<E> {
      * Finds every resources.
      * @return every resources
      */
-    Iterable<E> findAll();
+    Collection<E> findAll();
 
     /**
      * Finds multiple resources by their ids.
      * @param resourceIds resources ids
      * @return resources
      */
-    Iterable<E> findAll(Collection<Long> resourceIds);
+    Collection<E> findAll(Collection<Long> resourceIds);
 
     /**
      * Finds a page of resources.
@@ -86,22 +86,22 @@ public interface PagingService<E> {
      * Delete a resource by its id.
      * @param resourceId id of the resource to delete
      */
-    void delete(Long resourceId);
+    boolean delete(Long resourceId);
 
     /**
      * Delete resources by their ids.
      * @param resourceIds resources ids
      */
-    void delete(Collection<Long> resourceIds);
+    boolean delete(Collection<Long> resourceIds);
 
     /**
      * Deletes a resource.
      * @param resource resource to delete
      */
-    void delete(E resource);
+    boolean delete(E resource);
 
     /**
      * Deletes all resources.
      */
-    void deleteAll();
+    boolean deleteAll();
 }

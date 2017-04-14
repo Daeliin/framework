@@ -16,7 +16,6 @@ import java.util.Collection;
  * @param <E> resource type
  * @param <R> resource repository
  */
-@Service
 public abstract class ResourceService<E extends PersistentResource, R extends PagingRepository<E>> implements PagingService<E> {
 
     private static final String MESSAGE_RESOURCE_NOT_FOUND = "Resource was not found";
@@ -40,7 +39,7 @@ public abstract class ResourceService<E extends PersistentResource, R extends Pa
      * @return created resources
      */
     @Override
-    public Iterable<E> create(Collection<E> resources) {
+    public Collection<E> create(Collection<E> resources) {
         return repository.save(resources);
     }
 
@@ -93,7 +92,7 @@ public abstract class ResourceService<E extends PersistentResource, R extends Pa
      * @return every resources
      */
     @Override
-    public Iterable<E> findAll() {
+    public Collection<E> findAll() {
         return repository.findAll();
     }
 
@@ -113,7 +112,7 @@ public abstract class ResourceService<E extends PersistentResource, R extends Pa
      * @return resources
      */
     @Override
-    public Iterable<E> findAll(Collection<Long> resourcesIds) {
+    public Collection<E> findAll(Collection<Long> resourcesIds) {
         return repository.findAll(resourcesIds);
     }
 
@@ -139,22 +138,21 @@ public abstract class ResourceService<E extends PersistentResource, R extends Pa
      * @return updated resources
      */
     @Override
-    public Iterable<E> update(Collection<E> resources) {
+    public Collection<E> update(Collection<E> resources) {
         return repository.save(resources);
     }
 
     /**
      * Delete a resource by its id.
      * @param id id of the resource to delete
-     * @throws PersistentResourceNotFoundException if the resource is not found
      */
     @Override
-    public void delete(Long id) {
-        if (!repository.exists(id)) {
-            throw new PersistentResourceNotFoundException(MESSAGE_RESOURCE_NOT_FOUND);
+    public boolean delete(Long id) {
+        if (id == null) {
+            return false;
         }
 
-        repository.delete(id);
+        return repository.delete(id);
     }
 
     /**
@@ -162,10 +160,12 @@ public abstract class ResourceService<E extends PersistentResource, R extends Pa
      * @param resourceIds resources ids
      */
     @Override
-    public void delete(Collection<Long> resourceIds) {
-        if (!CollectionUtils.isEmpty(resourceIds)) {
-            repository.delete(resourceIds);
+    public boolean delete(Collection<Long> resourceIds) {
+        if (CollectionUtils.isEmpty(resourceIds)) {
+            return false;
         }
+
+        return repository.delete(resourceIds);
     }
 
     /**
@@ -173,15 +173,19 @@ public abstract class ResourceService<E extends PersistentResource, R extends Pa
      * @param resource resource to delete
      */
     @Override
-    public void delete(E resource) {
-        repository.delete(resource.id());
+    public boolean delete(E resource) {
+        if (resource == null ){
+            return false;
+        }
+
+        return repository.delete(resource.id());
     }
 
     /**
      * Deletes all resources.
      */
     @Override
-    public void deleteAll() {
-        repository.deleteAll();
+    public boolean deleteAll() {
+        return repository.deleteAll();
     }
 }
