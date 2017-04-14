@@ -5,17 +5,17 @@ import com.daeliin.components.core.fake.UUIDEntity;
 import com.daeliin.components.core.fake.UUIDEntityRepository;
 import com.daeliin.components.core.fixtures.UUIDEntityFixtures;
 import com.daeliin.components.core.sql.QUuidEntity;
-import org.junit.Before;
+import com.daeliin.components.domain.pagination.Page;
+import com.daeliin.components.domain.pagination.PageRequest;
+import com.daeliin.components.domain.pagination.Sort;
+import com.google.common.collect.Sets;
 import org.junit.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -112,101 +112,66 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
         assertThat(repository.findOne(null)).isNull();
     }
 
-//    @Test
-//    public void findAll_returnsAllResources() {
-//        List<UUIDEntity> UUIDEntitys = (List<UUIDEntity>)repository.findAll();
-//
-//        assertEquals(UUIDEntitys.size(), repository.count());
-//    }
-//
-//    @Test
-//    public void findAll_existingResourcesIds_returnsResources() {
-//        List<Long> UUIDEntitysIds = Arrays.asList(1L, 2L);
-//        List<UUIDEntity> UUIDEntitys = (List<UUIDEntity>)repository.findAll(UUIDEntitysIds);
-//
-//        assertEquals(UUIDEntitys.size(), UUIDEntitysIds.size());
-//        UUIDEntitys.forEach((UUIDEntity UUIDEntity) -> UUIDEntitysIds.contains(UUIDEntity.getId()));
-//    }
-//
-//    @Test
-//    public void findAll_nonExistingResourcesIds_returnsNoResources() {
-//        List<UUIDEntity> UUIDEntitys = (List<UUIDEntity>)repository.findAll(Arrays.asList(-1L, -2L));
-//
-//        assertEquals(UUIDEntitys.size(), 0);
-//    }
-//
-//    @Test
-//    public void findAll_noUUIDEntitysIds_returnsNoResources() {
-//        List<UUIDEntity> UUIDEntitys = (List<UUIDEntity>)repository.findAll(new ArrayList<>());
-//
-//        assertEquals(UUIDEntitys.size(), 0);
-//    }
-//
-//    @Test
-//    public void findAll_existingAndNonExistingResourcesIds_returnsOnlyExistingResources() {
-//        List<Long> UUIDEntitysIds = Arrays.asList(1L, 2L, -1L);
-//        List<UUIDEntity> UUIDEntitys = (List<UUIDEntity>)repository.findAll(UUIDEntitysIds);
-//
-//        assertEquals(UUIDEntitys.size(), 2);
-//        UUIDEntitys.forEach((UUIDEntity UUIDEntity) -> assertNotEquals(UUIDEntity.getId().longValue(), -1L));
-//    }
-//
-//    @Test
-//    public void findAll_sortByNameAsc_returnsResourcesSortedByNameAsc() {
-//        List<UUIDEntity> UUIDEntitysSortedByNameAsc = (List<UUIDEntity>)repository.findAll();
-//        Collections.sort(UUIDEntitysSortedByNameAsc);
-//
-//        List<UUIDEntity> UUIDEntitys = (List<UUIDEntity>)repository.findAll(new Sort(Sort.Direction.ASC, "name"));
-//
-//        assertEquals(UUIDEntitys, UUIDEntitysSortedByNameAsc);
-//    }
-//
-//    @Test
-//    public void findAll_sortByNameDesc_returnsResourcesSortedByNameDesc() {
-//        List<UUIDEntity> UUIDEntitysSortedByNameDesc = (List<UUIDEntity>)repository.findAll();
-//        Collections.sort(UUIDEntitysSortedByNameDesc);
-//        Collections.reverse(UUIDEntitysSortedByNameDesc);
-//
-//        List<UUIDEntity> UUIDEntitys = (List<UUIDEntity>)repository.findAll(new Sort(Sort.Direction.DESC, "name"));
-//
-//        assertEquals(UUIDEntitys, UUIDEntitysSortedByNameDesc);
-//    }
-//
-//    @Test(expected = PropertyReferenceException.class)
-//    public void findAll_sortByInvalidProperty_throwsPropertyReferenceException() {
-//        List<UUIDEntity> UUIDEntitys = (List<UUIDEntity>)repository.findAll(new Sort(Sort.Direction.DESC, "invalidProperty"));
-//    }
-//
-//    @Test
-//    public void findAll_page1WithSize5SortedByNameDesc_returnsPage1WithSize5SortedByNameDesc() {
-//        List<UUIDEntity> UUIDEntitysPageContent = (List<UUIDEntity>)repository.findAll(Arrays.asList(21L, 6L, 12L, 19L, 17L));
-//        Collections.sort(UUIDEntitysPageContent);
-//        Collections.reverse(UUIDEntitysPageContent);
-//        Page<UUIDEntity> UUIDEntitysPage = repository.findAll(new PageRequest(1, 5, Sort.Direction.DESC, "name"));
-//
-//        assertEquals(UUIDEntitysPage.getNumber(), 1);
-//        assertEquals(UUIDEntitysPage.getSize(), 5);
-//        assertEquals(UUIDEntitysPage.getNumberOfElements(), 5);
-//        assertEquals(UUIDEntitysPage.getTotalElements(), 22);
-//        assertEquals(UUIDEntitysPage.getTotalPages(), 5);
-//        assertEquals(UUIDEntitysPage.getSort(), new Sort(Sort.Direction.DESC, "name"));
-//        assertEquals(UUIDEntitysPage.getContent().size(), 5);
-//
-//        assertEquals(UUIDEntitysPage.getContent(), UUIDEntitysPageContent);
-//    }
-//
-//    @Test
-//    public void delete_existingResourceId_deletesResource() {
-//        int UUIDEntityCountBeforeDelete = repository.count();
-//
-//        repository.delete(1L);
-//
-//        int UUIDEntityCountAfterDelete = repository.count();
-//
-//        assertEquals(UUIDEntityCountAfterDelete, UUIDEntityCountBeforeDelete - 1);
-//        assertNull(repository.findOne(1L));
-//    }
-//
+    @Test
+    public void shouldFindAllResources() {
+        Collection<UUIDEntity> uuidEntities = repository.findAll();
+
+        assertThat(uuidEntities.size()).isEqualTo(countRowsInTable(QUuidEntity.uuidEntity.getTableName()));
+    }
+
+    @Test
+    public void shouldFindResources() {
+        List<Long> uuidEntityIds = Arrays.asList(UUIDEntityFixtures.uuidEntity1().id(), UUIDEntityFixtures.uuidEntity2().id());
+        Collection<UUIDEntity> uuidEntities = repository.findAll(uuidEntityIds);
+
+        assertThat(uuidEntities).containsOnly(UUIDEntityFixtures.uuidEntity1(), UUIDEntityFixtures.uuidEntity2());
+    }
+
+    @Test
+    public void shouldReturnNoResources_whenFindingNonExistingResources() {
+        Collection<UUIDEntity> uuidEntities = repository.findAll(Arrays.asList(-1L, -2L));
+
+        assertThat(uuidEntities).isEmpty();
+    }
+
+    @Test
+    public void shouldReturnNoResources_whenFindingZeroResources() {
+        Collection<UUIDEntity> uuidEntities = repository.findAll(Arrays.asList());
+
+        assertThat(uuidEntities).isEmpty();
+    }
+
+    @Test
+    public void shouldReturnNoResources_whenFindingNulls() {
+        Collection<UUIDEntity> uuidEntities = repository.findAll(Arrays.asList(null, null));
+
+        assertThat(uuidEntities).isEmpty();
+    }
+
+    @Test
+    public void shouldReturnOnlyExistingResources_whenFindingEexistingAndNonExistingResources() {
+        List<Long> uuidEntityIds = Arrays.asList(UUIDEntityFixtures.uuidEntity1().id(), UUIDEntityFixtures.uuidEntity2().id(), -1L);
+        Collection<UUIDEntity> uuidEntities = repository.findAll(uuidEntityIds);
+
+        assertThat(uuidEntities).containsOnly(UUIDEntityFixtures.uuidEntity1(), UUIDEntityFixtures.uuidEntity2());
+    }
+
+    @Test
+    public void shouldFindPage1WithSize5SortedByIdDesc() {
+        int uuidEntityCount = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+
+        Collection<UUIDEntity> uuidEntityPageContent = Arrays.asList(
+                UUIDEntityFixtures.uuidEntity2(),
+                UUIDEntityFixtures.uuidEntity1());
+
+        Page<UUIDEntity> page = repository.findAll(new PageRequest(1, 2, Sets.newHashSet(new Sort("id", Sort.Direction.DESC))));
+
+        assertThat(page.items).containsExactly(uuidEntityPageContent.toArray(new UUIDEntity[uuidEntityPageContent.size()]));
+        assertThat(page.nbItems).isEqualTo(uuidEntityPageContent.size());
+        assertThat(page.totalItems).isEqualTo(uuidEntityCount);
+        assertThat(page.totalPages).isEqualTo(uuidEntityCount / 2);
+    }
+
     @Test
     public void shouldReturnFalse_whenDeletingNonExistingResource() {
         assertThat(repository.delete(-1L)).isFalse();
@@ -243,75 +208,78 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
     }
 
 
-//    @Test
-//    public void delete_existingResource_deletesResource() {
-//        int UUIDEntityCountBeforeDelete = repository.count();
-//
-//        repository.delete(repository.findOne(1L));
-//
-//        int UUIDEntityCountAfterDelete = repository.count();
-//
-//        assertEquals(UUIDEntityCountAfterDelete, UUIDEntityCountBeforeDelete - 1);
-//        assertNull(repository.findOne(1L));
-//    }
-//
-//    @Test
-//    public void delete_nonExistingResource_doesntDeleteAnyResource() {
-//        int UUIDEntityCountBeforeDelete = repository.count();
-//
-//        repository.delete(new UUIDEntity().withId(-1L).withName("nonExistingUUIDEntity"));
-//
-//        int UUIDEntityCountAfterDelete = repository.count();
-//
-//        assertEquals(UUIDEntityCountAfterDelete, UUIDEntityCountBeforeDelete);
-//    }
-//
-//    @Test
-//    public void delete_multipleExistingResources_deletesResources() {
-//        List<UUIDEntity> UUIDEntitys = (List<UUIDEntity>)repository.findAll(Arrays.asList(1L, 2L));
-//        int UUIDEntityCountBeforeDelete = repository.count();
-//
-//        repository.delete(UUIDEntitys);
-//
-//        int UUIDEntityCountAfterDelete = repository.count();
-//
-//        assertEquals(UUIDEntityCountAfterDelete, UUIDEntityCountBeforeDelete - UUIDEntitys.size());
-//        UUIDEntitys.forEach((UUIDEntity UUIDEntity) -> assertNull(repository.findOne(UUIDEntity.getId())));
-//    }
-//
-//    @Test
-//    public void delete_multipleNonExistingResources_doesntDeleteAnyResource() {
-//        List<UUIDEntity> UUIDEntitys =
-//            Arrays.asList(
-//                new UUIDEntity().withId(-1L).withName("nonExistingUUIDEntity1"),
-//                new UUIDEntity().withId(-2L).withName("nonExistingUUIDEntity2"));
-//
-//        int UUIDEntityCountBeforeDelete = repository.count();
-//
-//        repository.delete(UUIDEntitys);
-//
-//        int UUIDEntityCountAfterDelete = repository.count();
-//
-//        assertEquals(UUIDEntityCountAfterDelete, UUIDEntityCountBeforeDelete);
-//    }
-//
-//    @Test
-//    public void delete_multipleNonExistingAndExistingResources_deletesOnlyExistingResources() {
-//        List<UUIDEntity> UUIDEntitys =
-//            Arrays.asList(
-//                new UUIDEntity().withId(-1L).withName("nonExistingUUIDEntity1"),
-//                new UUIDEntity().withId(1L).withName("Tom"));
-//
-//        int UUIDEntityCountBeforeDelete = repository.count();
-//
-//        repository.delete(UUIDEntitys);
-//
-//        int UUIDEntityCountAfterDelete = repository.count();
-//
-//        assertEquals(UUIDEntityCountAfterDelete, UUIDEntityCountBeforeDelete - 1);
-//        assertNull(repository.findOne(1L));
-//    }
-//
+    @Test
+    public void shouldDeleteAResource() {
+        int uuidEntityCountBeforeCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+
+        repository.delete(UUIDEntityFixtures.uuidEntity1().id());
+
+        int uuidEntityCountAfterCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+
+        assertThat(uuidEntityCountAfterCreate).isEqualTo(uuidEntityCountBeforeCreate - 1);
+    }
+
+    @Test
+    public void shouldReturnTrue_whenDeletingResource() {
+        boolean delete = repository.delete(UUIDEntityFixtures.uuidEntity1().id());
+
+        assertThat(delete).isTrue();
+    }
+
+    @Test
+    public void shouldDeleteMultipleResources() {
+        List<Long> uuidEntityIds = Arrays.asList(UUIDEntityFixtures.uuidEntity1().id(), UUIDEntityFixtures.uuidEntity2().id());
+        int uuidEntityCountBeforeDelete = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+
+        repository.delete(uuidEntityIds);
+
+        int uuidEntityCountAfterDelete = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+
+        assertThat(uuidEntityCountAfterDelete).isEqualTo(uuidEntityCountBeforeDelete - uuidEntityIds.size());
+    }
+
+    @Test
+    public void shouldReturnTrue_whenDeletingMultipleResources() {
+        List<Long> uuidEntityIds = Arrays.asList(UUIDEntityFixtures.uuidEntity1().id(), UUIDEntityFixtures.uuidEntity2().id());
+        boolean delete = repository.delete(uuidEntityIds);
+
+        assertThat(delete).isTrue();
+    }
+
+
+    @Test
+    public void shouldNotDeleteAnyResources_whenDeletingNonExistingResources() {
+        List<Long> uuidEntityIds = Arrays.asList(-1L, -2L);
+        int uuidEntityCountBeforeDelete = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+
+        repository.delete(uuidEntityIds);
+
+        int uuidEntityCountAfterDelete = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+
+        assertThat(uuidEntityCountAfterDelete).isEqualTo(uuidEntityCountBeforeDelete);
+    }
+
+    @Test
+    public void shouldReturnFalse_whenNotDeletingAnyResources() {
+        List<Long> uuidEntityIds = Arrays.asList(-1L, -2L);
+        boolean delete = repository.delete(uuidEntityIds);
+
+        assertThat(delete).isFalse();
+    }
+
+    @Test
+    public void shouldDeleteOnlyExistingResources_whenDeletingExistingAndNonExistingResources() {
+        List<Long> uuidEntityIds = Arrays.asList(UUIDEntityFixtures.uuidEntity1().id(), UUIDEntityFixtures.uuidEntity2().id(), -1L);
+
+        int uuidEntityCountBeforeDelete = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+
+        repository.delete(uuidEntityIds);
+
+        int uuidEntityCountAfterDelete = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+
+        assertThat(uuidEntityCountAfterDelete).isEqualTo(uuidEntityCountBeforeDelete - 2);
+    }
+
     @Test
     public void shouldDeleteAllResources() {
         repository.deleteAll();

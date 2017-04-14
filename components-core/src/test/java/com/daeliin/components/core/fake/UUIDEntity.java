@@ -4,7 +4,7 @@ import com.daeliin.components.domain.resource.PersistentResource;
 
 import java.time.LocalDateTime;
 
-public class UUIDEntity extends PersistentResource implements Comparable<UUIDEntity> {
+public class UUIDEntity extends PersistentResource {
 
     private static final long serialVersionUID = 6434352024112491080L;
 
@@ -13,14 +13,5 @@ public class UUIDEntity extends PersistentResource implements Comparable<UUIDEnt
     public UUIDEntity(Long id, String uuid, LocalDateTime creationDate, String label) {
         super(id, uuid, creationDate);
         this.label = label;
-    }
-
-    @Override
-    public int compareTo(UUIDEntity other) {
-        if (this.equals(other)) {
-            return 0;
-        }
-
-        return label.compareTo(other.label);
     }
 }

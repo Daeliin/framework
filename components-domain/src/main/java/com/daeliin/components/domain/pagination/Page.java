@@ -12,14 +12,14 @@ import java.util.Objects;
 public final class Page<E> {
 
     public final Collection<E> items;
-    public final long nbElements;
-    public final long totalElements;
+    public final long nbItems;
+    public final long totalItems;
     public final long totalPages;
 
-    public Page(Collection<E> items, long totalElements, long totalPages) {
+    public Page(Collection<E> items, long totalItems, long totalPages) {
         this.items = Objects.requireNonNull(items, " items should not be null");
-        this.nbElements = items.size();
-        this.totalElements = (totalElements > 0L && totalElements < Long.MAX_VALUE) ? totalElements : 0L;
+        this.nbItems = items.size();
+        this.totalItems = (totalItems > 0L && totalItems < Long.MAX_VALUE) ? totalItems : 0L;
         this.totalPages = (totalPages > 1L && totalPages < Long.MAX_VALUE) ? totalPages : 1L;
     }
 
@@ -28,22 +28,22 @@ public final class Page<E> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Page<?> page = (Page<?>) o;
-        return totalElements == page.totalElements &&
+        return totalItems == page.totalItems &&
                 totalPages == page.totalPages &&
                 Objects.equals(items, page.items);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(items, totalElements, totalPages);
+        return Objects.hash(items, totalItems, totalPages);
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("items", items)
-                .add("nbElements", nbElements)
-                .add("totalElements", totalElements)
+                .add("nbItems", nbItems)
+                .add("totalitems", totalItems)
                 .add("totalPages", totalPages)
                 .toString();
     }

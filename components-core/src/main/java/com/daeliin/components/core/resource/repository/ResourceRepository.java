@@ -115,20 +115,21 @@ public abstract class ResourceRepository<E extends PersistentResource, B> implem
     @Transactional(readOnly = true)
     @Override
     public Page<E> findAll(PageRequest pageRequest) {
-        long totalElements = count();
-        long totalPages = Double.valueOf(Math.ceil(totalElements / pageRequest.size)).intValue();
+        long totalItems = count();
+        long totalPages = Double.valueOf(Math.ceil(totalItems / pageRequest.size)).intValue();
+        OrderSpecifier[] orders = computeOrders(pageRequest);
 
-        List<E> collect = queryFactory.select(rowPath)
+        List<E> items = queryFactory.select(rowPath)
                 .from(rowPath)
                 .limit(pageRequest.size)
                 .offset(pageRequest.offset)
-                .orderBy(computeOrders(pageRequest))
+                .orderBy(orders)
                 .fetch()
                 .stream()
                 .map(conversion::instantiate)
                 .collect(toList());
 
-        return new Page(collect, totalElements, totalPages);
+        return new Page(items, totalItems, totalPages);
     }
 
     @Transactional(readOnly = true)

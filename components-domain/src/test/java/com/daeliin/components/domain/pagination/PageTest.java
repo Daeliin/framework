@@ -17,14 +17,14 @@ public final class PageTest {
     }
 
     @Test
-    public void shouldHaveADefaultTotalElementsOf0() {
-        Assertions.assertThat(new Page(Collections.EMPTY_LIST, -1, 10).totalElements).isEqualTo(0);
-        Assertions.assertThat(new Page(Collections.EMPTY_LIST, Long.MAX_VALUE + 1, 10).totalElements).isEqualTo(0);
+    public void shouldHaveADefaultTotalItemsOf0() {
+        Assertions.assertThat(new Page(Collections.EMPTY_LIST, -1, 10).totalItems).isEqualTo(0);
+        Assertions.assertThat(new Page(Collections.EMPTY_LIST, Long.MAX_VALUE + 1, 10).totalItems).isEqualTo(0);
     }
 
     @Test
-    public void shouldAssignTotalElements() {
-        Assertions.assertThat(new Page(Collections.EMPTY_LIST, 15, 10).totalElements).isEqualTo(15);
+    public void shouldAssignTotalItems() {
+        Assertions.assertThat(new Page(Collections.EMPTY_LIST, 15, 10).totalItems).isEqualTo(15);
     }
 
     @Test
@@ -39,15 +39,15 @@ public final class PageTest {
     }
 
     @Test
-    public void shouldComputeNbElements() {
+    public void shouldComputeNbItems() {
         List<String> items = Arrays.asList("John", "Jane");
         Page<String> page = new Page<>(items, 4, 2);
 
-        assertThat(page.nbElements).isEqualTo(items.size());
+        assertThat(page.nbItems).isEqualTo(items.size());
     }
 
     @Test
-    public void shouldBeEqual_whenSameItemsSameTotalElementsAndSameTotalPages() {
+    public void shouldBeEqual_whenSameItemsSameTotalItemsAndSameTotalPages() {
         List<String> items = Arrays.asList("John", "Jane");
         Page<String> page = new Page<>(items, 4, 2);
         Page<String> samePage = new Page<>(items, 4, 2);
@@ -56,9 +56,9 @@ public final class PageTest {
     }
 
     @Test
-    public void shouldPrintsItsItemsNbElementsTotalElementsAndtotalPages() {
+    public void shouldPrintsItsItemsNbItemsTotalItemsAndtotalPages() {
         Page<String> page = new Page<>(Arrays.asList("John", "Jane"), 4, 2);
 
-        Assertions.assertThat(page.toString()).contains(page.items.toString(), String.valueOf(page.nbElements), String.valueOf(page.totalElements), String.valueOf(page.totalPages));
+        Assertions.assertThat(page.toString()).contains(page.items.toString(), String.valueOf(page.nbItems), String.valueOf(page.totalItems), String.valueOf(page.totalPages));
     }
 }
