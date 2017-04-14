@@ -25,8 +25,15 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
     @Inject
     private UUIDEntityRepository repository;
 
+    @Test(expected = Exception.class)
+    public void shouldThrowException_whenPersistingNull() {
+        UUIDEntity nullUuidEntity = null;
+
+        repository.save(nullUuidEntity);
+    }
+
     @Test
-    public void shouldPersistsAResource() {
+    public void shouldPersistAResource() {
         UUIDEntity newUuuidEntity = new UUIDEntity(100L, UUID.randomUUID().toString(), LocalDateTime.now(), "label100");
         int uuidEntityCountBeforeCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
 

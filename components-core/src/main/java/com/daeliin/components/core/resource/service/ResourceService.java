@@ -118,14 +118,13 @@ public abstract class ResourceService<E extends PersistentResource, R extends Pa
 
     /**
      * Updates a resource.
-     * @param resourceId resource id
      * @param resource resource to update
      * @return updated resource
-     * @throws PersistentResourceNotFoundException if the resource id is not found or if the resource id doesnt match its actual id
+     * @throws PersistentResourceNotFoundException if the resource is not found
      */
     @Override
-    public E update(Long resourceId, E resource) {
-        if (resourceId == null || !repository.exists(resourceId) || resource == null || !resource.id().equals(resourceId)) {
+    public E update(E resource) {
+        if (resource == null || !repository.exists(resource.id())) {
             throw new PersistentResourceNotFoundException(MESSAGE_RESOURCE_NOT_FOUND);
         }
 

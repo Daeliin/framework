@@ -1,103 +1,71 @@
-//package com.daeliin.components.core.resource.service;
-//
-//import com.daeliin.components.core.Application;
-//import com.daeliin.components.core.exception.ResourceNotFoundException;
-//import com.daeliin.components.core.mock.User;
-//import com.daeliin.components.core.mock.UserRepository;
-//import com.daeliin.components.core.mock.UserService;
-//import java.util.ArrayList;
-//import java.util.Arrays;
-//import java.util.HashSet;
-//import java.util.List;
-//import java.util.Set;
-//import javax.validation.ConstraintViolation;
-//import javax.validation.ConstraintViolationException;
-//import javax.validation.Validation;
-//import javax.validation.Validator;
-//import static org.junit.Assert.assertEquals;
-//import static org.junit.Assert.assertFalse;
-//import static org.junit.Assert.assertTrue;
-//import static org.junit.Assert.fail;
-//import org.junit.Before;
-//import org.junit.Test;
-//import org.mockito.InjectMocks;
-//import org.mockito.Mock;
-//import static org.mockito.Mockito.never;
-//import static org.mockito.Mockito.when;
-//import org.mockito.MockitoAnnotations;
-//import org.springframework.data.domain.PageRequest;
-//import org.springframework.data.domain.Sort;
-//import org.springframework.test.context.ContextConfiguration;
-//import static org.mockito.Mockito.verify;
-//import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
-//
-//@ContextConfiguration(classes = Application.class)
-//public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
-//
-//    @Mock
-//    private UserRepository repository;
-//
-//    @InjectMocks
-//    private UserService service;
-//
-//    @Before
-//    public void init() {
-//        MockitoAnnotations.initMocks(this);
-//    }
-//
-//    @Test
-//    public void create_validResource_callsRepositorySaveAndReturnsResource() {
-//        User validUser = new User().withName("validUserName");
-//        User savedValidUser = new User().withId(1L).withName("validUserName");
-//
-//        when(repository.save(validUser)).thenReturn(savedValidUser);
-//
-//        User createdUser = service.create(validUser);
-//
-//        verify(repository).save(validUser);
-//        assertEquals(createdUser, savedValidUser);
-//    }
-//
-//    @Test
-//    public void create_invalidResource_callsRepositorySaveAndThrowsConstraintViolationException() {
-//        User invalidUser = new User().withName("");
-//        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-//
-//        when(repository.save(invalidUser))
-//            .thenThrow(
-//                new ConstraintViolationException(
-//                    validator.validateProperty(invalidUser, "name")));
-//
-//        try {
-//            service.create(invalidUser);
-//        } catch (ConstraintViolationException e) {
-//            verify(repository).save(invalidUser);
-//            return;
-//        }
-//
-//        fail();
-//    }
-//
-//    @Test
-//    public void create_validResources_callsRepositorySaveAndReturnsResources() {
-//        List<User> validUsers =
-//            Arrays.asList(
-//                new User().withName("validUserName1"),
-//                new User().withName("validUserName2"));
-//
-//
-//        List<User> savedValidUsers = Arrays.asList(
-//                new User().withId(1L).withName("validUserName1"),
-//                new User().withId(2L).withName("validUserName2"));
-//
-//        when(repository.save(validUsers)).thenReturn(savedValidUsers);
-//
-//        List<User> createdUsers = (List<User>)service.create(validUsers);
-//
-//        verify(repository).save(validUsers);
-//
-//        assertEquals(createdUsers, savedValidUsers);
-//    }
+package com.daeliin.components.core.resource.service;
+
+import com.daeliin.components.core.Application;
+import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
+import com.daeliin.components.core.fake.UUIDEntity;
+import com.daeliin.components.core.fake.UUIDEntityRepository;
+import com.daeliin.components.core.fake.UUIDEntityService;
+import com.daeliin.components.core.fixtures.UUIDEntityFixtures;
+import org.apache.catalina.User;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
+
+@ContextConfiguration(classes = Application.class)
+public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
+
+    @Mock
+    private UUIDEntityRepository repository;
+
+    @InjectMocks
+    private UUIDEntityService service;
+
+    @Before
+    public void init() {
+        MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void shouldCallRepositorySaveAndReturnResource_whenCreatingResource() {
+        UUIDEntity newUuuidEntity = new UUIDEntity(100L, UUID.randomUUID().toString(), LocalDateTime.now(), "label100");
+
+        doReturn(newUuuidEntity).when(repository).save(newUuuidEntity);
+
+        UUIDEntity createdUuidEntity = service.create(newUuuidEntity);
+
+        verify(repository).save(newUuuidEntity);
+        assertThat(createdUuidEntity).isEqualTo(newUuuidEntity);
+    }
+
+    @Test
+    public void shouldCallRepositorySaveAndReturnsResources_whenCreatingResources() {
+        UUIDEntity newUuidEntity1 = new UUIDEntity(101L, UUID.randomUUID().toString(), LocalDateTime.now(), "label101");
+        UUIDEntity newUuidEntity2 = new UUIDEntity(102L, UUID.randomUUID().toString(), LocalDateTime.now(), "label102");
+
+        List<UUIDEntity> newUuidEntites = Arrays.asList(newUuidEntity1, newUuidEntity2);
+
+        doReturn(newUuidEntites).when(repository).save(newUuidEntites);
+
+        Collection<UUIDEntity> createdUuidEntities = service.create(newUuidEntites);
+
+        verify(repository).save(newUuidEntites);
+
+        assertThat(createdUuidEntities).containsOnly(newUuidEntity1, newUuidEntity2);
+    }
 //
 //    @Test
 //    public void create_invalidResources_callsRepositorySaveAndThrowsConstraintViolationException() {
@@ -123,66 +91,66 @@
 //
 //        fail();
 //    }
-//
-//    @Test
-//    public void exists_nullResourceId_returnsFalse() {
-//        assertFalse(service.exists(null));
-//    }
-//
-//    @Test
-//    public void exists_existingResourceId_callsRepositoryExistsAndReturnsTrue() {
-//        when(repository.exists(1L)).thenReturn(true);
-//
-//        assertTrue(service.exists(1L));
-//        verify(repository).exists(1L);
-//    }
-//
-//    @Test
-//    public void exists_nonExistingResourceId_callsRepositoryExistsAndReturnsFalse() {
-//        when(repository.exists(-1L)).thenReturn(false);
-//
-//        assertFalse(service.exists(-1L));
-//        verify(repository).exists(-1L);
-//    }
-//
-//    @Test
-//    public void count_callsRepositoryCountAndReturnsSameResult() {
-//        when(repository.count()).thenReturn(22L);
-//
-//        assertEquals(service.count(), 22);
-//        verify(repository).count();
-//    }
-//
-//    @Test(expected = ResourceNotFoundException.class)
-//    public void findOne_nullId_throwsResourceNotFoundException() {
-//        service.findOne(null);
-//    }
-//
-//    @Test
-//    public void findOne_nonExistingResourceId_throwsResourceNotFoundException() {
-//        when(repository.findOne(-1L)).thenThrow(new ResourceNotFoundException(""));
-//
-//        try {
-//             service.findOne(-1L);
-//        } catch (ResourceNotFoundException e) {
-//            verify(repository).findOne(-1L);
-//            return;
-//        }
-//
-//        fail();
-//    }
-//
-//    @Test
-//    public void findOne_existingResourceId_callsRepositoryFindOneAndReturnsResource() {
-//        User existingUser = new User().withId(1L).withName("existingUserName");
-//
-//        when(repository.findOne(existingUser.getId())).thenReturn(existingUser);
-//
-//        User foundUser = service.findOne(existingUser.getId());
-//
-//        verify(repository).findOne(existingUser.getId());
-//        assertEquals(foundUser, existingUser);
-//    }
+
+    @Test
+    public void shouldCheckThatNullDoesntExist() {
+        assertThat(service.exists(null)).isFalse();
+    }
+
+    @Test
+    public void shouldCallRepositoryExistAndReturnTrue_whenResourceIdExists() {
+        Long existingUuidEntityId = UUIDEntityFixtures.uuidEntity1().id();
+
+        doReturn(true).when(repository).exists(existingUuidEntityId);
+
+        assertThat(service.exists(existingUuidEntityId)).isTrue();
+        verify(repository).exists(existingUuidEntityId);
+    }
+
+    @Test
+    public void shouldCallRepositoryExistAndReturnTrue_whenResourceIdDoesntExist() {
+        doReturn(false).when(repository).exists(-1L);
+
+        assertThat(service.exists(-1L)).isFalse();
+        verify(repository).exists(-1L);
+    }
+
+    @Test
+    public void shouldCallRepositoryCountAndReturnTheSameResult() {
+        doReturn(5L).when(repository).count();
+
+        assertThat(service.count()).isEqualTo(5L);
+        verify(repository).count();
+    }
+
+    @Test(expected = PersistentResourceNotFoundException.class)
+    public void shouldThrowResourceNotFoundException_whenIdIsNull() {
+        service.findOne(null);
+    }
+
+    @Test
+    public void shouldThrowResourceNotFoundException_whenResourceIdDoesntExist() {
+        doThrow(new PersistentResourceNotFoundException("")).when(repository).findOne(-1L);
+
+        try {
+             service.findOne(-1L);
+        } catch (PersistentResourceNotFoundException e) {
+            verify(repository).findOne(-1L);
+            return;
+        }
+
+        fail();
+    }
+
+    @Test
+    public void shouldCallRepositoryFindOneAndReturnsResource_whenFindingResource() {
+        UUIDEntity existingUuidEntity = UUIDEntityFixtures.uuidEntity1();
+
+        doReturn(existingUuidEntity).when(repository).findOne(existingUuidEntity.id());
+
+        assertThat(service.findOne(existingUuidEntity.id())).isEqualTo(existingUuidEntity);
+        verify(repository).findOne(existingUuidEntity.id());
+    }
 //
 //    @Test
 //    public void findAll_callsRepositoryFindAllAndReturnsAllResources() {
@@ -198,14 +166,6 @@
 //
 //        verify(repository).findAll();
 //        assertEquals(users, allUsers);
-//    }
-//
-//    @Test
-//    public void findAll_sort_callsRepositoryFindAllWithSort() {
-//        Sort sort = new Sort(Sort.Direction.ASC, "id", "name");
-//
-//        service.findAll(sort);
-//        verify(repository).findAll(sort);
 //    }
 //
 //    @Test
@@ -362,4 +322,4 @@
 //        service.deleteAll();
 //        verify(repository).deleteAll();
 //    }
-//}
+}

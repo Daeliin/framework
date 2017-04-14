@@ -42,6 +42,10 @@ public abstract class ResourceRepository<E extends PersistentResource, B> implem
 
     @Override
     public E save(E resource) {
+        if (resource == null) {
+            throw new IllegalArgumentException("Cannot create null resource");
+        }
+
         if (exists(resource.id())) {
             queryFactory.update(rowPath)
                     .where(idPath.eq(resource.id()))

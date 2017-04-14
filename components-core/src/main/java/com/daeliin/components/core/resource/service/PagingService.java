@@ -28,12 +28,11 @@ public interface PagingService<E> {
     Collection<E> create(Collection<E> resources);
 
     /**
-     * Updates a resource by id.
-     * @param resourceId resource id
+     * Updates a resource.
      * @param resource resource to update
      * @return updated resource
      */
-    E update(Long resourceId, E resource);
+    E update(E resource);
 
     /**
      * Updates multiple resources.
