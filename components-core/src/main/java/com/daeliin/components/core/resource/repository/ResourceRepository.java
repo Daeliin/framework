@@ -25,8 +25,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 
 @Transactional
-@Component
-public abstract class ResourceRepository<E extends PersistentResource, B,  C extends Conversion<E, B>> implements PagingRepository<E> {
+public abstract class ResourceRepository<E extends PersistentResource, B> implements PagingRepository<E> {
 
     @Inject
     protected SQLQueryFactory queryFactory;

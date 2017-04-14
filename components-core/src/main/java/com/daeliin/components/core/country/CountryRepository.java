@@ -6,7 +6,7 @@ import com.daeliin.components.core.sql.QCountry;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CountryRepository extends ResourceRepository<Country, BCountry, CountryConversion> {
+public class CountryRepository extends ResourceRepository<Country, BCountry> {
 
     public CountryRepository() {
         super(new CountryConversion(), QCountry.country, QCountry.country.id);

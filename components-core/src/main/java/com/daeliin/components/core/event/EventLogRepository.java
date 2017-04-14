@@ -6,7 +6,7 @@ import com.daeliin.components.core.sql.QEventLog;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EventLogRepository extends ResourceRepository<EventLog, BEventLog, EventLogConversion> {
+public class EventLogRepository extends ResourceRepository<EventLog, BEventLog> {
 
     public EventLogRepository() {
         super(new EventLogConversion(), QEventLog.eventLog, QEventLog.eventLog.id);
