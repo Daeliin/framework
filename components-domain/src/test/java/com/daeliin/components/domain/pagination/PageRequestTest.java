@@ -62,6 +62,17 @@ public final class PageRequestTest {
     }
 
     @Test
+    public void shouldNotBeCaseSensitiveOnPropertySort() {
+        Sort idAsc = new Sort("id", Sort.Direction.ASC);
+
+        Map<String, Sort.Direction> sorts = new PageRequest(2, 25, Sets.newHashSet(idAsc)).sorts;
+
+        assertThat(sorts.containsKey("id")).isTrue();
+        assertThat(sorts.containsKey("ID")).isTrue();
+        assertThat(sorts.containsKey("Id")).isTrue();
+    }
+
+    @Test
     public void shouldComputeOffset() {
         assertThat(new PageRequest().offset).isEqualTo(0);
         assertThat(new PageRequest(0).offset).isEqualTo(0);

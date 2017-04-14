@@ -224,8 +224,6 @@ public abstract class ResourceRepository<E extends PersistentResource, B> implem
                             break;
                     }
                 }
-
-                break;
             }
         }
 

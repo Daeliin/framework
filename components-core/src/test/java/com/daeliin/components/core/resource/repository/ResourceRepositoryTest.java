@@ -173,6 +173,24 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
     }
 
     @Test
+    public void shouldApplySortsInTheSameOrderAsTheyWereRequested() {
+        int uuidEntityCount = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+
+        Collection<UUIDEntity> uuidEntityPageContent = Arrays.asList(
+                UUIDEntityFixtures.uuidEntity3(),
+                UUIDEntityFixtures.uuidEntity2(),
+                UUIDEntityFixtures.uuidEntity1(),
+                UUIDEntityFixtures.uuidEntity4());
+
+        Page<UUIDEntity> page = repository.findAll(new PageRequest(0, uuidEntityCount, Sets.newHashSet(
+                new Sort("creationDate", Sort.Direction.ASC),
+                new Sort("id", Sort.Direction.DESC))));
+
+        assertThat(page.items).containsExactly(uuidEntityPageContent.toArray(new UUIDEntity[uuidEntityPageContent.size()]));
+    }
+
+
+    @Test
     public void shouldReturnFalse_whenDeletingNonExistingResource() {
         assertThat(repository.delete(-1L)).isFalse();
     }
