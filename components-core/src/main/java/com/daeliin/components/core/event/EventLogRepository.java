@@ -9,6 +9,6 @@ import org.springframework.stereotype.Component;
 public class EventLogRepository extends ResourceRepository<EventLog, BEventLog> {
 
     public EventLogRepository() {
-        super(new EventLogConversion(), QEventLog.eventLog, QEventLog.eventLog.id);
+        super(new EventLogConversion(), QEventLog.eventLog, QEventLog.eventLog.uuid);
     }
 }

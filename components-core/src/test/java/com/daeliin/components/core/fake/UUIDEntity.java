@@ -10,8 +10,8 @@ public class UUIDEntity extends PersistentResource {
 
     public final String label;
 
-    public UUIDEntity(Long id, String uuid, LocalDateTime creationDate, String label) {
-        super(id, uuid, creationDate);
+    public UUIDEntity(String uuid, LocalDateTime creationDate, String label) {
+        super(uuid, creationDate);
         this.label = label;
     }
 }

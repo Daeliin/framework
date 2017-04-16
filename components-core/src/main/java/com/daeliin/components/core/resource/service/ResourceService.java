@@ -5,7 +5,8 @@ import com.daeliin.components.core.resource.repository.PagingRepository;
 import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
 import com.daeliin.components.domain.resource.PersistentResource;
-import org.springframework.stereotype.Service;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 import org.springframework.util.CollectionUtils;
 
 import javax.inject.Inject;
@@ -22,6 +23,13 @@ public abstract class ResourceService<E extends PersistentResource, R extends Pa
 
     @Inject
     protected R repository;
+
+    protected LoadingCache<String, E> cache = Caffeine.newBuilder()
+            .maximumSize(10_000)
+            .build(id -> repository.findOne(id));
+
+    public ResourceService() {
+    }
 
     /**
      * Creates a resource.
@@ -49,7 +57,7 @@ public abstract class ResourceService<E extends PersistentResource, R extends Pa
      * @return true of the resource exists, false otherwise
      */
     @Override
-    public boolean exists(Long resourceId) {
+    public boolean exists(String resourceId) {
         if(resourceId == null) {
             return false;
         }
@@ -73,7 +81,7 @@ public abstract class ResourceService<E extends PersistentResource, R extends Pa
      * @throws PersistentResourceNotFoundException if the resource is not found
      */
     @Override
-    public E findOne(Long resourceId) {
+    public E findOne(String resourceId) {
         E resource = null;
 
         if (resourceId != null) {
@@ -112,7 +120,7 @@ public abstract class ResourceService<E extends PersistentResource, R extends Pa
      * @return resources
      */
     @Override
-    public Collection<E> findAll(Collection<Long> resourcesIds) {
+    public Collection<E> findAll(Collection<String> resourcesIds) {
         return repository.findAll(resourcesIds);
     }
 
@@ -124,7 +132,7 @@ public abstract class ResourceService<E extends PersistentResource, R extends Pa
      */
     @Override
     public E update(E resource) {
-        if (resource == null || !repository.exists(resource.id())) {
+        if (resource == null || !repository.exists(resource.uuid())) {
             throw new PersistentResourceNotFoundException(MESSAGE_RESOURCE_NOT_FOUND);
         }
 
@@ -146,7 +154,7 @@ public abstract class ResourceService<E extends PersistentResource, R extends Pa
      * @param id id of the resource to delete
      */
     @Override
-    public boolean delete(Long id) {
+    public boolean delete(String id) {
         if (id == null) {
             return false;
         }
@@ -159,7 +167,7 @@ public abstract class ResourceService<E extends PersistentResource, R extends Pa
      * @param resourceIds resources ids
      */
     @Override
-    public boolean delete(Collection<Long> resourceIds) {
+    public boolean delete(Collection<String> resourceIds) {
         if (CollectionUtils.isEmpty(resourceIds)) {
             return false;
         }
@@ -177,7 +185,7 @@ public abstract class ResourceService<E extends PersistentResource, R extends Pa
             return false;
         }
 
-        return repository.delete(resource.id());
+        return repository.delete(resource.uuid());
     }
 
     /**

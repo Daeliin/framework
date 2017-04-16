@@ -2,10 +2,8 @@ package com.daeliin.components.core.resource.service;
 
 import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
-import com.daeliin.components.domain.resource.Persistable;
-import java.io.Serializable;
+
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Provides CRUD operations and pagination for a resource.
@@ -46,7 +44,7 @@ public interface PagingService<E> {
      * @param resourceId resource id
      * @return resource
      */
-    E findOne(Long resourceId);
+    E findOne(String resourceId);
 
     /**
      * Finds every resources.
@@ -59,7 +57,7 @@ public interface PagingService<E> {
      * @param resourceIds resources ids
      * @return resources
      */
-    Collection<E> findAll(Collection<Long> resourceIds);
+    Collection<E> findAll(Collection<String> resourceIds);
 
     /**
      * Finds a page of resources.
@@ -73,7 +71,7 @@ public interface PagingService<E> {
      * @param resourceId resource id
      * @return true of the resource exists, false otherwise
      */
-    boolean exists(Long resourceId);
+    boolean exists(String resourceId);
 
     /**
      * Returns the total number of resources.
@@ -85,13 +83,13 @@ public interface PagingService<E> {
      * Delete a resource by its id.
      * @param resourceId id of the resource to delete
      */
-    boolean delete(Long resourceId);
+    boolean delete(String resourceId);
 
     /**
      * Delete resources by their ids.
      * @param resourceIds resources ids
      */
-    boolean delete(Collection<Long> resourceIds);
+    boolean delete(Collection<String> resourceIds);
 
     /**
      * Deletes a resource.

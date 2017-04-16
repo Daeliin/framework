@@ -13,8 +13,8 @@ public class Country extends PersistentResource implements Comparable<Country> {
     public final String code;
     public final String name;
     
-    public Country(Long id, String uuid, LocalDateTime creationDate, String code, String name) {
-        super(id, uuid, creationDate);
+    public Country(String uuid, LocalDateTime creationDate, String code, String name) {
+        super(uuid, creationDate);
         this.code = Objects.requireNonNull(code, "code should not be null");
         this.name = Objects.requireNonNull(name, "name should not be null");
     }

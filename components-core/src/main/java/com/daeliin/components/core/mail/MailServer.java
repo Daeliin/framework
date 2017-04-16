@@ -8,7 +8,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 @Profile("mail")
 @Configuration
-public class Mails {
+public class MailServer {
     
     @Value("${daeliin.mail.host}")
     private String host;

@@ -15,21 +15,21 @@ public interface PagingRepository<E> {
 
     Collection<E> save(Collection<E> resources);
 
-    E findOne(Long resourceId);
+    E findOne(String resourceId);
 
-    Collection<E> findAll(Collection<Long> resourceIds);
+    Collection<E> findAll(Collection<String> resourceIds);
 
     Page<E> findAll(PageRequest pageRequest);
 
     Collection<E> findAll();
 
-    boolean exists(Long resourceId);
+    boolean exists(String resourceId);
 
     long count();
 
-    boolean delete(Long resourceId);
+    boolean delete(String resourceId);
 
-    boolean delete(Collection<Long> resourceIds);
+    boolean delete(Collection<String> resourceIds);
 
     boolean deleteAll();
 }

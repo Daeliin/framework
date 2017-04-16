@@ -9,6 +9,6 @@ import org.springframework.stereotype.Component;
 public class CountryRepository extends ResourceRepository<Country, BCountry> {
 
     public CountryRepository() {
-        super(new CountryConversion(), QCountry.country, QCountry.country.id);
+        super(new CountryConversion(), QCountry.country, QCountry.country.uuid);
     }
 }

@@ -14,7 +14,6 @@ public final class UUIDEntityConversion implements Conversion<UUIDEntity, BUuidE
         }
 
         return new UUIDEntity(
-                bUuidEntity.getId(),
                 bUuidEntity.getUuid(),
                 bUuidEntity.getCreationDate().toLocalDateTime(),
                 bUuidEntity.getLabel());
@@ -28,7 +27,6 @@ public final class UUIDEntityConversion implements Conversion<UUIDEntity, BUuidE
 
         return new BUuidEntity(
                 Timestamp.valueOf(uuidEntity.creationDate()),
-                uuidEntity.id(),
                 uuidEntity.label,
                 uuidEntity.uuid());
     }

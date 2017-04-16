@@ -14,8 +14,8 @@ public final class EventLog extends PersistentResource implements Comparable<Eve
 
     public final String descriptionKey;
 
-    public EventLog(Long id, String uuid, LocalDateTime creationDate, String descriptionKey) {
-        super(id, uuid, creationDate);
+    public EventLog(String uuid, LocalDateTime creationDate, String descriptionKey) {
+        super(uuid, creationDate);
         this.descriptionKey = Objects.requireNonNull(descriptionKey, "descriptionKey should not be null");
     }
 

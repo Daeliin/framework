@@ -4,15 +4,9 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * Resource persistable in a RDBMS, with a Long id and a String uuid.
+ * Resource persistable in a RDBMS, with an uuid.
  */
 public interface Persistable extends Serializable {
-
-    /**
-     * Returns the resource id.
-     * @return resource id
-     */
-    Long id();
 
     /**
      * Returns the resource UUID.

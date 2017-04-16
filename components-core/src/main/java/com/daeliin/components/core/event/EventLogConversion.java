@@ -14,7 +14,6 @@ public final class EventLogConversion implements Conversion<EventLog, BEventLog>
         }
 
         return new EventLog(
-                bEventLog.getId(),
                 bEventLog.getUuid(),
                 bEventLog.getCreationDate().toLocalDateTime(),
                 bEventLog.getDescriptionKey());
@@ -29,7 +28,6 @@ public final class EventLogConversion implements Conversion<EventLog, BEventLog>
         return new BEventLog(
                 Timestamp.valueOf(eventLog.creationDate()),
                 eventLog.descriptionKey,
-                eventLog.id(),
                 eventLog.uuid());
     }
 }

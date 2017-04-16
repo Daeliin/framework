@@ -9,6 +9,6 @@ import org.springframework.stereotype.Component;
 public class UUIDEntityRepository extends ResourceRepository<UUIDEntity, BUuidEntity> {
 
     public UUIDEntityRepository() {
-        super(new UUIDEntityConversion(), QUuidEntity.uuidEntity, QUuidEntity.uuidEntity.id);
+        super(new UUIDEntityConversion(), QUuidEntity.uuidEntity, QUuidEntity.uuidEntity.uuid);
     }
 }

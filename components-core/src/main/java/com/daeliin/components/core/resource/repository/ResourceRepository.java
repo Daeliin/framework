@@ -8,12 +8,11 @@ import com.daeliin.components.domain.resource.PersistentResource;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
-import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.sql.RelationalPathBase;
 import com.querydsl.sql.SQLQueryFactory;
 import com.querydsl.sql.dml.SQLInsertClause;
 import com.querydsl.sql.dml.SQLUpdateClause;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
@@ -32,9 +31,9 @@ public abstract class ResourceRepository<E extends PersistentResource, B> implem
 
     protected final Conversion<E, B> conversion;
     protected final RelationalPathBase<B> rowPath;
-    protected final NumberPath<Long> idPath;
+    protected final StringPath idPath;
 
-    protected ResourceRepository(Conversion<E, B> conversion, RelationalPathBase<B> rowPath, NumberPath<Long> idPath) {
+    protected ResourceRepository(Conversion<E, B> conversion, RelationalPathBase<B> rowPath, StringPath idPath) {
         this.conversion = conversion;
         this.rowPath = rowPath;
         this.idPath = idPath;
@@ -46,9 +45,9 @@ public abstract class ResourceRepository<E extends PersistentResource, B> implem
             throw new IllegalArgumentException("Cannot create null resource");
         }
 
-        if (exists(resource.id())) {
+        if (exists(resource.uuid())) {
             queryFactory.update(rowPath)
-                    .where(idPath.eq(resource.id()))
+                    .where(idPath.eq(resource.uuid()))
                     .populate(conversion.map(resource))
                     .execute();
         } else {
@@ -62,8 +61,8 @@ public abstract class ResourceRepository<E extends PersistentResource, B> implem
 
     @Override
     public Collection<E> save(Collection<E> resources) {
-        Collection<Long> resourceIds = resources.stream().map(Persistable::id).collect(Collectors.toList());
-        Collection<Long> persistedResourceIds = findAllIds(resources);
+        Collection<String> resourceIds = resources.stream().map(Persistable::uuid).collect(Collectors.toList());
+        Collection<String> persistedResourceIds = findAllIds(resources);
         boolean insertBatchShouldBeExecuted = resourceIds.size() > persistedResourceIds.size();
         boolean updateBatchShouldBeExecuted = persistedResourceIds.size() > 0;
 
@@ -71,7 +70,7 @@ public abstract class ResourceRepository<E extends PersistentResource, B> implem
         SQLUpdateClause updateBatch = queryFactory.update(rowPath);
 
         resources.forEach(resource -> {
-            if (persistedResourceIds.contains(resource.id())) {
+            if (persistedResourceIds.contains(resource.uuid())) {
                 updateBatch.populate(conversion.map(resource)).addBatch();
             } else {
                 insertBatch.populate(conversion.map(resource)).addBatch();
@@ -91,7 +90,7 @@ public abstract class ResourceRepository<E extends PersistentResource, B> implem
 
     @Transactional(readOnly = true)
     @Override
-    public E findOne(Long resourceId) {
+    public E findOne(String resourceId) {
         if (resourceId == null) {
             return null;
         }
@@ -106,7 +105,7 @@ public abstract class ResourceRepository<E extends PersistentResource, B> implem
 
     @Transactional(readOnly = true)
     @Override
-    public Collection<E> findAll(Collection<Long> resourceIds) {
+    public Collection<E> findAll(Collection<String> resourceIds) {
         return queryFactory.select(rowPath)
                 .from(rowPath)
                 .where(idPath.in(resourceIds))
@@ -149,7 +148,7 @@ public abstract class ResourceRepository<E extends PersistentResource, B> implem
 
     @Transactional(readOnly = true)
     @Override
-    public boolean exists(Long resourceId) {
+    public boolean exists(String resourceId) {
         if (resourceId == null) {
             return false;
         }
@@ -169,7 +168,7 @@ public abstract class ResourceRepository<E extends PersistentResource, B> implem
     }
 
     @Override
-    public boolean delete(Long resourceId) {
+    public boolean delete(String resourceId) {
         if (resourceId == null) {
             return false;
         }
@@ -180,7 +179,7 @@ public abstract class ResourceRepository<E extends PersistentResource, B> implem
     }
 
     @Override
-    public boolean delete(Collection<Long> resourceIds) {
+    public boolean delete(Collection<String> resourceIds) {
         return queryFactory.delete(rowPath)
                 .where(idPath.in(resourceIds))
                 .execute() == resourceIds.size();
@@ -191,8 +190,8 @@ public abstract class ResourceRepository<E extends PersistentResource, B> implem
         return queryFactory.delete(rowPath).execute() > 0;
     }
 
-    protected Collection<Long> findAllIds(Collection<E> resources) {
-        Collection<Long> resourceIds = resources.stream().map(E::id).collect(Collectors.toList());
+    protected Collection<String> findAllIds(Collection<E> resources) {
+        Collection<String> resourceIds = resources.stream().map(E::uuid).collect(Collectors.toList());
 
         return queryFactory.select(idPath)
                 .from(rowPath)
