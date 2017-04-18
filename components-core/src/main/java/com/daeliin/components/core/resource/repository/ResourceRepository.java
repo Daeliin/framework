@@ -10,12 +10,10 @@ import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.sql.RelationalPathBase;
-import com.querydsl.sql.SQLQueryFactory;
 import com.querydsl.sql.dml.SQLInsertClause;
 import com.querydsl.sql.dml.SQLUpdateClause;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -23,20 +21,13 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
-@Transactional
-public abstract class ResourceRepository<E extends PersistentResource, B> implements PagingRepository<E> {
-
-    @Inject
-    protected SQLQueryFactory queryFactory;
+public abstract class ResourceRepository<E extends PersistentResource, B> extends BaseRepository<B> implements PagingRepository<E> {
 
     protected final Conversion<E, B> conversion;
-    protected final RelationalPathBase<B> rowPath;
-    protected final StringPath idPath;
 
     protected ResourceRepository(Conversion<E, B> conversion, RelationalPathBase<B> rowPath, StringPath idPath) {
+        super(rowPath, idPath);
         this.conversion = conversion;
-        this.rowPath = rowPath;
-        this.idPath = idPath;
     }
 
     @Override
@@ -119,7 +110,7 @@ public abstract class ResourceRepository<E extends PersistentResource, B> implem
     @Override
     public Page<E> findAll(PageRequest pageRequest) {
         long totalItems = count();
-        long totalPages = Double.valueOf(Math.ceil(totalItems / pageRequest.size)).intValue();
+        long totalPages = computeTotalPages(totalItems, pageRequest.size);
         OrderSpecifier[] orders = computeOrders(pageRequest);
 
         List<E> items = queryFactory.select(rowPath)
@@ -197,39 +188,5 @@ public abstract class ResourceRepository<E extends PersistentResource, B> implem
                 .from(rowPath)
                 .where(idPath.in(resourceIds))
                 .fetch();
-    }
-
-    protected OrderSpecifier[] computeOrders(PageRequest pageRequest) {
-        List<OrderSpecifier> orders = new ArrayList<>();
-
-        List<Path> sortablePaths =
-                rowPath.getColumns()
-                        .stream()
-                        .filter(path -> path instanceof ComparableExpressionBase)
-                        .collect(toList());
-
-        for (Path<?> path : sortablePaths) {
-            String columnName = path.getMetadata().getName();
-
-            if (pageRequest.sorts.containsKey(columnName)) {
-                ComparableExpressionBase comparableExpressionBase = (ComparableExpressionBase)path;
-
-                if (pageRequest.sorts.containsKey(columnName)) {
-                    switch (pageRequest.sorts.get(columnName)) {
-                        case ASC:
-                            orders.add(comparableExpressionBase.asc());
-                            break;
-                        case DESC:
-                            orders.add(comparableExpressionBase.desc());
-                            break;
-                        default:
-                            orders.add(comparableExpressionBase.asc());
-                            break;
-                    }
-                }
-            }
-        }
-
-        return orders.toArray(new OrderSpecifier[orders.size()]);
     }
 }

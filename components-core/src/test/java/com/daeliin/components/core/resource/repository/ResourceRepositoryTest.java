@@ -232,7 +232,6 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
         assertThat(uuidEntityCountBeforeDelete).isEqualTo(uuidEntityCountAfterDelete);
     }
 
-
     @Test
     public void shouldDeleteAResource() {
         int uuidEntityCountBeforeCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
