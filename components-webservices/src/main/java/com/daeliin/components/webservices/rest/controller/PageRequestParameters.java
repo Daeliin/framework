@@ -1,7 +1,7 @@
 package com.daeliin.components.webservices.rest.controller;
 
+import com.daeliin.components.domain.pagination.Sort;
 import com.daeliin.components.webservices.exception.PageRequestException;
-import org.springframework.data.domain.Sort;
 
 /**
  * Builds parameters of a page request instantiate their String value.
@@ -14,8 +14,8 @@ public class PageRequestParameters {
     private String[] properties;
 
     public PageRequestParameters(
-            final String pageNumberParameter, 
-            final String pageSizeParameter, 
+            final String pageNumberParameter,
+            final String pageSizeParameter,
             final String directionParameter, 
             final String... propertiesParameter) throws PageRequestException{
         
@@ -40,7 +40,7 @@ public class PageRequestParameters {
     public int pageSize() {
         return pageSize;
     }
-    
+
     /**
      * Returns the sort direction.
      * @return the sort direction
@@ -56,7 +56,7 @@ public class PageRequestParameters {
     public String[] properties() {
         return properties;
     }
-    
+
     private void buildPageNumber(final String pageNumberParameter) throws PageRequestException {
         boolean pageNumberParameterIsNotCorrect = false;
         
