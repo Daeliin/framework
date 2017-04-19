@@ -28,6 +28,6 @@ public final class UUIDEntityConversion implements Conversion<UUIDEntity, BUuidE
         return new BUuidEntity(
                 Timestamp.valueOf(uuidEntity.creationDate()),
                 uuidEntity.label,
-                uuidEntity.uuid());
+                uuidEntity.id());
     }
 }

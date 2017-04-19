@@ -14,9 +14,8 @@ public final class CountryConversion implements Conversion<Country, BCountry> {
         }
 
         return new Country(
-                bCountry.getUuid(),
-                bCountry.getCreationDate().toLocalDateTime(),
                 bCountry.getCode(),
+                bCountry.getCreationDate().toLocalDateTime(),
                 bCountry.getName());
     }
 
@@ -29,7 +28,6 @@ public final class CountryConversion implements Conversion<Country, BCountry> {
         return new BCountry(
                 country.code,
                 Timestamp.valueOf(country.creationDate()),
-                country.name,
-                country.uuid());
+                country.name);
     }
 }

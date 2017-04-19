@@ -25,7 +25,7 @@ public final class CountryConversionTest {
         assertThat(mappedCountry.getCreationDate().toLocalDateTime()).isEqualTo(country.creationDate());
         assertThat(mappedCountry.getCode()).isEqualTo(country.code);
         assertThat(mappedCountry.getName()).isEqualTo(country.name);
-        assertThat(mappedCountry.getUuid()).isEqualTo(country.uuid());
+        assertThat(mappedCountry.getUuid()).isEqualTo(country.id());
     }
 
     @Test
@@ -36,7 +36,7 @@ public final class CountryConversionTest {
     @Test
     public void shouldInstantiateAnEventLog() {
         Country country = CountryFixtures.france();
-        BCountry mappedCountry = new BCountry(country.code, Timestamp.valueOf(country.creationDate()), country.name, country.uuid());
+        BCountry mappedCountry = new BCountry(country.code, Timestamp.valueOf(country.creationDate()), country.name, country.id());
         Country rebuiltCountry = countryConversion.instantiate(mappedCountry);
 
         assertThat(rebuiltCountry).isEqualTo(country);

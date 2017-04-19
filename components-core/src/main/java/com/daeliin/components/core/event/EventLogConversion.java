@@ -28,6 +28,6 @@ public final class EventLogConversion implements Conversion<EventLog, BEventLog>
         return new BEventLog(
                 Timestamp.valueOf(eventLog.creationDate()),
                 eventLog.descriptionKey,
-                eventLog.uuid());
+                eventLog.id());
     }
 }

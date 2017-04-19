@@ -8,23 +8,22 @@ import java.util.Objects;
 /**
  * Resource saved in a RDBMS and identified by an UUID,
  * Equality is only based on the UUID.
+ * @param <ID> resource ID
  */
-public abstract class PersistentResource implements Persistable {
+public abstract class PersistentResource<ID> implements Persistable<ID> {
     
-    private static final long serialVersionUID = -5886577401324234159L;
-
     private static final LocalDateTime DEFAULT_CREATION_DATE = LocalDateTime.now();
 
-    protected final String uuid;
+    protected final ID id;
     protected final LocalDateTime creationDate;
 
-    protected PersistentResource(String uuid, LocalDateTime creationDate) {
-        this.uuid = Objects.requireNonNull(uuid, "uuid should not be null");
+    protected PersistentResource(ID id, LocalDateTime creationDate) {
+        this.id = Objects.requireNonNull(id, "id should not be null");
         this.creationDate = creationDate != null ? creationDate : DEFAULT_CREATION_DATE;
     }
 
-    public String uuid() {
-        return uuid;
+    public ID id() {
+        return id;
     }
 
     public LocalDateTime creationDate() {
@@ -36,12 +35,12 @@ public abstract class PersistentResource implements Persistable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PersistentResource that = (PersistentResource) o;
-        return Objects.equals(uuid, that.uuid);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid.hashCode());
+        return Objects.hash(id.hashCode());
     }
 
     @Override
@@ -51,7 +50,7 @@ public abstract class PersistentResource implements Persistable {
 
     protected MoreObjects.ToStringHelper toStringHelper() {
         return MoreObjects.toStringHelper(this)
-                .add("uuid", uuid)
+                .add("id", id)
                 .add("creationDate", creationDate);
     }
 }

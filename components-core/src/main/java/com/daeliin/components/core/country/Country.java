@@ -1,20 +1,17 @@
 package com.daeliin.components.core.country;
 
 import com.daeliin.components.domain.resource.PersistentResource;
-import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Country extends PersistentResource implements Comparable<Country> {
+public class Country extends PersistentResource<String> implements Comparable<Country> {
 
-    private static final long serialVersionUID = -5165401765623832715L;
-    
     public final String code;
     public final String name;
     
-    public Country(String uuid, LocalDateTime creationDate, String code, String name) {
-        super(uuid, creationDate);
+    public Country(String code, LocalDateTime creationDate, String name) {
+        super(code, creationDate);
         this.code = Objects.requireNonNull(code, "code should not be null");
         this.name = Objects.requireNonNull(name, "name should not be null");
     }

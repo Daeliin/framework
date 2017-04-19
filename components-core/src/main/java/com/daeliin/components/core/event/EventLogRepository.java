@@ -8,9 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Component
-public class EventLogRepository extends ResourceRepository<EventLog, BEventLog> {
+public class EventLogRepository extends ResourceRepository<BEventLog, String> {
 
     public EventLogRepository() {
-        super(new EventLogConversion(), QEventLog.eventLog, QEventLog.eventLog.uuid);
+        super(QEventLog.eventLog, QEventLog.eventLog.uuid, BEventLog::getUuid);
     }
 }

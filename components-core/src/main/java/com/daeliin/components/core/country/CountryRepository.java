@@ -8,9 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Component
-public class CountryRepository extends ResourceRepository<Country, BCountry> {
+public class CountryRepository extends ResourceRepository<BCountry, String> {
 
     public CountryRepository() {
-        super(new CountryConversion(), QCountry.country, QCountry.country.uuid);
+        super(QCountry.country, QCountry.country.code, BCountry::getCode);
     }
 }

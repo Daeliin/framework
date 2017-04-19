@@ -8,9 +8,7 @@ import java.util.Objects;
 /**
  * Represents a log for an event in the system, with an description i18n key.
  */
-public final class EventLog extends PersistentResource implements Comparable<EventLog> {
-
-    private static final long serialVersionUID = -5353349286441881283L;
+public final class EventLog extends PersistentResource<String> implements Comparable<EventLog> {
 
     public final String descriptionKey;
 

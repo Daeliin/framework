@@ -33,7 +33,7 @@ public class User extends PersistentResource implements Comparable<User> {
     }
     
     public User withUuid(final String uuid) {
-        this.uuid = uuid;
+        this.id = uuid;
         return this;
     }
 

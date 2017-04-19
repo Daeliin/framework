@@ -1,6 +1,6 @@
 package com.daeliin.components.domain.resource;
 
-import com.daeliin.components.domain.resource.fake.UUIDEntity;
+import com.daeliin.components.domain.resource.fake.FakePersistenceResource;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
@@ -15,21 +15,21 @@ public class PersistentResourceTest {
 
     @Test
     public void shouldAssignADefaultCreationDate() {
-        UUIDEntity newUUIDEntity = new UUIDEntity(UUID, null);
+        FakePersistenceResource newUUIDEntity = new FakePersistenceResource(UUID, null);
 
         assertThat(newUUIDEntity.creationDate()).isNotNull();
     }
 
     @Test
     public void shouldAssignAnUuid() {
-        UUIDEntity newUUIDEntity = new UUIDEntity(UUID, CREATION_DATE);
+        FakePersistenceResource newUUIDEntity = new FakePersistenceResource(UUID, CREATION_DATE);
 
-        assertThat(newUUIDEntity.uuid()).isEqualTo(UUID);
+        assertThat(newUUIDEntity.id()).isEqualTo(UUID);
     }
 
     @Test
     public void shouldAssignACreationDate() {
-        UUIDEntity newUUIDEntity = new UUIDEntity(UUID, CREATION_DATE);
+        FakePersistenceResource newUUIDEntity = new FakePersistenceResource(UUID, CREATION_DATE);
 
         assertThat(newUUIDEntity.creationDate()).isEqualTo(CREATION_DATE);
     }
@@ -37,12 +37,12 @@ public class PersistentResourceTest {
 
     @Test(expected = Exception.class)
     public void shouldThrowException_whenUuidIsNull() {
-        new UUIDEntity(null, CREATION_DATE);
+        new FakePersistenceResource(null, CREATION_DATE);
     }
 
     @Test
     public void shouldNotBeEqualToOtherTypes() {
-        UUIDEntity newUUIDEntity = new UUIDEntity(UUID, CREATION_DATE);
+        FakePersistenceResource newUUIDEntity = new FakePersistenceResource(UUID, CREATION_DATE);
         Object otherTypeObject = new Object();
         
         assertThat(newUUIDEntity).isNotEqualTo(otherTypeObject);
@@ -50,30 +50,30 @@ public class PersistentResourceTest {
     
     @Test
     public void shouldNotBeEqualToNull() {
-        UUIDEntity newUUIDEntity = new UUIDEntity(UUID, CREATION_DATE);
+        FakePersistenceResource newUUIDEntity = new FakePersistenceResource(UUID, CREATION_DATE);
 
         assertThat(newUUIDEntity).isNotEqualTo(null);
     }
     
     @Test
     public void shouldBeEqualToItself() {
-        UUIDEntity newUUIDEntity = new UUIDEntity(UUID, CREATION_DATE);
+        FakePersistenceResource newUUIDEntity = new FakePersistenceResource(UUID, CREATION_DATE);
 
         assertThat(newUUIDEntity).isEqualTo(newUUIDEntity);
     }
     
     @Test
     public void shouldBeEqualToOtherInstanceWithSameUuid() {
-        UUIDEntity newUUIDEntity = new UUIDEntity(UUID, CREATION_DATE);
-        UUIDEntity sameUUIDEntity = new UUIDEntity(UUID, CREATION_DATE);
+        FakePersistenceResource newUUIDEntity = new FakePersistenceResource(UUID, CREATION_DATE);
+        FakePersistenceResource sameUUIDEntity = new FakePersistenceResource(UUID, CREATION_DATE);
 
         assertThat(newUUIDEntity).isEqualTo(sameUUIDEntity);
     }
     
     @Test
     public void shouldBeEqualSymmetrically() {
-        UUIDEntity newUUIDEntity = new UUIDEntity(UUID, CREATION_DATE);
-        UUIDEntity sameUUIDEntity = new UUIDEntity(UUID, CREATION_DATE);
+        FakePersistenceResource newUUIDEntity = new FakePersistenceResource(UUID, CREATION_DATE);
+        FakePersistenceResource sameUUIDEntity = new FakePersistenceResource(UUID, CREATION_DATE);
 
         assertThat(newUUIDEntity).isEqualTo(sameUUIDEntity);
         assertThat(sameUUIDEntity).isEqualTo(newUUIDEntity);
@@ -81,9 +81,9 @@ public class PersistentResourceTest {
     
     @Test
     public void shouldBeEqualTransitively() {
-        UUIDEntity newUUIDEntity = new UUIDEntity(UUID, CREATION_DATE);
-        UUIDEntity sameUUIDEntity = new UUIDEntity(UUID, CREATION_DATE);
-        UUIDEntity anotherSameUUIDEntity = new UUIDEntity(UUID, CREATION_DATE);
+        FakePersistenceResource newUUIDEntity = new FakePersistenceResource(UUID, CREATION_DATE);
+        FakePersistenceResource sameUUIDEntity = new FakePersistenceResource(UUID, CREATION_DATE);
+        FakePersistenceResource anotherSameUUIDEntity = new FakePersistenceResource(UUID, CREATION_DATE);
 
         assertThat(newUUIDEntity).isEqualTo(sameUUIDEntity);
         assertThat(sameUUIDEntity).isEqualTo(anotherSameUUIDEntity);
@@ -92,8 +92,8 @@ public class PersistentResourceTest {
     
     @Test
     public void shouldNotHaveSameHashCode_whenNotEqual() {
-        UUIDEntity newUUIDEntity = new UUIDEntity(UUID, CREATION_DATE);
-        UUIDEntity otherUUIDEntity = new UUIDEntity("anotherUuid", CREATION_DATE);
+        FakePersistenceResource newUUIDEntity = new FakePersistenceResource(UUID, CREATION_DATE);
+        FakePersistenceResource otherUUIDEntity = new FakePersistenceResource("anotherUuid", CREATION_DATE);
 
         assertThat(newUUIDEntity).isNotEqualTo(otherUUIDEntity);
         assertThat(newUUIDEntity.hashCode()).isNotEqualTo(otherUUIDEntity.hashCode());
@@ -101,8 +101,8 @@ public class PersistentResourceTest {
     
     @Test
     public void shouldHaveSameHashCode_whenEqual() {
-        UUIDEntity newUUIDEntity = new UUIDEntity(UUID, CREATION_DATE);
-        UUIDEntity sameUUIDEntity = new UUIDEntity(UUID, CREATION_DATE);
+        FakePersistenceResource newUUIDEntity = new FakePersistenceResource(UUID, CREATION_DATE);
+        FakePersistenceResource sameUUIDEntity = new FakePersistenceResource(UUID, CREATION_DATE);
 
         assertThat(newUUIDEntity).isEqualTo(sameUUIDEntity);
         assertThat(newUUIDEntity.hashCode()).isEqualTo(sameUUIDEntity.hashCode());
@@ -110,8 +110,8 @@ public class PersistentResourceTest {
     
     @Test
     public void shouldPrintsItsUuidAndCreationDate() {
-        UUIDEntity newUUIDEntity = new UUIDEntity(UUID, CREATION_DATE);
+        FakePersistenceResource newUUIDEntity = new FakePersistenceResource(UUID, CREATION_DATE);
 
-        assertThat(newUUIDEntity.toString()).contains(newUUIDEntity.uuid(), newUUIDEntity.creationDate.toString());
+        assertThat(newUUIDEntity.toString()).contains(newUUIDEntity.id(), newUUIDEntity.creationDate.toString());
     }
 }

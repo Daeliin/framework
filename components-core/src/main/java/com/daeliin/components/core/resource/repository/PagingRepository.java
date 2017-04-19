@@ -6,30 +6,31 @@ import com.daeliin.components.domain.pagination.PageRequest;
 import java.util.Collection;
 
 /**
- * Provides CRUD operations and pagination for a resource.
- * @param <E> resource type
+ * Provides CRUD operations and pagination for a table.
+ * @param <T> row type
+ * @param <ID> resource ID
  */
-public interface PagingRepository<E> {
+public interface PagingRepository<T, ID> {
 
-    E save(E resource);
+    T save(T resource);
 
-    Collection<E> save(Collection<E> resources);
+    Collection<T> save(Collection<T> resources);
 
-    E findOne(String resourceId);
+    T findOne(ID resourceId);
 
-    Collection<E> findAll(Collection<String> resourceIds);
+    Collection<T> findAll(Collection<ID> resourceIds);
 
-    Page<E> findAll(PageRequest pageRequest);
+    Page<T> findAll(PageRequest pageRequest);
 
-    Collection<E> findAll();
+    Collection<T> findAll();
 
-    boolean exists(String resourceId);
+    boolean exists(ID resourceId);
 
     long count();
 
-    boolean delete(String resourceId);
+    boolean delete(ID resourceId);
 
-    boolean delete(Collection<String> resourceIds);
+    boolean delete(Collection<ID> resourceIds);
 
     boolean deleteAll();
 }

@@ -27,14 +27,14 @@ public final class PageRequest implements Comparable<PageRequest> {
     }
 
     public PageRequest(int index, int size) {
-        this(index, size, Collections.EMPTY_SET);
+        this(index, size, new HashSet<>());
     }
 
     public PageRequest(int index, int size, Set<Sort> sorts) {
         this.index = (index >= 0 && index <= Integer.MAX_VALUE) ? index : DEFAULT_INDEX;
         this.size = (size >= 0 && size <= Integer.MAX_VALUE) ? size : DEFAULT_SIZE;
         this.offset = index * size;
-        this.sorts = (sorts == null || sorts.isEmpty()) ? Collections.EMPTY_MAP : buildSorts(sorts);
+        this.sorts = (sorts == null || sorts.isEmpty()) ? new HashMap<>() : buildSorts(sorts);
     }
 
     @Override

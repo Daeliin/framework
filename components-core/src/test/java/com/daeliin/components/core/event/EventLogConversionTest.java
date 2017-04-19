@@ -24,7 +24,7 @@ public final class EventLogConversionTest {
 
         assertThat(mappedEventLog.getCreationDate().toLocalDateTime()).isEqualTo(eventLog.creationDate());
         assertThat(mappedEventLog.getDescriptionKey()).isEqualTo(eventLog.descriptionKey);
-        assertThat(mappedEventLog.getUuid()).isEqualTo(eventLog.uuid());
+        assertThat(mappedEventLog.getUuid()).isEqualTo(eventLog.id());
     }
 
     @Test
@@ -35,7 +35,7 @@ public final class EventLogConversionTest {
     @Test
     public void shouldInstantiateAnEventLog() {
         EventLog eventLog = EventLogFixtures.login();
-        BEventLog mappedEventLog = new BEventLog(Timestamp.valueOf(eventLog.creationDate()), eventLog.descriptionKey, eventLog.uuid());
+        BEventLog mappedEventLog = new BEventLog(Timestamp.valueOf(eventLog.creationDate()), eventLog.descriptionKey, eventLog.id());
         EventLog rebuiltEventLog = eventLogConversion.instantiate(mappedEventLog);
 
         assertThat(rebuiltEventLog).isEqualTo(eventLog);

@@ -76,7 +76,7 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
 
     @Test
     public void shouldCallRepositoryExistAndReturnTrue_whenResourceIdExists() {
-        String existingUuidEntityId = UUIDEntityFixtures.uuidEntity1().uuid();
+        String existingUuidEntityId = UUIDEntityFixtures.uuidEntity1().id();
 
         doReturn(true).when(repository).exists(existingUuidEntityId);
 
@@ -123,10 +123,10 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
     public void shouldCallRepositoryFindOneAndReturnsResource_whenFindingResource() {
         UUIDEntity existingUuidEntity = UUIDEntityFixtures.uuidEntity1();
 
-        doReturn(existingUuidEntity).when(repository).findOne(existingUuidEntity.uuid());
+        doReturn(existingUuidEntity).when(repository).findOne(existingUuidEntity.id());
 
-        assertThat(service.findOne(existingUuidEntity.uuid())).isEqualTo(existingUuidEntity);
-        verify(repository).findOne(existingUuidEntity.uuid());
+        assertThat(service.findOne(existingUuidEntity.id())).isEqualTo(existingUuidEntity);
+        verify(repository).findOne(existingUuidEntity.id());
     }
 
     @Test
@@ -159,7 +159,7 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
 
     @Test
     public void shouldCallRepositoryFindAllWithResourceIds_whenFindingResources() {
-        Collection<String> uuidEntityIds = Arrays.asList(UUIDEntityFixtures.uuidEntity1().uuid(), UUIDEntityFixtures.uuidEntity2().uuid());
+        Collection<String> uuidEntityIds = Arrays.asList(UUIDEntityFixtures.uuidEntity1().id(), UUIDEntityFixtures.uuidEntity2().id());
 
         service.findAll(uuidEntityIds);
         verify(repository).findAll(uuidEntityIds);
@@ -182,7 +182,7 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
     @Test
     public void shouldCallRepositorySaveWithResourceAndReturnResource_whenUpdatingResource() {
         UUIDEntity exitingUuidEntity = UUIDEntityFixtures.uuidEntity1();
-        doReturn(true).when(repository).exists(exitingUuidEntity.uuid());
+        doReturn(true).when(repository).exists(exitingUuidEntity.id());
         doReturn(exitingUuidEntity).when(repository).save(exitingUuidEntity);
 
         UUIDEntity updatedUuidEntity = service.update(exitingUuidEntity);
@@ -205,8 +205,8 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
 
     @Test
     public void shouldCallRepositoryDelete_whenDeletingResource() {
-        service.delete(UUIDEntityFixtures.uuidEntity1().uuid());
-        verify(repository).delete(UUIDEntityFixtures.uuidEntity1().uuid());
+        service.delete(UUIDEntityFixtures.uuidEntity1().id());
+        verify(repository).delete(UUIDEntityFixtures.uuidEntity1().id());
     }
 
     @Test
@@ -220,9 +220,9 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
         UUIDEntity uuidEntity1 = UUIDEntityFixtures.uuidEntity1();
         UUIDEntity uuidEntity2 = UUIDEntityFixtures.uuidEntity2();
 
-        service.delete(Arrays.asList(uuidEntity1.uuid(), uuidEntity2.uuid()));
+        service.delete(Arrays.asList(uuidEntity1.id(), uuidEntity2.id()));
 
-        verify(repository).delete(Arrays.asList(uuidEntity1.uuid(), uuidEntity2.uuid()));
+        verify(repository).delete(Arrays.asList(uuidEntity1.id(), uuidEntity2.id()));
     }
 
     @Test
@@ -230,12 +230,12 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
         UUIDEntity uuidEntity = UUIDEntityFixtures.uuidEntity1();
 
         service.delete(uuidEntity);
-        verify(repository).delete(uuidEntity.uuid());
+        verify(repository).delete(uuidEntity.id());
     }
 
     @Test
     public void dshouldCallRepositoryDeleteWithResources_whenDeletingResources() {
-        Collection<String> uuidEntityIds = Arrays.asList(UUIDEntityFixtures.uuidEntity1().uuid(), UUIDEntityFixtures.uuidEntity2().uuid());
+        Collection<String> uuidEntityIds = Arrays.asList(UUIDEntityFixtures.uuidEntity1().id(), UUIDEntityFixtures.uuidEntity2().id());
 
         service.delete(uuidEntityIds);
         verify(repository).delete(uuidEntityIds);

@@ -3,6 +3,7 @@ package com.daeliin.components.domain.pagination;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -18,24 +19,24 @@ public final class PageTest {
 
     @Test
     public void shouldHaveADefaultTotalItemsOf0() {
-        Assertions.assertThat(new Page(Collections.EMPTY_LIST, -1, 10).totalItems).isEqualTo(0);
-        Assertions.assertThat(new Page(Collections.EMPTY_LIST, Long.MAX_VALUE + 1, 10).totalItems).isEqualTo(0);
+        Assertions.assertThat(new Page(new ArrayList<>(), -1, 10).totalItems).isEqualTo(0);
+        Assertions.assertThat(new Page(new ArrayList<>(), Long.MAX_VALUE + 1, 10).totalItems).isEqualTo(0);
     }
 
     @Test
     public void shouldAssignTotalItems() {
-        Assertions.assertThat(new Page(Collections.EMPTY_LIST, 15, 10).totalItems).isEqualTo(15);
+        Assertions.assertThat(new Page(new ArrayList<>(), 15, 10).totalItems).isEqualTo(15);
     }
 
     @Test
     public void shouldHaveADefaultTotalPagesOf0() {
-        Assertions.assertThat(new Page(Collections.EMPTY_LIST, 10, -1).totalPages).isEqualTo(1);
-        Assertions.assertThat(new Page(Collections.EMPTY_LIST, 10, Long.MAX_VALUE + 1).totalPages).isEqualTo(1);
+        Assertions.assertThat(new Page(new ArrayList<>(), 10, -1).totalPages).isEqualTo(1);
+        Assertions.assertThat(new Page(new ArrayList<>(), 10, Long.MAX_VALUE + 1).totalPages).isEqualTo(1);
     }
 
     @Test
     public void shouldAssignTotalPages() {
-        Assertions.assertThat(new Page(Collections.EMPTY_LIST, 10, 15).totalPages).isEqualTo(15);
+        Assertions.assertThat(new Page(new ArrayList<>(), 10, 15).totalPages).isEqualTo(15);
     }
 
     @Test

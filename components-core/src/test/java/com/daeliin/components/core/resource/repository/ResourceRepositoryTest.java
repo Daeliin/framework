@@ -37,7 +37,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
         UUIDEntity newUuuidEntity = new UUIDEntity(UUID.randomUUID().toString(), LocalDateTime.now(), "label100");
         int uuidEntityCountBeforeCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
 
-        UUIDEntity persistedUuidEntity = repository.findOne(repository.save(newUuuidEntity).uuid());
+        UUIDEntity persistedUuidEntity = repository.findOne(repository.save(newUuuidEntity).id());
 
         int uuidEntityCountAfterCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
 
@@ -82,7 +82,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void shouldCheckIfResourceExists() {
-        assertThat(repository.exists(UUIDEntityFixtures.uuidEntity1().uuid())).isTrue();
+        assertThat(repository.exists(UUIDEntityFixtures.uuidEntity1().id())).isTrue();
     }
 
     @Test
@@ -104,7 +104,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
     public void shouldFindResource() {
         UUIDEntity uuidEntity1 = UUIDEntityFixtures.uuidEntity1();
 
-        UUIDEntity foundUuidEntity = repository.findOne(uuidEntity1.uuid());
+        UUIDEntity foundUuidEntity = repository.findOne(uuidEntity1.id());
 
         assertThat(foundUuidEntity).isEqualTo(UUIDEntityFixtures.uuidEntity1());
     }
@@ -128,7 +128,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void shouldFindResources() {
-        List<String> uuidEntityIds = Arrays.asList(UUIDEntityFixtures.uuidEntity1().uuid(), UUIDEntityFixtures.uuidEntity2().uuid());
+        List<String> uuidEntityIds = Arrays.asList(UUIDEntityFixtures.uuidEntity1().id(), UUIDEntityFixtures.uuidEntity2().id());
         Collection<UUIDEntity> uuidEntities = repository.findAll(uuidEntityIds);
 
         assertThat(uuidEntities).containsOnly(UUIDEntityFixtures.uuidEntity1(), UUIDEntityFixtures.uuidEntity2());
@@ -157,7 +157,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void shouldReturnOnlyExistingResources_whenFindingEexistingAndNonExistingResources() {
-        List<String> uuidEntityIds = Arrays.asList(UUIDEntityFixtures.uuidEntity1().uuid(), UUIDEntityFixtures.uuidEntity2().uuid(), "646444-218");
+        List<String> uuidEntityIds = Arrays.asList(UUIDEntityFixtures.uuidEntity1().id(), UUIDEntityFixtures.uuidEntity2().id(), "646444-218");
         Collection<UUIDEntity> uuidEntities = repository.findAll(uuidEntityIds);
 
         assertThat(uuidEntities).containsOnly(UUIDEntityFixtures.uuidEntity1(), UUIDEntityFixtures.uuidEntity2());
@@ -171,7 +171,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
                 UUIDEntityFixtures.uuidEntity2(),
                 UUIDEntityFixtures.uuidEntity1());
 
-        Page<UUIDEntity> page = repository.findAll(new PageRequest(1, 2, Sets.newHashSet(new Sort("uuid", Sort.Direction.DESC))));
+        Page<UUIDEntity> page = repository.findAll(new PageRequest(1, 2, Sets.newHashSet(new Sort("id", Sort.Direction.DESC))));
 
         assertThat(page.items).containsExactly(uuidEntityPageContent.toArray(new UUIDEntity[uuidEntityPageContent.size()]));
         assertThat(page.nbItems).isEqualTo(uuidEntityPageContent.size());
@@ -191,7 +191,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
         Page<UUIDEntity> page = repository.findAll(new PageRequest(0, uuidEntityCount, Sets.newHashSet(
                 new Sort("creationDate", Sort.Direction.ASC),
-                new Sort("uuid", Sort.Direction.DESC))));
+                new Sort("id", Sort.Direction.DESC))));
 
         assertThat(page.items).containsExactly(uuidEntityPageContent.toArray(new UUIDEntity[uuidEntityPageContent.size()]));
     }
@@ -236,7 +236,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
     public void shouldDeleteAResource() {
         int uuidEntityCountBeforeCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
 
-        repository.delete(UUIDEntityFixtures.uuidEntity1().uuid());
+        repository.delete(UUIDEntityFixtures.uuidEntity1().id());
 
         int uuidEntityCountAfterCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
 
@@ -245,14 +245,14 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void shouldReturnTrue_whenDeletingResource() {
-        boolean delete = repository.delete(UUIDEntityFixtures.uuidEntity1().uuid());
+        boolean delete = repository.delete(UUIDEntityFixtures.uuidEntity1().id());
 
         assertThat(delete).isTrue();
     }
 
     @Test
     public void shouldDeleteMultipleResources() {
-        List<String> uuidEntityIds = Arrays.asList(UUIDEntityFixtures.uuidEntity1().uuid(), UUIDEntityFixtures.uuidEntity2().uuid());
+        List<String> uuidEntityIds = Arrays.asList(UUIDEntityFixtures.uuidEntity1().id(), UUIDEntityFixtures.uuidEntity2().id());
         int uuidEntityCountBeforeDelete = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
 
         repository.delete(uuidEntityIds);
@@ -264,7 +264,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void shouldReturnTrue_whenDeletingMultipleResources() {
-        List<String> uuidEntityIds = Arrays.asList(UUIDEntityFixtures.uuidEntity1().uuid(), UUIDEntityFixtures.uuidEntity2().uuid());
+        List<String> uuidEntityIds = Arrays.asList(UUIDEntityFixtures.uuidEntity1().id(), UUIDEntityFixtures.uuidEntity2().id());
         boolean delete = repository.delete(uuidEntityIds);
 
         assertThat(delete).isTrue();
@@ -293,7 +293,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void shouldDeleteOnlyExistingResources_whenDeletingExistingAndNonExistingResources() {
-        List<String> uuidEntityIds = Arrays.asList(UUIDEntityFixtures.uuidEntity1().uuid(), UUIDEntityFixtures.uuidEntity2().uuid(), "665321-111");
+        List<String> uuidEntityIds = Arrays.asList(UUIDEntityFixtures.uuidEntity1().id(), UUIDEntityFixtures.uuidEntity2().id(), "665321-111");
 
         int uuidEntityCountBeforeDelete = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
 
