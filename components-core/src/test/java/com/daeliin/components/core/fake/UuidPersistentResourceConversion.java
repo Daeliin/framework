@@ -1,31 +1,31 @@
 package com.daeliin.components.core.fake;
 
-import com.daeliin.components.core.sql.BUuidEntity;
+import com.daeliin.components.core.sql.BUuidPersistentResource;
 import com.daeliin.components.domain.resource.Conversion;
 
 import java.sql.Timestamp;
 
-public final class UUIDEntityConversion implements Conversion<UUIDEntity, BUuidEntity> {
+public final class UuidPersistentResourceConversion implements Conversion<UuidPersistentResource, BUuidPersistentResource> {
 
     @Override
-    public UUIDEntity instantiate(BUuidEntity bUuidEntity) {
+    public UuidPersistentResource instantiate(BUuidPersistentResource bUuidEntity) {
         if (bUuidEntity == null) {
             return null;
         }
 
-        return new UUIDEntity(
+        return new UuidPersistentResource(
                 bUuidEntity.getUuid(),
                 bUuidEntity.getCreationDate().toLocalDateTime(),
                 bUuidEntity.getLabel());
     }
 
     @Override
-    public BUuidEntity map(UUIDEntity uuidEntity) {
+    public BUuidPersistentResource map(UuidPersistentResource uuidEntity) {
         if (uuidEntity == null) {
             return null;
         }
 
-        return new BUuidEntity(
+        return new BUuidPersistentResource(
                 Timestamp.valueOf(uuidEntity.creationDate()),
                 uuidEntity.label,
                 uuidEntity.id());

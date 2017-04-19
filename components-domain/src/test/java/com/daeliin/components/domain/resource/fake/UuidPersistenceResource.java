@@ -4,9 +4,9 @@ import com.daeliin.components.domain.resource.PersistentResource;
 
 import java.time.LocalDateTime;
 
-public class FakePersistenceResource extends PersistentResource<String> {
+public class UuidPersistenceResource extends PersistentResource<String> {
 
-    public FakePersistenceResource(String uuid, LocalDateTime creationDate) {
+    public UuidPersistenceResource(String uuid, LocalDateTime creationDate) {
         super(uuid, creationDate);
     }
 }

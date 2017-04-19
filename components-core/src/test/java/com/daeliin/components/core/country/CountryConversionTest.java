@@ -1,6 +1,7 @@
 package com.daeliin.components.core.country;
 
 import com.daeliin.components.core.fixtures.CountryFixtures;
+import com.daeliin.components.core.library.CountryLibrary;
 import com.daeliin.components.core.sql.BCountry;
 import org.junit.Test;
 
@@ -19,13 +20,10 @@ public final class CountryConversionTest {
 
     @Test
     public void shouldMapCountry() {
-        Country country = CountryFixtures.france();
+        Country country = CountryLibrary.france();
         BCountry mappedCountry = countryConversion.map(country);
 
-        assertThat(mappedCountry.getCreationDate().toLocalDateTime()).isEqualTo(country.creationDate());
-        assertThat(mappedCountry.getCode()).isEqualTo(country.code);
-        assertThat(mappedCountry.getName()).isEqualTo(country.name);
-        assertThat(mappedCountry.getUuid()).isEqualTo(country.id());
+        assertThat(mappedCountry).isEqualToComparingFieldByField(CountryFixtures.france());
     }
 
     @Test
@@ -34,9 +32,9 @@ public final class CountryConversionTest {
     }
 
     @Test
-    public void shouldInstantiateAnEventLog() {
-        Country country = CountryFixtures.france();
-        BCountry mappedCountry = new BCountry(country.code, Timestamp.valueOf(country.creationDate()), country.name, country.id());
+    public void shouldInstantiateAnCountry() {
+        Country country = CountryLibrary.france();
+        BCountry mappedCountry = new BCountry(country.code, Timestamp.valueOf(country.creationDate()), country.name);
         Country rebuiltCountry = countryConversion.instantiate(mappedCountry);
 
         assertThat(rebuiltCountry).isEqualTo(country);

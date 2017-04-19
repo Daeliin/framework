@@ -1,10 +1,10 @@
 package com.daeliin.components.core.resource.repository;
 
 import com.daeliin.components.core.Application;
-import com.daeliin.components.core.fake.UUIDEntity;
-import com.daeliin.components.core.fake.UUIDEntityRepository;
-import com.daeliin.components.core.fixtures.UUIDEntityFixtures;
-import com.daeliin.components.core.sql.QUuidEntity;
+import com.daeliin.components.core.fake.UuidPersistentResourceRepository;
+import com.daeliin.components.core.fixtures.UuidPersistentResourceFixtures;
+import com.daeliin.components.core.sql.BUuidPersistentResource;
+import com.daeliin.components.core.sql.QUuidPersistentResource;
 import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
 import com.daeliin.components.domain.pagination.Sort;
@@ -14,8 +14,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 import javax.inject.Inject;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,66 +27,66 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Inject
-    private UUIDEntityRepository repository;
+    private UuidPersistentResourceRepository repository;
 
     @Test(expected = Exception.class)
     public void shouldThrowException_whenPersistingNull() {
-        UUIDEntity nullUuidEntity = null;
+        BUuidPersistentResource nullUuidEntity = null;
 
         repository.save(nullUuidEntity);
     }
 
     @Test
     public void shouldPersistAResource() {
-        UUIDEntity newUuuidEntity = new UUIDEntity(UUID.randomUUID().toString(), LocalDateTime.now(), "label100");
-        int uuidEntityCountBeforeCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+        BUuidPersistentResource newUuuidPersistentResource = new BUuidPersistentResource(Timestamp.valueOf(LocalDateTime.now()), UUID.randomUUID().toString(), "label100");
+        int uuidPersistentResourceCountBeforeCreate = countRowsInTable(QUuidPersistentResource.uuidPersistentResource.getTableName());
 
-        UUIDEntity persistedUuidEntity = repository.findOne(repository.save(newUuuidEntity).id());
+        BUuidPersistentResource persistedUuidEntity = repository.findOne(repository.save(newUuuidPersistentResource).getUuid());
 
-        int uuidEntityCountAfterCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+        int uuidPersistentResourceCountAfterCreate = countRowsInTable(QUuidPersistentResource.uuidPersistentResource.getTableName());
 
-        assertThat(uuidEntityCountAfterCreate).isEqualTo(uuidEntityCountBeforeCreate + 1);
-        assertThat(persistedUuidEntity).isEqualTo(newUuuidEntity);
+        assertThat(uuidPersistentResourceCountAfterCreate).isEqualTo(uuidPersistentResourceCountBeforeCreate + 1);
+        assertThat(persistedUuidEntity).isEqualTo(newUuuidPersistentResource);
     }
 
     @Test
     public void shouldReturnThePersistedResource() {
-        UUIDEntity newUuuidEntity = new UUIDEntity(UUID.randomUUID().toString(), LocalDateTime.now(), "label100");
+        BUuidPersistentResource newUuuidPersistentResource = new BUuidPersistentResource(Timestamp.valueOf(LocalDateTime.now()), UUID.randomUUID().toString(), "label100");
 
-        UUIDEntity returnedUuidEntity = repository.save(newUuuidEntity);
+        BUuidPersistentResource returnedUuidEntity = repository.save(newUuuidPersistentResource);
 
-        assertThat(returnedUuidEntity).isEqualTo(newUuuidEntity);
+        assertThat(returnedUuidEntity).isEqualTo(newUuuidPersistentResource);
     }
 
     @Test
     public void shouldPersistResources() {
-        UUIDEntity newUuidEntity1 = new UUIDEntity(UUID.randomUUID().toString(), LocalDateTime.now(), "label101");
-        UUIDEntity newUuidEntity2 = new UUIDEntity(UUID.randomUUID().toString(), LocalDateTime.now(), "label102");
-        List<UUIDEntity> newUuidEntities = Arrays.asList(newUuidEntity1, newUuidEntity2);
+        BUuidPersistentResource newUuuidPersistentResource1 = new BUuidPersistentResource(Timestamp.valueOf(LocalDateTime.now()), UUID.randomUUID().toString(), "label101");
+        BUuidPersistentResource newUuuidPersistentResource2 = new BUuidPersistentResource(Timestamp.valueOf(LocalDateTime.now()), UUID.randomUUID().toString(), "label102");
+        List<BUuidPersistentResource> newUuidEntities = Arrays.asList(newUuuidPersistentResource1, newUuuidPersistentResource2);
 
-        int uuidEntityCountBeforeCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+        int uuidPersistentResourceCountBeforeCreate = countRowsInTable(QUuidPersistentResource.uuidPersistentResource.getTableName());
 
         repository.save(newUuidEntities);
 
-        int uuidEntityCountAterCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+        int uuidPersistentResourceCountAterCreate = countRowsInTable(QUuidPersistentResource.uuidPersistentResource.getTableName());
 
-        assertThat(uuidEntityCountAterCreate).isEqualTo(uuidEntityCountBeforeCreate + newUuidEntities.size());
+        assertThat(uuidPersistentResourceCountAterCreate).isEqualTo(uuidPersistentResourceCountBeforeCreate + newUuidEntities.size());
     }
 
     @Test
     public void shouldReturnThePersistedResources() {
-        UUIDEntity newUuidEntity1 = new UUIDEntity(UUID.randomUUID().toString(), LocalDateTime.now(), "label101");
-        UUIDEntity newUuidEntity2 = new UUIDEntity(UUID.randomUUID().toString(), LocalDateTime.now(), "label102");
-        List<UUIDEntity> newUuidEntities = Arrays.asList(newUuidEntity1, newUuidEntity2);
+        BUuidPersistentResource newUuuidPersistentResource1 = new BUuidPersistentResource(Timestamp.valueOf(LocalDateTime.now()), UUID.randomUUID().toString(), "label101");
+        BUuidPersistentResource newUuuidPersistentResource2 = new BUuidPersistentResource(Timestamp.valueOf(LocalDateTime.now()), UUID.randomUUID().toString(), "label102");
+        List<BUuidPersistentResource> newUuidEntities = Arrays.asList(newUuuidPersistentResource1, newUuuidPersistentResource2);
 
-        List<UUIDEntity> returnedUuidEntities = (List<UUIDEntity>)repository.save(newUuidEntities);
+        Collection<BUuidPersistentResource> returnedUuidEntities = repository.save(newUuidEntities);
 
-        assertThat(returnedUuidEntities).containsOnly(newUuidEntity1, newUuidEntity2);
+        assertThat(returnedUuidEntities).containsOnly(newUuuidPersistentResource1, newUuuidPersistentResource2);
     }
 
     @Test
     public void shouldCheckIfResourceExists() {
-        assertThat(repository.exists(UUIDEntityFixtures.uuidEntity1().id())).isTrue();
+        assertThat(repository.exists(UuidPersistentResourceFixtures.uuidPersistentResource1().getUuid())).isTrue();
     }
 
     @Test
@@ -102,11 +106,11 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void shouldFindResource() {
-        UUIDEntity uuidEntity1 = UUIDEntityFixtures.uuidEntity1();
+        BUuidPersistentResource uuidPersistentResource1 = UuidPersistentResourceFixtures.uuidPersistentResource1();
 
-        UUIDEntity foundUuidEntity = repository.findOne(uuidEntity1.id());
+        BUuidPersistentResource foundUuidEntity = repository.findOne(uuidPersistentResource1.getUuid());
 
-        assertThat(foundUuidEntity).isEqualTo(UUIDEntityFixtures.uuidEntity1());
+        assertThat(foundUuidEntity).isEqualTo(UuidPersistentResourceFixtures.uuidPersistentResource1());
     }
 
     @Test
@@ -121,79 +125,79 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void shouldFindAllResources() {
-        Collection<UUIDEntity> uuidEntities = repository.findAll();
+        Collection<BUuidPersistentResource> uuidEntities = repository.findAll();
 
-        assertThat(uuidEntities.size()).isEqualTo(countRowsInTable(QUuidEntity.uuidEntity.getTableName()));
+        assertThat(uuidEntities.size()).isEqualTo(countRowsInTable(QUuidPersistentResource.uuidPersistentResource.getTableName()));
     }
 
     @Test
     public void shouldFindResources() {
-        List<String> uuidEntityIds = Arrays.asList(UUIDEntityFixtures.uuidEntity1().id(), UUIDEntityFixtures.uuidEntity2().id());
-        Collection<UUIDEntity> uuidEntities = repository.findAll(uuidEntityIds);
+        List<String> uuidPersistentResourceIds = Arrays.asList(UuidPersistentResourceFixtures.uuidPersistentResource1().getUuid(), UuidPersistentResourceFixtures.uuidPersistentResource2().getUuid());
+        Collection<BUuidPersistentResource> uuidEntities = repository.findAll(uuidPersistentResourceIds);
 
-        assertThat(uuidEntities).containsOnly(UUIDEntityFixtures.uuidEntity1(), UUIDEntityFixtures.uuidEntity2());
+        assertThat(uuidEntities).containsOnly(UuidPersistentResourceFixtures.uuidPersistentResource1(), UuidPersistentResourceFixtures.uuidPersistentResource2());
     }
 
     @Test
     public void shouldReturnNoResources_whenFindingNonExistingResources() {
-        Collection<UUIDEntity> uuidEntities = repository.findAll(Arrays.asList("68464-684", "684684-444"));
+        Collection<BUuidPersistentResource> uuidEntities = repository.findAll(Arrays.asList("68464-684", "684684-444"));
 
         assertThat(uuidEntities).isEmpty();
     }
 
     @Test
     public void shouldReturnNoResources_whenFindingZeroResources() {
-        Collection<UUIDEntity> uuidEntities = repository.findAll(Arrays.asList());
+        Collection<BUuidPersistentResource> uuidEntities = repository.findAll(Arrays.asList());
 
         assertThat(uuidEntities).isEmpty();
     }
 
     @Test
     public void shouldReturnNoResources_whenFindingNulls() {
-        Collection<UUIDEntity> uuidEntities = repository.findAll(Arrays.asList(null, null));
+        Collection<BUuidPersistentResource> uuidEntities = repository.findAll(Arrays.asList(null, null));
 
         assertThat(uuidEntities).isEmpty();
     }
 
     @Test
     public void shouldReturnOnlyExistingResources_whenFindingEexistingAndNonExistingResources() {
-        List<String> uuidEntityIds = Arrays.asList(UUIDEntityFixtures.uuidEntity1().id(), UUIDEntityFixtures.uuidEntity2().id(), "646444-218");
-        Collection<UUIDEntity> uuidEntities = repository.findAll(uuidEntityIds);
+        List<String> uuidPersistentResourceIds = Arrays.asList(UuidPersistentResourceFixtures.uuidPersistentResource1().getUuid(), UuidPersistentResourceFixtures.uuidPersistentResource2().getUuid(), "646444-218");
+        Collection<BUuidPersistentResource> uuidEntities = repository.findAll(uuidPersistentResourceIds);
 
-        assertThat(uuidEntities).containsOnly(UUIDEntityFixtures.uuidEntity1(), UUIDEntityFixtures.uuidEntity2());
+        assertThat(uuidEntities).containsOnly(UuidPersistentResourceFixtures.uuidPersistentResource1(), UuidPersistentResourceFixtures.uuidPersistentResource2());
     }
 
     @Test
     public void shouldFindPage1WithSize5SortedByIdDesc() {
-        int uuidEntityCount = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+        int uuidPersistentResourceCount = countRowsInTable(QUuidPersistentResource.uuidPersistentResource.getTableName());
 
-        Collection<UUIDEntity> uuidEntityPageContent = Arrays.asList(
-                UUIDEntityFixtures.uuidEntity2(),
-                UUIDEntityFixtures.uuidEntity1());
+        Collection<BUuidPersistentResource> uuidPersistentResourcePageContent = Arrays.asList(
+                UuidPersistentResourceFixtures.uuidPersistentResource2(),
+                UuidPersistentResourceFixtures.uuidPersistentResource1());
 
-        Page<UUIDEntity> page = repository.findAll(new PageRequest(1, 2, Sets.newHashSet(new Sort("id", Sort.Direction.DESC))));
+        Page<BUuidPersistentResource> page = repository.findAll(new PageRequest(1, 2, Sets.newHashSet(new Sort("id", Sort.Direction.DESC))));
 
-        assertThat(page.items).containsExactly(uuidEntityPageContent.toArray(new UUIDEntity[uuidEntityPageContent.size()]));
-        assertThat(page.nbItems).isEqualTo(uuidEntityPageContent.size());
-        assertThat(page.totalItems).isEqualTo(uuidEntityCount);
-        assertThat(page.totalPages).isEqualTo(uuidEntityCount / 2);
+        assertThat(page.items).containsExactly(uuidPersistentResourcePageContent.toArray(new BUuidPersistentResource[uuidPersistentResourcePageContent.size()]));
+        assertThat(page.nbItems).isEqualTo(uuidPersistentResourcePageContent.size());
+        assertThat(page.totalItems).isEqualTo(uuidPersistentResourceCount);
+        assertThat(page.totalPages).isEqualTo(uuidPersistentResourceCount / 2);
     }
 
     @Test
     public void shouldApplySortsInTheSameOrderAsTheyWereRequested() {
-        int uuidEntityCount = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+        int uuidPersistentResourceCount = countRowsInTable(QUuidPersistentResource.uuidPersistentResource.getTableName());
 
-        Collection<UUIDEntity> uuidEntityPageContent = Arrays.asList(
-                UUIDEntityFixtures.uuidEntity3(),
-                UUIDEntityFixtures.uuidEntity2(),
-                UUIDEntityFixtures.uuidEntity1(),
-                UUIDEntityFixtures.uuidEntity4());
+        Collection<BUuidPersistentResource> uuidPersistentResourcePageContent = Arrays.asList(
+                UuidPersistentResourceFixtures.uuidPersistentResource3(),
+                UuidPersistentResourceFixtures.uuidPersistentResource2(),
+                UuidPersistentResourceFixtures.uuidPersistentResource1(),
+                UuidPersistentResourceFixtures.uuidPersistentResource4());
 
-        Page<UUIDEntity> page = repository.findAll(new PageRequest(0, uuidEntityCount, Sets.newHashSet(
+        Page<BUuidPersistentResource> page = repository.findAll(new PageRequest(0, uuidPersistentResourceCount, Sets.newHashSet(
                 new Sort("creationDate", Sort.Direction.ASC),
                 new Sort("id", Sort.Direction.DESC))));
 
-        assertThat(page.items).containsExactly(uuidEntityPageContent.toArray(new UUIDEntity[uuidEntityPageContent.size()]));
+        assertThat(page.items).containsExactly(uuidPersistentResourcePageContent.toArray(new BUuidPersistentResource[uuidPersistentResourcePageContent.size()]));
     }
 
 
@@ -211,61 +215,61 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void shouldNotDeleteAnyResources_whenDeletingNonExistingResource() {
-        int uuidEntityCountBeforeDelete = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+        int uuidPersistentResourceCountBeforeDelete = countRowsInTable(QUuidPersistentResource.uuidPersistentResource.getTableName());
 
         repository.delete("6984684-685648");
 
-        int uuidEntityCountAfterDelete = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+        int uuidPersistentResourceCountAfterDelete = countRowsInTable(QUuidPersistentResource.uuidPersistentResource.getTableName());
 
-        assertThat(uuidEntityCountBeforeDelete).isEqualTo(uuidEntityCountAfterDelete);
+        assertThat(uuidPersistentResourceCountBeforeDelete).isEqualTo(uuidPersistentResourceCountAfterDelete);
     }
 
     @Test
     public void shouldNotDeleteAnyResources_whenDeletingNullId() {
         String nullId = null;
-        int uuidEntityCountBeforeDelete = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+        int uuidPersistentResourceCountBeforeDelete = countRowsInTable(QUuidPersistentResource.uuidPersistentResource.getTableName());
 
         repository.delete(nullId);
 
-        int uuidEntityCountAfterDelete = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+        int uuidPersistentResourceCountAfterDelete = countRowsInTable(QUuidPersistentResource.uuidPersistentResource.getTableName());
 
-        assertThat(uuidEntityCountBeforeDelete).isEqualTo(uuidEntityCountAfterDelete);
+        assertThat(uuidPersistentResourceCountBeforeDelete).isEqualTo(uuidPersistentResourceCountAfterDelete);
     }
 
     @Test
     public void shouldDeleteAResource() {
-        int uuidEntityCountBeforeCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+        int uuidPersistentResourceCountBeforeCreate = countRowsInTable(QUuidPersistentResource.uuidPersistentResource.getTableName());
 
-        repository.delete(UUIDEntityFixtures.uuidEntity1().id());
+        repository.delete(UuidPersistentResourceFixtures.uuidPersistentResource1().getUuid());
 
-        int uuidEntityCountAfterCreate = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+        int uuidPersistentResourceCountAfterCreate = countRowsInTable(QUuidPersistentResource.uuidPersistentResource.getTableName());
 
-        assertThat(uuidEntityCountAfterCreate).isEqualTo(uuidEntityCountBeforeCreate - 1);
+        assertThat(uuidPersistentResourceCountAfterCreate).isEqualTo(uuidPersistentResourceCountBeforeCreate - 1);
     }
 
     @Test
     public void shouldReturnTrue_whenDeletingResource() {
-        boolean delete = repository.delete(UUIDEntityFixtures.uuidEntity1().id());
+        boolean delete = repository.delete(UuidPersistentResourceFixtures.uuidPersistentResource1().getUuid());
 
         assertThat(delete).isTrue();
     }
 
     @Test
     public void shouldDeleteMultipleResources() {
-        List<String> uuidEntityIds = Arrays.asList(UUIDEntityFixtures.uuidEntity1().id(), UUIDEntityFixtures.uuidEntity2().id());
-        int uuidEntityCountBeforeDelete = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+        List<String> uuidPersistentResourceIds = Arrays.asList(UuidPersistentResourceFixtures.uuidPersistentResource1().getUuid(), UuidPersistentResourceFixtures.uuidPersistentResource2().getUuid());
+        int uuidPersistentResourceCountBeforeDelete = countRowsInTable(QUuidPersistentResource.uuidPersistentResource.getTableName());
 
-        repository.delete(uuidEntityIds);
+        repository.delete(uuidPersistentResourceIds);
 
-        int uuidEntityCountAfterDelete = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+        int uuidPersistentResourceCountAfterDelete = countRowsInTable(QUuidPersistentResource.uuidPersistentResource.getTableName());
 
-        assertThat(uuidEntityCountAfterDelete).isEqualTo(uuidEntityCountBeforeDelete - uuidEntityIds.size());
+        assertThat(uuidPersistentResourceCountAfterDelete).isEqualTo(uuidPersistentResourceCountBeforeDelete - uuidPersistentResourceIds.size());
     }
 
     @Test
     public void shouldReturnTrue_whenDeletingMultipleResources() {
-        List<String> uuidEntityIds = Arrays.asList(UUIDEntityFixtures.uuidEntity1().id(), UUIDEntityFixtures.uuidEntity2().id());
-        boolean delete = repository.delete(uuidEntityIds);
+        List<String> uuidPersistentResourceIds = Arrays.asList(UuidPersistentResourceFixtures.uuidPersistentResource1().getUuid(), UuidPersistentResourceFixtures.uuidPersistentResource2().getUuid());
+        boolean delete = repository.delete(uuidPersistentResourceIds);
 
         assertThat(delete).isTrue();
     }
@@ -273,43 +277,43 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void shouldNotDeleteAnyResources_whenDeletingNonExistingResources() {
-        List<String> uuidEntityIds = Arrays.asList("1111-222", "313213-321321");
-        int uuidEntityCountBeforeDelete = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+        List<String> uuidPersistentResourceIds = Arrays.asList("1111-222", "313213-321321");
+        int uuidPersistentResourceCountBeforeDelete = countRowsInTable(QUuidPersistentResource.uuidPersistentResource.getTableName());
 
-        repository.delete(uuidEntityIds);
+        repository.delete(uuidPersistentResourceIds);
 
-        int uuidEntityCountAfterDelete = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+        int uuidPersistentResourceCountAfterDelete = countRowsInTable(QUuidPersistentResource.uuidPersistentResource.getTableName());
 
-        assertThat(uuidEntityCountAfterDelete).isEqualTo(uuidEntityCountBeforeDelete);
+        assertThat(uuidPersistentResourceCountAfterDelete).isEqualTo(uuidPersistentResourceCountBeforeDelete);
     }
 
     @Test
     public void shouldReturnFalse_whenNotDeletingAnyResources() {
-        List<String> uuidEntityIds = Arrays.asList("1111-222", "313213-321321");
-        boolean delete = repository.delete(uuidEntityIds);
+        List<String> uuidPersistentResourceIds = Arrays.asList("1111-222", "313213-321321");
+        boolean delete = repository.delete(uuidPersistentResourceIds);
 
         assertThat(delete).isFalse();
     }
 
     @Test
     public void shouldDeleteOnlyExistingResources_whenDeletingExistingAndNonExistingResources() {
-        List<String> uuidEntityIds = Arrays.asList(UUIDEntityFixtures.uuidEntity1().id(), UUIDEntityFixtures.uuidEntity2().id(), "665321-111");
+        List<String> uuidPersistentResourceIds = Arrays.asList(UuidPersistentResourceFixtures.uuidPersistentResource1().getUuid(), UuidPersistentResourceFixtures.uuidPersistentResource2().getUuid(), "665321-111");
 
-        int uuidEntityCountBeforeDelete = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+        int uuidPersistentResourceCountBeforeDelete = countRowsInTable(QUuidPersistentResource.uuidPersistentResource.getTableName());
 
-        repository.delete(uuidEntityIds);
+        repository.delete(uuidPersistentResourceIds);
 
-        int uuidEntityCountAfterDelete = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+        int uuidPersistentResourceCountAfterDelete = countRowsInTable(QUuidPersistentResource.uuidPersistentResource.getTableName());
 
-        assertThat(uuidEntityCountAfterDelete).isEqualTo(uuidEntityCountBeforeDelete - 2);
+        assertThat(uuidPersistentResourceCountAfterDelete).isEqualTo(uuidPersistentResourceCountBeforeDelete - 2);
     }
 
     @Test
     public void shouldDeleteAllResources() {
         repository.deleteAll();
 
-        int uuidEntityCountAfterDelete = countRowsInTable(QUuidEntity.uuidEntity.getTableName());
+        int uuidPersistentResourceCountAfterDelete = countRowsInTable(QUuidPersistentResource.uuidPersistentResource.getTableName());
 
-        assertThat(uuidEntityCountAfterDelete).isEqualTo(0);
+        assertThat(uuidPersistentResourceCountAfterDelete).isEqualTo(0);
     }
 }

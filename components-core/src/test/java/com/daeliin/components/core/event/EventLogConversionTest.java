@@ -1,6 +1,7 @@
 package com.daeliin.components.core.event;
 
 import com.daeliin.components.core.fixtures.EventLogFixtures;
+import com.daeliin.components.core.library.EventLogLibrary;
 import com.daeliin.components.core.sql.BEventLog;
 import org.junit.Test;
 
@@ -19,12 +20,10 @@ public final class EventLogConversionTest {
 
     @Test
     public void shouldMapEventLog() {
-        EventLog eventLog = EventLogFixtures.login();
+        EventLog eventLog = EventLogLibrary.login();
         BEventLog mappedEventLog = eventLogConversion.map(eventLog);
 
-        assertThat(mappedEventLog.getCreationDate().toLocalDateTime()).isEqualTo(eventLog.creationDate());
-        assertThat(mappedEventLog.getDescriptionKey()).isEqualTo(eventLog.descriptionKey);
-        assertThat(mappedEventLog.getUuid()).isEqualTo(eventLog.id());
+        assertThat(mappedEventLog).isEqualToComparingFieldByField(EventLogFixtures.login());
     }
 
     @Test
@@ -34,7 +33,7 @@ public final class EventLogConversionTest {
 
     @Test
     public void shouldInstantiateAnEventLog() {
-        EventLog eventLog = EventLogFixtures.login();
+        EventLog eventLog = EventLogLibrary.login();
         BEventLog mappedEventLog = new BEventLog(Timestamp.valueOf(eventLog.creationDate()), eventLog.descriptionKey, eventLog.id());
         EventLog rebuiltEventLog = eventLogConversion.instantiate(mappedEventLog);
 

@@ -1,10 +1,10 @@
-CREATE TABLE uuid_entity(
+CREATE TABLE uuid_persistent_resource(
     uuid VARCHAR(36) NOT NULL,
     creation_date DATETIME NOT NULL,
     label VARCHAR(255) NOT NULL
 );
 
-ALTER TABLE uuid_entity ADD PRIMARY KEY (uuid);
+ALTER TABLE uuid_persistent_resource ADD PRIMARY KEY (uuid);
 
 CREATE TABLE country(
     code VARCHAR(2) NOT NULL,
