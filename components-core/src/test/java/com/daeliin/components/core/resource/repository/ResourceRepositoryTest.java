@@ -111,7 +111,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
         BUuidPersistentResource foundUuidEntity = repository.findOne(uuidPersistentResource1.getUuid());
 
-        assertThat(foundUuidEntity).isEqualTo(UuidPersistentResourceFixtures.uuidPersistentResource1());
+        assertThat(foundUuidEntity).isEqualToComparingFieldByField(UuidPersistentResourceFixtures.uuidPersistentResource1());
     }
 
     @Test
@@ -136,7 +136,9 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
         List<String> uuidPersistentResourceIds = Arrays.asList(UuidPersistentResourceFixtures.uuidPersistentResource1().getUuid(), UuidPersistentResourceFixtures.uuidPersistentResource2().getUuid());
         Collection<BUuidPersistentResource> uuidEntities = repository.findAll(uuidPersistentResourceIds);
 
-        assertThat(uuidEntities).containsOnly(UuidPersistentResourceFixtures.uuidPersistentResource1(), UuidPersistentResourceFixtures.uuidPersistentResource2());
+        assertThat(uuidEntities)
+                .usingFieldByFieldElementComparator()
+                .containsOnly(UuidPersistentResourceFixtures.uuidPersistentResource1(), UuidPersistentResourceFixtures.uuidPersistentResource2());
     }
 
     @Test
@@ -165,7 +167,9 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
         List<String> uuidPersistentResourceIds = Arrays.asList(UuidPersistentResourceFixtures.uuidPersistentResource1().getUuid(), UuidPersistentResourceFixtures.uuidPersistentResource2().getUuid(), "646444-218");
         Collection<BUuidPersistentResource> uuidEntities = repository.findAll(uuidPersistentResourceIds);
 
-        assertThat(uuidEntities).containsOnly(UuidPersistentResourceFixtures.uuidPersistentResource1(), UuidPersistentResourceFixtures.uuidPersistentResource2());
+        assertThat(uuidEntities)
+                .usingFieldByFieldElementComparator()
+                .containsOnly(UuidPersistentResourceFixtures.uuidPersistentResource1(), UuidPersistentResourceFixtures.uuidPersistentResource2());
     }
 
     @Test
@@ -176,9 +180,11 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
                 UuidPersistentResourceFixtures.uuidPersistentResource2(),
                 UuidPersistentResourceFixtures.uuidPersistentResource1());
 
-        Page<BUuidPersistentResource> page = repository.findAll(new PageRequest(1, 2, Sets.newHashSet(new Sort("id", Sort.Direction.DESC))));
+        Page<BUuidPersistentResource> page = repository.findAll(new PageRequest(1, 2, Sets.newHashSet(new Sort("uuid", Sort.Direction.DESC))));
 
-        assertThat(page.items).containsExactly(uuidPersistentResourcePageContent.toArray(new BUuidPersistentResource[uuidPersistentResourcePageContent.size()]));
+        assertThat(page.items)
+                .usingFieldByFieldElementComparator()
+                .containsExactly(uuidPersistentResourcePageContent.toArray(new BUuidPersistentResource[uuidPersistentResourcePageContent.size()]));
         assertThat(page.nbItems).isEqualTo(uuidPersistentResourcePageContent.size());
         assertThat(page.totalItems).isEqualTo(uuidPersistentResourceCount);
         assertThat(page.totalPages).isEqualTo(uuidPersistentResourceCount / 2);
@@ -196,9 +202,11 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
         Page<BUuidPersistentResource> page = repository.findAll(new PageRequest(0, uuidPersistentResourceCount, Sets.newHashSet(
                 new Sort("creationDate", Sort.Direction.ASC),
-                new Sort("id", Sort.Direction.DESC))));
+                new Sort("uuid", Sort.Direction.DESC))));
 
-        assertThat(page.items).containsExactly(uuidPersistentResourcePageContent.toArray(new BUuidPersistentResource[uuidPersistentResourcePageContent.size()]));
+        assertThat(page.items)
+                .usingFieldByFieldElementComparator()
+                .containsExactly(uuidPersistentResourcePageContent.toArray(new BUuidPersistentResource[uuidPersistentResourcePageContent.size()]));
     }
 
 
