@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,7 +39,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void shouldPersistAResource() {
-        BUuidPersistentResource newUuuidPersistentResource = new BUuidPersistentResource(Timestamp.valueOf(LocalDateTime.now()), UUID.randomUUID().toString(), "label100");
+        BUuidPersistentResource newUuuidPersistentResource = new BUuidPersistentResource(Timestamp.valueOf(LocalDateTime.now()), "label100", UUID.randomUUID().toString());
         int uuidPersistentResourceCountBeforeCreate = countRowsInTable(QUuidPersistentResource.uuidPersistentResource.getTableName());
 
         BUuidPersistentResource persistedUuidEntity = repository.findOne(repository.save(newUuuidPersistentResource).getUuid());
@@ -46,22 +47,22 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
         int uuidPersistentResourceCountAfterCreate = countRowsInTable(QUuidPersistentResource.uuidPersistentResource.getTableName());
 
         assertThat(uuidPersistentResourceCountAfterCreate).isEqualTo(uuidPersistentResourceCountBeforeCreate + 1);
-        assertThat(persistedUuidEntity).isEqualTo(newUuuidPersistentResource);
+        assertThat(persistedUuidEntity).isEqualToComparingFieldByField(newUuuidPersistentResource);
     }
 
     @Test
     public void shouldReturnThePersistedResource() {
-        BUuidPersistentResource newUuuidPersistentResource = new BUuidPersistentResource(Timestamp.valueOf(LocalDateTime.now()), UUID.randomUUID().toString(), "label100");
+        BUuidPersistentResource newUuuidPersistentResource = new BUuidPersistentResource(Timestamp.valueOf(LocalDateTime.now()), "label100", UUID.randomUUID().toString());
 
         BUuidPersistentResource returnedUuidEntity = repository.save(newUuuidPersistentResource);
 
-        assertThat(returnedUuidEntity).isEqualTo(newUuuidPersistentResource);
+        assertThat(returnedUuidEntity).isEqualToComparingFieldByField(newUuuidPersistentResource);
     }
 
     @Test
     public void shouldPersistResources() {
-        BUuidPersistentResource newUuuidPersistentResource1 = new BUuidPersistentResource(Timestamp.valueOf(LocalDateTime.now()), UUID.randomUUID().toString(), "label101");
-        BUuidPersistentResource newUuuidPersistentResource2 = new BUuidPersistentResource(Timestamp.valueOf(LocalDateTime.now()), UUID.randomUUID().toString(), "label102");
+        BUuidPersistentResource newUuuidPersistentResource1 = new BUuidPersistentResource(Timestamp.valueOf(LocalDateTime.now()), "label101", UUID.randomUUID().toString());
+        BUuidPersistentResource newUuuidPersistentResource2 = new BUuidPersistentResource(Timestamp.valueOf(LocalDateTime.now()), "label102", UUID.randomUUID().toString());
         List<BUuidPersistentResource> newUuidEntities = Arrays.asList(newUuuidPersistentResource1, newUuuidPersistentResource2);
 
         int uuidPersistentResourceCountBeforeCreate = countRowsInTable(QUuidPersistentResource.uuidPersistentResource.getTableName());
@@ -75,8 +76,8 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void shouldReturnThePersistedResources() {
-        BUuidPersistentResource newUuuidPersistentResource1 = new BUuidPersistentResource(Timestamp.valueOf(LocalDateTime.now()), UUID.randomUUID().toString(), "label101");
-        BUuidPersistentResource newUuuidPersistentResource2 = new BUuidPersistentResource(Timestamp.valueOf(LocalDateTime.now()), UUID.randomUUID().toString(), "label102");
+        BUuidPersistentResource newUuuidPersistentResource1 = new BUuidPersistentResource(Timestamp.valueOf(LocalDateTime.now()), "label101", UUID.randomUUID().toString());
+        BUuidPersistentResource newUuuidPersistentResource2 = new BUuidPersistentResource(Timestamp.valueOf(LocalDateTime.now()), "label102", UUID.randomUUID().toString());
         List<BUuidPersistentResource> newUuidEntities = Arrays.asList(newUuuidPersistentResource1, newUuuidPersistentResource2);
 
         Collection<BUuidPersistentResource> returnedUuidEntities = repository.save(newUuidEntities);

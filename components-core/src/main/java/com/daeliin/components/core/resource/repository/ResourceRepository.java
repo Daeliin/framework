@@ -46,10 +46,12 @@ public abstract class ResourceRepository<T, ID> implements PagingRepository<T, I
 
         if (exists(resourceId)) {
             queryFactory.update(rowPath)
+                    .populate(resource)
                     .where(idPath.eq(resourceId))
                     .execute();
         } else {
             queryFactory.insert(rowPath)
+                    .populate(resource)
                     .execute();
         }
 
