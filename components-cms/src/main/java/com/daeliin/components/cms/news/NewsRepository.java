@@ -1,8 +1,14 @@
 package com.daeliin.components.cms.news;
 
-import com.daeliin.components.core.resource.repository.PagingRepository;
-import org.springframework.stereotype.Repository;
+import com.daeliin.components.core.resource.repository.BaseRepository;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-@Repository
-public interface NewsRepository extends PagingRepository<News, Long> {
+@Transactional
+@Component
+public class NewsRepository extends BaseRepository<BNews> {
+
+    public NewsRepository() {
+        super(QNews.news, QNews.news.uuid);
+    }
 }

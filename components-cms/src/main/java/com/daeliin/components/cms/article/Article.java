@@ -1,85 +1,48 @@
 package com.daeliin.components.cms.article;
 
 import com.daeliin.components.domain.resource.PersistentResource;
-import com.daeliin.components.security.credentials.account.Account;
-import java.time.LocalDateTime;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.NotNull;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import org.hibernate.annotations.Type;
-import org.hibernate.validator.constraints.NotBlank;
 
-@Getter
-@Setter
-@EqualsAndHashCode(callSuper = true)
-@ToString(of = {"title", "author", "creationDate", "publicationDate"}, callSuper = true)
-@Entity
+import java.time.LocalDateTime;
+import java.util.Objects;
+
 public class Article extends PersistentResource implements Comparable<Article> {
     
     private static final long serialVersionUID = -7808122481259070912L;
 
-    @NotNull
-    @OneToOne
-    private Account author;
-    
-    @NotBlank
-    private String title;
-    
-    @NotBlank
-    private String urlFriendlyTitle;
-    
-    @NotBlank
-    @Type(type = "text")
-    private String description;
-    
-    @NotBlank
-    @Type(type = "text")
-    private String content;
+    public final String author;
+    public final String title;
+    public final String urlFriendlyTitle;
+    public final String description;
+    public final String content;
+    public final LocalDateTime publicationDate;
+    public final boolean published;
 
-    @Column(name = "creation_date")
-    private LocalDateTime creationDate;
-    
-    @Column(name = "publication_date")
-    private LocalDateTime publicationDate;
-    
-    @NotNull
-    private boolean published = false;
-
-    public Article() {
-        this.creationDate = LocalDateTime.now();
-    }
-    
-    public Article(Account author, String title, String description, String content, LocalDateTime creationDate, LocalDateTime publicationDate) {
-        if (creationDate == null) {
-            this.creationDate = LocalDateTime.now();
-        } else {
-            this.creationDate = creationDate;
-        }
-        
-        this.author = author;
-        this.title = title;
+    public Article(String uuid, LocalDateTime creationDate, String author, String title, String urlFriendlyTitle, String description, String content, LocalDateTime publicationDate, boolean published) {
+        super(uuid, creationDate);
+        this.author = Objects.requireNonNull(author, "author should not be null");
+        this.title = Objects.requireNonNull(title, "title should not be null");;
+        this.urlFriendlyTitle = urlFriendlyTitle;
         this.description = description;
         this.content = content;
         this.publicationDate = publicationDate;
+        this.published = published;
     }
-    
+
+    @Override
+    public String toString() {
+        return super.toStringHelper()
+                .add("author", author)
+                .add("title", title)
+                .add("published", published)
+                .toString();
+    }
+
     @Override
     public int compareTo(Article other) {
-        boolean titlesAreNotNull = this.title != null && other.title != null;
-        
         if (this.equals(other)) {
             return 0;
         }
-        
-        if (titlesAreNotNull) {
-            return this.title.compareTo(other.title);
-        } else {
-            return -1;
-        }
+
+        return this.creationDate.compareTo(other.creationDate);
     }
 }

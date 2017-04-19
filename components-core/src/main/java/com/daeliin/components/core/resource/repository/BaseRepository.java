@@ -7,17 +7,13 @@ import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.sql.RelationalPathBase;
 import com.querydsl.sql.SQLQueryFactory;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
-@Transactional
 public abstract class BaseRepository<B> {
 
     @Inject
