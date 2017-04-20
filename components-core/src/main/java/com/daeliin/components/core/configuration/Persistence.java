@@ -21,6 +21,7 @@ public class Persistence {
     public com.querydsl.sql.Configuration querydslConfiguration() {
         SQLTemplates templates = MySQLTemplates.builder().build();
         com.querydsl.sql.Configuration configuration = new com.querydsl.sql.Configuration(templates);
+
         configuration.setExceptionTranslator(new SpringExceptionTranslator());
         configuration.register(new JSR310InstantType());
         configuration.register(new JSR310LocalDateType());
@@ -29,6 +30,7 @@ public class Persistence {
         configuration.register(new JSR310OffsetTimeType());
         configuration.register(new JSR310OffsetDateTimeType());
         configuration.register(new JSR310ZonedDateTimeType());
+
         return configuration;
     }
 
@@ -36,6 +38,7 @@ public class Persistence {
     @Inject
     public SQLQueryFactory queryFactory(DataSource dataSource) {
         Provider<Connection> provider = new SpringConnectionProvider(dataSource);
+
         return new SQLQueryFactory(querydslConfiguration(), provider);
     }
 }
