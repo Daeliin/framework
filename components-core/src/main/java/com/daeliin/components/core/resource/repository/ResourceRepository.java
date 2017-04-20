@@ -21,23 +21,23 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
-public abstract class ResourceRepository<T, ID> implements PagingRepository<T, ID> {
+public abstract class ResourceRepository<R, ID> implements PagingRepository<R, ID> {
 
     @Inject
     protected SQLQueryFactory queryFactory;
 
-    protected final RelationalPathBase<T> rowPath;
+    protected final RelationalPathBase<R> rowPath;
     protected final SimpleExpression<ID> idPath;
-    protected final Function<T, ID> idMapping;
+    protected final Function<R, ID> idMapping;
 
-    public ResourceRepository(RelationalPathBase<T> rowPath, SimpleExpression<ID> idPath, Function<T, ID> idMapping) {
+    public ResourceRepository(RelationalPathBase<R> rowPath, SimpleExpression<ID> idPath, Function<R, ID> idMapping) {
         this.rowPath = rowPath;
         this.idPath = idPath;
         this.idMapping = idMapping;
     }
 
     @Override
-    public T save(T resource) {
+    public R save(R resource) {
         if (resource == null) {
             throw new IllegalArgumentException("Cannot create null resource");
         }
@@ -59,7 +59,7 @@ public abstract class ResourceRepository<T, ID> implements PagingRepository<T, I
     }
 
     @Override
-    public Collection<T> save(Collection<T> resources) {
+    public Collection<R> save(Collection<R> resources) {
         Collection<ID> resourceIds = resources.stream().map(idMapping::apply).collect(Collectors.toList());
         Collection<ID> persistedResourceIds = findAllIds(resources);
         boolean insertBatchShouldBeExecuted = resourceIds.size() > persistedResourceIds.size();
@@ -91,7 +91,7 @@ public abstract class ResourceRepository<T, ID> implements PagingRepository<T, I
 
     @Transactional(readOnly = true)
     @Override
-    public T findOne(ID resourceId) {
+    public R findOne(ID resourceId) {
         if (resourceId == null) {
             return null;
         }
@@ -104,7 +104,7 @@ public abstract class ResourceRepository<T, ID> implements PagingRepository<T, I
 
     @Transactional(readOnly = true)
     @Override
-    public Collection<T> findAll(Collection<ID> resourceIds) {
+    public Collection<R> findAll(Collection<ID> resourceIds) {
         return queryFactory.select(rowPath)
                 .from(rowPath)
                 .where(idPath.in(resourceIds))
@@ -113,12 +113,12 @@ public abstract class ResourceRepository<T, ID> implements PagingRepository<T, I
 
     @Transactional(readOnly = true)
     @Override
-    public Page<T> findAll(PageRequest pageRequest) {
+    public Page<R> findAll(PageRequest pageRequest) {
         long totalItems = count();
         long totalPages = computeTotalPages(totalItems, pageRequest.size);
         OrderSpecifier[] orders = computeOrders(pageRequest);
 
-        List<T> items = queryFactory.select(rowPath)
+        List<R> items = queryFactory.select(rowPath)
                 .from(rowPath)
                 .limit(pageRequest.size)
                 .offset(pageRequest.offset)
@@ -130,7 +130,7 @@ public abstract class ResourceRepository<T, ID> implements PagingRepository<T, I
 
     @Transactional(readOnly = true)
     @Override
-    public Collection<T> findAll() {
+    public Collection<R> findAll() {
         return queryFactory.select(rowPath)
                 .from(rowPath)
                 .fetch();
@@ -180,7 +180,7 @@ public abstract class ResourceRepository<T, ID> implements PagingRepository<T, I
         return queryFactory.delete(rowPath).execute() > 0;
     }
 
-    protected Collection<ID> findAllIds(Collection<T> resources) {
+    protected Collection<ID> findAllIds(Collection<R> resources) {
         Collection<ID> resourceIds = resources.stream().map(idMapping::apply).collect(Collectors.toList());
 
         return queryFactory.select(idPath)

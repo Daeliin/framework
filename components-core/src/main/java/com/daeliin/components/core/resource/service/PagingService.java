@@ -9,7 +9,7 @@ import java.util.Collection;
 /**
  * Provides CRUD operations and pagination for a resource.
  * @param <T> resource type
- * @param <ID> resource ID
+ * @param <ID> resource ID type
  */
 public interface PagingService<T extends Persistable<ID>, ID> {
 

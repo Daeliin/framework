@@ -7,22 +7,22 @@ import java.util.Collection;
 
 /**
  * Provides CRUD operations and pagination for a table.
- * @param <T> row type
- * @param <ID> resource ID
+ * @param <R> row type
+ * @param <ID> resource ID type
  */
-public interface PagingRepository<T, ID> {
+public interface PagingRepository<R, ID> {
 
-    T save(T resource);
+    R save(R resource);
 
-    Collection<T> save(Collection<T> resources);
+    Collection<R> save(Collection<R> resources);
 
-    T findOne(ID resourceId);
+    R findOne(ID resourceId);
 
-    Collection<T> findAll(Collection<ID> resourceIds);
+    Collection<R> findAll(Collection<ID> resourceIds);
 
-    Page<T> findAll(PageRequest pageRequest);
+    Page<R> findAll(PageRequest pageRequest);
 
-    Collection<T> findAll();
+    Collection<R> findAll();
 
     boolean exists(ID resourceId);
 

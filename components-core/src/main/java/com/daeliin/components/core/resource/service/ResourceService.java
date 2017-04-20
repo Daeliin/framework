@@ -4,23 +4,31 @@ import com.daeliin.components.core.exception.PersistentResourceNotFoundException
 import com.daeliin.components.core.resource.repository.PagingRepository;
 import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
+import com.daeliin.components.domain.resource.Conversion;
 import com.daeliin.components.domain.resource.Persistable;
 import org.springframework.util.CollectionUtils;
 
-import javax.inject.Inject;
 import java.util.Collection;
+
+import static java.util.stream.Collectors.toSet;
 
 /**
  * Provides CRUD operations and pagination for a resource, with caching.
  * @param <T> resource type
- * @param <R> resource repository
+ * @param <R> row type
+ * @param <ID> resource id type
  */
-public abstract class ResourceService<T extends Persistable<ID>, ID, R extends PagingRepository<T, ID>> implements PagingService<T, ID> {
+public abstract class ResourceService<T extends Persistable<ID>, R, ID> implements PagingService<T, ID> {
 
     private static final String MESSAGE_RESOURCE_NOT_FOUND = "Resource was not found";
 
-    @Inject
-    protected R repository;
+    protected final PagingRepository<R, ID> repository;
+    protected final Conversion<T, R> conversion;
+
+    public ResourceService(PagingRepository<R, ID> repository, Conversion<T, R> conversion) {
+        this.repository = repository;
+        this.conversion = conversion;
+    }
 
     /**
      * Creates a resource.
@@ -29,7 +37,9 @@ public abstract class ResourceService<T extends Persistable<ID>, ID, R extends P
      */
     @Override
     public T create(T resource) {
-        return repository.save(resource);
+        R createdRow = repository.save(conversion.map(resource));
+
+        return conversion.instantiate(createdRow);
     }
 
     /**
@@ -39,7 +49,9 @@ public abstract class ResourceService<T extends Persistable<ID>, ID, R extends P
      */
     @Override
     public Collection<T> create(Collection<T> resources) {
-        return repository.save(resources);
+        Collection<R> createdRows = repository.save(resources.stream().map(conversion::map).collect(toSet()));
+
+        return createdRows.stream().map(conversion::instantiate).collect(toSet());
     }
 
     /**
@@ -76,7 +88,7 @@ public abstract class ResourceService<T extends Persistable<ID>, ID, R extends P
         T resource = null;
 
         if (resourceId != null) {
-            resource = repository.findOne(resourceId);
+            resource = conversion.instantiate(repository.findOne(resourceId));
         }
 
         if (resource == null) {
@@ -92,7 +104,7 @@ public abstract class ResourceService<T extends Persistable<ID>, ID, R extends P
      */
     @Override
     public Collection<T> findAll() {
-        return repository.findAll();
+        return repository.findAll().stream().map(conversion::instantiate).collect(toSet());
     }
 
     /**
@@ -102,7 +114,9 @@ public abstract class ResourceService<T extends Persistable<ID>, ID, R extends P
      */
     @Override
     public Page<T> findAll(PageRequest pageRequest) {
-        return repository.findAll(pageRequest);
+        Page<R> rowPage = repository.findAll(pageRequest);
+
+        return new Page<>(rowPage.items.stream().map(conversion::instantiate).collect(toSet()), rowPage.totalItems, rowPage.totalPages);
     }
 
     /**
@@ -112,7 +126,7 @@ public abstract class ResourceService<T extends Persistable<ID>, ID, R extends P
      */
     @Override
     public Collection<T> findAll(Collection<ID> resourcesIds) {
-        return repository.findAll(resourcesIds);
+        return repository.findAll(resourcesIds).stream().map(conversion::instantiate).collect(toSet());
     }
 
     /**
@@ -127,7 +141,7 @@ public abstract class ResourceService<T extends Persistable<ID>, ID, R extends P
             throw new PersistentResourceNotFoundException(MESSAGE_RESOURCE_NOT_FOUND);
         }
 
-        return repository.save(resource);
+        return conversion.instantiate(repository.save(conversion.map(resource)));
     }
 
     /**
@@ -137,7 +151,9 @@ public abstract class ResourceService<T extends Persistable<ID>, ID, R extends P
      */
     @Override
     public Collection<T> update(Collection<T> resources) {
-        return repository.save(resources);
+        Collection<R> mappedResources = resources.stream().map(conversion::map).collect(toSet());
+
+        return repository.save(mappedResources).stream().map(conversion::instantiate).collect(toSet());
     }
 
     /**
