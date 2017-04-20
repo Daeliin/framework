@@ -9,6 +9,7 @@ import com.daeliin.components.domain.resource.Persistable;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
+import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
 
@@ -37,9 +38,9 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID> implemen
      */
     @Override
     public T create(T resource) {
-        R createdRow = repository.save(conversion.map(resource));
+        R createdRow = repository.save(map(resource));
 
-        return conversion.instantiate(createdRow);
+        return instantiate(createdRow);
     }
 
     /**
@@ -49,9 +50,9 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID> implemen
      */
     @Override
     public Collection<T> create(Collection<T> resources) {
-        Collection<R> createdRows = repository.save(resources.stream().map(conversion::map).collect(toSet()));
+        Collection<R> createdRows = repository.save(map(resources));
 
-        return createdRows.stream().map(conversion::instantiate).collect(toSet());
+        return instantiate(createdRows);
     }
 
     /**
@@ -88,7 +89,7 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID> implemen
         T resource = null;
 
         if (resourceId != null) {
-            resource = conversion.instantiate(repository.findOne(resourceId));
+            resource = instantiate(repository.findOne(resourceId));
         }
 
         if (resource == null) {
@@ -104,7 +105,7 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID> implemen
      */
     @Override
     public Collection<T> findAll() {
-        return repository.findAll().stream().map(conversion::instantiate).collect(toSet());
+        return instantiate(repository.findAll());
     }
 
     /**
@@ -116,7 +117,7 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID> implemen
     public Page<T> findAll(PageRequest pageRequest) {
         Page<R> rowPage = repository.findAll(pageRequest);
 
-        return new Page<>(rowPage.items.stream().map(conversion::instantiate).collect(toSet()), rowPage.totalItems, rowPage.totalPages);
+        return new Page<>(instantiate(rowPage.items), rowPage.totalItems, rowPage.totalPages);
     }
 
     /**
@@ -126,7 +127,7 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID> implemen
      */
     @Override
     public Collection<T> findAll(Collection<ID> resourcesIds) {
-        return repository.findAll(resourcesIds).stream().map(conversion::instantiate).collect(toSet());
+        return instantiate(repository.findAll(resourcesIds));
     }
 
     /**
@@ -141,7 +142,7 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID> implemen
             throw new PersistentResourceNotFoundException(MESSAGE_RESOURCE_NOT_FOUND);
         }
 
-        return conversion.instantiate(repository.save(conversion.map(resource)));
+        return instantiate(repository.save(map(resource)));
     }
 
     /**
@@ -151,9 +152,9 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID> implemen
      */
     @Override
     public Collection<T> update(Collection<T> resources) {
-        Collection<R> mappedResources = resources.stream().map(conversion::map).collect(toSet());
+        Collection<R> mappedResources = map(resources);
 
-        return repository.save(mappedResources).stream().map(conversion::instantiate).collect(toSet());
+        return instantiate(repository.save(mappedResources));
     }
 
     /**
@@ -201,5 +202,27 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID> implemen
     @Override
     public boolean deleteAll() {
         return repository.deleteAll();
+    }
+
+    public R map(T resource) {
+        return conversion.map(resource);
+    }
+
+    public Set<R> map(Collection<T> resources) {
+        return resources
+                .stream()
+                .map(conversion::map)
+                .collect(toSet());
+    }
+
+    public T instantiate(R row) {
+        return conversion.instantiate(row);
+    }
+
+    public Set<T> instantiate(Collection<R> rows) {
+        return rows
+                .stream()
+                .map(conversion::instantiate)
+                .collect(toSet());
     }
 }
