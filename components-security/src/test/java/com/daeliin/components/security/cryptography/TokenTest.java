@@ -1,65 +1,62 @@
 package com.daeliin.components.security.cryptography;
 
+import org.apache.commons.codec.digest.DigestUtils;
+import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.apache.commons.codec.digest.DigestUtils;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TokenTest {
     
     @Test
-    public void newToken_data_buildsANotRandomSha512TokenFromData() {
-        String token = new Token(new ArrayList<>(Arrays.asList("data"))).asString();
-        assertEquals(token, DigestUtils.sha512Hex("data"));
+    public void shouldBuildANonRandomSha512TokenByDefault() {
+        String token = new Token(new ArrayList<>(Arrays.asList("data"))).asString;
+        assertThat(token).isEqualTo(DigestUtils.sha512Hex("data"));
     }
     
     @Test
-    public void newToken_dataAndMd5_buildsAMd5TokenFromData() {
+    public void shouldBuildAMd5Token() {
         String token = 
             new Token(
                 new ArrayList<>(Arrays.asList("data")),
-                new Md5()
-                ).asString();
+                new Md5()).asString;
         
-        assertEquals(token, DigestUtils.md5Hex("data"));
+        assertThat(token).isEqualTo(DigestUtils.md5Hex("data"));
     }
     
     @Test
-    public void newToken_dataAndMd5AndRandom_buildsARandomMd5Token() {
+    public void shouldBuildARandomMd5Token() {
         String token = 
             new Token(
                 new ArrayList<>(Arrays.asList("data")),
                 new Md5(),
-                true
-                ).asString();
+                true).asString;
         
-        assertNotEquals(token, DigestUtils.md5Hex("data"));
-        assertEquals(token.length(), 32);
+        assertThat(token).isNotEqualTo(DigestUtils.md5Hex("data"));
+        assertThat(token.length()).isEqualTo(32);
     }
     
     @Test
-    public void newToken_dataAndSha512_buildsASha512TokenFromData() {
+    public void shouldBuildASha512Token() {
         String token = 
             new Token(
                 new ArrayList<>(Arrays.asList("data")),
-                new Sha512()
-                ).asString();
+                new Sha512()).asString;
         
-        assertEquals(token, DigestUtils.sha512Hex("data"));
+        assertThat(token).isEqualTo(DigestUtils.sha512Hex("data"));
     }
     
     @Test
-    public void newToken_dataAndSha12AndRandom_buildsARandomSha512Token() {
+    public void shouldBuildsRandomSha512Token() {
         String token = 
             new Token(
                 new ArrayList<>(Arrays.asList("data")),
                 new Sha512(),
-                true
-                ).asString();
+                true).asString;
         
-        assertNotEquals(token, DigestUtils.sha512Hex("data"));
-        assertEquals(token.length(), 128);
+        assertThat(token).isNotEqualTo(DigestUtils.sha512Hex("data"));
+        assertThat(token.length()).isEqualTo(128);
     }
 }
