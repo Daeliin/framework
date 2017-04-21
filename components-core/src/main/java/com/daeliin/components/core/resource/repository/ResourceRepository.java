@@ -30,6 +30,7 @@ public abstract class ResourceRepository<R, ID> extends Repository<R> implements
         this.idMapping = idMapping;
     }
 
+    @Transactional
     @Override
     public R save(R resource) {
         if (resource == null) {
@@ -52,6 +53,7 @@ public abstract class ResourceRepository<R, ID> extends Repository<R> implements
         return resource;
     }
 
+    @Transactional
     @Override
     public Collection<R> save(Collection<R> resources) {
         Collection<ID> resourceIds = resources.stream().map(idMapping::apply).collect(Collectors.toList());
@@ -151,6 +153,7 @@ public abstract class ResourceRepository<R, ID> extends Repository<R> implements
                 .fetchCount();
     }
 
+    @Transactional
     @Override
     public boolean delete(ID resourceId) {
         if (resourceId == null) {
@@ -162,6 +165,7 @@ public abstract class ResourceRepository<R, ID> extends Repository<R> implements
                 .execute() == 1;
     }
 
+    @Transactional
     @Override
     public boolean delete(Collection<ID> resourceIds) {
         return queryFactory.delete(rowPath)
@@ -169,6 +173,7 @@ public abstract class ResourceRepository<R, ID> extends Repository<R> implements
                 .execute() == resourceIds.size();
     }
 
+    @Transactional
     @Override
     public boolean deleteAll() {
         return queryFactory.delete(rowPath).execute() > 0;

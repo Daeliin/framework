@@ -2,9 +2,9 @@ package com.daeliin.components.security.credentials.permission;
 
 import com.daeliin.components.core.resource.repository.Repository;
 import com.daeliin.components.security.Application;
-import com.daeliin.components.security.fixtures.PermissionFixtures;
 import com.daeliin.components.security.library.PermissionLibrary;
 import com.daeliin.components.security.sql.QPermission;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
@@ -14,20 +14,19 @@ import javax.inject.Inject;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ContextConfiguration(classes = Application.class)
-public final class PermissionRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
+public class PermissionRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Inject
     private PermissionRepository permissionRepository;
 
-    @Test
-    public void shouldExtendRepository() {
-        assertThat(permissionRepository.getClass().getSuperclass()).isEqualTo(Repository.class);
+    @Before
+    public void setUp() {
+        assertThat(countRows()).isEqualTo(2);
     }
 
     @Test
-    public void shouldLoadCacheAtStartUp() {
-        assertThat(permissionRepository.delete(PermissionFixtures.admin().getLabel())).isTrue();
-        assertThat(permissionRepository.delete(PermissionFixtures.admin().getLabel())).isTrue();
+    public void shouldExtendRepository() {
+        assertThat(permissionRepository.getClass().getSuperclass().getClass()).isEqualTo(Repository.class.getClass());
     }
 
     @Test
@@ -47,6 +46,11 @@ public final class PermissionRepositoryTest extends AbstractTransactionalJUnit4S
     @Test
     public void shouldReturnNull_whenFindingNull() {
         assertThat(permissionRepository.findOne(null)).isNull();
+    }
+
+    @Test
+    public void shouldReturnNull_whenFindingEmptyString() {
+        assertThat(permissionRepository.findOne("")).isNull();
     }
 
     @Test
