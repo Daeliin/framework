@@ -7,12 +7,10 @@ import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.querydsl.core.types.dsl.SimpleExpression;
 import com.querydsl.sql.RelationalPathBase;
-import com.querydsl.sql.SQLQueryFactory;
 import com.querydsl.sql.dml.SQLInsertClause;
 import com.querydsl.sql.dml.SQLUpdateClause;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -21,17 +19,13 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
-public abstract class ResourceRepository<R, ID> implements PagingRepository<R, ID> {
+public abstract class ResourceRepository<R, ID> extends Repository<R> implements PagingRepository<R, ID> {
 
-    @Inject
-    protected SQLQueryFactory queryFactory;
-
-    protected final RelationalPathBase<R> rowPath;
     protected final SimpleExpression<ID> idPath;
     protected final Function<R, ID> idMapping;
 
     public ResourceRepository(RelationalPathBase<R> rowPath, SimpleExpression<ID> idPath, Function<R, ID> idMapping) {
-        this.rowPath = rowPath;
+        super(rowPath);
         this.idPath = idPath;
         this.idMapping = idMapping;
     }

@@ -1,45 +1,44 @@
 package com.daeliin.components.security.credentials.permission;
 
-import com.daeliin.components.domain.resource.PersistentResource;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import org.hibernate.validator.constraints.NotBlank;
 
-@NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode(callSuper = true)
-@ToString(of = {"label"}, callSuper = true)
-@Entity
-public class Permission extends PersistentResource implements Comparable<Permission> {
+import com.google.common.base.MoreObjects;
+
+import java.util.Objects;
+
+public class Permission implements Comparable<Permission> {
     
-    private static final long serialVersionUID = -4768460974607663983L;
-    
-    @Column(unique = true)
-    @NotBlank
-    private String label;
+    public final String label;
 
     public Permission(String label) {
-        this.label = label;
+        this.label = Objects.requireNonNull(label, "label should not be null");
     }
-    
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Permission that = (Permission) o;
+        return Objects.equals(label, that.label);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(label);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("label", label)
+                .toString();
+    }
+
     @Override
     public int compareTo(Permission other) {
-        boolean labelsAreNotBlanks = this.label != null && other.label != null;
-        
         if (this.equals(other)) {
             return 0;
         }
         
-        if (labelsAreNotBlanks) {
-            return this.label.compareTo(other.label);
-        } else {
-            return -1;
-        }
+        return this.label.compareTo(other.label);
     }
 }
