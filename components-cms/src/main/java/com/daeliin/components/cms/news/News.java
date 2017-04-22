@@ -7,14 +7,12 @@ import java.util.Objects;
 
 public class News extends PersistentResource implements Comparable<News> {
 
-    private static final long serialVersionUID = -4011303518879793138L;
-    
     public final String author;
     public final String content;
     public final String source;
 
-    public News(String uuid, LocalDateTime creationDate, String author, String content, String source) {
-        super(uuid, creationDate);
+    public News(String id, LocalDateTime creationDate, String author, String content, String source) {
+        super(id, creationDate);
         this.author = Objects.requireNonNull(author, "author should not be null");
         this.content = Objects.requireNonNull(content, "content should not be null");
         this.source = source;

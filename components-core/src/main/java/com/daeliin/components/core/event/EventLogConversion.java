@@ -14,7 +14,7 @@ public final class EventLogConversion implements Conversion<EventLog, BEventLog>
         }
 
         return new EventLog(
-                bEventLog.getUuid(),
+                bEventLog.getId(),
                 bEventLog.getCreationDate().toLocalDateTime(),
                 bEventLog.getDescriptionKey());
     }

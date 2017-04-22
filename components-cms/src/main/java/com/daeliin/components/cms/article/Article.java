@@ -7,8 +7,6 @@ import java.util.Objects;
 
 public class Article extends PersistentResource implements Comparable<Article> {
     
-    private static final long serialVersionUID = -7808122481259070912L;
-
     public final String author;
     public final String title;
     public final String urlFriendlyTitle;
@@ -17,12 +15,12 @@ public class Article extends PersistentResource implements Comparable<Article> {
     public final LocalDateTime publicationDate;
     public final boolean published;
 
-    public Article(String uuid, LocalDateTime creationDate, String author, String title, String urlFriendlyTitle, String description, String content, LocalDateTime publicationDate, boolean published) {
-        super(uuid, creationDate);
+    public Article(String id, LocalDateTime creationDate, String author, String title, String urlFriendlyTitle, String description, String content, LocalDateTime publicationDate, boolean published) {
+        super(id, creationDate);
         this.author = Objects.requireNonNull(author, "author should not be null");
-        this.title = Objects.requireNonNull(title, "title should not be null");;
-        this.urlFriendlyTitle = urlFriendlyTitle;
-        this.description = description;
+        this.title = Objects.requireNonNull(title, "title should not be null");
+        this.urlFriendlyTitle = Objects.requireNonNull(urlFriendlyTitle, "urlFriendlyTitle should not be null");
+        this.description = Objects.requireNonNull(description, "description should not be null");
         this.content = content;
         this.publicationDate = publicationDate;
         this.published = published;
@@ -34,6 +32,7 @@ public class Article extends PersistentResource implements Comparable<Article> {
                 .add("author", author)
                 .add("title", title)
                 .add("published", published)
+                .add("publicationDate", publicationDate)
                 .toString();
     }
 

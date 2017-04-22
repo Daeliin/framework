@@ -7,5 +7,5 @@ INSERT INTO uuid_persistent_resource(uuid, creation_date, label) VALUES
 INSERT INTO country(code, name, creation_date) VALUES
 ( 'FR', 'France', '2017-01-01 12:00:00');
 
-INSERT INTO event_log(uuid, creation_date, description_key) VALUES
+INSERT INTO event_log(id, creation_date, description_key) VALUES
 ('d5666c5a-df28-49be-b711-cfd58d0867cf', '2017-01-01 12:00:00', 'membership.loginmembership.login');

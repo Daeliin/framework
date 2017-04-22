@@ -11,6 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class EventLogRepository extends ResourceRepository<BEventLog, String> {
 
     public EventLogRepository() {
-        super(QEventLog.eventLog, QEventLog.eventLog.uuid, BEventLog::getUuid);
+        super(QEventLog.eventLog, QEventLog.eventLog.id, BEventLog::getId);
     }
 }

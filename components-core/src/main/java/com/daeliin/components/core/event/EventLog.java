@@ -12,8 +12,8 @@ public final class EventLog extends PersistentResource<String> implements Compar
 
     public final String descriptionKey;
 
-    public EventLog(String uuid, LocalDateTime creationDate, String descriptionKey) {
-        super(uuid, creationDate);
+    public EventLog(String id, LocalDateTime creationDate, String descriptionKey) {
+        super(id, creationDate);
         this.descriptionKey = Objects.requireNonNull(descriptionKey, "descriptionKey should not be null");
     }
 
