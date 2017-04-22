@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.2.RELEASE</version>
+        <version>1.5.3.RELEASE</version>
         <relativePath/>
     </parent>
     
@@ -28,6 +28,7 @@
         <guava.version>21.0</guava.version>
         <querydsl.version>4.1.4</querydsl.version>
         <commons-codec.version>1.10</commons-codec.version>
+        <sql.folder>${project.basedir}/src/test/resources/schema.sql</sql.folder>
     </properties>
     
     <modules>
