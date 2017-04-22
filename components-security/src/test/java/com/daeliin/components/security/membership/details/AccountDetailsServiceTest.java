@@ -58,7 +58,7 @@ public class AccountDetailsServiceTest extends AbstractTransactionalJUnit4Spring
     }
 
     @Test(expected = InvalidTokenException.class)
-    public void shouldThrowInvalidTokenException_whenTokenDoesntMatch() throws Exception {
+    public void shouldThrowInvalidTokenException_whenTokenDoesntMatchWhenActivatingIt() throws Exception {
         Account account = AccountLibrary.admin();
 
         accountDetailsService.activate(account, "differentToken");
@@ -93,6 +93,13 @@ public class AccountDetailsServiceTest extends AbstractTransactionalJUnit4Spring
         Account activatedAccount = accountDetailsService.activate(account, account.token);
 
         assertThat(activatedAccount.enabled).isTrue();
+    }
+
+    @Test(expected = InvalidTokenException.class)
+    public void shouldThrowInvalidTokenException_whenTokenDoesntMatchWhenResetingPassword() throws Exception {
+        Account account = AccountLibrary.admin();
+
+        accountDetailsService.resetPassword(account, "differentToken", "newPassword");
     }
 
     @Test
