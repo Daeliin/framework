@@ -57,26 +57,7 @@ public class AccountDetailsService implements UserDetailsService {
                 accountEncryption.token));
     }
 
-    public void assignNewToken(Account account) {
-        if (account == null) {
-            throw new IllegalArgumentException("account should not be null");
-        }
-
-        Token newToken = new Token(Arrays.asList(account.username), new Sha512(), true);
-
-        Account accountWithNewToken = new Account(
-                account.id(),
-                account.creationDate(),
-                account.username,
-                account.email,
-                account.enabled,
-                account.password,
-                newToken.asString);
-
-        accountService.update(accountWithNewToken);
-    }
-
-    public void activate(Account account, final String activationToken) throws InvalidTokenException {
+    public Account activate(Account account, final String activationToken) throws InvalidTokenException {
         if (!account.token.equals(activationToken)) {
             throw new InvalidTokenException(String.format("Activation token is not valid for %s", account));
         }
@@ -92,10 +73,10 @@ public class AccountDetailsService implements UserDetailsService {
                 account.password,
                 accountEncryption.token);
 
-        accountService.update(accountWithNewToken);
+        return accountService.update(accountWithNewToken);
     }
 
-    public void resetPassword(Account account, final String resetPasswordToken, final String newPassword) throws InvalidTokenException {
+    public Account resetPassword(Account account, final String resetPasswordToken, final String newPassword) throws InvalidTokenException {
         if (!account.token.equals(resetPasswordToken)) {
             throw new InvalidTokenException(String.format("Activation token is not valid for %s ", account));
         }
@@ -111,6 +92,6 @@ public class AccountDetailsService implements UserDetailsService {
                 accountEncryption.password,
                 accountEncryption.token);
 
-        accountService.update(accountWithNewToken);
+        return accountService.update(accountWithNewToken);
     }
 }

@@ -45,11 +45,11 @@ public class MembershipService {
             throw new AccountAlreadyExistException("The username already exist");
         }
 
-        Account signedUpAccount = accountDetailsService.signUp(signUpRequest);
+        Account account = accountDetailsService.signUp(signUpRequest);
         eventLogService.create(new EventLog(UUID.randomUUID().toString(), LocalDateTime.now(), "daeliin.membership.signup.event"));
-        membershipNotifications.signUp(signedUpAccount);
+        membershipNotifications.signUp(account);
 
-        log.info(String.format("%s signed up", signedUpAccount));
+        log.info(String.format("%s signed up", account));
     }
 
     @Transactional
@@ -61,7 +61,7 @@ public class MembershipService {
         Account account = accountService.findOne(accountId);
 
         try {
-            accountDetailsService.activate(account, activationToken);
+            account = accountDetailsService.activate(account, activationToken);
             eventLogService.create(new EventLog(UUID.randomUUID().toString(), LocalDateTime.now(), "daeliin.membership.activate.event"));
             membershipNotifications.activate(account);
             log.info(String.format("%s activated", account));
@@ -92,7 +92,7 @@ public class MembershipService {
         Account account = accountService.findOne(accountId);
 
         try {
-            accountDetailsService.resetPassword(account, resetPasswordToken, newPassword);
+            account = accountDetailsService.resetPassword(account, resetPasswordToken, newPassword);
             eventLogService.create(new EventLog(UUID.randomUUID().toString(), LocalDateTime.now(), "daeliin.membership.resetpassword.event"));
             membershipNotifications.resetPassword(account);
             log.info(String.format("%s reseted its password", account));

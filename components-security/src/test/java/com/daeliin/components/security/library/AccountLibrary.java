@@ -34,7 +34,7 @@ public final class AccountLibrary {
                 LocalDateTime.of(2017, 1, 1, 12, 0, 0),
                 "inactive",
                 "inactive@daeliin.com",
-                true,
+                false,
                 "$2a$10$dJ9dhL7FqCDXBb1kKj5y.ub4ohRm7VARPLlg5H.AHcd/T/XVEgpA.",
                 "c4e655641f1d05a415d5ea30d4fd25dcd03ea4a187c5d121d221454c03770f9f98101c206878b25697a79c924149da6802ad8997fbed4999c0dd838577590d9e");
     }
