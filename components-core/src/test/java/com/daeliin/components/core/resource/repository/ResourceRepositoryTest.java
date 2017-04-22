@@ -9,6 +9,7 @@ import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
 import com.daeliin.components.domain.pagination.Sort;
 import com.google.common.collect.Sets;
+import com.querydsl.core.types.Predicate;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
@@ -28,6 +29,16 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
     @Inject
     private UuidPersistentResourceRepository repository;
+
+    @Test
+    public void shouldProvideTheIdPath() {
+        assertThat(repository.idPath()).isEqualTo(QUuidPersistentResource.uuidPersistentResource.uuid);
+    }
+
+    @Test
+    public void shouldProvideTheIdMapping() {
+        assertThat(repository.idMapping()).isNotNull();
+    }
 
     @Test(expected = Exception.class)
     public void shouldThrowException_whenPersistingNull() {
@@ -111,6 +122,38 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
         BUuidPersistentResource foundUuidEntity = repository.findOne(uuidPersistentResource1.getUuid());
 
         assertThat(foundUuidEntity).isEqualToComparingFieldByField(UuidPersistentResourceFixtures.uuidPersistentResource1());
+    }
+
+    @Test
+    public void shouldReturnEmptyCollection_whenPredicateIsNull() {
+        Predicate nullPredicate = null;
+
+        Collection<BUuidPersistentResource> foundUuidEntities = repository.findAll(nullPredicate);
+
+        assertThat(foundUuidEntities).isEmpty();
+    }
+
+    @Test
+    public void shouldReturnEmptyCollection_whenPredicateDoesntMatchAnyRow() {
+        Predicate labelIsEqualToFoo = QUuidPersistentResource.uuidPersistentResource.label.eq("Foo");
+
+        Collection<BUuidPersistentResource> foundUuidEntities = repository.findAll(labelIsEqualToFoo);
+
+        assertThat(foundUuidEntities).isEmpty();
+    }
+
+    @Test
+    public void shouldFindResource_accordingToPredicate() {
+        Predicate labelStartsWithLabel = QUuidPersistentResource.uuidPersistentResource.label.startsWith("label");
+
+        Collection<BUuidPersistentResource> foundUuidEntities = repository.findAll(labelStartsWithLabel);
+
+        assertThat(foundUuidEntities).usingFieldByFieldElementComparator().containsOnly(
+                UuidPersistentResourceFixtures.uuidPersistentResource1(),
+                UuidPersistentResourceFixtures.uuidPersistentResource2(),
+                UuidPersistentResourceFixtures.uuidPersistentResource3(),
+                UuidPersistentResourceFixtures.uuidPersistentResource4()
+        );
     }
 
     @Test

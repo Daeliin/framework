@@ -4,6 +4,7 @@ import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.querydsl.core.types.dsl.SimpleExpression;
 import com.querydsl.sql.RelationalPathBase;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
-public abstract class ResourceRepository<R, ID> extends Repository<R> implements PagingRepository<R, ID> {
+public abstract class ResourceRepository<R, ID> extends BaseRepository<R> implements PagingRepository<R, ID> {
 
     protected final SimpleExpression<ID> idPath;
     protected final Function<R, ID> idMapping;
@@ -96,6 +97,19 @@ public abstract class ResourceRepository<R, ID> extends Repository<R> implements
                 .from(rowPath)
                 .where(idPath.eq(resourceId))
                 .fetchOne();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Collection<R> findAll(Predicate predicate) {
+        if (predicate == null) {
+            return new ArrayList<>();
+        }
+
+        return queryFactory.select(rowPath)
+                .from(rowPath)
+                .where(predicate)
+                .fetch();
     }
 
     @Transactional(readOnly = true)
@@ -177,6 +191,16 @@ public abstract class ResourceRepository<R, ID> extends Repository<R> implements
     @Override
     public boolean deleteAll() {
         return queryFactory.delete(rowPath).execute() > 0;
+    }
+
+    @Override
+    public SimpleExpression<ID> idPath(){
+        return idPath;
+    }
+
+    @Override
+    public Function<R, ID> idMapping() {
+        return idMapping;
     }
 
     protected Collection<ID> findAllIds(Collection<R> resources) {

@@ -6,9 +6,9 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
- * Resource saved in a RDBMS and identified by an UUID,
- * Equality is only based on the UUID.
- * @param <ID> resource ID
+ * Resource saved in a RDBMS and identified by an id,
+ * Equality is only based on the id.
+ * @param <ID> resource ID type
  */
 public abstract class PersistentResource<ID> implements Persistable<ID> {
     

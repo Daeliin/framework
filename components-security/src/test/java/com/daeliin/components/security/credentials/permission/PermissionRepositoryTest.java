@@ -1,6 +1,6 @@
 package com.daeliin.components.security.credentials.permission;
 
-import com.daeliin.components.core.resource.repository.Repository;
+import com.daeliin.components.core.resource.repository.BaseRepository;
 import com.daeliin.components.security.Application;
 import com.daeliin.components.security.library.PermissionLibrary;
 import com.daeliin.components.security.sql.QPermission;
@@ -21,17 +21,17 @@ public class PermissionRepositoryTest extends AbstractTransactionalJUnit4SpringC
 
     @Before
     public void setUp() {
-        assertThat(countRows()).isEqualTo(2);
+        permissionRepository.invalidateCache();
     }
 
     @Test
     public void shouldExtendRepository() {
-        assertThat(permissionRepository.getClass().getSuperclass().getClass()).isEqualTo(Repository.class.getClass());
+        assertThat(permissionRepository.getClass().getSuperclass().getClass()).isEqualTo(BaseRepository.class.getClass());
     }
 
     @Test
     public void shouldPersistAPermission() {
-        Permission newPermission = new Permission("MODERATOR");
+        Permission newPermission = new Permission("NEW");
 
         int rowCountBeforePersist = countRows();
 
@@ -60,7 +60,10 @@ public class PermissionRepositoryTest extends AbstractTransactionalJUnit4SpringC
 
     @Test
     public void shouldFindAllPermission() {
-        assertThat(permissionRepository.findAll()).containsOnly(PermissionLibrary.admin(), PermissionLibrary.user());
+        assertThat(permissionRepository.findAll()).containsOnly(
+                PermissionLibrary.admin(),
+                PermissionLibrary.user(),
+                PermissionLibrary.moderator());
     }
 
     @Test
@@ -79,7 +82,7 @@ public class PermissionRepositoryTest extends AbstractTransactionalJUnit4SpringC
     public void shouldDeleteAPermission() {
         int rowCountBeforePersist = countRows();
 
-        boolean delete = permissionRepository.delete(PermissionLibrary.admin().label);
+        boolean delete = permissionRepository.delete(PermissionLibrary.moderator().label);
 
         int rowCountAfterPersist = countRows();
 

@@ -4,16 +4,17 @@ import com.daeliin.components.core.mail.Mail;
 import com.daeliin.components.core.mail.MailBuildingException;
 import com.daeliin.components.core.mail.Mailing;
 import com.daeliin.components.security.credentials.account.Account;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import javax.inject.Inject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -38,7 +39,7 @@ public class MailingMembershipNotifications implements MembershipNotifications {
             Mail mail = 
                 Mail.builder()
                 .from(from)
-                .to(account.getEmail())
+                .to(account.email)
                 .subject(messages.getMessage("membership.mail.signup.subject", null, Locale.getDefault()))
                 .templateName("signUp")
                 .parameters(parameters)
@@ -59,7 +60,7 @@ public class MailingMembershipNotifications implements MembershipNotifications {
             Mail mail = 
                 Mail.builder()
                 .from(from)
-                .to(account.getEmail())
+                .to(account.email)
                 .subject(messages.getMessage("membership.mail.activate.subject", null, Locale.getDefault()))
                 .templateName("activate")
                 .parameters(parameters)
@@ -80,7 +81,7 @@ public class MailingMembershipNotifications implements MembershipNotifications {
             Mail mail = 
                 Mail.builder()
                 .from(from)
-                .to(account.getEmail())
+                .to(account.email)
                 .subject(messages.getMessage("membership.mail.newPassword.subject", null, Locale.getDefault()))
                 .templateName("newPassword")
                 .parameters(parameters)
@@ -101,7 +102,7 @@ public class MailingMembershipNotifications implements MembershipNotifications {
             Mail mail = 
                 Mail.builder()
                 .from(from)
-                .to(account.getEmail())
+                .to(account.email)
                 .subject(messages.getMessage("membership.mail.resetPassword.subject", null, Locale.getDefault()))
                 .templateName("resetPassword")
                 .parameters(parameters)
@@ -116,9 +117,9 @@ public class MailingMembershipNotifications implements MembershipNotifications {
     private Map<String, String> addAccountParameters(final Account account) {
         Map<String, String> accountParameters = new HashMap<>();
         
-        accountParameters.put("userName", account.getUsername());
-        accountParameters.put("userEmail", account.getEmail());
-        accountParameters.put("userToken", account.getToken());
+        accountParameters.put("userName", account.username);
+        accountParameters.put("userEmail", account.email);
+        accountParameters.put("userToken", account.token);
             
         return accountParameters;
     }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 
 @Component
-public final class CountryService extends ResourceService<Country, BCountry, String> {
+public final class CountryService extends ResourceService<Country, BCountry, String, CountryRepository> {
 
     @Inject
     public CountryService(CountryRepository repository) {

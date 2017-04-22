@@ -5,8 +5,6 @@ import com.daeliin.components.core.library.EventLogLibrary;
 import com.daeliin.components.core.sql.BEventLog;
 import org.junit.Test;
 
-import java.sql.Timestamp;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public final class EventLogConversionTest {
@@ -20,8 +18,7 @@ public final class EventLogConversionTest {
 
     @Test
     public void shouldMapEventLog() {
-        EventLog eventLog = EventLogLibrary.login();
-        BEventLog mappedEventLog = eventLogConversion.map(eventLog);
+        BEventLog mappedEventLog = eventLogConversion.map(EventLogLibrary.login());
 
         assertThat(mappedEventLog).isEqualToComparingFieldByField(EventLogFixtures.login());
     }
@@ -33,10 +30,8 @@ public final class EventLogConversionTest {
 
     @Test
     public void shouldInstantiateAnEventLog() {
-        EventLog eventLog = EventLogLibrary.login();
-        BEventLog mappedEventLog = new BEventLog(Timestamp.valueOf(eventLog.creationDate()), eventLog.descriptionKey, eventLog.id());
-        EventLog rebuiltEventLog = eventLogConversion.instantiate(mappedEventLog);
+        EventLog rebuiltEventLog = eventLogConversion.instantiate(EventLogFixtures.login());
 
-        assertThat(rebuiltEventLog).isEqualTo(eventLog);
+        assertThat(rebuiltEventLog).isEqualTo(EventLogLibrary.login());
     }
 }

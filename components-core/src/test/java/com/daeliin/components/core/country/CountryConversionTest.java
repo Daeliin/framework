@@ -5,8 +5,6 @@ import com.daeliin.components.core.library.CountryLibrary;
 import com.daeliin.components.core.sql.BCountry;
 import org.junit.Test;
 
-import java.sql.Timestamp;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public final class CountryConversionTest {
@@ -20,8 +18,7 @@ public final class CountryConversionTest {
 
     @Test
     public void shouldMapCountry() {
-        Country country = CountryLibrary.france();
-        BCountry mappedCountry = countryConversion.map(country);
+        BCountry mappedCountry = countryConversion.map(CountryLibrary.france());
 
         assertThat(mappedCountry).isEqualToComparingFieldByField(CountryFixtures.france());
     }
@@ -33,10 +30,8 @@ public final class CountryConversionTest {
 
     @Test
     public void shouldInstantiateAnCountry() {
-        Country country = CountryLibrary.france();
-        BCountry mappedCountry = new BCountry(country.code, Timestamp.valueOf(country.creationDate()), country.name);
-        Country rebuiltCountry = countryConversion.instantiate(mappedCountry);
+        Country rebuiltCountry = countryConversion.instantiate(CountryFixtures.france());
 
-        assertThat(rebuiltCountry).isEqualTo(country);
+        assertThat(rebuiltCountry).isEqualTo(CountryLibrary.france());
     }
 }

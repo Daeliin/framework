@@ -11,4 +11,8 @@ public final class PermissionFixtures {
     public static BPermission user() {
         return new BPermission("USER");
     }
+
+    public static BPermission moderator() {
+        return new BPermission("MODERATOR");
+    }
 }

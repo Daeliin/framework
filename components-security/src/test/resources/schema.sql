@@ -5,7 +5,7 @@ CREATE TABLE account (
     enabled BOOLEAN NOT NULL DEFAULT FALSE,
     password VARCHAR(255) NOT NULL,
     token VARCHAR(255) NOT NULL,
-    signup_date DATETIME NOT NULL
+    creation_date DATETIME NOT NULL
 );
 
 ALTER TABLE account ADD PRIMARY KEY (id);

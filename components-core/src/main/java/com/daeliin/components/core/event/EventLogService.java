@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 
 @Service
-public final class EventLogService extends ResourceService<EventLog, BEventLog, String> {
+public final class EventLogService extends ResourceService<EventLog, BEventLog, String, EventLogRepository> {
 
     @Inject
     public EventLogService(EventLogRepository repository) {

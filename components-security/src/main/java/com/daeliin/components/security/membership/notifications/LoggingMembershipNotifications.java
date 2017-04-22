@@ -12,7 +12,7 @@ public class LoggingMembershipNotifications implements MembershipNotifications {
 
     @Override
     public void signUp(Account account) {
-        log.info("The account " + account + " signeUp");
+        log.info("The account " + account + " signed up");
     }
 
     @Override

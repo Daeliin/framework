@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 
 @Service
-public class UuidPersistentResourceService extends ResourceService<UuidPersistentResource, BUuidPersistentResource, String> {
+public class UuidPersistentResourceService extends ResourceService<UuidPersistentResource, BUuidPersistentResource, String, UuidPersistentResourceRepository> {
 
     @Inject
     public UuidPersistentResourceService(UuidPersistentResourceRepository repository) {

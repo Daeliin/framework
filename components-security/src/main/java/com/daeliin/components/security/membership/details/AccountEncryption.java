@@ -1,41 +1,22 @@
-//package com.daeliin.components.security.membership.details;
-//
-//import com.daeliin.components.security.credentials.account.Account;
-//import com.daeliin.components.security.cryptography.Sha512;
-//import com.daeliin.components.security.cryptography.Token;
-//import java.util.LinkedList;
-//import java.util.List;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//
-//public class AccountEncryption {
-//
-//    private final Account account;
-//    private String password;
-//    private String token;
-//
-//    public AccountEncryption(final Account account) {
-//        this.account = account;
-//
-//        generatePassword();
-//        generateToken();
-//    }
-//
-//    public String password() {
-//        return this.password;
-//    }
-//
-//    public String token() {
-//        return this.token;
-//    }
-//
-//    private void generatePassword() {
-//        this.password = new BCryptPasswordEncoder().encode(this.account.getClearPassword());
-//    }
-//
-//    private void generateToken() {
-//        List<String> data = new LinkedList<>();
-//        data.add(account.getEmail());
-//
-//        this.token = new Token(data, new Sha512(), true).asString();
-//    }
-//}
+package com.daeliin.components.security.membership.details;
+
+import com.daeliin.components.security.cryptography.Sha512;
+import com.daeliin.components.security.cryptography.Token;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.Arrays;
+import java.util.Objects;
+
+public class AccountEncryption {
+
+    public final String password;
+    public final String token;
+
+    public AccountEncryption(String username, String clearPassword) {
+        Objects.requireNonNull(username, "username should not be null");
+        Objects.requireNonNull(clearPassword, "clearPassword should not be null");
+
+        this.password = new BCryptPasswordEncoder().encode(clearPassword);
+        this.token = new Token(Arrays.asList(username), new Sha512(), true).asString;
+    }
+}

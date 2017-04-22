@@ -11,5 +11,9 @@ public final class PermissionLibrary {
     public static Permission user() {
         return new Permission("USER");
     }
+
+    public static Permission moderator() {
+        return new Permission("MODERATOR");
+    }
 }
 

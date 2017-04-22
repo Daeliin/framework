@@ -1,6 +1,6 @@
 package com.daeliin.components.security.credentials.permission;
 
-import com.daeliin.components.core.resource.repository.Repository;
+import com.daeliin.components.core.resource.repository.BaseRepository;
 import com.daeliin.components.security.sql.BPermission;
 import com.daeliin.components.security.sql.QPermission;
 import com.google.common.base.Strings;
@@ -18,7 +18,7 @@ import static java.util.stream.Collectors.toSet;
  */
 @Transactional
 @Component
-public class PermissionRepository extends Repository<BPermission> {
+public class PermissionRepository extends BaseRepository<BPermission> {
 
     private final Map<String, Permission> cache = Maps.newConcurrentMap();
 
@@ -84,16 +84,16 @@ public class PermissionRepository extends Repository<BPermission> {
         return nbDelete == 1;
     }
 
-    public void loadCache() {
+    public void invalidateCache() {
+        cache.clear();
+    }
+
+    protected void loadCache() {
         queryFactory.select(rowPath)
                 .from(rowPath)
                 .fetch()
                 .stream().map(BPermission::getLabel)
                 .collect(toSet())
                 .forEach(label -> cache.put(label, new Permission(label)));
-    }
-
-    public void invalidateCache() {
-        cache.clear();
     }
 }
