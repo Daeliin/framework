@@ -25,8 +25,8 @@ public final class ArticleLibrary {
                 LocalDateTime.of(2016, 5, 20, 14, 30, 0),
                 "admin",
                 "Sample.com is live",
-                "sample-com-is-live"
-                "Today is the day we go live at sample.com",s
+                "sample-com-is-live",
+                "Today is the day we go live at sample.com",
                 "We go live today, here''s our first content.",
                 null,
                 false);

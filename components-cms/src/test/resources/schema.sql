@@ -20,7 +20,7 @@ CREATE TABLE article(
     url_friendly_title VARCHAR(255) NOT NULL,
     description VARCHAR(500) NOT NULL,
     content VARCHAR(5000),
-    publicationDate DATETIME,
+    publication_date DATETIME,
     published BOOLEAN NOT NULL DEFAULT FALSE
 );
 

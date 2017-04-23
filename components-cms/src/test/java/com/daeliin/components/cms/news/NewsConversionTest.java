@@ -1,0 +1,39 @@
+package com.daeliin.components.cms.news;
+
+import com.daeliin.components.cms.fixtures.NewsFixtures;
+import com.daeliin.components.cms.library.AccountLibrary;
+import com.daeliin.components.cms.library.ArticleLibrary;
+import com.daeliin.components.cms.library.NewsLibrary;
+import com.daeliin.components.core.sql.BNews;
+import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public final class NewsConversionTest {
+
+    private NewsConversion eventLogConversion = new NewsConversion();
+
+    @Test
+    public void shouldMapToNull_whenNull() {
+        assertThat(eventLogConversion.map(null, ArticleLibrary.notPublishedArticle().id(), AccountLibrary.admin().id())).isNull();
+    }
+
+    @Test
+    public void shouldMapNews() {
+        BNews mappedNews = eventLogConversion.map(NewsLibrary.newsWithSource(), ArticleLibrary.notPublishedArticle().id(), AccountLibrary.admin().id());
+
+        assertThat(mappedNews).isEqualToComparingFieldByField(NewsFixtures.newsWithSource());
+    }
+
+    @Test
+    public void shouldInstantiateNull_fromNull() {
+        assertThat(eventLogConversion.instantiate(null, AccountLibrary.admin().id())).isNull();
+    }
+
+    @Test
+    public void shouldInstantiateAnNews() {
+        News rebuiltNews = eventLogConversion.instantiate(NewsFixtures.newsWithSource(), AccountLibrary.admin().id());
+
+        assertThat(rebuiltNews).isEqualTo(NewsLibrary.newsWithSource());
+    }
+}

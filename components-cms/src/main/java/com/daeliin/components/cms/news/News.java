@@ -5,7 +5,7 @@ import com.daeliin.components.domain.resource.PersistentResource;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class News extends PersistentResource implements Comparable<News> {
+public class News extends PersistentResource<String> implements Comparable<News> {
 
     public final String author;
     public final String content;

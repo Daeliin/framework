@@ -2,8 +2,9 @@ package com.daeliin.components.cms;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
 
+@ComponentScan(basePackages = "com.daeliin.components")
 @SpringBootApplication
 public class Application {
     

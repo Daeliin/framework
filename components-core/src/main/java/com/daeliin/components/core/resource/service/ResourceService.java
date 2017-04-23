@@ -10,7 +10,9 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.TreeSet;
 
+import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toSet;
 
 /**
@@ -223,6 +225,6 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
         return rows
                 .stream()
                 .map(conversion::instantiate)
-                .collect(toSet());
+                .collect(toCollection(TreeSet::new));
     }
 }

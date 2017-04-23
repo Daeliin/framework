@@ -9,8 +9,9 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.Collection;
+import java.util.TreeSet;
 
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.toCollection;
 
 @Service
 public class AccountService extends ResourceService<Account, BAccount, String, AccountRepository> {
@@ -37,7 +38,7 @@ public class AccountService extends ResourceService<Account, BAccount, String, A
         return repository.findPermissions(account.id())
                 .stream()
                 .map(permissionConversion::instantiate)
-                .collect(toSet());
+                .collect(toCollection(TreeSet::new));
     }
 
     public boolean usernameExists(String username) {

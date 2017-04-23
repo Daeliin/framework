@@ -6,14 +6,14 @@
     <packaging>pom</packaging>
     <version>0.2-SNAPSHOT</version>
     <description>Java Components Main</description>
-    
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>1.5.3.RELEASE</version>
         <relativePath/>
     </parent>
-    
+
     <properties>
         <file.encoding>UTF-8</file.encoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -30,7 +30,7 @@
         <commons-codec.version>1.10</commons-codec.version>
         <sql.folder>${project.basedir}/src/test/resources/schema.sql</sql.folder>
     </properties>
-    
+
     <modules>
         <module>components-domain</module>
         <module>components-core</module>
@@ -39,7 +39,7 @@
         <module>components-cms</module>
         <module>components-test</module>
     </modules>
-    
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -89,7 +89,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    
+
     <dependencies>
         <!-- Java -->
         <dependency>
@@ -121,7 +121,7 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-    
+
     <build>
         <extensions>
             <!-- SSH -->
@@ -142,7 +142,7 @@
                     <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
-                 
+
             <!-- Java Sources -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -160,27 +160,27 @@
 
             <!-- Test reports -->
             <plugin>
-			    <groupId>org.jacoco</groupId>
-			    <artifactId>jacoco-maven-plugin</artifactId>
-			    <version>${jacoco.plugin.version}</version>
-			    <executions>
-			        <execution>
-			            <goals>
-			                <goal>prepare-agent</goal>
-			            </goals>
-			        </execution>
-			        <execution>
-			            <id>report</id>
-			            <phase>prepare-package</phase>
-			            <goals>
-			                <goal>report</goal>
-			            </goals>
-			        </execution>
-			    </executions>
-			</plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-    
+
     <distributionManagement>
         <repository>
             <id>daeliin-repository</id>
