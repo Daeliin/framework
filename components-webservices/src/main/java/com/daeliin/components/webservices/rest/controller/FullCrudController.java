@@ -22,10 +22,10 @@ public interface FullCrudController<E extends Serializable> {
     
     /**
      * Exposes a search by id entry point.
-     * @param id resource id
+     * @param resourceId resource id
      * @return resource
      */
-    E getOne(String id);
+    E getOne(String resourceId);
     
     /**
      * Exposes a pagination entry point.
@@ -40,21 +40,21 @@ public interface FullCrudController<E extends Serializable> {
     
     /**
      * Exposes an update by id entry point.
-     * @param id resource id
+     * @param resourceId resource id
      * @param resource resource to update
      * @return updated resource 
      */
-    E update(String id, E resource);
+    E update(String resourceId, E resource);
     
     /**
      * Exposes a delete by id entry point.
-     * @param id resource id to delete
+     * @param resourceId resource id to delete
      */
-    void delete(String id);
+    void delete(String resourceId);
     
     /**
      * Exposes a delete entry point for a list of ids.
-     * @param ids resources ids to delete
+     * @param resourceIds resources ids to delete
      */
-    void delete(Collection<String> ids);
+    void delete(Collection<String> resourceIds);
 }

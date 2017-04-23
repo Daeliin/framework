@@ -1,6 +1,5 @@
 package com.daeliin.components.webservices.rest.controller;
 
-import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
 import com.daeliin.components.core.resource.service.PagingService;
 import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
@@ -8,7 +7,6 @@ import com.daeliin.components.domain.pagination.Sort;
 import com.daeliin.components.domain.resource.Persistable;
 import com.daeliin.components.webservices.exception.PageRequestException;
 import com.daeliin.components.webservices.exception.ResourceNotFoundException;
-import com.google.common.collect.Sets;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -109,8 +107,8 @@ public abstract class ResourceController<E extends Persistable, S extends Paging
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     @Override
-    public E update(@PathVariable String id, @RequestBody @Valid E resource) {
-        E persistedResource = service.findOne(id);
+    public E update(@PathVariable String resourceId, @RequestBody @Valid E resource) {
+        E persistedResource = service.findOne(resourceId);
 
         if (persistedResource == null) {
             throw new ResourceNotFoundException();
@@ -121,13 +119,13 @@ public abstract class ResourceController<E extends Persistable, S extends Paging
 
     /**
      * Exposes a delete by id entry point, returns a 410 if the resource is found, a 404 otherwise.
-     * @param id resource id to delete
+     * @param resourceId resource id to delete
      */
     @RequestMapping(value="{id}", method = DELETE)
     @ResponseStatus(HttpStatus.GONE)
     @Override
-    public void delete(@PathVariable String id) {
-        service.delete(id);
+    public void delete(@PathVariable String resourceId) {
+        service.delete(resourceId);
     }
     
     /**
@@ -135,12 +133,12 @@ public abstract class ResourceController<E extends Persistable, S extends Paging
      * it's exposed as a POST and not a DELETE because if the list of ids is passed as a request parameters,
      * which is the only way of passing data for a DELETE request since it has no body,
      * the URL maximum size limits the number of ids we can pass.
-     * @param ids resource ids to delete
+     * @param resourceIds resource ids to delete
      */
     @RequestMapping(value="deleteSeveral", method = POST)
     @ResponseStatus(HttpStatus.GONE)
     @Override
-    public void delete(@RequestBody Collection<String> ids) {
-        service.delete(ids);
+    public void delete(@RequestBody Collection<String> resourceIds) {
+        service.delete(resourceIds);
     }
 }
