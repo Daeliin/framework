@@ -2,12 +2,14 @@ package com.daeliin.components.cms.article;
 
 import com.daeliin.components.cms.Application;
 import com.daeliin.components.cms.library.ArticleLibrary;
-import org.apache.commons.lang3.builder.ToStringExclude;
+import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
+import com.daeliin.components.domain.utils.UrlFriendlyString;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 import javax.inject.Inject;
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,51 +37,58 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
         assertThat(articleService.exists(ArticleLibrary.publishedArticle().id())).isTrue();
     }
 
-//    @Test
-//    public void publish_notPublishedArticle_makesItPublished() {
-//        Article notPublishedArticle = articleService.findOne(2L);
-//
-//        articleService.publish(notPublishedArticle);
-//
-//        Article publishedArticle = articleService.findOne(2L);
-//
-//        assertNotNull(publishedArticle.getPublicationDate());
-//        assertTrue(publishedArticle.isPublished());
-//    }
-//
-//    @Test
-//    public void publish_alreadyPublishedArticle_doesntChangeAnything() {
-//        Article alreadyPublishedArticle = articleService.findOne(1L);
-//
-//        articleService.publish(alreadyPublishedArticle);
-//
-//        Article republishedArticle = articleService.findOne(1L);
-//
-//        assertEquals(republishedArticle, alreadyPublishedArticle);
-//    }
-//
-//    @Test
-//    public void publish_notPublishedArticles_makesAllOfThemPublished() {
-//        List<Article> notPublishedArticles = Arrays.asList(articleService.findOne(2L), articleService.findOne(3L));
-//
-//        articleService.publish(notPublishedArticles);
-//
-//        List<Article> publishedArticles = Arrays.asList(articleService.findOne(2L), articleService.findOne(3L));
-//
-//        publishedArticles.forEach(publishedArticle -> {
-//            assertNotNull(publishedArticle.getPublicationDate());
-//            assertTrue(publishedArticle.isPublished());
-//        });
-//    }
-//
-//    @Test
-//    public void publish_alreadyPublishedArticles_doesntChangeAnything() {
-//        List<Article> alreadyPublishedArticles = Arrays.asList(articleService.findOne(1L), articleService.findOne(4L));
-//
-//        articleService.publish(alreadyPublishedArticles);
-//
-//        List<Article> publishedArticle = Arrays.asList(articleService.findOne(1L), articleService.findOne(4L));
-//
-//        assertEquals(alreadyPublishedArticles, publishedArticle);
-//    }
+    @Test(expected = PersistentResourceNotFoundException.class)
+    public void shouldThrowPersistentResourceNotFoundException_whenCreatingArticleWithNonExistingAuthor() {
+        Article article = new Article(
+                "ARTICLE1",
+                LocalDateTime.of(2016, 5, 20, 14, 30, 0),
+                "AANWN",
+                "Welcome to sample",
+                "welcome-to-sample",
+                "Today is the day we start sample.com",
+                "We open our door today, you'll find content very soon.",
+                LocalDateTime.of(2016, 5, 20, 15, 30, 0),
+                true);
+
+        articleService.create(article);
+    }
+
+    @Test
+    public void shouldCreateArticle() {
+        Article article = new Article(
+                "ARTICLE1",
+                LocalDateTime.of(2016, 5, 20, 14, 30, 0),
+                "admin",
+                "Welcome to sample",
+                "welcome-to-sample",
+                "Today is the day we start sample.com",
+                "We open our door today, you'll find content very soon.",
+                LocalDateTime.of(2016, 5, 20, 15, 30, 0),
+                true);
+
+        Article createdArticle = articleService.create(article);
+
+        assertThat(createdArticle).isEqualTo(article);
+    }
+
+    @Test(expected = PersistentResourceNotFoundException.class)
+    public void shouldThrowPersistentResourceNotFoundException_whenUpdatingNonExistingArticle() {
+        articleService.update("OKOK", null);
+    }
+
+    @Test
+    public void shouldUpdateAnArticleTitleDescriptionAndContent() {
+        Article articleToUpdate = ArticleLibrary.notPublishedArticle();
+        Article article = new Article("", LocalDateTime.now(), "", "New title", "", "New desc", "New content", null, false);
+
+        Article updatedArtice = articleService.update(articleToUpdate.id(), article);
+
+        assertThat(updatedArtice.title).isEqualTo(article.title);
+        assertThat(updatedArtice.urlFriendlyTitle).isEqualTo(new UrlFriendlyString(article.title).value);
+        assertThat(updatedArtice.description).isEqualTo(article.description);
+        assertThat(updatedArtice.content).isEqualTo(article.content);
+        assertThat(updatedArtice.id()).isEqualTo(articleToUpdate.id());
+        assertThat(updatedArtice.creationDate()).isEqualTo(articleToUpdate.creationDate());
+        assertThat(updatedArtice.author).isEqualTo(articleToUpdate.author);
+    }
 }

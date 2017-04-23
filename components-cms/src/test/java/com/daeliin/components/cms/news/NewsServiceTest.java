@@ -38,28 +38,28 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
     public void shouldThrowPersistentResourceNotFoundException_whenCreatingNewsOfUnexistingArticleId() {
         News news = new News("NEWSID", LocalDateTime.now(), AccountLibrary.admin().username, "Content", null);
 
-        newsService.create(news, "EZOFZEJF-34324");
+        newsService.create("EZOFZEJF-34324", news);
     }
 
     @Test(expected = PersistentResourceNotFoundException.class)
     public void shouldThrowPersistentResourceNotFoundException_whenCreatingNewsOfUnexistingAuthor() {
         News news = new News("NEWSID", LocalDateTime.now(), "ZADAZD", "Content", null);
 
-        newsService.create(news, ArticleLibrary.notPublishedArticle().id());
+        newsService.create(ArticleLibrary.notPublishedArticle().id(), news);
     }
 
     @Test(expected = IllegalStateException.class)
     public void shouldThrowIllegalStateException_whenCreatingNewsOnPublishedArticle() {
         News news = new News("NEWSID", LocalDateTime.now(), AccountLibrary.admin().username, "Content", null);
 
-        newsService.create(news, ArticleLibrary.publishedArticle().id());
+        newsService.create(ArticleLibrary.publishedArticle().id(), news);
     }
 
     @Test
     public void shouldCreateANews() {
         News news = new News("NEWSID", LocalDateTime.now(), AccountLibrary.admin().username, "Content", null);
 
-        News createdNews = newsService.create(news, ArticleLibrary.notPublishedArticle().id());
+        News createdNews = newsService.create(ArticleLibrary.notPublishedArticle().id(), news);
 
         assertThat(createdNews).isEqualTo(news);
     }

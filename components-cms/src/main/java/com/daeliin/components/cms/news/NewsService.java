@@ -31,7 +31,7 @@ public class NewsService {
         this.articleService = articleService;
     }
 
-    public News create(News news, String articleId) {
+    public News create(String articleId, News news) {
         Article article = articleService.findOne(articleId);
         Account author = accountService.findByUsernameAndEnabled(news.author);
 

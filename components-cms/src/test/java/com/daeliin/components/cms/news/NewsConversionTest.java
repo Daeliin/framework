@@ -11,28 +11,28 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public final class NewsConversionTest {
 
-    private NewsConversion eventLogConversion = new NewsConversion();
+    private NewsConversion newsConversion = new NewsConversion();
 
     @Test
     public void shouldMapToNull_whenNull() {
-        assertThat(eventLogConversion.map(null, ArticleLibrary.notPublishedArticle().id(), AccountLibrary.admin().id())).isNull();
+        assertThat(newsConversion.map(null, ArticleLibrary.notPublishedArticle().id(), AccountLibrary.admin().id())).isNull();
     }
 
     @Test
     public void shouldMapNews() {
-        BNews mappedNews = eventLogConversion.map(NewsLibrary.newsWithSource(), ArticleLibrary.notPublishedArticle().id(), AccountLibrary.admin().id());
+        BNews mappedNews = newsConversion.map(NewsLibrary.newsWithSource(), ArticleLibrary.notPublishedArticle().id(), AccountLibrary.admin().id());
 
         assertThat(mappedNews).isEqualToComparingFieldByField(NewsFixtures.newsWithSource());
     }
 
     @Test
     public void shouldInstantiateNull_fromNull() {
-        assertThat(eventLogConversion.instantiate(null, AccountLibrary.admin().id())).isNull();
+        assertThat(newsConversion.instantiate(null, AccountLibrary.admin().username)).isNull();
     }
 
     @Test
     public void shouldInstantiateAnNews() {
-        News rebuiltNews = eventLogConversion.instantiate(NewsFixtures.newsWithSource(), AccountLibrary.admin().id());
+        News rebuiltNews = newsConversion.instantiate(NewsFixtures.newsWithSource(), AccountLibrary.admin().username);
 
         assertThat(rebuiltNews).isEqualTo(NewsLibrary.newsWithSource());
     }

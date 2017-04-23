@@ -16,8 +16,8 @@ public final class ArticleFixtures {
                 "ARTICLE1",
                 Timestamp.valueOf(LocalDateTime.of(2016, 5, 20, 15, 30, 0)),
                 true,
-                "Welcome to sample.com",
-                "Welcome-to-sample-com");
+                "Welcome to sample",
+                "welcome-to-sample");
     }
 
     public static BArticle notPublishedArticle() {
@@ -29,7 +29,7 @@ public final class ArticleFixtures {
                 "ARTICLE2",
                 null,
                 false,
-                "Sample.com is live",
-                "sample-com-is-live");
+                "Sample is live",
+                "sample-is-live");
     }
 }
