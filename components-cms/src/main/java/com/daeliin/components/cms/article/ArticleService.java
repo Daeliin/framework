@@ -10,6 +10,7 @@ import com.daeliin.components.security.credentials.account.AccountService;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static java.util.stream.Collectors.toCollection;
@@ -36,7 +37,18 @@ public class ArticleService  {
             throw new PersistentResourceNotFoundException(String.format("Account %s doesn't exist", article.author));
         }
 
-        return instantiate(repository.save(map(article, author.id())), author.username);
+        Article articleToCreate = new Article(
+                UUID.randomUUID().toString(),
+                LocalDateTime.now(),
+                article.author,
+                article.title,
+                article.urlFriendlyTitle,
+                article.description,
+                article.content,
+                null,
+                false);
+
+        return instantiate(repository.save(map(articleToCreate, author.id())), author.username);
     }
 
     public Article update(String articleId, Article article) {

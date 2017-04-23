@@ -56,7 +56,7 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
     @Test
     public void shouldCreateArticle() {
         Article article = new Article(
-                "ARTICLE1",
+                " ",
                 LocalDateTime.of(2016, 5, 20, 14, 30, 0),
                 "admin",
                 "Welcome to sample",
@@ -68,7 +68,14 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
 
         Article createdArticle = articleService.create(article);
 
-        assertThat(createdArticle).isEqualTo(article);
+        assertThat(createdArticle.id()).isNotBlank();
+        assertThat(createdArticle.title).isEqualTo(article.title);
+        assertThat(createdArticle.urlFriendlyTitle).isEqualTo(new UrlFriendlyString(article.title).value);
+        assertThat(createdArticle.description).isEqualTo(article.description);
+        assertThat(createdArticle.content).isEqualTo(article.content);
+        assertThat(createdArticle.author).isEqualTo(article.author);
+        assertThat(createdArticle.publicationDate).isNull();
+        assertThat(createdArticle.published).isFalse();
     }
 
     @Test(expected = PersistentResourceNotFoundException.class)

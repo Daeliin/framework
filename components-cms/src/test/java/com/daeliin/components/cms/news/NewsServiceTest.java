@@ -57,11 +57,14 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
 
     @Test
     public void shouldCreateANews() {
-        News news = new News("NEWSID", LocalDateTime.now(), AccountLibrary.admin().username, "Content", null);
+        News news = new News("", LocalDateTime.now(), AccountLibrary.admin().username, "Content", null);
 
         News createdNews = newsService.create(ArticleLibrary.notPublishedArticle().id(), news);
 
-        assertThat(createdNews).isEqualTo(news);
+        assertThat(createdNews.id()).isNotBlank();
+        assertThat(createdNews.author).isEqualTo(news.author);
+        assertThat(createdNews.content).isEqualTo(news.content);
+        assertThat(createdNews.source).isEqualTo(news.source);
     }
 
     @Test(expected = PersistentResourceNotFoundException.class)
@@ -72,7 +75,7 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
     @Test
     public void shouldUpdateANewsContentAndSource() {
         News newsToUpdate = NewsLibrary.newsWithSource();
-        News news = new News("", LocalDateTime.now(), "", "newContent", "http://newsource.com");
+        News news = new News(" ", LocalDateTime.now(), "", "newContent", "http://newsource.com");
 
         News updatedNews = newsService.update(newsToUpdate.id(), news);
 

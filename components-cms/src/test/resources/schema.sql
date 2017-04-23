@@ -28,7 +28,7 @@ ALTER TABLE article ADD PRIMARY KEY (id);
 ALTER TABLE article ADD CONSTRAINT fk_article_account_id FOREIGN KEY (author_id) REFERENCES account (id);
 
 CREATE TABLE news(
-    id VARCHAR(26) NOT NULL,
+    id VARCHAR(36) NOT NULL,
     creation_date DATETIME NOT NULL,
     article_id VARCHAR(36) NOT NULL,
     author_id VARCHAR(36) NOT NULL,
