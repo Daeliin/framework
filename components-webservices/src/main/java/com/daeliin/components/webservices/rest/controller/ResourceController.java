@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -22,11 +21,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /***
  * Exposes CRUD and pagination for a resource.
- * @param <E> resource type
+ * @param <T> resource type
  * @param <S> resource service
  */
-@RestController
-public abstract class ResourceController<E extends Persistable, S extends PagingService<E>> implements FullCrudController<E> {
+public abstract class ResourceController<T extends Persistable<ID>, ID, S extends PagingService<T, ID>> implements FullCrudController<T, ID> {
     
     public static final String DEFAULT_PAGE = "0";
     public static final String DEFAULT_SIZE = "20";
@@ -45,7 +43,7 @@ public abstract class ResourceController<E extends Persistable, S extends Paging
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     @Override
-    public E create(@RequestBody @Valid E resource) {
+    public T create(@RequestBody T resource) {
         return service.create(resource);
     }
     
@@ -59,7 +57,7 @@ public abstract class ResourceController<E extends Persistable, S extends Paging
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     @Override
-    public E getOne(@PathVariable String id) {
+    public T getOne(@PathVariable ID id) {
         return service.findOne(id);
     }
     
@@ -76,7 +74,7 @@ public abstract class ResourceController<E extends Persistable, S extends Paging
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     @Override
-    public Page<E> getAll(
+    public Page<T> getAll(
         @RequestParam(value = "page", defaultValue = DEFAULT_PAGE) String page,
         @RequestParam(value = "size", defaultValue = DEFAULT_SIZE) String size,
         @RequestParam(value = "direction", defaultValue = DEFAULT_DIRECTION) String direction,
@@ -107,8 +105,8 @@ public abstract class ResourceController<E extends Persistable, S extends Paging
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     @Override
-    public E update(@PathVariable String resourceId, @RequestBody @Valid E resource) {
-        E persistedResource = service.findOne(resourceId);
+    public T update(@PathVariable ID resourceId, @RequestBody T resource) {
+        T persistedResource = service.findOne(resourceId);
 
         if (persistedResource == null) {
             throw new ResourceNotFoundException();
@@ -124,7 +122,7 @@ public abstract class ResourceController<E extends Persistable, S extends Paging
     @RequestMapping(value="{id}", method = DELETE)
     @ResponseStatus(HttpStatus.GONE)
     @Override
-    public void delete(@PathVariable String resourceId) {
+    public void delete(@PathVariable ID resourceId) {
         service.delete(resourceId);
     }
     
@@ -138,7 +136,7 @@ public abstract class ResourceController<E extends Persistable, S extends Paging
     @RequestMapping(value="deleteSeveral", method = POST)
     @ResponseStatus(HttpStatus.GONE)
     @Override
-    public void delete(@RequestBody Collection<String> resourceIds) {
+    public void delete(@RequestBody Collection<ID> resourceIds) {
         service.delete(resourceIds);
     }
 }

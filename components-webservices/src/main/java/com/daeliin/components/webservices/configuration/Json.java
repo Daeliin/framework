@@ -16,7 +16,7 @@ public class Json {
 
     @Bean
     @Primary
-    public ObjectMapper jsonMapper(Jackson2ObjectMapperBuilder builder) {
+    public ObjectMapper objectMapper(Jackson2ObjectMapperBuilder builder) {
         ObjectMapper objectMapper = builder.createXmlMapper(false).build();
 
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);

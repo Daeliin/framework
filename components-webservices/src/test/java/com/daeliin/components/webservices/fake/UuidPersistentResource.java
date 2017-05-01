@@ -8,8 +8,8 @@ public class UuidPersistentResource extends PersistentResource<String> implement
 
     public final String label;
 
-    public UuidPersistentResource(String uuid, LocalDateTime creationDate, String label) {
-        super(uuid, creationDate);
+    public UuidPersistentResource(String id, LocalDateTime creationDate, String label) {
+        super(id, creationDate);
         this.label = label;
     }
 

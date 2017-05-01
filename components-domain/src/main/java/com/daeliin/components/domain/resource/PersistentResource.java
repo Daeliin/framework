@@ -14,8 +14,8 @@ public abstract class PersistentResource<ID> implements Persistable<ID> {
     
     private static final LocalDateTime DEFAULT_CREATION_DATE = LocalDateTime.now();
 
-    protected final ID id;
-    protected final LocalDateTime creationDate;
+    public final ID id;
+    public final LocalDateTime creationDate;
 
     protected PersistentResource(ID id, LocalDateTime creationDate) {
         this.id = Objects.requireNonNull(id, "id should not be null");
