@@ -1,5 +1,6 @@
 package com.daeliin.components.webservices.rest.controller;
 
+import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
 import com.daeliin.components.core.resource.service.PagingService;
 import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
@@ -28,7 +29,7 @@ public abstract class ResourceController<T extends Persistable<ID>, ID, S extend
     
     public static final String DEFAULT_PAGE = "0";
     public static final String DEFAULT_SIZE = "20";
-    public static final String DEFAULT_DIRECTION = "asc";
+    public static final String DEFAULT_DIRECTION = "ASC";
     public static final String DEFAULT_PROPERTIES = "id";
     
     @Inject
@@ -58,7 +59,11 @@ public abstract class ResourceController<T extends Persistable<ID>, ID, S extend
     @ResponseBody
     @Override
     public T getOne(@PathVariable ID id) {
-        return service.findOne(id);
+        try {
+            return service.findOne(id);
+        } catch (PersistentResourceNotFoundException e) {
+            throw new ResourceNotFoundException();
+        }
     }
     
     /**
@@ -83,7 +88,7 @@ public abstract class ResourceController<T extends Persistable<ID>, ID, S extend
         // TODO: validation of input !
 
         List<String> propertyList = Arrays.asList(properties);
-        Set<Sort> sorts = propertyList.stream().map(property -> new Sort(property, Sort.Direction.valueOf(direction))).collect(toSet());
+        Set<Sort> sorts = propertyList.stream().map(property -> new Sort(property, Sort.Direction.valueOf(direction.toUpperCase()))).collect(toSet());
 
         PageRequest pageRequest = new PageRequest(
                 Integer.parseInt(page),
@@ -106,13 +111,11 @@ public abstract class ResourceController<T extends Persistable<ID>, ID, S extend
     @ResponseBody
     @Override
     public T update(@PathVariable ID resourceId, @RequestBody T resource) {
-        T persistedResource = service.findOne(resourceId);
-
-        if (persistedResource == null) {
+        if (!service.exists(resourceId)) {
             throw new ResourceNotFoundException();
         }
 
-        return service.update(persistedResource);
+        return service.update(resource);
     }
 
     /**

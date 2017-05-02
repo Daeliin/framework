@@ -28,7 +28,7 @@
         <guava.version>21.0</guava.version>
         <querydsl.version>4.1.4</querydsl.version>
         <commons-codec.version>1.10</commons-codec.version>
-        <sql.folder>${project.basedir}/src/test/resources/schema.sql</sql.folder>
+        <sql.schema>${project.basedir}/src/test/resources/schema.sql</sql.schema>
     </properties>
 
     <modules>

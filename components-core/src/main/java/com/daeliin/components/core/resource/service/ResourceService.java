@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toSet;
 
 /**
@@ -107,7 +106,7 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
      */
     @Override
     public Collection<T> findAll() {
-        return instantiate(repository.findAll());
+        return new TreeSet<>(instantiate(repository.findAll()));
     }
 
     /**
@@ -129,7 +128,7 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
      */
     @Override
     public Collection<T> findAll(Collection<ID> resourcesIds) {
-        return instantiate(repository.findAll(resourcesIds));
+        return new TreeSet(instantiate(repository.findAll(resourcesIds)));
     }
 
     /**
@@ -225,6 +224,6 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
         return rows
                 .stream()
                 .map(conversion::instantiate)
-                .collect(toCollection(TreeSet::new));
+                .collect(toSet());
     }
 }

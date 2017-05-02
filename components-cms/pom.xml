@@ -49,7 +49,7 @@
                 </executions>
                 <configuration>
                     <jdbcDriver>org.h2.Driver</jdbcDriver>
-                    <jdbcUrl>jdbc:h2:mem:;INIT=runscript from '${sql.folder}'</jdbcUrl>
+                    <jdbcUrl>jdbc:h2:mem:;INIT=runscript from '${sql.schema}'</jdbcUrl>
                     <jdbcUser>sa</jdbcUser>
                     <exportBeans>true</exportBeans>
                     <beanPrefix>B</beanPrefix>

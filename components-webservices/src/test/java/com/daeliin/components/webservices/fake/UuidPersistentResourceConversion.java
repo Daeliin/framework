@@ -1,7 +1,7 @@
 package com.daeliin.components.webservices.fake;
 
-import com.daeliin.components.core.sql.BUuidPersistentResource;
 import com.daeliin.components.domain.resource.Conversion;
+import com.daeliin.components.webservices.sql.BUuidPersistentResource;
 
 import java.sql.Timestamp;
 
