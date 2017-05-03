@@ -7,6 +7,6 @@ public class PageRequestParametersTest {
     
     @Test(expected = PageRequestException.class)
     public void pageSize_zero_returnsOne() throws PageRequestException {
-        PageRequestParameters pageRequestParameters = new PageRequestParameters("1", "0", "ASC", "id");
+        PageRequestValidation pageRequestParameters = new PageRequestValidation("1", "0", "ASC", "id");
     }
 }

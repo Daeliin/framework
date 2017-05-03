@@ -4,7 +4,6 @@ import com.daeliin.components.core.exception.PersistentResourceNotFoundException
 import com.daeliin.components.core.resource.service.PagingService;
 import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
-import com.daeliin.components.domain.pagination.Sort;
 import com.daeliin.components.domain.resource.Persistable;
 import com.daeliin.components.webservices.exception.PageRequestException;
 import com.daeliin.components.webservices.exception.ResourceNotFoundException;
@@ -12,12 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
-import static java.util.stream.Collectors.toSet;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /***
@@ -25,7 +20,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  * @param <T> resource type
  * @param <S> resource service
  */
-public abstract class ResourceController<T extends Persistable<ID>, ID, S extends PagingService<T, ID>> implements FullCrudController<T, ID> {
+public abstract class ResourceController<T extends Persistable<ID>, ID, S extends PagingService<T, ID>> implements PagingController<T, ID> {
     
     public static final String DEFAULT_PAGE = "0";
     public static final String DEFAULT_SIZE = "20";
@@ -51,16 +46,16 @@ public abstract class ResourceController<T extends Persistable<ID>, ID, S extend
     /**
      * Exposes a search by id entry point, returns the resource and a 200 if a resource exist for this id
      * and a 404 otherwise.
-     * @param id resource id
+     * @param resourceId resource id
      * @return resource
      */
-    @RequestMapping(value="{id}", method = GET)
+    @RequestMapping(value="{resourceId}", method = GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     @Override
-    public T getOne(@PathVariable ID id) {
+    public T getOne(@PathVariable ID resourceId) {
         try {
-            return service.findOne(id);
+            return service.findOne(resourceId);
         } catch (PersistentResourceNotFoundException e) {
             throw new ResourceNotFoundException();
         }
@@ -85,15 +80,8 @@ public abstract class ResourceController<T extends Persistable<ID>, ID, S extend
         @RequestParam(value = "direction", defaultValue = DEFAULT_DIRECTION) String direction,
         @RequestParam(value = "properties", defaultValue = DEFAULT_PROPERTIES) String... properties) throws PageRequestException {
 
-        // TODO: validation of input !
-
-        List<String> propertyList = Arrays.asList(properties);
-        Set<Sort> sorts = propertyList.stream().map(property -> new Sort(property, Sort.Direction.valueOf(direction.toUpperCase()))).collect(toSet());
-
-        PageRequest pageRequest = new PageRequest(
-                Integer.parseInt(page),
-                Integer.parseInt(size),
-                sorts);
+        PageRequestValidation pageRequestValidation = new PageRequestValidation(page, size, direction, properties);
+        PageRequest pageRequest = new PageRequest(pageRequestValidation.index, pageRequestValidation.size, pageRequestValidation.sorts);
 
         return service.findAll(pageRequest);
     }
@@ -106,7 +94,7 @@ public abstract class ResourceController<T extends Persistable<ID>, ID, S extend
      * @param resource resource to update
      * @return updated resource 
      */
-    @RequestMapping(value="{id}", method = PUT)
+    @RequestMapping(value="{resourceId}", method = PUT)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     @Override
@@ -122,11 +110,15 @@ public abstract class ResourceController<T extends Persistable<ID>, ID, S extend
      * Exposes a delete by id entry point, returns a 410 if the resource is found, a 404 otherwise.
      * @param resourceId resource id to delete
      */
-    @RequestMapping(value="{id}", method = DELETE)
+    @RequestMapping(value="{resourceId}", method = DELETE)
     @ResponseStatus(HttpStatus.GONE)
     @Override
     public void delete(@PathVariable ID resourceId) {
-        service.delete(resourceId);
+        boolean deleted = service.delete(resourceId);
+
+        if (!deleted) {
+            throw new ResourceNotFoundException();
+        }
     }
     
     /**

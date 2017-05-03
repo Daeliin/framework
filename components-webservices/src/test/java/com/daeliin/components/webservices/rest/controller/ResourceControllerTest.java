@@ -13,11 +13,11 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -137,55 +137,56 @@ public class ResourceControllerTest extends IntegrationTest {
             .andExpect(jsonPath("$.totalPages").value(2))
             .andExpect(jsonPath("$.totalItems").value(4))
             .andExpect(jsonPath("$.nbItems").value(2))
-            .andExpect(jsonPath("$.items[0].label").value("label2"))
-            .andExpect(jsonPath("$.items[1].label").value("label1"));
+            .andExpect(jsonPath("$.items[0].label").value(UuidPersistentResourceLibrary.uuidPersistentResource2().label))
+            .andExpect(jsonPath("$.items[1].label").value(UuidPersistentResourceLibrary.uuidPersistentResource1().label));
     }
 
-//    @Test
-//    public void shouldReturnPageSortedByLabelDescThenByIdDesc() throws Exception {
-//        mockMvc
-//            .perform(get("/uuid?direction=DESC&properties=label,id")
-//            .contentType(MediaType.APPLICATION_JSON))
-//            .andExpect(jsonPath("$.sort[0].direction").value("DESC"))
-//            .andExpect(jsonPath("$.sort[0].property").value("name"))
-//            .andExpect(jsonPath("$.sort[1].direction").value("DESC"))
-//            .andExpect(jsonPath("$.sort[1].property").value("id"));
-//    }
+    @Test
+    public void shouldReturnPageSortedByLabelDescThenByIdDesc() throws Exception {
+        mockMvc
+            .perform(get("/uuid?direction=DESC&properties=label,id")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items[0].label").value(UuidPersistentResourceLibrary.uuidPersistentResource4().label))
+                .andExpect(jsonPath("$.items[1].label").value(UuidPersistentResourceLibrary.uuidPersistentResource3().label))
+                .andExpect(jsonPath("$.items[2].label").value(UuidPersistentResourceLibrary.uuidPersistentResource2().label))
+                .andExpect(jsonPath("$.items[3].label").value(UuidPersistentResourceLibrary.uuidPersistentResource1().label));
+    }
 
-//    @Test
-//    public void getAll_invalidPageNumber_returnsHttpBadRequest() throws Exception {
-//        mockMvc
-//            .perform(get("/uuid?pageNumber=-1")
-//            .contentType(MediaType.APPLICATION_JSON))
-//            .andExpect(status().isBadRequest());
-//
-//        mockMvc
-//            .perform(get("/uuid?pageNumber=invalidPageNumber")
-//            .contentType(MediaType.APPLICATION_JSON))
-//            .andExpect(status().isBadRequest());
-//    }
-//
-//    @Test
-//    public void getAll_invalidPageSize_returnsHttpBadRequest() throws Exception {
-//        mockMvc
-//            .perform(get("/uuid?pageSize=-1")
-//            .contentType(MediaType.APPLICATION_JSON))
-//            .andExpect(status().isBadRequest());
-//
-//        mockMvc
-//            .perform(get("/uuid?pageSize=invalidPageSize")
-//            .contentType(MediaType.APPLICATION_JSON))
-//            .andExpect(status().isBadRequest());
-//    }
-//
-//    @Test
-//    public void getAll_invalidDirection_returnsHttpBadRequest() throws Exception {
-//        mockMvc
-//            .perform(get("/uuid?direction=invalidDirection")
-//            .contentType(MediaType.APPLICATION_JSON))
-//            .andExpect(status().isBadRequest());
-//    }
-//
+    @Test
+    public void shouldReturnHttpBadRequest_whenPageIsNotValid() throws Exception {
+        mockMvc
+            .perform(get("/uuid?page=-1")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest());
+
+        mockMvc
+            .perform(get("/uuid?page=invalidPageNumber")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void shouldReturnHttpBadRequest_whenPageSizeIsNotValid() throws Exception {
+        mockMvc
+            .perform(get("/uuid?size=-1")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest());
+
+        mockMvc
+            .perform(get("/uuid?size=invalidPageSize")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void shouldReturnHttpBadRequest_whenPageDiretionIsNotValid() throws Exception {
+        mockMvc
+            .perform(get("/uuid?direction=invalidDirection")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest());
+    }
+
 //    @Test
 //    public void update_validUpdatedResource_returnsHttpOkAndUpdatedResource() throws Exception {
 //        User validUpdatedUser = repository.findOne(1L);
@@ -275,84 +276,74 @@ public class ResourceControllerTest extends IntegrationTest {
 //
 //        assertEquals(repository.findOne(1L).getName(), originalUser.getName());
 //    }
-//
-//    @Test
-//    public void delete_existingResource_returnsHttpGone() throws Exception {
-//        mockMvc
-//            .perform(delete("/uuid/1"))
-//            .andExpect(status().isGone());
-//    }
-//
-//    @Test
-//    public void delete_existingResource_deletesResource() throws Exception {
-//        mockMvc
-//            .perform(delete("/uuid/1"));
-//
-//        assertFalse(repository.exists(1L));
-//    }
-//
-//    @Test
-//    public void delete_nonExistingResource_returnsHttpNotFound() throws Exception {
-//        mockMvc
-//            .perform(delete("/uuid/-1"))
-//            .andExpect(status().isNotFound());
-//    }
-//
-//    @Test
-//    public void delete_existingResourceIds_returnsHttpGone() throws Exception {
-//        mockMvc
-//            .perform(post("/uuid/deleteSeveral")
-//            .contentType(MediaType.APPLICATION_JSON)
-//            .content(new JsonString(Arrays.asList(1L, 2L)).value()))
-//            .andExpect(status().isGone());
-//    }
-//
-//    @Test
-//    public void delete_existingResourceIds_deletesResources() throws Exception {
-//        mockMvc
-//            .perform(post("/uuid/deleteSeveral")
-//            .contentType(MediaType.APPLICATION_JSON)
-//            .content(new JsonString(Arrays.asList(1L, 2L)).value()));
-//
-//        assertFalse(repository.exists(1L));
-//        assertFalse(repository.exists(2L));
-//    }
-//
-//    @Test
-//    public void delete_nonExistingResourceIds_returnsHttpGone() throws Exception {
-//        mockMvc
-//            .perform(post("/uuid/deleteSeveral")
-//            .contentType(MediaType.APPLICATION_JSON)
-//            .content(new JsonString(Arrays.asList(-1L, -2L)).value()))
-//            .andExpect(status().isGone());
-//    }
-//
-//    @Test
-//    public void delete_nonExistingAndExistingResourceIds_returnsHttpGone() throws Exception {
-//        mockMvc
-//            .perform(post("/uuid/deleteSeveral")
-//            .contentType(MediaType.APPLICATION_JSON)
-//            .content(new JsonString(Arrays.asList(-1L, -2L)).value()))
-//            .andExpect(status().isGone());
-//    }
-//
-//    @Test
-//    public void delete_nonExistingAndExistingResourceIds_deletesExistingResources() throws Exception {
-//        mockMvc
-//            .perform(post("/uuid/deleteSeveral")
-//            .contentType(MediaType.APPLICATION_JSON)
-//            .content(new JsonString(Arrays.asList(1L, 2L, -3L)).value()));
-//
-//        assertFalse(repository.exists(1L));
-//        assertFalse(repository.exists(2L));
-//    }
-//
-//    @Test
-//    public void delete_null_returnsHttpBadRequest() throws Exception {
-//        mockMvc
-//            .perform(post("/uuid/deleteSeveral")
-//            .contentType(MediaType.APPLICATION_JSON)
-//            .content(new JsonString(null).value()))
-//            .andExpect(status().isBadRequest());
-//    }
+
+    @Test
+    public void shouldReturnHttpGone_whenDeletingAResource() throws Exception {
+        mockMvc
+                .perform(delete("/uuid/" + UuidPersistentResourceLibrary.uuidPersistentResource1().id()))
+                .andExpect(status().isGone());
+    }
+
+    @Test
+    public void shouldDeleteAResource() throws Exception {
+        mockMvc
+            .perform(delete("/uuid/" + UuidPersistentResourceLibrary.uuidPersistentResource1().id()));
+
+        assertThat(service.exists(UuidPersistentResourceLibrary.uuidPersistentResource1().id())).isFalse();
+    }
+
+    @Test
+    public void shouldReturnHttpNotFound_whenDeletingNonExistingResource() throws Exception {
+        mockMvc
+            .perform(delete("/uuid/nonExistingId"))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void shouldReturnHttpGone_whenDeletingResources() throws Exception {
+        mockMvc
+            .perform(post("/uuid/deleteSeveral")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonMapper.writeValueAsString(Arrays.asList(
+                    UuidPersistentResourceLibrary.uuidPersistentResource1().id(),
+                    UuidPersistentResourceLibrary.uuidPersistentResource2().id()))))
+            .andExpect(status().isGone());
+    }
+
+    @Test
+    public void shouldDeleteResources() throws Exception {
+        mockMvc
+            .perform(post("/uuid/deleteSeveral")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonMapper.writeValueAsString(Arrays.asList(
+                    UuidPersistentResourceLibrary.uuidPersistentResource1().id(),
+                    UuidPersistentResourceLibrary.uuidPersistentResource2().id()))));
+
+        assertThat(service.exists(UuidPersistentResourceLibrary.uuidPersistentResource1().id())).isFalse();
+        assertThat(service.exists(UuidPersistentResourceLibrary.uuidPersistentResource2().id())).isFalse();
+    }
+
+
+    @Test
+    public void shouldDeletesExistingResources_whenDeletingNonExistingAndExistingResourceIds() throws Exception {
+        mockMvc
+            .perform(post("/uuid/deleteSeveral")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonMapper.writeValueAsString(Arrays.asList(
+                    UuidPersistentResourceLibrary.uuidPersistentResource1().id(),
+                    UuidPersistentResourceLibrary.uuidPersistentResource2().id(),
+                    "nonExistingId"))));
+
+        assertThat(service.exists(UuidPersistentResourceLibrary.uuidPersistentResource1().id())).isFalse();
+        assertThat(service.exists(UuidPersistentResourceLibrary.uuidPersistentResource2().id())).isFalse();
+    }
+
+    @Test
+    public void shouldReturnHttpBadRequest_whenDeletingNull() throws Exception {
+        mockMvc
+            .perform(post("/uuid/deleteSeveral")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonMapper.writeValueAsString(null)))
+            .andExpect(status().isBadRequest());
+    }
 }

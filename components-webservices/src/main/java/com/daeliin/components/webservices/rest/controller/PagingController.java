@@ -10,7 +10,7 @@ import java.util.Collection;
  * @author baptiste
  * @param <T> resource type
  */
-public interface FullCrudController<T, ID> {
+public interface PagingController<T, ID> {
     
     /**
      * Exposes a create entry point.

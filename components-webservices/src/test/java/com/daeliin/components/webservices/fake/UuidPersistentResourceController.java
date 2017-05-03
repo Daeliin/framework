@@ -6,5 +6,5 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/uuid")
 @RestController
-public final class UuidPersistenceResourceController extends ResourceController<UuidPersistentResource, String, UuidPersistentResourceService> {
+public final class UuidPersistentResourceController extends ResourceController<UuidPersistentResource, String, UuidPersistentResourceService> {
 }

@@ -9,9 +9,11 @@ import com.daeliin.components.domain.resource.Persistable;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
+import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toSet;
 
 /**
@@ -117,8 +119,9 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
     @Override
     public Page<T> findAll(PageRequest pageRequest) {
         Page<R> rowPage = repository.findAll(pageRequest);
+            Set<T> pageInstances = instantiate(rowPage.items);
 
-        return new Page<>(instantiate(rowPage.items), rowPage.totalItems, rowPage.totalPages);
+        return new Page<>(pageInstances, rowPage.totalItems, rowPage.totalPages);
     }
 
     /**
@@ -224,6 +227,6 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
         return rows
                 .stream()
                 .map(conversion::instantiate)
-                .collect(toSet());
+                .collect(toCollection(LinkedHashSet::new));
     }
 }
