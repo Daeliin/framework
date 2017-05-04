@@ -1,8 +1,5 @@
 package com.daeliin.components.core.resource.repository;
 
-import com.daeliin.components.domain.pagination.Page;
-import com.daeliin.components.domain.pagination.PageRequest;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.SimpleExpression;
 
 import java.util.Collection;
@@ -21,23 +18,13 @@ public interface PagingRepository<R, ID> extends Repository<R> {
 
     R findOne(ID resourceId);
 
-    Collection<R> findAll(Predicate predicate);
-
     Collection<R> findAll(Collection<ID> resourceIds);
 
-    Page<R> findAll(PageRequest pageRequest);
-
-    Collection<R> findAll();
-
     boolean exists(ID resourceId);
-
-    long count();
 
     boolean delete(ID resourceId);
 
     boolean delete(Collection<ID> resourceIds);
-
-    boolean deleteAll();
 
     SimpleExpression<ID> idPath();
 

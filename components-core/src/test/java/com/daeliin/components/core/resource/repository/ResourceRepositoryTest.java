@@ -111,49 +111,12 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
     }
 
     @Test
-    public void shouldCountResources() {
-        assertThat(repository.count()).isEqualTo(4);
-    }
-
-    @Test
     public void shouldFindResource() {
         BUuidPersistentResource uuidPersistentResource1 = UuidPersistentResourceFixtures.uuidPersistentResource1();
 
         BUuidPersistentResource foundUuidEntity = repository.findOne(uuidPersistentResource1.getUuid());
 
         assertThat(foundUuidEntity).isEqualToComparingFieldByField(UuidPersistentResourceFixtures.uuidPersistentResource1());
-    }
-
-    @Test
-    public void shouldReturnEmptyCollection_whenPredicateIsNull() {
-        Predicate nullPredicate = null;
-
-        Collection<BUuidPersistentResource> foundUuidEntities = repository.findAll(nullPredicate);
-
-        assertThat(foundUuidEntities).isEmpty();
-    }
-
-    @Test
-    public void shouldReturnEmptyCollection_whenPredicateDoesntMatchAnyRow() {
-        Predicate labelIsEqualToFoo = QUuidPersistentResource.uuidPersistentResource.label.eq("Foo");
-
-        Collection<BUuidPersistentResource> foundUuidEntities = repository.findAll(labelIsEqualToFoo);
-
-        assertThat(foundUuidEntities).isEmpty();
-    }
-
-    @Test
-    public void shouldFindResource_accordingToPredicate() {
-        Predicate labelStartsWithLabel = QUuidPersistentResource.uuidPersistentResource.label.startsWith("label");
-
-        Collection<BUuidPersistentResource> foundUuidEntities = repository.findAll(labelStartsWithLabel);
-
-        assertThat(foundUuidEntities).usingFieldByFieldElementComparator().containsOnly(
-                UuidPersistentResourceFixtures.uuidPersistentResource1(),
-                UuidPersistentResourceFixtures.uuidPersistentResource2(),
-                UuidPersistentResourceFixtures.uuidPersistentResource3(),
-                UuidPersistentResourceFixtures.uuidPersistentResource4()
-        );
     }
 
     @Test
@@ -164,13 +127,6 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
     @Test
     public void shouldReturnNull_whenFindingNull() {
         assertThat(repository.findOne(null)).isNull();
-    }
-
-    @Test
-    public void shouldFindAllResources() {
-        Collection<BUuidPersistentResource> uuidEntities = repository.findAll();
-
-        assertThat(uuidEntities.size()).isEqualTo(countRows());
     }
 
     @Test
@@ -213,44 +169,6 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
                 .usingFieldByFieldElementComparator()
                 .containsOnly(UuidPersistentResourceFixtures.uuidPersistentResource1(), UuidPersistentResourceFixtures.uuidPersistentResource2());
     }
-
-    @Test
-    public void shouldFindPage1WithSize5SortedByIdDesc() {
-        int uuidPersistentResourceCount = countRows();
-
-        Collection<BUuidPersistentResource> uuidPersistentResourcePageContent = Arrays.asList(
-                UuidPersistentResourceFixtures.uuidPersistentResource2(),
-                UuidPersistentResourceFixtures.uuidPersistentResource1());
-
-        Page<BUuidPersistentResource> page = repository.findAll(new PageRequest(1, 2, Sets.newHashSet(new Sort("uuid", Sort.Direction.DESC))));
-
-        assertThat(page.items)
-                .usingFieldByFieldElementComparator()
-                .containsExactly(uuidPersistentResourcePageContent.toArray(new BUuidPersistentResource[uuidPersistentResourcePageContent.size()]));
-        assertThat(page.nbItems).isEqualTo(uuidPersistentResourcePageContent.size());
-        assertThat(page.totalItems).isEqualTo(uuidPersistentResourceCount);
-        assertThat(page.totalPages).isEqualTo(uuidPersistentResourceCount / 2);
-    }
-
-    @Test
-    public void shouldApplySortsInTheSameOrderAsTheyWereRequested() {
-        int uuidPersistentResourceCount = countRows();
-
-        Collection<BUuidPersistentResource> uuidPersistentResourcePageContent = Arrays.asList(
-                UuidPersistentResourceFixtures.uuidPersistentResource3(),
-                UuidPersistentResourceFixtures.uuidPersistentResource2(),
-                UuidPersistentResourceFixtures.uuidPersistentResource1(),
-                UuidPersistentResourceFixtures.uuidPersistentResource4());
-
-        Page<BUuidPersistentResource> page = repository.findAll(new PageRequest(0, uuidPersistentResourceCount, Sets.newHashSet(
-                new Sort("creationDate", Sort.Direction.ASC),
-                new Sort("uuid", Sort.Direction.DESC))));
-
-        assertThat(page.items)
-                .usingFieldByFieldElementComparator()
-                .containsExactly(uuidPersistentResourcePageContent.toArray(new BUuidPersistentResource[uuidPersistentResourcePageContent.size()]));
-    }
-
 
     @Test
     public void shouldReturnFalse_whenDeletingNonExistingResource() {
@@ -357,15 +275,6 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
         int uuidPersistentResourceCountAfterDelete = countRows();
 
         assertThat(uuidPersistentResourceCountAfterDelete).isEqualTo(uuidPersistentResourceCountBeforeDelete - 2);
-    }
-
-    @Test
-    public void shouldDeleteAllResources() {
-        repository.deleteAll();
-
-        int uuidPersistentResourceCountAfterDelete = countRows();
-
-        assertThat(uuidPersistentResourceCountAfterDelete).isEqualTo(0);
     }
 
     private int countRows() {
