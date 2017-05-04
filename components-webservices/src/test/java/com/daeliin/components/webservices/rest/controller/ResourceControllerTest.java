@@ -1,14 +1,17 @@
 package com.daeliin.components.webservices.rest.controller;
 
-import com.daeliin.components.test.IntegrationTest;
-import com.daeliin.components.webservices.Application;
 import com.daeliin.components.webservices.fake.UuidPersistentResource;
 import com.daeliin.components.webservices.fake.UuidPersistentResourceService;
 import com.daeliin.components.webservices.library.UuidPersistentResourceLibrary;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import javax.inject.Inject;
@@ -21,14 +24,19 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ContextConfiguration(classes = Application.class)
-public class ResourceControllerTest extends IntegrationTest {
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Inject
     private ObjectMapper jsonMapper;
 
     @Inject
     private UuidPersistentResourceService service;
+
+    @Inject
+    private MockMvc mockMvc;
 
     @Test
     public void shouldReturnHttpCreatedAndCreatedResource() throws Exception {
