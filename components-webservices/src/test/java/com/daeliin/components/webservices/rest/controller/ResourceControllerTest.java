@@ -180,42 +180,46 @@ public class ResourceControllerTest extends IntegrationTest {
     }
 
     @Test
-    public void shouldReturnHttpBadRequest_whenPageDiretionIsNotValid() throws Exception {
+    public void shouldReturnHttpBadRequest_whenPageDirectionIsNotValid() throws Exception {
         mockMvc
             .perform(get("/uuid?direction=invalidDirection")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest());
     }
 
-//    @Test
-//    public void update_validUpdatedResource_returnsHttpOkAndUpdatedResource() throws Exception {
-//        User validUpdatedUser = repository.findOne(1L);
-//        validUpdatedUser.setName("updatedName");
-//
-//        MvcResult result =
-//            mockMvc
-//                .perform(put("/uuid/" + validUpdatedUser.getId())
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(new JsonString(validUpdatedUser).value()))
-//                .andExpect(status().isOk())
-//                .andReturn();
-//
-//        User retrievedUser = new JsonObject<>(result.getResponse().getContentAsString(), User.class).value().get();
-//        assertEquals(retrievedUser, validUpdatedUser);
-//    }
-//
-//    @Test
-//    public void update_validUpdatedResource_updatesResource() throws Exception {
-//        User originalUser = repository.findOne(1L);
-//        User validUpdatedUser = new User().withId(originalUser.getId()).withName("updatedName");
-//
-//        mockMvc
-//            .perform(put("/uuid/" + validUpdatedUser.getId())
-//            .contentType(MediaType.APPLICATION_JSON)
-//            .content(new JsonString(validUpdatedUser).value()));
-//
-//        assertEquals(repository.findOne(1L).getName(), validUpdatedUser.getName());
-//    }
+    @Test
+    public void shouldReturnHttpOkAndUpdatedResource_whenUpdatingResource() throws Exception {
+        UuidPersistentResource updatedUuidPersistentResource = new UuidPersistentResource(
+                UuidPersistentResourceLibrary.uuidPersistentResource1().id(),
+                LocalDateTime.now(),
+                "newLabel");
+
+        MvcResult result =
+            mockMvc
+                .perform(put("/uuid/" + updatedUuidPersistentResource.id())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonMapper.writeValueAsString(updatedUuidPersistentResource)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        UuidPersistentResource retrievedUuidPersistentResource = jsonMapper.readValue(result.getResponse().getContentAsString(), UuidPersistentResource.class);
+        assertThat(retrievedUuidPersistentResource).isEqualTo(updatedUuidPersistentResource);
+    }
+
+    @Test
+    public void shouldUpdateResource() throws Exception {
+        UuidPersistentResource updatedUuidPersistentResource = new UuidPersistentResource(
+                UuidPersistentResourceLibrary.uuidPersistentResource1().id(),
+                LocalDateTime.now(),
+                "newLabel");
+
+        mockMvc
+            .perform(put("/uuid/" + updatedUuidPersistentResource.id())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonMapper.writeValueAsString(updatedUuidPersistentResource)));
+
+        assertThat(service.findOne(updatedUuidPersistentResource.id())).isEqualTo(updatedUuidPersistentResource);
+    }
 //
 //    @Test
 //    public void update_invalidUpdatedResource_returnsHttpBadRequest() throws Exception {
@@ -241,41 +245,53 @@ public class ResourceControllerTest extends IntegrationTest {
 //
 //        assertEquals(repository.findOne(1L).getName(), originalUser.getName());
 //    }
-//
-//    @Test
-//    public void update_nonExistingResourceId_returnsHttpNotFound() throws Exception {
-//        User user = new User().withId(-1L).withName("name");
-//
-//        mockMvc
-//            .perform(put("/uuid/" + user.getId())
-//            .contentType(MediaType.APPLICATION_JSON)
-//            .content(new JsonString(user).value()))
-//            .andExpect(status().isNotFound());
-//    }
-//
-//    @Test
-//    public void update_existingResourceIdButDiffersFromActualResourceId_returnsHttpNotFound() throws Exception {
-//        User user = repository.findOne(1L);
-//
-//        mockMvc
-//            .perform(put("/uuid/" + -1)
-//            .contentType(MediaType.APPLICATION_JSON)
-//            .content(new JsonString(user).value()))
-//            .andExpect(status().isNotFound());
-//    }
-//
-//    @Test
-//    public void update_existingResourceIdButDiffersFromActualResourceId_doesntUpdateResource() throws Exception {
-//        User originalUser = repository.findOne(1L);
-//        User updatedUser = new User().withId(originalUser.getId()).withName("updatedName");
-//
-//        mockMvc
-//            .perform(put("/uuid/" + -1)
-//            .contentType(MediaType.APPLICATION_JSON)
-//            .content(new JsonString(updatedUser).value()));
-//
-//        assertEquals(repository.findOne(1L).getName(), originalUser.getName());
-//    }
+
+    @Test
+    public void shouldReturnHttpNotFound_whenUpdatingNonExistingResource() throws Exception {
+        UuidPersistentResource updatedUuidPersistentResource = new UuidPersistentResource(
+                UuidPersistentResourceLibrary.uuidPersistentResource1().id(),
+                LocalDateTime.now(),
+                "newLabel");
+
+        mockMvc
+            .perform(put("/uuid/nonExistingId")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonMapper.writeValueAsString(updatedUuidPersistentResource)))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void shouldReturnHttpBadRequest_whenUpdatingResourceAndIdDoesntMatch() throws Exception {
+        UuidPersistentResource updatedUuidPersistentResource = new UuidPersistentResource(
+                UuidPersistentResourceLibrary.uuidPersistentResource1().id(),
+                LocalDateTime.now(),
+                "newLabel");
+
+        mockMvc
+            .perform(put("/uuid/" + UuidPersistentResourceLibrary.uuidPersistentResource2().id())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonMapper.writeValueAsString(updatedUuidPersistentResource)))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void update_existingResourceIdButDiffersFromActualResourceId_doesntUpdateAnyResource() throws Exception {
+        UuidPersistentResource originalUuidPersistentResource = UuidPersistentResourceLibrary.uuidPersistentResource1();
+        UuidPersistentResource mismatchUuidPersistenceResource = UuidPersistentResourceLibrary.uuidPersistentResource2();
+
+        UuidPersistentResource updatedUuidPersistentResource = new UuidPersistentResource(
+                originalUuidPersistentResource.id(),
+                LocalDateTime.now(),
+                "newLabel");
+
+        mockMvc
+            .perform(put("/uuid/" + mismatchUuidPersistenceResource.id())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonMapper.writeValueAsString(updatedUuidPersistentResource)));
+
+        assertThat(service.findOne(originalUuidPersistentResource.id())).isEqualTo(originalUuidPersistentResource);
+        assertThat(service.findOne(mismatchUuidPersistenceResource.id())).isEqualTo(mismatchUuidPersistenceResource);
+    }
 
     @Test
     public void shouldReturnHttpGone_whenDeletingAResource() throws Exception {

@@ -7,7 +7,9 @@ import com.daeliin.components.domain.pagination.PageRequest;
 import com.daeliin.components.domain.resource.Persistable;
 import com.daeliin.components.webservices.exception.PageRequestException;
 import com.daeliin.components.webservices.exception.ResourceNotFoundException;
+import com.daeliin.components.webservices.exception.ResourceUpdateRequestException;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -78,7 +80,7 @@ public abstract class ResourceController<T extends Persistable<ID>, ID, S extend
         @RequestParam(value = "page", defaultValue = DEFAULT_PAGE) String page,
         @RequestParam(value = "size", defaultValue = DEFAULT_SIZE) String size,
         @RequestParam(value = "direction", defaultValue = DEFAULT_DIRECTION) String direction,
-        @RequestParam(value = "properties", defaultValue = DEFAULT_PROPERTIES) String... properties) throws PageRequestException {
+        @RequestParam(value = "properties", defaultValue = DEFAULT_PROPERTIES) String... properties) {
 
         PageRequestValidation pageRequestValidation = new PageRequestValidation(page, size, direction, properties);
         PageRequest pageRequest = new PageRequest(pageRequestValidation.index, pageRequestValidation.size, pageRequestValidation.sorts);
@@ -101,6 +103,10 @@ public abstract class ResourceController<T extends Persistable<ID>, ID, S extend
     public T update(@PathVariable ID resourceId, @RequestBody T resource) {
         if (!service.exists(resourceId)) {
             throw new ResourceNotFoundException();
+        }
+
+        if (!resourceId.equals(resource.id())) {
+            throw new ResourceUpdateRequestException("The update resource doesn't match the id");
         }
 
         return service.update(resource);
