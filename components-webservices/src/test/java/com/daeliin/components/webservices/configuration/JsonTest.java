@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ContextConfiguration(classes = Application.class)
-public final class JsonTest extends AbstractJUnit4SpringContextTests {
+public class JsonTest extends AbstractJUnit4SpringContextTests {
 
     @Inject
     private ObjectMapper jsonMapper;
