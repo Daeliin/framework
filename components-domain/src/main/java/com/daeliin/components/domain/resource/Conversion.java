@@ -26,9 +26,9 @@ public interface Conversion<O, C> {
     C map(O object);
 
     /**
-     * Instantiates a collection of objects form a collection of converted objects.
+     * Instantiates a collection of objects from a collection of converted objects.
      * @param conversions the converted objects to instantiate
-     * @return the new collection of instance
+     * @return the new collection of instance, in the same order as the converted objects
      */
     default Set<O> instantiate(Collection<C> conversions) {
         return conversions
@@ -40,7 +40,7 @@ public interface Conversion<O, C> {
     /**
      * Maps a collection of objects to a collection of converted objects.
      * @param objects the objects to map
-     * @return the converted objects
+     * @return the converted objects in the same order as the objects
      */
     default Set<C> map(Collection<O> objects) {
         return objects

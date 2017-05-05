@@ -1,7 +1,7 @@
 package com.daeliin.components.core.resource.service;
 
 import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
-import com.daeliin.components.core.resource.repository.TableRepository;
+import com.daeliin.components.core.resource.repository.PagingRepository;
 import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
 import com.daeliin.components.domain.resource.Conversion;
@@ -9,7 +9,6 @@ import com.daeliin.components.domain.resource.Persistable;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
-import java.util.Set;
 import java.util.TreeSet;
 
 /**
@@ -18,7 +17,7 @@ import java.util.TreeSet;
  * @param <R> row type
  * @param <ID> resource id type
  */
-public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extends TableRepository<R, ID>> implements PagingService<T, ID> {
+public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extends PagingRepository<R, ID>> implements PagingService<T, ID> {
 
     private static final String MESSAGE_RESOURCE_NOT_FOUND = "Resource was not found";
 
@@ -115,9 +114,8 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
     @Override
     public Page<T> findAll(PageRequest pageRequest) {
         Page<R> rowPage = repository.findAll(pageRequest);
-            Set<T> pageInstances = conversion.instantiate(rowPage.items);
 
-        return new Page<>(pageInstances, rowPage.totalItems, rowPage.totalPages);
+        return new Page<>(conversion.instantiate(rowPage.items), rowPage.totalItems, rowPage.totalPages);
     }
 
     /**

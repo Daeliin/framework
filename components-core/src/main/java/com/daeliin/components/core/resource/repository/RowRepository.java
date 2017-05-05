@@ -18,7 +18,7 @@ import static java.util.stream.Collectors.toList;
 /**
   * @param <R> row type
   */
-public abstract class RowRepository<R> extends BaseRepository<R> implements PagingRepository<R> {
+public abstract class RowRepository<R> extends BaseRepository<R> implements TableRepository<R> {
 
     public RowRepository(RelationalPathBase<R> rowPath) {
         super(rowPath);
