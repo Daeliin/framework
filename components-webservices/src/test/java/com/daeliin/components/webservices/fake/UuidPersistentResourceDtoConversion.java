@@ -1,8 +1,10 @@
 package com.daeliin.components.webservices.fake;
 
-import com.daeliin.components.domain.resource.Conversion;
+import com.daeliin.components.webservices.dto.DtoConversion;
 
-public final class UuidPersistentResourceDtoConversion implements Conversion<UuidPersistentResourceDto, UuidPersistentResource> {
+import java.util.UUID;
+
+public final class UuidPersistentResourceDtoConversion implements DtoConversion<UuidPersistentResourceDto, UuidPersistentResource, String> {
 
     @Override
     public UuidPersistentResourceDto instantiate(UuidPersistentResource uuidEntity) {
@@ -17,14 +19,14 @@ public final class UuidPersistentResourceDtoConversion implements Conversion<Uui
     }
 
     @Override
-    public UuidPersistentResource map(UuidPersistentResourceDto uuidEntityDto) {
+    public UuidPersistentResource map(UuidPersistentResourceDto uuidEntityDto, String id) {
         if (uuidEntityDto == null) {
             return null;
         }
 
         return new UuidPersistentResource(
-                uuidEntityDto.id(),
-                uuidEntityDto.creationDate(),
+                id != null ? id: UUID.randomUUID().toString(),
+                uuidEntityDto.creationDate,
                 uuidEntityDto.label);
     }
 }

@@ -7,12 +7,14 @@ import java.util.Set;
 import static java.util.stream.Collectors.toCollection;
 
 /**
- * Conversion from type O to type C.
+ * Conversion from type O to type C and from type C to type O.
+ * @param <O> type 1
+ * @param <C> type 2
  */
 public interface Conversion<O, C> {
 
     /**
-     * Instantiates an object form a converted object.
+     * Instantiates an object from a converted object.
      * @param conversion a converted object
      * @return the new instance
      */

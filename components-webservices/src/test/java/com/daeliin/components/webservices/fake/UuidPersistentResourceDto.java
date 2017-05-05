@@ -1,11 +1,10 @@
 package com.daeliin.components.webservices.fake;
 
-import com.daeliin.components.domain.resource.Persistable;
 import org.hibernate.validator.constraints.NotBlank;
 
 import java.time.LocalDateTime;
 
-public final class UuidPersistentResourceDto implements Persistable<String> {
+public final class UuidPersistentResourceDto {
 
     public final String id;
     public final LocalDateTime creationDate;
@@ -17,15 +16,5 @@ public final class UuidPersistentResourceDto implements Persistable<String> {
         this.id = id;
         this.creationDate = creationDate;
         this.label = label;
-    }
-
-    @Override
-    public String id() {
-        return id;
-    }
-
-    @Override
-    public LocalDateTime creationDate() {
-        return creationDate;
     }
 }

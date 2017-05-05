@@ -4,11 +4,10 @@ import com.daeliin.components.core.exception.PersistentResourceNotFoundException
 import com.daeliin.components.core.resource.service.PagingService;
 import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
-import com.daeliin.components.domain.resource.Conversion;
 import com.daeliin.components.domain.resource.Persistable;
+import com.daeliin.components.webservices.dto.DtoConversion;
 import com.daeliin.components.webservices.exception.PageRequestException;
 import com.daeliin.components.webservices.exception.ResourceNotFoundException;
-import com.daeliin.components.webservices.exception.ResourceUpdateRequestException;
 import com.daeliin.components.webservices.validation.PageRequestValidation;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +25,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  * @param <ID> resource ID type
  * @param <S> resource service
  */
-public abstract class ResourceController<V extends Persistable, T extends Persistable<ID>, ID, S extends PagingService<T, ID>> implements PagingController<V, ID> {
+public abstract class ResourceController<V, T extends Persistable<ID>, ID, S extends PagingService<T, ID>> implements PagingController<V, ID> {
     
     public static final String DEFAULT_PAGE = "0";
     public static final String DEFAULT_SIZE = "20";
@@ -34,10 +33,10 @@ public abstract class ResourceController<V extends Persistable, T extends Persis
     public static final String DEFAULT_PROPERTIES = "id";
     
     protected final S service;
-    protected final Conversion<V, T> conversion;
+    protected final DtoConversion<V, T, ID> conversion;
 
     @Inject
-    public ResourceController(S service, Conversion<V, T> conversion) {
+    public ResourceController(S service, DtoConversion<V, T, ID> conversion) {
         this.service = service;
         this.conversion = conversion;
     }
@@ -52,7 +51,7 @@ public abstract class ResourceController<V extends Persistable, T extends Persis
     @ResponseBody
     @Override
     public V create(@RequestBody @Valid V resource) {
-        return conversion.instantiate(service.create(conversion.map(resource)));
+        return conversion.instantiate(service.create(conversion.map(resource, null)));
     }
     
     /**
@@ -117,11 +116,7 @@ public abstract class ResourceController<V extends Persistable, T extends Persis
             throw new ResourceNotFoundException();
         }
 
-        if (!resourceId.equals(resource.id())) {
-            throw new ResourceUpdateRequestException("The update resource doesn't match the id");
-        }
-
-        return conversion.instantiate(service.update(conversion.map(resource)));
+        return conversion.instantiate(service.update(conversion.map(resource, resourceId)));
     }
 
     /**
