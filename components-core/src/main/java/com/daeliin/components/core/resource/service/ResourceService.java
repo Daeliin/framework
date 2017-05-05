@@ -1,6 +1,7 @@
 package com.daeliin.components.core.resource.service;
 
 import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
+import com.daeliin.components.core.exception.PersistentResourceAlreadyExistsException;
 import com.daeliin.components.core.resource.repository.PagingRepository;
 import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
@@ -36,6 +37,10 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
      */
     @Override
     public T create(T resource) {
+        if (repository.exists(resource.id())) {
+            throw new PersistentResourceAlreadyExistsException("Resource should not already exist when creating it");
+        }
+
         R createdRow = repository.save(conversion.map(resource));
 
         return conversion.instantiate(createdRow);

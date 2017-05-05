@@ -2,6 +2,7 @@ package com.daeliin.components.core.resource.service;
 
 import com.daeliin.components.core.Application;
 import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
+import com.daeliin.components.core.exception.PersistentResourceAlreadyExistsException;
 import com.daeliin.components.core.fake.UuidPersistentResource;
 import com.daeliin.components.core.fake.UuidPersistentResourceConversion;
 import com.daeliin.components.core.fake.UuidPersistentResourceRepository;
@@ -45,6 +46,15 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
+    }
+
+    @Test(expected = PersistentResourceAlreadyExistsException.class)
+    public void shouldThrowResourceAlreadyExistsException_whenCreatingResourceWithAlreadyExistingId() {
+        UuidPersistentResource alreadyExistingUuidPersistentResource = UuidPersistentResourceLibrary.uuidPersistentResource1();
+
+        doReturn(true).when(repositoryMock).exists(alreadyExistingUuidPersistentResource.id());
+
+        service.create(UuidPersistentResourceLibrary.uuidPersistentResource1());
     }
 
     @Test

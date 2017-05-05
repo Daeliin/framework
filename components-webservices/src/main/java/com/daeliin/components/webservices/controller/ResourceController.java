@@ -1,5 +1,6 @@
 package com.daeliin.components.webservices.controller;
 
+import com.daeliin.components.core.exception.PersistentResourceAlreadyExistsException;
 import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
 import com.daeliin.components.core.resource.service.PagingService;
 import com.daeliin.components.domain.pagination.Page;
@@ -7,6 +8,7 @@ import com.daeliin.components.domain.pagination.PageRequest;
 import com.daeliin.components.domain.resource.Persistable;
 import com.daeliin.components.webservices.dto.DtoConversion;
 import com.daeliin.components.webservices.exception.PageRequestException;
+import com.daeliin.components.webservices.exception.ResourceAlreadyExistsException;
 import com.daeliin.components.webservices.exception.ResourceNotFoundException;
 import com.daeliin.components.webservices.validation.PageRequestValidation;
 import org.springframework.http.HttpStatus;
@@ -51,7 +53,11 @@ public abstract class ResourceController<V, T extends Persistable<ID>, ID, S ext
     @ResponseBody
     @Override
     public V create(@RequestBody @Valid V resource) {
-        return conversion.instantiate(service.create(conversion.map(resource, null)));
+        try {
+            return conversion.instantiate(service.create(conversion.map(resource, null)));
+        } catch (PersistentResourceAlreadyExistsException e) {
+            throw new ResourceAlreadyExistsException();
+        }
     }
     
     /**

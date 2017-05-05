@@ -54,7 +54,9 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
                 .andReturn();
 
         UuidPersistentResourceDto createdUuidPersistentResourceDto = jsonMapper.readValue(result.getResponse().getContentAsString(), UuidPersistentResourceDto.class);
-        assertThat(createdUuidPersistentResourceDto).isEqualToComparingFieldByField(uuidPersistentResourceDto);
+
+        assertThat(createdUuidPersistentResourceDto.creationDate).isEqualTo(uuidPersistentResourceDto.creationDate);
+        assertThat(createdUuidPersistentResourceDto.label).isEqualTo(uuidPersistentResourceDto.label);
     }
 
     @Test
@@ -62,16 +64,20 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
         UuidPersistentResourceDto uuidPersistentResourceDto = new UuidPersistentResourceDto("id", LocalDateTime.now(), "label");
         long uuidPersistentResourceCountBeforeCreate = service.count();
 
-        mockMvc
-            .perform(post("/uuid")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(jsonMapper.writeValueAsString(uuidPersistentResourceDto)));
-
-        UuidPersistentResourceDto persistedUuidPersistentResourceDto = conversion.instantiate(service.findOne(uuidPersistentResourceDto.id()));
+         UuidPersistentResourceDto returnedUuidPersistentResourceDto = jsonMapper.readValue(mockMvc
+                .perform(post("/uuid")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonMapper.writeValueAsString(uuidPersistentResourceDto)))
+                .andReturn()
+                .getResponse()
+                .getContentAsString(), UuidPersistentResourceDto.class);
 
         long uuidPersistentResourceCountAfterCreate = service.count();
 
-        assertThat(persistedUuidPersistentResourceDto).isEqualToComparingFieldByField(uuidPersistentResourceDto);
+        UuidPersistentResourceDto persistedUuidPersistentResourceDto = conversion.instantiate(service.findOne(returnedUuidPersistentResourceDto.id));
+
+        assertThat(persistedUuidPersistentResourceDto.creationDate).isEqualTo(uuidPersistentResourceDto.creationDate);
+        assertThat(persistedUuidPersistentResourceDto.label).isEqualTo(uuidPersistentResourceDto.label);
         assertThat(uuidPersistentResourceCountAfterCreate).isEqualTo(uuidPersistentResourceCountBeforeCreate + 1);
     }
 
@@ -99,7 +105,7 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
 
         long uuidPersistentResourceCountAfterCreate = service.count();
 
-        assertThat(service.exists(invalidUuidPersistentResourceDto.id())).isFalse();
+        assertThat(service.exists(invalidUuidPersistentResourceDto.id)).isFalse();
         assertThat(uuidPersistentResourceCountAfterCreate).isEqualTo(uuidPersistentResourceCountBeforeCreate);
     }
 
@@ -109,7 +115,7 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
 
         MvcResult result =
             mockMvc
-                .perform(get("/uuid/" + existingUuidPersistentResourceDto.id())
+                .perform(get("/uuid/" + existingUuidPersistentResourceDto.id)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -201,13 +207,13 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
     @Test
     public void shouldReturnHttpOkAndUpdatedResource_whenUpdatingResource() throws Exception {
         UuidPersistentResourceDto updatedUuidPersistentResourceDto = new UuidPersistentResourceDto(
-                UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id(),
+                UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
                 LocalDateTime.now(),
                 "newLabel");
 
         MvcResult result =
             mockMvc
-                .perform(put("/uuid/" + updatedUuidPersistentResourceDto.id())
+                .perform(put("/uuid/" + updatedUuidPersistentResourceDto.id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMapper.writeValueAsString(updatedUuidPersistentResourceDto)))
                 .andExpect(status().isOk())
@@ -220,16 +226,16 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
     @Test
     public void shouldUpdateResource() throws Exception {
         UuidPersistentResourceDto updatedUuidPersistentResourceDto = new UuidPersistentResourceDto(
-                UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id(),
+                UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
                 LocalDateTime.now(),
                 "newLabel");
 
         mockMvc
-            .perform(put("/uuid/" + updatedUuidPersistentResourceDto.id())
+            .perform(put("/uuid/" + updatedUuidPersistentResourceDto.id)
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(updatedUuidPersistentResourceDto)));
 
-        UuidPersistentResourceDto retrievedUuidPersistentResourceDto = conversion.instantiate(service.findOne(updatedUuidPersistentResourceDto.id()));
+        UuidPersistentResourceDto retrievedUuidPersistentResourceDto = conversion.instantiate(service.findOne(updatedUuidPersistentResourceDto.id));
 
         assertThat(retrievedUuidPersistentResourceDto).isEqualToComparingFieldByField(updatedUuidPersistentResourceDto);
     }
@@ -237,12 +243,12 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
     @Test
     public void shouldReturnHttpBadRequest_whenUpdatingInvalidResource() throws Exception {
         UuidPersistentResourceDto invalidUuidPersistentResourceDto = new UuidPersistentResourceDto(
-                UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id(),
+                UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
                 LocalDateTime.now(),
                 " ");
 
         mockMvc
-            .perform(put("/uuid/" + invalidUuidPersistentResourceDto.id())
+            .perform(put("/uuid/" + invalidUuidPersistentResourceDto.id)
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(invalidUuidPersistentResourceDto)))
             .andExpect(status().isBadRequest());
@@ -251,16 +257,16 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
     @Test
     public void shouldNotUpdateResource_whenUpdatingInvalidResource() throws Exception {
         UuidPersistentResourceDto invalidUuidPersistentResourceDto = new UuidPersistentResourceDto(
-                UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id(),
+                UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
                 LocalDateTime.now(),
                 " ");
 
         mockMvc
-                .perform(put("/uuid/" + invalidUuidPersistentResourceDto.id())
+                .perform(put("/uuid/" + invalidUuidPersistentResourceDto.id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMapper.writeValueAsString(invalidUuidPersistentResourceDto)));
 
-        UuidPersistentResourceDto retrivedUuidPersistenceResourceDto = conversion.instantiate(service.findOne(invalidUuidPersistentResourceDto.id()));
+        UuidPersistentResourceDto retrivedUuidPersistenceResourceDto = conversion.instantiate(service.findOne(invalidUuidPersistentResourceDto.id));
 
         assertThat(retrivedUuidPersistenceResourceDto).isEqualToComparingFieldByFieldRecursively(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1());
     }
@@ -268,7 +274,7 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
     @Test
     public void shouldReturnHttpNotFound_whenUpdatingNonExistingResource() throws Exception {
         UuidPersistentResourceDto updatedUuidPersistentResourceDto = new UuidPersistentResourceDto(
-                UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id(),
+                UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
                 LocalDateTime.now(),
                 "newLabel");
 
@@ -280,55 +286,18 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
     }
 
     @Test
-    public void shouldReturnHttpBadRequest_whenUpdatingResourceAndIdDoesntMatch() throws Exception {
-        UuidPersistentResourceDto updatedUuidPersistentResourceDto = new UuidPersistentResourceDto(
-                UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id(),
-                LocalDateTime.now(),
-                "newLabel");
-
-        mockMvc
-            .perform(put("/uuid/" + UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto2().id())
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(jsonMapper.writeValueAsString(updatedUuidPersistentResourceDto)))
-            .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    public void shouldNotUpdateAnyResource_whenUpdatingExistingResourceIdAndIdDiffersFromActualResourceId() throws Exception {
-        UuidPersistentResourceDto originalUuidPersistentResourceDto = UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1();
-        UuidPersistentResourceDto mismatchUuidPersistenceResourceDto = UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto2();
-
-        UuidPersistentResourceDto updatedUuidPersistentResourceDto = new UuidPersistentResourceDto(
-                originalUuidPersistentResourceDto.id(),
-                LocalDateTime.now(),
-                "newLabel");
-
-        mockMvc
-            .perform(put("/uuid/" + mismatchUuidPersistenceResourceDto.id())
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(jsonMapper.writeValueAsString(updatedUuidPersistentResourceDto)));
-
-
-        UuidPersistentResourceDto retrievedOriginalUuidPersistentResource = conversion.instantiate(service.findOne(originalUuidPersistentResourceDto.id()));
-        UuidPersistentResourceDto retrievedMismatchUuidPersistentResource = conversion.instantiate(service.findOne(mismatchUuidPersistenceResourceDto.id()));
-
-        assertThat(retrievedOriginalUuidPersistentResource).isEqualToComparingFieldByField(originalUuidPersistentResourceDto);
-        assertThat(retrievedMismatchUuidPersistentResource).isEqualToComparingFieldByField(mismatchUuidPersistenceResourceDto);
-    }
-
-    @Test
     public void shouldReturnHttpGone_whenDeletingAResource() throws Exception {
         mockMvc
-                .perform(delete("/uuid/" + UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id()))
+                .perform(delete("/uuid/" + UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id))
                 .andExpect(status().isGone());
     }
 
     @Test
     public void shouldDeleteAResource() throws Exception {
         mockMvc
-            .perform(delete("/uuid/" + UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id()));
+            .perform(delete("/uuid/" + UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id));
 
-        assertThat(service.exists(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id())).isFalse();
+        assertThat(service.exists(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id)).isFalse();
     }
 
     @Test
@@ -344,8 +313,8 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
             .perform(post("/uuid/deleteSeveral")
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(Arrays.asList(
-                    UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id(),
-                    UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto2().id()))))
+                    UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
+                    UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto2().id))))
             .andExpect(status().isGone());
     }
 
@@ -355,11 +324,11 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
             .perform(post("/uuid/deleteSeveral")
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(Arrays.asList(
-                    UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id(),
-                    UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto2().id()))));
+                    UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
+                    UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto2().id))));
 
-        assertThat(service.exists(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id())).isFalse();
-        assertThat(service.exists(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto2().id())).isFalse();
+        assertThat(service.exists(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id)).isFalse();
+        assertThat(service.exists(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto2().id)).isFalse();
     }
 
     @Test
@@ -368,12 +337,12 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
             .perform(post("/uuid/deleteSeveral")
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(Arrays.asList(
-                    UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id(),
-                    UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto2().id(),
+                    UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
+                    UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto2().id,
                     "nonExistingId"))));
 
-        assertThat(service.exists(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id())).isFalse();
-        assertThat(service.exists(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto2().id())).isFalse();
+        assertThat(service.exists(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id)).isFalse();
+        assertThat(service.exists(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto2().id)).isFalse();
     }
 
     @Test
