@@ -1,6 +1,6 @@
 package com.daeliin.components.security.credentials.permission;
 
-import com.daeliin.components.core.resource.repository.BaseRepository;
+import com.daeliin.components.core.resource.repository.RowRepository;
 import com.daeliin.components.security.Application;
 import com.daeliin.components.security.library.PermissionLibrary;
 import com.daeliin.components.security.sql.QPermission;
@@ -26,7 +26,7 @@ public class PermissionRepositoryTest extends AbstractTransactionalJUnit4SpringC
 
     @Test
     public void shouldExtendRepository() {
-        assertThat(permissionRepository.getClass().getSuperclass().getClass()).isEqualTo(BaseRepository.class.getClass());
+        assertThat(permissionRepository.getClass().getSuperclass().getClass()).isEqualTo(RowRepository.class.getClass());
     }
 
     @Test

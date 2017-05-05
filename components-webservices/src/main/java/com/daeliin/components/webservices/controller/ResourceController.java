@@ -1,36 +1,46 @@
-package com.daeliin.components.webservices.rest.controller;
+package com.daeliin.components.webservices.controller;
 
 import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
 import com.daeliin.components.core.resource.service.PagingService;
 import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
+import com.daeliin.components.domain.resource.Conversion;
 import com.daeliin.components.domain.resource.Persistable;
 import com.daeliin.components.webservices.exception.PageRequestException;
 import com.daeliin.components.webservices.exception.ResourceNotFoundException;
 import com.daeliin.components.webservices.exception.ResourceUpdateRequestException;
+import com.daeliin.components.webservices.validation.PageRequestValidation;
 import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
 import java.util.Collection;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /***
  * Exposes CRUD and pagination for a resource.
+ * @param <V> resource view type
  * @param <T> resource type
+ * @param <ID> resource ID type
  * @param <S> resource service
  */
-public abstract class ResourceController<T extends Persistable<ID>, ID, S extends PagingService<T, ID>> implements PagingController<T, ID> {
+public abstract class ResourceController<V extends Persistable, T extends Persistable<ID>, ID, S extends PagingService<T, ID>> implements PagingController<V, ID> {
     
     public static final String DEFAULT_PAGE = "0";
     public static final String DEFAULT_SIZE = "20";
     public static final String DEFAULT_DIRECTION = "ASC";
     public static final String DEFAULT_PROPERTIES = "id";
     
+    protected final S service;
+    protected final Conversion<V, T> conversion;
+
     @Inject
-    protected S service;
+    public ResourceController(S service, Conversion<V, T> conversion) {
+        this.service = service;
+        this.conversion = conversion;
+    }
 
     /**
      * Exposes a create entry point, returns the created resource and a 201 if the resource is valid and a 400 otherwise.
@@ -41,8 +51,8 @@ public abstract class ResourceController<T extends Persistable<ID>, ID, S extend
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     @Override
-    public T create(@RequestBody T resource) {
-        return service.create(resource);
+    public V create(@RequestBody @Valid V resource) {
+        return conversion.instantiate(service.create(conversion.map(resource)));
     }
     
     /**
@@ -55,9 +65,9 @@ public abstract class ResourceController<T extends Persistable<ID>, ID, S extend
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     @Override
-    public T getOne(@PathVariable ID resourceId) {
+    public V getOne(@PathVariable ID resourceId) {
         try {
-            return service.findOne(resourceId);
+            return conversion.instantiate(service.findOne(resourceId));
         } catch (PersistentResourceNotFoundException e) {
             throw new ResourceNotFoundException();
         }
@@ -76,7 +86,7 @@ public abstract class ResourceController<T extends Persistable<ID>, ID, S extend
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     @Override
-    public Page<T> getAll(
+    public Page<V> getAll(
         @RequestParam(value = "page", defaultValue = DEFAULT_PAGE) String page,
         @RequestParam(value = "size", defaultValue = DEFAULT_SIZE) String size,
         @RequestParam(value = "direction", defaultValue = DEFAULT_DIRECTION) String direction,
@@ -85,7 +95,9 @@ public abstract class ResourceController<T extends Persistable<ID>, ID, S extend
         PageRequestValidation pageRequestValidation = new PageRequestValidation(page, size, direction, properties);
         PageRequest pageRequest = new PageRequest(pageRequestValidation.index, pageRequestValidation.size, pageRequestValidation.sorts);
 
-        return service.findAll(pageRequest);
+        Page<T> pageResult = service.findAll(pageRequest);
+
+        return new Page<>(conversion.instantiate(pageResult.items), pageResult.totalItems, pageResult.totalPages);
     }
     
     /**
@@ -100,7 +112,7 @@ public abstract class ResourceController<T extends Persistable<ID>, ID, S extend
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     @Override
-    public T update(@PathVariable ID resourceId, @RequestBody T resource) {
+    public V update(@PathVariable ID resourceId, @RequestBody @Valid V resource) {
         if (!service.exists(resourceId)) {
             throw new ResourceNotFoundException();
         }
@@ -109,7 +121,7 @@ public abstract class ResourceController<T extends Persistable<ID>, ID, S extend
             throw new ResourceUpdateRequestException("The update resource doesn't match the id");
         }
 
-        return service.update(resource);
+        return conversion.instantiate(service.update(conversion.map(resource)));
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.daeliin.components.webservices.rest.controller;
+package com.daeliin.components.webservices.controller;
 
 import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.webservices.exception.PageRequestException;
@@ -7,7 +7,6 @@ import java.util.Collection;
 
 /**
  * Exposes CRUD operations and pagination for a resource.
- * @author baptiste
  * @param <T> resource type
  */
 public interface PagingController<T, ID> {

@@ -13,7 +13,9 @@ public final class EventLogConversionTest {
 
     @Test
     public void shouldMapToNull_whenNull() {
-        assertThat(eventLogConversion.map(null)).isNull();
+        EventLog nullEventLog = null;
+
+        assertThat(eventLogConversion.map(nullEventLog)).isNull();
     }
 
     @Test
@@ -25,7 +27,9 @@ public final class EventLogConversionTest {
 
     @Test
     public void shouldInstantiateNull_fromNull() {
-        assertThat(eventLogConversion.instantiate(null)).isNull();
+        BEventLog nullEventLogRow = null;
+
+        assertThat(eventLogConversion.instantiate(nullEventLogRow)).isNull();
     }
 
     @Test

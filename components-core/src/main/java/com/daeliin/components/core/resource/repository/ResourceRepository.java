@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public abstract class ResourceRepository<R, ID> extends BaseRepository<R> implements PagingRepository<R, ID> {
+public abstract class ResourceRepository<R, ID> extends RowRepository<R> implements TableRepository<R, ID> {
 
     protected final SimpleExpression<ID> idPath;
     protected final Function<R, ID> idMapping;

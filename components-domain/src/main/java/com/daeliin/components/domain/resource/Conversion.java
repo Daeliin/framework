@@ -1,12 +1,18 @@
 package com.daeliin.components.domain.resource;
 
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import static java.util.stream.Collectors.toCollection;
+
 /**
  * Conversion from type O to type C.
  */
 public interface Conversion<O, C> {
 
     /**
-     * Instantiate an object form a converted object.
+     * Instantiates an object form a converted object.
      * @param conversion a converted object
      * @return the new instance
      */
@@ -18,4 +24,28 @@ public interface Conversion<O, C> {
      * @return the converted object
      */
     C map(O object);
+
+    /**
+     * Instantiates a collection of objects form a collection of converted objects.
+     * @param conversions the converted objects to instantiate
+     * @return the new collection of instance
+     */
+    default Set<O> instantiate(Collection<C> conversions) {
+        return conversions
+                .stream()
+                .map(this::instantiate)
+                .collect(toCollection(LinkedHashSet::new));
+    }
+
+    /**
+     * Maps a collection of objects to a collection of converted objects.
+     * @param objects the objects to map
+     * @return the converted objects
+     */
+    default Set<C> map(Collection<O> objects) {
+        return objects
+                .stream()
+                .map(this::map)
+                .collect(toCollection(LinkedHashSet::new));
+    }
 }

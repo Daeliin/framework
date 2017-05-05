@@ -13,7 +13,9 @@ public final class PermissionConversionTest {
 
     @Test
     public void shouldMapToNull_whenNull() {
-        assertThat(permissionConversion.map(null)).isNull();
+        Permission nullPermission = null;
+
+        assertThat(permissionConversion.map(nullPermission)).isNull();
     }
 
     @Test
@@ -25,7 +27,9 @@ public final class PermissionConversionTest {
 
     @Test
     public void shouldInstantiateNull_fromNull() {
-        assertThat(permissionConversion.instantiate(null)).isNull();
+        BPermission nullPermissionRow = null;
+
+        assertThat(permissionConversion.instantiate(nullPermissionRow)).isNull();
     }
 
     @Test

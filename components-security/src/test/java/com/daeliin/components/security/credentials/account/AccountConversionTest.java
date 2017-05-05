@@ -13,7 +13,9 @@ public final class AccountConversionTest {
 
     @Test
     public void shouldMapToNull_whenNull() {
-        assertThat(accountConversion.map(null)).isNull();
+        Account nullAccount = null;
+
+        assertThat(accountConversion.map(nullAccount)).isNull();
     }
 
     @Test
@@ -25,7 +27,9 @@ public final class AccountConversionTest {
 
     @Test
     public void shouldInstantiateNull_fromNull() {
-        assertThat(accountConversion.instantiate(null)).isNull();
+        BAccount nullAccountRow = null;
+
+        assertThat(accountConversion.instantiate(nullAccountRow)).isNull();
     }
 
     @Test

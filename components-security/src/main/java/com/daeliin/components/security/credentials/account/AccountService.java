@@ -29,7 +29,7 @@ public class AccountService extends ResourceService<Account, BAccount, String, A
                 .and(QAccount.account.enabled.isTrue()));
 
 
-        Account account = instantiate(bAccounts.stream().findFirst().orElse(null));
+        Account account = conversion.instantiate(bAccounts.stream().findFirst().orElse(null));
 
         return account;
     }

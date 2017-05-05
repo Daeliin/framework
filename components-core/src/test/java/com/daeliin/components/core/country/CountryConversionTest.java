@@ -13,7 +13,9 @@ public final class CountryConversionTest {
 
     @Test
     public void shouldMapToNull_whenNull() {
-        assertThat(countryConversion.map(null)).isNull();
+        Country nullCountry = null;
+
+        assertThat(countryConversion.map(nullCountry)).isNull();
     }
 
     @Test
@@ -25,7 +27,9 @@ public final class CountryConversionTest {
 
     @Test
     public void shouldInstantiateNull_fromNull() {
-        assertThat(countryConversion.instantiate(null)).isNull();
+        BCountry nullCountryRow = null;
+
+        assertThat(countryConversion.instantiate(nullCountryRow)).isNull();
     }
 
     @Test

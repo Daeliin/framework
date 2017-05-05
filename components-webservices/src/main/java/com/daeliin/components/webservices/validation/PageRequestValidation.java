@@ -1,4 +1,4 @@
-package com.daeliin.components.webservices.rest.controller;
+package com.daeliin.components.webservices.validation;
 
 import com.daeliin.components.domain.pagination.Sort;
 import com.daeliin.components.webservices.exception.PageRequestException;
