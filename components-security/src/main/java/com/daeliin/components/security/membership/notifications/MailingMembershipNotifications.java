@@ -21,7 +21,7 @@ import java.util.Map;
 @Profile("mail")
 public class MailingMembershipNotifications implements MembershipNotifications {
 
-    @Value("${daeliin.mail.instantiate}")
+    @Value("${daeliin.mail.from}")
     private String from;
     
     @Inject
