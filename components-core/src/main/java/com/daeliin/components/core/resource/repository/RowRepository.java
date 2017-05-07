@@ -77,7 +77,7 @@ public abstract class RowRepository<R> extends BaseRepository<R> implements Tabl
     }
 
     protected int computeTotalPages(long totalItems, long pageSize) {
-        return Double.valueOf(Math.ceil(totalItems / pageSize)).intValue();
+        return Double.valueOf(Math.ceil((double)totalItems / (double)pageSize)).intValue();
     }
 
     protected OrderSpecifier[] computeOrders(PageRequest pageRequest) {
