@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
@@ -54,7 +55,7 @@ public abstract class ResourceController<V, T extends Persistable<ID>, ID, S ext
     @Override
     public V create(@RequestBody @Valid V resource) {
         try {
-            return conversion.instantiate(service.create(conversion.map(resource, null)));
+            return conversion.instantiate(service.create(conversion.map(resource, null, LocalDateTime.now())));
         } catch (PersistentResourceAlreadyExistsException e) {
             throw new ResourceAlreadyExistsException();
         }
@@ -122,7 +123,9 @@ public abstract class ResourceController<V, T extends Persistable<ID>, ID, S ext
             throw new ResourceNotFoundException();
         }
 
-        return conversion.instantiate(service.update(conversion.map(resource, resourceId)));
+        T existingResource = service.findOne(resourceId);
+
+        return conversion.instantiate(service.update(conversion.map(resource, existingResource.id(), existingResource.creationDate())));
     }
 
     /**

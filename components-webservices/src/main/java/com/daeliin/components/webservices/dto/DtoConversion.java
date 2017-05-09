@@ -1,5 +1,8 @@
 package com.daeliin.components.webservices.dto;
 
+import com.daeliin.components.domain.resource.Persistable;
+
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -12,7 +15,7 @@ import static java.util.stream.Collectors.toCollection;
  * @param <C> other type
  * @param <ID> DTO id type
  */
-public interface DtoConversion<V, C, ID> {
+public interface DtoConversion<V, C extends Persistable<ID>, ID> {
 
     /**
      * Instantiates an DTO object from a converted object.
@@ -27,7 +30,7 @@ public interface DtoConversion<V, C, ID> {
      * @param object the DTO id to map
      * @return the converted object
      */
-    C map(V object, ID id);
+    C map(V object, ID id, LocalDateTime creationDate);
 
     /**
      * Instantiates a collection of DTO objects from a collection of converted objects.

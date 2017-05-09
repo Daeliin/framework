@@ -55,7 +55,8 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
 
         UuidPersistentResourceDto createdUuidPersistentResourceDto = jsonMapper.readValue(result.getResponse().getContentAsString(), UuidPersistentResourceDto.class);
 
-        assertThat(createdUuidPersistentResourceDto.creationDate).isEqualTo(uuidPersistentResourceDto.creationDate);
+        assertThat(createdUuidPersistentResourceDto.id).isNotBlank();
+        assertThat(createdUuidPersistentResourceDto.creationDate).isNotNull();
         assertThat(createdUuidPersistentResourceDto.label).isEqualTo(uuidPersistentResourceDto.label);
     }
 
@@ -76,7 +77,8 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
 
         UuidPersistentResourceDto persistedUuidPersistentResourceDto = conversion.instantiate(service.findOne(returnedUuidPersistentResourceDto.id));
 
-        assertThat(persistedUuidPersistentResourceDto.creationDate).isEqualTo(uuidPersistentResourceDto.creationDate);
+        assertThat(uuidPersistentResourceDto.id).isNotBlank();
+        assertThat(uuidPersistentResourceDto.creationDate).isNotNull();
         assertThat(persistedUuidPersistentResourceDto.label).isEqualTo(uuidPersistentResourceDto.label);
         assertThat(uuidPersistentResourceCountAfterCreate).isEqualTo(uuidPersistentResourceCountBeforeCreate + 1);
     }
@@ -220,7 +222,7 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
                 .andReturn();
 
         UuidPersistentResourceDto retrievedUuidPersistentResourceDto = jsonMapper.readValue(result.getResponse().getContentAsString(), UuidPersistentResourceDto.class);
-        assertThat(retrievedUuidPersistentResourceDto).isEqualToComparingFieldByField(updatedUuidPersistentResourceDto);
+        assertThat(retrievedUuidPersistentResourceDto.label).isEqualTo(updatedUuidPersistentResourceDto.label);
     }
 
     @Test
@@ -237,7 +239,7 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
 
         UuidPersistentResourceDto retrievedUuidPersistentResourceDto = conversion.instantiate(service.findOne(updatedUuidPersistentResourceDto.id));
 
-        assertThat(retrievedUuidPersistentResourceDto).isEqualToComparingFieldByField(updatedUuidPersistentResourceDto);
+        assertThat(retrievedUuidPersistentResourceDto.label).isEqualTo(updatedUuidPersistentResourceDto.label);
     }
 
     @Test
