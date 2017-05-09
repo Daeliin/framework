@@ -33,6 +33,6 @@ public class News extends PersistentResource<String> implements Comparable<News>
             return 0;
         }
         
-        return this.creationDate.compareTo(other.creationDate);
+        return this.creationDate().compareTo(other.creationDate());
     }
 }
