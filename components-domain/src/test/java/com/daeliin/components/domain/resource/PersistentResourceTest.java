@@ -112,6 +112,6 @@ public class PersistentResourceTest {
     public void shouldPrintsItsUuidAndCreationDate() {
         UuidPersistentResource newUUIDEntity = new UuidPersistentResource(UUID, CREATION_DATE);
 
-        assertThat(newUUIDEntity.toString()).contains(newUUIDEntity.id(), newUUIDEntity.creationDate.toString());
+        assertThat(newUUIDEntity.toString()).contains(newUUIDEntity.id(), newUUIDEntity.creationDate().toString());
     }
 }

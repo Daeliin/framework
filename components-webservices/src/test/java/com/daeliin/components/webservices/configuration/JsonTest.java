@@ -1,6 +1,6 @@
 package com.daeliin.components.webservices.configuration;
 
-import com.daeliin.components.webservices.fake.UuidPersistentResource;
+import com.daeliin.components.webservices.fake.UuidPersistentResourceDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class JsonTest extends AbstractJUnit4SpringContextTests {
 
     @Test
     public void shouldSerializeImmutableTypes() throws Exception {
-        UuidPersistentResource uuidPersistentResource = new UuidPersistentResource("id", LocalDateTime.of(2017, 1, 1, 12, 32, 12), "label");
+        UuidPersistentResourceDto uuidPersistentResource = new UuidPersistentResourceDto("id", LocalDateTime.of(2017, 1, 1, 12, 32, 12), "label");
 
         String serializeduuidPersistentResource = jsonMapper.writeValueAsString(uuidPersistentResource);
 
@@ -37,12 +37,12 @@ public class JsonTest extends AbstractJUnit4SpringContextTests {
 
     @Test
     public void shouldDeserializeImmutableTypes() throws Exception {
-        UuidPersistentResource uuidPersistentResource = new UuidPersistentResource("id", LocalDateTime.of(2017, 1, 1, 12, 32, 12), "label");
+        UuidPersistentResourceDto uuidPersistentResource = new UuidPersistentResourceDto("id", LocalDateTime.of(2017, 1, 1, 12, 32, 12), "label");
 
-        UuidPersistentResource deserializedUuidPersistentResource =
-                jsonMapper.readValue("{\"id\":\"id\",\"creationDate\":\"2017-01-01T12:32:12\",\"label\":\"label\"}", UuidPersistentResource.class);
+        UuidPersistentResourceDto deserializedUuidPersistentResource =
+                jsonMapper.readValue("{\"id\":\"id\",\"creationDate\":\"2017-01-01T12:32:12\",\"label\":\"label\"}", UuidPersistentResourceDto.class);
 
-        assertThat(deserializedUuidPersistentResource).isEqualTo(uuidPersistentResource);
+        assertThat(deserializedUuidPersistentResource).isEqualToComparingFieldByField(uuidPersistentResource);
     }
 
     @Test
