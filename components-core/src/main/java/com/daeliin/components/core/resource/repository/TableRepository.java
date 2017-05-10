@@ -15,6 +15,8 @@ public interface TableRepository<R> extends Repository<R> {
 
     Page<R> findAll(PageRequest pageRequest);
 
+    Page<R> findAll(Predicate predicate, PageRequest pageRequest);
+
     Collection<R> findAll();
 
     long count();

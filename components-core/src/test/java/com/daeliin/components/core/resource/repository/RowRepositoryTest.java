@@ -33,12 +33,12 @@ public class RowRepositoryTest extends AbstractTransactionalJUnit4SpringContextT
     }
 
     @Test
-    public void shouldReturnEmptyCollection_whenPredicateIsNull() {
+    public void shouldFindAllResources_whenPredicateIsNull() {
         Predicate nullPredicate = null;
 
         Collection<BUuidPersistentResource> foundUuidEntities = repository.findAll(nullPredicate);
 
-        assertThat(foundUuidEntities).isEmpty();
+        assertThat(foundUuidEntities.size()).isEqualTo(countRows());
     }
 
     @Test

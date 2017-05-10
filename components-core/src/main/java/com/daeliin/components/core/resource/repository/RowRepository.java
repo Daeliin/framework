@@ -7,6 +7,7 @@ import com.querydsl.core.types.Path;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.querydsl.sql.RelationalPathBase;
+import com.querydsl.sql.SQLQuery;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -16,8 +17,8 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 /**
-  * @param <R> row type
-  */
+ * @param <R> row type
+ */
 public abstract class RowRepository<R> extends BaseRepository<R> implements TableRepository<R> {
 
     public RowRepository(RelationalPathBase<R> rowPath) {
@@ -27,31 +28,40 @@ public abstract class RowRepository<R> extends BaseRepository<R> implements Tabl
     @Transactional(readOnly = true)
     @Override
     public Collection<R> findAll(Predicate predicate) {
-        if (predicate == null) {
-            return new ArrayList<>();
+        SQLQuery<R> query = queryFactory.select(rowPath)
+                .from(rowPath);
+
+        if (predicate != null) {
+            query = query.where(predicate);
         }
 
-        return queryFactory.select(rowPath)
-                .from(rowPath)
-                .where(predicate)
-                .fetch();
+        return query.fetch();
     }
 
     @Transactional(readOnly = true)
     @Override
     public Page<R> findAll(PageRequest pageRequest) {
+        return findAll(null, pageRequest);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Page<R> findAll(Predicate predicate, PageRequest pageRequest) {
         long totalItems = count();
         long totalPages = computeTotalPages(totalItems, pageRequest.size);
         OrderSpecifier[] orders = computeOrders(pageRequest);
 
-        List<R> items = queryFactory.select(rowPath)
+        SQLQuery<R> query = queryFactory.select(rowPath)
                 .from(rowPath)
                 .limit(pageRequest.size)
                 .offset(pageRequest.offset)
-                .orderBy(orders)
-                .fetch();
+                .orderBy(orders);
 
-        return new Page(items, totalItems, totalPages);
+        if (predicate != null) {
+            query = query.where(predicate);
+        }
+
+        return new Page(query.fetch(), totalItems, totalPages);
     }
 
     @Transactional(readOnly = true)
@@ -77,23 +87,30 @@ public abstract class RowRepository<R> extends BaseRepository<R> implements Tabl
     }
 
     protected int computeTotalPages(long totalItems, long pageSize) {
-        return Double.valueOf(Math.ceil((double)totalItems / (double)pageSize)).intValue();
+        return Double.valueOf(Math.ceil((double) totalItems / (double) pageSize)).intValue();
     }
 
     protected OrderSpecifier[] computeOrders(PageRequest pageRequest) {
-        List<OrderSpecifier> orders = new ArrayList<>();
+        List<OrderSpecifier> orders = computeOrderSpecifiers(getSortablePaths(rowPath), pageRequest);
 
-        List<Path> sortablePaths =
-                rowPath.getColumns()
-                        .stream()
-                        .filter(path -> path instanceof ComparableExpressionBase)
-                        .collect(toList());
+        return orders.toArray(new OrderSpecifier[orders.size()]);
+    }
+
+    private List<Path> getSortablePaths(RelationalPathBase<R> rowPath) {
+        return rowPath.getColumns()
+                .stream()
+                .filter(path -> path instanceof ComparableExpressionBase)
+                .collect(toList());
+    }
+
+    private List<OrderSpecifier> computeOrderSpecifiers(List<Path> sortablePaths, PageRequest pageRequest) {
+        List<OrderSpecifier> orders = new ArrayList<>();
 
         for (Path<?> path : sortablePaths) {
             String columnName = path.getMetadata().getName();
 
             if (pageRequest.sorts.containsKey(columnName)) {
-                ComparableExpressionBase comparableExpressionBase = (ComparableExpressionBase)path;
+                ComparableExpressionBase comparableExpressionBase = (ComparableExpressionBase) path;
 
                 if (pageRequest.sorts.containsKey(columnName)) {
                     switch (pageRequest.sorts.get(columnName)) {
@@ -111,6 +128,6 @@ public abstract class RowRepository<R> extends BaseRepository<R> implements Tabl
             }
         }
 
-        return orders.toArray(new OrderSpecifier[orders.size()]);
+        return orders;
     }
 }
