@@ -109,6 +109,18 @@ public class RowRepositoryTest extends AbstractTransactionalJUnit4SpringContextT
     }
 
     @Test
+    public void shouldFindPageWithPredicate() {
+        Predicate uuidDoesntContain511 = QUuidPersistentResource.uuidPersistentResource.uuid.contains("511").not();
+        PageRequest pageRequest = new PageRequest(0, 2, Sets.newHashSet(new Sort("label", Sort.Direction.ASC)));
+
+        Page<BUuidPersistentResource> page = repository.findAll(uuidDoesntContain511, pageRequest);
+
+        assertThat(page.items).usingFieldByFieldElementComparator().containsOnly(
+                UuidPersistentResourceFixtures.uuidPersistentResource2(),
+                UuidPersistentResourceFixtures.uuidPersistentResource3());
+    }
+
+    @Test
     public void shouldDeleteAllResources() {
         repository.deleteAll();
 

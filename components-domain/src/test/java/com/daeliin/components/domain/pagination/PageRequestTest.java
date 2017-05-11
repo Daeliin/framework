@@ -1,11 +1,8 @@
 package com.daeliin.components.domain.pagination;
 
 import com.google.common.collect.Sets;
-import com.google.common.collect.SortedMapDifference;
 import org.junit.Test;
 
-import java.util.AbstractMap;
-import java.util.Map;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,21 +52,14 @@ public final class PageRequestTest {
         Sort idDesc = new Sort("id", Sort.Direction.DESC);
         Sort nameDesc = new Sort("name", Sort.Direction.DESC);
 
-        Map<String, Sort.Direction> sorts = new PageRequest(2, 25, Sets.newHashSet(idAsc, idDesc, nameDesc)).sorts;
+        Set<Sort> sortSet = Sets.newLinkedHashSet();
+        sortSet.add(idAsc);
+        sortSet.add(idDesc);
+        sortSet.add(nameDesc);
 
-        assertThat(sorts.get("id")).isEqualTo(Sort.Direction.ASC);
-        assertThat(sorts.get("name")).isEqualTo(Sort.Direction.DESC);
-    }
+        Set<Sort> sorts = new PageRequest(2, 25, sortSet).sorts;
 
-    @Test
-    public void shouldNotBeCaseSensitiveOnPropertySort() {
-        Sort idAsc = new Sort("id", Sort.Direction.ASC);
-
-        Map<String, Sort.Direction> sorts = new PageRequest(2, 25, Sets.newHashSet(idAsc)).sorts;
-
-        assertThat(sorts.containsKey("id")).isTrue();
-        assertThat(sorts.containsKey("ID")).isTrue();
-        assertThat(sorts.containsKey("Id")).isTrue();
+        assertThat(sorts).containsExactly(idAsc, nameDesc);
     }
 
     @Test

@@ -2,7 +2,10 @@ package com.daeliin.components.domain.pagination;
 
 import com.google.common.base.MoreObjects;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * The request for a page, with a zero based index.
@@ -16,7 +19,7 @@ public final class PageRequest implements Comparable<PageRequest> {
     public final int index;
     public final int size;
     public final int offset;
-    public final Map<String, Sort.Direction> sorts;
+    public final Set<Sort> sorts;
 
     public PageRequest() {
         this(DEFAULT_INDEX);
@@ -34,7 +37,7 @@ public final class PageRequest implements Comparable<PageRequest> {
         this.index = (index >= 0 && index <= Integer.MAX_VALUE) ? index : DEFAULT_INDEX;
         this.size = (size >= 0 && size <= Integer.MAX_VALUE) ? size : DEFAULT_SIZE;
         this.offset = index * size;
-        this.sorts = (sorts == null || sorts.isEmpty()) ? new HashMap<>() : buildSorts(sorts);
+        this.sorts = (sorts == null || sorts.isEmpty()) ? new HashSet<>() : buildSorts(sorts);
     }
 
     @Override
@@ -70,18 +73,19 @@ public final class PageRequest implements Comparable<PageRequest> {
         return Integer.compare(this.index, other.index);
     }
 
-    private Map<String, Sort.Direction> buildSorts(Set<Sort> sorts) {
-        Map<String, Sort.Direction> sortMapping = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+    private Set<Sort> buildSorts(Set<Sort> sorts) {
+        Set<String> sortProperties = new HashSet<>();
+        Set<Sort> onlyOneSortForProperty = new LinkedHashSet<>();
 
-        sorts
-            .stream()
-            .sorted()
-            .forEach(sort -> {
-                if (!sortMapping.containsKey(sort.property)) {
-                    sortMapping.put(sort.property, sort.direction);
-                }
-            });
+        for (Sort sort : sorts) {
+            String sortProperty = sort.property.toLowerCase();
 
-        return sortMapping;
+            if (!sortProperties.contains(sortProperty)) {
+                sortProperties.add(sortProperty);
+                onlyOneSortForProperty.add(sort);
+            }
+        }
+
+        return onlyOneSortForProperty;
     }
 }
