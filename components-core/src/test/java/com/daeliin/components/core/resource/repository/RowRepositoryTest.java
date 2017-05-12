@@ -79,7 +79,8 @@ public class RowRepositoryTest extends AbstractTransactionalJUnit4SpringContextT
                 UuidPersistentResourceFixtures.uuidPersistentResource2(),
                 UuidPersistentResourceFixtures.uuidPersistentResource1());
 
-        Page<BUuidPersistentResource> page = repository.findAll(new PageRequest(1, 2, Sets.newHashSet(new Sort("uuid", Sort.Direction.DESC))));
+        Page<BUuidPersistentResource> page = repository.findAll(new PageRequest(1, 2, Sets.newLinkedHashSet(
+                Arrays.asList(new Sort("uuid", Sort.Direction.DESC)))));
 
         assertThat(page.items)
                 .usingFieldByFieldElementComparator()
@@ -99,9 +100,8 @@ public class RowRepositoryTest extends AbstractTransactionalJUnit4SpringContextT
                 UuidPersistentResourceFixtures.uuidPersistentResource1(),
                 UuidPersistentResourceFixtures.uuidPersistentResource4());
 
-        Page<BUuidPersistentResource> page = repository.findAll(new PageRequest(0, uuidPersistentResourceCount, Sets.newHashSet(
-                new Sort("creationDate", Sort.Direction.ASC),
-                new Sort("uuid", Sort.Direction.DESC))));
+        Page<BUuidPersistentResource> page = repository.findAll(new PageRequest(0, uuidPersistentResourceCount, Sets.newLinkedHashSet(
+                Arrays.asList(new Sort("creationDate", Sort.Direction.ASC), new Sort("uuid", Sort.Direction.DESC)))));
 
         assertThat(page.items)
                 .usingFieldByFieldElementComparator()
@@ -111,7 +111,7 @@ public class RowRepositoryTest extends AbstractTransactionalJUnit4SpringContextT
     @Test
     public void shouldFindPageWithPredicate() {
         Predicate uuidDoesntContain511 = QUuidPersistentResource.uuidPersistentResource.uuid.contains("511").not();
-        PageRequest pageRequest = new PageRequest(0, 2, Sets.newHashSet(new Sort("label", Sort.Direction.ASC)));
+        PageRequest pageRequest = new PageRequest(0, 2, Sets.newLinkedHashSet(Arrays.asList(new Sort("label", Sort.Direction.ASC))));
 
         Page<BUuidPersistentResource> page = repository.findAll(uuidDoesntContain511, pageRequest);
 

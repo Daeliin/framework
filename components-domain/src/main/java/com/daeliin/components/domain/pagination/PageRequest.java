@@ -19,7 +19,7 @@ public final class PageRequest implements Comparable<PageRequest> {
     public final int index;
     public final int size;
     public final int offset;
-    public final Set<Sort> sorts;
+    public final LinkedHashSet<Sort> sorts;
 
     public PageRequest() {
         this(DEFAULT_INDEX);
@@ -30,14 +30,14 @@ public final class PageRequest implements Comparable<PageRequest> {
     }
 
     public PageRequest(int index, int size) {
-        this(index, size, new HashSet<>());
+        this(index, size, new LinkedHashSet<>());
     }
 
-    public PageRequest(int index, int size, Set<Sort> sorts) {
+    public PageRequest(int index, int size, LinkedHashSet<Sort> sorts) {
         this.index = (index >= 0 && index <= Integer.MAX_VALUE) ? index : DEFAULT_INDEX;
         this.size = (size >= 0 && size <= Integer.MAX_VALUE) ? size : DEFAULT_SIZE;
         this.offset = index * size;
-        this.sorts = (sorts == null || sorts.isEmpty()) ? new HashSet<>() : buildSorts(sorts);
+        this.sorts = (sorts == null || sorts.isEmpty()) ? new LinkedHashSet<>() : buildSorts(sorts);
     }
 
     @Override
@@ -73,9 +73,9 @@ public final class PageRequest implements Comparable<PageRequest> {
         return Integer.compare(this.index, other.index);
     }
 
-    private Set<Sort> buildSorts(Set<Sort> sorts) {
+    private LinkedHashSet<Sort> buildSorts(LinkedHashSet<Sort> sorts) {
         Set<String> sortProperties = new HashSet<>();
-        Set<Sort> onlyOneSortForProperty = new LinkedHashSet<>();
+        LinkedHashSet<Sort> onlyOneSortForProperty = new LinkedHashSet<>();
 
         for (Sort sort : sorts) {
             String sortProperty = sort.property.toLowerCase();

@@ -6,7 +6,7 @@ import com.daeliin.components.core.resource.service.PagingService;
 import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
 import com.daeliin.components.domain.resource.Persistable;
-import com.daeliin.components.webservices.dto.DtoConversion;
+import com.daeliin.components.webservices.dto.ResourceDtoConversion;
 import com.daeliin.components.webservices.exception.PageRequestException;
 import com.daeliin.components.webservices.exception.ResourceAlreadyExistsException;
 import com.daeliin.components.webservices.exception.ResourceNotFoundException;
@@ -36,10 +36,10 @@ public abstract class ResourceController<V, T extends Persistable<ID>, ID, S ext
     public static final String DEFAULT_PROPERTIES = "id";
     
     protected final S service;
-    protected final DtoConversion<V, T, ID> conversion;
+    protected final ResourceDtoConversion<V, T, ID> conversion;
 
     @Inject
-    public ResourceController(S service, DtoConversion<V, T, ID> conversion) {
+    public ResourceController(S service, ResourceDtoConversion<V, T, ID> conversion) {
         this.service = service;
         this.conversion = conversion;
     }

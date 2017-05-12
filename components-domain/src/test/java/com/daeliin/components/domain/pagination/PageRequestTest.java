@@ -3,6 +3,8 @@ package com.daeliin.components.domain.pagination;
 import com.google.common.collect.Sets;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,7 +45,7 @@ public final class PageRequestTest {
         assertThat(new PageRequest(0).sorts).isEmpty();
         assertThat(new PageRequest(2, 25).sorts).isEmpty();
         assertThat(new PageRequest(2, 25, null).sorts).isEmpty();
-        assertThat(new PageRequest(2, 25, Sets.newHashSet()).sorts).isEmpty();
+        assertThat(new PageRequest(2, 25, Sets.newLinkedHashSet()).sorts).isEmpty();
     }
 
     @Test
@@ -52,7 +54,7 @@ public final class PageRequestTest {
         Sort idDesc = new Sort("id", Sort.Direction.DESC);
         Sort nameDesc = new Sort("name", Sort.Direction.DESC);
 
-        Set<Sort> sortSet = Sets.newLinkedHashSet();
+        LinkedHashSet<Sort> sortSet = Sets.newLinkedHashSet();
         sortSet.add(idAsc);
         sortSet.add(idDesc);
         sortSet.add(nameDesc);
@@ -73,7 +75,7 @@ public final class PageRequestTest {
     public void shouldBeEqual_whenSameIndexSameSizeAndSameSorts() {
         int index = 5;
         int size = 10;
-        Set<Sort> sorts = Sets.newHashSet(new Sort("id", Sort.Direction.ASC), new Sort("name", Sort.Direction.DESC));
+        LinkedHashSet<Sort> sorts = Sets.newLinkedHashSet(Arrays.asList(new Sort("id", Sort.Direction.ASC), new Sort("name", Sort.Direction.DESC)));
 
         PageRequest pageRequest = new PageRequest(index, size, sorts);
         PageRequest samePageRequest = new PageRequest(index, size, sorts);

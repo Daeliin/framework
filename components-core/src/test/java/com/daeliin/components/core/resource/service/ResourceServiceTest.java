@@ -165,7 +165,7 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
 
     @Test
     public void shouldCallRepositoryFindAllWithPageRequest_whenFindingAllResoucesWithPageRequest() {
-        PageRequest pageRequest = new PageRequest(1, 10, Sets.newHashSet(new Sort("uuid", Sort.Direction.ASC)));
+        PageRequest pageRequest = new PageRequest(1, 10, Sets.newLinkedHashSet(Arrays.asList(new Sort("uuid", Sort.Direction.ASC))));
 
         Page<BUuidPersistentResource> pageFake =
                 new Page<>(Arrays.asList(conversion.map(UuidPersistentResourceLibrary.uuidPersistentResource1())), 1, 1);
@@ -258,7 +258,7 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
     }
 
     @Test
-    public void dshouldCallRepositoryDeleteWithResources_whenDeletingResources() {
+    public void shouldCallRepositoryDeleteWithResources_whenDeletingResources() {
         Collection<String> uuidEntityIds = Arrays.asList(
                 UuidPersistentResourceLibrary.uuidPersistentResource1().id(),
                 UuidPersistentResourceLibrary.uuidPersistentResource2().id());

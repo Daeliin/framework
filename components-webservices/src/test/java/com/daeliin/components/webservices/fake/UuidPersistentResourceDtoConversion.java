@@ -1,11 +1,11 @@
 package com.daeliin.components.webservices.fake;
 
-import com.daeliin.components.webservices.dto.DtoConversion;
+import com.daeliin.components.webservices.dto.ResourceDtoConversion;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public final class UuidPersistentResourceDtoConversion implements DtoConversion<UuidPersistentResourceDto, UuidPersistentResource, String> {
+public final class UuidPersistentResourceDtoConversion implements ResourceDtoConversion<UuidPersistentResourceDto, UuidPersistentResource, String> {
 
     @Override
     public UuidPersistentResourceDto instantiate(UuidPersistentResource uuidEntity) {

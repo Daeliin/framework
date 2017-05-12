@@ -15,7 +15,7 @@ import static java.util.stream.Collectors.toCollection;
  * @param <C> other type
  * @param <ID> DTO id type
  */
-public interface DtoConversion<V, C extends Persistable<ID>, ID> {
+public interface ResourceDtoConversion<V, C extends Persistable<ID>, ID> {
 
     /**
      * Instantiates an DTO object from a converted object.

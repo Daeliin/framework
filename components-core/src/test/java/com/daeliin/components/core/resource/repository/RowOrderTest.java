@@ -8,6 +8,8 @@ import com.querydsl.core.types.OrderSpecifier;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public final class RowOrderTest {
@@ -36,9 +38,9 @@ public final class RowOrderTest {
 
     @Test
     public void shouldComputeOrders() {
-        PageRequest pageRequest = new PageRequest(0, 10, Sets.newHashSet(
+        PageRequest pageRequest = new PageRequest(0, 10, Sets.newLinkedHashSet(Arrays.asList(
                 new Sort("uuid", Sort.Direction.DESC),
-                new Sort("CreationDate", Sort.Direction.ASC)));
+                new Sort("CreationDate", Sort.Direction.ASC))));
 
         OrderSpecifier[] orderSpecifiers = rowOrder.computeOrders(pageRequest);
 

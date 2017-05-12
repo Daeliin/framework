@@ -5,7 +5,6 @@ import com.daeliin.components.webservices.exception.PageRequestException;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
-import java.util.Set;
 
 import static java.util.stream.Collectors.toCollection;
 
@@ -16,7 +15,7 @@ public class PageRequestValidation {
     
     public int index;
     public int size;
-    public Set<Sort> sorts;
+    public LinkedHashSet<Sort> sorts;
 
     public PageRequestValidation(
             final String index,
@@ -57,7 +56,7 @@ public class PageRequestValidation {
         }
     }
     
-    private Set<Sort> validateSorts(String direction, String[] properties) throws PageRequestException {
+    private LinkedHashSet<Sort> validateSorts(String direction, String[] properties) throws PageRequestException {
         Sort.Direction sortDirection;
 
         if ("asc".equalsIgnoreCase(direction)) {
