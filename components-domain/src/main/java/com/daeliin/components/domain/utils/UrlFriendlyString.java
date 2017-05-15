@@ -4,8 +4,9 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * Builds an valid url out of a String, by :
- * - deleting all non alphanumerical characters
- * - replacing whitespaces with a dash (-)
+ * - deleting all non alphanumerical characters except '&'
+ * - replacing whitespaces with a dash
+ * - replacing & with a dash
  */
 public class UrlFriendlyString {
 
@@ -17,9 +18,10 @@ public class UrlFriendlyString {
         if (StringUtils.isNotBlank(originalString)) {
             computedValue =
                 originalString.toLowerCase()
-                    .replaceAll("[^a-zA-Z0-9 ]", "")
+                    .replaceAll("[^a-zA-Z0-9 &]", "")
                     .trim()
-                    .replace(' ', '-');
+                    .replace(' ', '-')
+                    .replace("&", "and");
         }
 
         value = computedValue;

@@ -2,29 +2,34 @@ package com.daeliin.components.domain.utils;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UrlFriendlyStringTest {
 
     @Test
     public void handlesNullAndBlankStrings() {
-        assertEquals(new UrlFriendlyString(null).value, "");
-        assertEquals(new UrlFriendlyString("").value, "");
-        assertEquals(new UrlFriendlyString(" ").value, "");
+        assertThat(new UrlFriendlyString(null).value).isEqualTo("");
+        assertThat(new UrlFriendlyString("").value).isEqualTo("");
+        assertThat(new UrlFriendlyString(" ").value).isEqualTo("");
     }
     
     @Test
     public void putsEveryCharactersToLowerCase() {
-        assertEquals(new UrlFriendlyString("ThiSiSATeST").value, "thisisatest");
+        assertThat(new UrlFriendlyString("ThiSiSATeST").value).isEqualTo("thisisatest");
     }
     
     @Test
     public void deletesSpecialCharacters() {
-        assertEquals(new UrlFriendlyString("test#ezt!a").value, "testezta");
+        assertThat(new UrlFriendlyString("test#ezt!a").value).isEqualTo("testezta");
     }
     
     @Test
     public void replacesSpaceWithDash() {
-        assertEquals(new UrlFriendlyString("this is a test").value, "this-is-a-test");
+        assertThat(new UrlFriendlyString("this is a test").value).isEqualTo("this-is-a-test");
+    }
+
+    @Test
+    public void replacesAmpersandWithAnd() {
+        assertThat(new UrlFriendlyString("Down & Dirty").value).isEqualTo("down-and-dirty");
     }
 }
