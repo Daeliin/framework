@@ -1,7 +1,11 @@
 package com.daeliin.components.security.credentials.account;
 
 import com.daeliin.components.core.resource.repository.ResourceRepository;
-import com.daeliin.components.security.sql.*;
+import com.daeliin.components.security.sql.BAccount;
+import com.daeliin.components.security.sql.BPermission;
+import com.daeliin.components.security.sql.QAccount;
+import com.daeliin.components.security.sql.QAccountPermission;
+import com.daeliin.components.security.sql.QPermission;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +28,7 @@ public class AccountRepository extends ResourceRepository<BAccount, String> {
 
         return queryFactory.select(QPermission.permission)
                 .from(QAccountPermission.accountPermission, QPermission.permission)
-                .where(QAccountPermission.accountPermission.permissionLabel.eq(QPermission.permission.label)
+                .where(QAccountPermission.accountPermission.permissionId.eq(QPermission.permission.id)
                         .and(QAccountPermission.accountPermission.accountId.eq(accountId)))
                 .fetch();
     }

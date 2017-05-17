@@ -17,7 +17,7 @@ ALTER TABLE country ADD PRIMARY KEY (code);
 CREATE TABLE event_log (
     id VARCHAR(36) NOT NULL,
     creation_date DATETIME NOT NULL,
-    description_key VARCHAR(255) NOT NULL
+    description VARCHAR(255) NOT NULL
 );
 
 ALTER TABLE event_log ADD PRIMARY KEY (id);

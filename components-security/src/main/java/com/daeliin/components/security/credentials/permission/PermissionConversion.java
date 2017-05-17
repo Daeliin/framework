@@ -3,6 +3,8 @@ package com.daeliin.components.security.credentials.permission;
 import com.daeliin.components.domain.resource.Conversion;
 import com.daeliin.components.security.sql.BPermission;
 
+import java.sql.Timestamp;
+
 public final class PermissionConversion implements Conversion<Permission, BPermission> {
 
     @Override
@@ -11,7 +13,10 @@ public final class PermissionConversion implements Conversion<Permission, BPermi
             return null;
         }
 
-        return new Permission(bPermission.getLabel());
+        return new Permission(
+                bPermission.getId(),
+                bPermission.getCreationDate().toLocalDateTime(),
+                bPermission.getName());
     }
 
     @Override
@@ -20,6 +25,9 @@ public final class PermissionConversion implements Conversion<Permission, BPermi
             return null;
         }
 
-        return new BPermission(permission.label);
+        return new BPermission(
+                Timestamp.valueOf(permission.creationDate()),
+                permission.id(),
+                permission.name);
     }
 }

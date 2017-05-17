@@ -18,22 +18,22 @@ public final class EventLogTest {
     }
 
     @Test(expected = Exception.class)
-    public void shouldThrowException_whenDescriptionKeyIsNull() {
+    public void shouldThrowException_whenDescriptionIsNull() {
         new EventLog(UUID.randomUUID().toString(), LocalDateTime.now(), null);
     }
 
     @Test
-    public void shouldAssignADescriptionKey() {
-        EventLog eventLog = new EventLog(UUID.randomUUID().toString(), LocalDateTime.now(), "descriptionKey");
+    public void shouldAssignADescription() {
+        EventLog eventLog = new EventLog(UUID.randomUUID().toString(), LocalDateTime.now(), "description");
 
-        assertThat(eventLog.descriptionKey).isEqualTo("descriptionKey");
+        assertThat(eventLog.description).isEqualTo("description");
     }
 
     @Test
-    public void shouldPrintsItsIdUuidAndCreationDate() {
-        EventLog eventLog = new EventLog(UUID.randomUUID().toString(), LocalDateTime.now(), "descriptionKey");
+    public void shouldPrintsItsDescription() {
+        EventLog eventLog = new EventLog(UUID.randomUUID().toString(), LocalDateTime.now(), "description");
 
-        assertThat(eventLog.toString()).contains(String.valueOf(eventLog.descriptionKey));
+        assertThat(eventLog.toString()).contains(String.valueOf(eventLog.description));
     }
 
     @Test
@@ -41,8 +41,8 @@ public final class EventLogTest {
         LocalDateTime creationDate1 = LocalDateTime.now();
         LocalDateTime creationDate2 = LocalDateTime.now().plus(10, ChronoUnit.SECONDS);
 
-        EventLog eventLog1 = new EventLog(UUID.randomUUID().toString(), creationDate1, "descriptionKey");
-        EventLog eventLog2 = new EventLog(UUID.randomUUID().toString(), creationDate2, "descriptionKey");
+        EventLog eventLog1 = new EventLog(UUID.randomUUID().toString(), creationDate1, "description");
+        EventLog eventLog2 = new EventLog(UUID.randomUUID().toString(), creationDate2, "description");
 
         assertThat(eventLog1.compareTo(eventLog2)).isNegative();
         assertThat(eventLog2.compareTo(eventLog1)).isPositive();

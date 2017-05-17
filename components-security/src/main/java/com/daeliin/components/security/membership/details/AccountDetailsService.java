@@ -3,8 +3,6 @@ package com.daeliin.components.security.membership.details;
 import com.daeliin.components.security.credentials.account.Account;
 import com.daeliin.components.security.credentials.account.AccountService;
 import com.daeliin.components.security.credentials.permission.Permission;
-import com.daeliin.components.security.cryptography.Sha512;
-import com.daeliin.components.security.cryptography.Token;
 import com.daeliin.components.security.exception.InvalidTokenException;
 import com.daeliin.components.security.membership.SignUpRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +33,7 @@ public class AccountDetailsService implements UserDetailsService {
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         Collection<Permission> permissions = accountService.findPermissions(account);
-        permissions.forEach(accountPermission -> authorities.add(new SimpleGrantedAuthority(accountPermission.label)));
+        permissions.forEach(accountPermission -> authorities.add(new SimpleGrantedAuthority(accountPermission.name)));
 
         return new org.springframework.security.core.userdetails.User(account.username, account.password, authorities);
     }

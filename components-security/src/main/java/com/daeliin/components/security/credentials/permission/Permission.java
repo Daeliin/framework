@@ -1,16 +1,19 @@
 package com.daeliin.components.security.credentials.permission;
 
 
+import com.daeliin.components.domain.resource.PersistentResource;
 import com.google.common.base.MoreObjects;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Permission implements Comparable<Permission> {
-    
-    public final String label;
+public class Permission extends PersistentResource<String> implements Comparable<Permission> {
 
-    public Permission(String label) {
-        this.label = Objects.requireNonNull(label, "label should not be null");
+    public final String name;
+
+    public Permission(String id, LocalDateTime creationDate, String name) {
+        super(id, creationDate);
+        this.name = Objects.requireNonNull(name, "name should not be null");
     }
 
     @Override
@@ -18,18 +21,18 @@ public class Permission implements Comparable<Permission> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Permission that = (Permission) o;
-        return Objects.equals(label, that.label);
+        return Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(label);
+        return Objects.hash(name);
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("label", label)
+                .add("name", name)
                 .toString();
     }
 
@@ -39,6 +42,6 @@ public class Permission implements Comparable<Permission> {
             return 0;
         }
         
-        return this.label.compareTo(other.label);
+        return this.name.compareTo(other.name);
     }
 }

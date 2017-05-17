@@ -1,38 +1,38 @@
 package com.daeliin.components.security.credentials.permission;
 
+import com.daeliin.components.domain.resource.PersistentResource;
 import org.junit.Test;
+
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public final class PermissionTest {
 
+    @Test
+    public void shouldExtendPersistentResource() {
+        assertThat(Permission.class.getSuperclass().getClass()).isEqualTo(PersistentResource.class.getClass());
+    }
+
     @Test(expected = Exception.class)
-    public void shouldThrowException_whenLabelIsNull() {
-        new Permission(null);
+    public void shouldThrowException_whenNameIsNull() {
+        new Permission("id", LocalDateTime.now(), null);
     }
 
     @Test
-    public void shouldAssignALabel() {
-        assertThat(new Permission("ADMIN").label).isEqualTo("ADMIN");
+    public void shouldAssignAName() {
+        assertThat(new Permission("id", LocalDateTime.now(), "ADMIN").name).isEqualTo("ADMIN");
     }
 
     @Test
-    public void shouldBeEqualToOtherInstance_withSameLabel() {
-        Permission permission = new Permission("ADMIN");
-        Permission samePermission = new Permission("ADMIN");
-
-        assertThat(permission).isEqualTo(samePermission);
+    public void shouldPrintsItsName() {
+        assertThat(new Permission("id", LocalDateTime.now(), "ADMIN").toString()).contains("ADMIN");
     }
 
     @Test
-    public void shouldPrintsItsLabel() {
-        assertThat(new Permission("ADMIN").toString()).contains("ADMIN");
-    }
-
-    @Test
-    public void shouldBeComparedOnLabels() {
-        Permission adminPermission = new Permission("ADMIN");
-        Permission userPermission = new Permission("USER");
+    public void shouldBeComparedOnNames() {
+        Permission adminPermission = new Permission("id", LocalDateTime.now(), "ADMIN");
+        Permission userPermission = new Permission("id", LocalDateTime.now(), "USER");
 
         assertThat(adminPermission.compareTo(userPermission)).isNegative();
         assertThat(userPermission.compareTo(adminPermission)).isPositive();

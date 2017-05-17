@@ -10,11 +10,11 @@ import java.util.Objects;
  */
 public final class EventLog extends PersistentResource<String> implements Comparable<EventLog> {
 
-    public final String descriptionKey;
+    public final String description;
 
-    public EventLog(String id, LocalDateTime creationDate, String descriptionKey) {
+    public EventLog(String id, LocalDateTime creationDate, String description) {
         super(id, creationDate);
-        this.descriptionKey = Objects.requireNonNull(descriptionKey, "descriptionKey should not be null");
+        this.description = Objects.requireNonNull(description, "description should not be null");
     }
 
     @Override
@@ -29,7 +29,7 @@ public final class EventLog extends PersistentResource<String> implements Compar
     @Override
     public String toString() {
         return super.toStringHelper()
-                .add("descriptionKey", descriptionKey)
+                .add("description", description)
                 .toString();
     }
 }
