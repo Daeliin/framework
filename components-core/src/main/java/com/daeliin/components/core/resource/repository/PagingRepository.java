@@ -1,5 +1,6 @@
 package com.daeliin.components.core.resource.repository;
 
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.SimpleExpression;
 
 import java.util.Collection;
@@ -17,6 +18,8 @@ public interface PagingRepository<R, ID> extends TableRepository<R> {
     Collection<R> save(Collection<R> resources);
 
     R findOne(ID resourceId);
+
+    R findOne(Predicate predicate);
 
     Collection<R> findAll(Collection<ID> resourceIds);
 

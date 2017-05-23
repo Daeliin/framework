@@ -3,6 +3,7 @@ package com.daeliin.components.core.resource.service;
 import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
 import com.daeliin.components.domain.resource.Persistable;
+import com.querydsl.core.types.Predicate;
 
 import java.util.Collection;
 
@@ -49,6 +50,13 @@ public interface PagingService<T extends Persistable<ID>, ID> {
     T findOne(ID resourceId);
 
     /**
+     * Finds a resource according to a predicate.
+     * @param predicate the predicate
+     * @return the resource matching the predicate
+     */
+    T findOne(Predicate predicate);
+
+    /**
      * Finds every resources.
      * @return every resources
      */
@@ -60,6 +68,13 @@ public interface PagingService<T extends Persistable<ID>, ID> {
      * @return resources
      */
     Collection<T> findAll(Collection<ID> resourceIds);
+
+    /**
+     * Finds resources according to a predicate.
+     * @param predicate the predicate
+     * @return the resources matching the predicate
+     */
+    Collection<T> findAll(Predicate predicate);
 
     /**
      * Finds a page of resources.

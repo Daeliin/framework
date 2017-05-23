@@ -1,5 +1,6 @@
 package com.daeliin.components.core.resource.repository;
 
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.SimpleExpression;
 import com.querydsl.sql.RelationalPathBase;
 import com.querydsl.sql.dml.SQLInsertClause;
@@ -86,6 +87,19 @@ public abstract class ResourceRepository<R, ID> extends RowRepository<R> impleme
         return queryFactory.select(rowPath)
                 .from(rowPath)
                 .where(idPath.eq(resourceId))
+                .fetchOne();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public R findOne(Predicate predicate) {
+        if (predicate == null) {
+            return null;
+        }
+
+        return queryFactory.select(rowPath)
+                .from(rowPath)
+                .where(predicate)
                 .fetchOne();
     }
 

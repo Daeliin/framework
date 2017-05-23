@@ -1,12 +1,13 @@
 package com.daeliin.components.core.resource.service;
 
-import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
 import com.daeliin.components.core.exception.PersistentResourceAlreadyExistsException;
+import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
 import com.daeliin.components.core.resource.repository.PagingRepository;
 import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
 import com.daeliin.components.domain.resource.Conversion;
 import com.daeliin.components.domain.resource.Persistable;
+import com.querydsl.core.types.Predicate;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
@@ -102,6 +103,11 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
         return resource;
     }
 
+    @Override
+    public T findOne(Predicate predicate) {
+        return conversion.instantiate(repository.findOne(predicate));
+    }
+
     /**
      * Finds every resources.
      * @return every resources
@@ -109,6 +115,11 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
     @Override
     public Collection<T> findAll() {
         return new TreeSet<>(conversion.instantiate(repository.findAll()));
+    }
+
+    @Override
+    public Collection<T> findAll(Predicate predicate) {
+        return conversion.instantiate(repository.findAll(predicate));
     }
 
     /**

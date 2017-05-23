@@ -1,18 +1,20 @@
 package com.daeliin.components.core.resource.service;
 
 import com.daeliin.components.core.Application;
-import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
 import com.daeliin.components.core.exception.PersistentResourceAlreadyExistsException;
+import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
 import com.daeliin.components.core.fake.UuidPersistentResource;
 import com.daeliin.components.core.fake.UuidPersistentResourceConversion;
 import com.daeliin.components.core.fake.UuidPersistentResourceRepository;
 import com.daeliin.components.core.fake.UuidPersistentResourceService;
 import com.daeliin.components.core.library.UuidPersistentResourceLibrary;
 import com.daeliin.components.core.sql.BUuidPersistentResource;
+import com.daeliin.components.core.sql.QUuidPersistentResource;
 import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
 import com.daeliin.components.domain.pagination.Sort;
 import com.google.common.collect.Sets;
+import com.querydsl.core.types.Predicate;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -30,7 +32,9 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 
 @ContextConfiguration(classes = Application.class)
 public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
@@ -70,7 +74,7 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
     }
 
     @Test
-    public void shouldCallRepositorySaveAndReturnsResources_whenCreatingResources() {
+    public void shouldCallRepositorySaveAndReturnResources_whenCreatingResources() {
         UuidPersistentResource newUuidEntity1 = new UuidPersistentResource(UUID.randomUUID().toString(), LocalDateTime.now(), "label101");
         UuidPersistentResource newUuidEntity2 = new UuidPersistentResource(UUID.randomUUID().toString(), LocalDateTime.now(), "label102");
 
@@ -118,7 +122,9 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
 
     @Test(expected = PersistentResourceNotFoundException.class)
     public void shouldThrowPersistentResourceNotFoundException_whenIdIsNull() {
-        service.findOne(null);
+        String nullId = null;
+
+        service.findOne(nullId);
     }
 
     @Test
@@ -136,7 +142,7 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
     }
 
     @Test
-    public void shouldCallRepositoryFindOneAndReturnsResource_whenFindingResource() {
+    public void shouldCallRepositoryFindOneAndReturnResource_whenFindingResource() {
         UuidPersistentResource existingUuidEntity = UuidPersistentResourceLibrary.uuidPersistentResource1();
 
         doReturn(conversion.map(existingUuidEntity)).when(repositoryMock).findOne(existingUuidEntity.id());
@@ -148,7 +154,20 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
     }
 
     @Test
-    public void shouldCallRepositoryFindAllAndReturnsAllResources_whenFindingAllResources() {
+    public void shouldCallRepositoryFindOneWithPredicateAndReturnResource_whenFindingResourceWithPredicate() {
+        Predicate predicate = QUuidPersistentResource.uuidPersistentResource.uuid.eq(UuidPersistentResourceLibrary.uuidPersistentResource1().id());
+        UuidPersistentResource existingUuidEntity = UuidPersistentResourceLibrary.uuidPersistentResource1();
+
+        doReturn(conversion.map(existingUuidEntity)).when(repositoryMock).findOne(predicate);
+
+        UuidPersistentResource foundUuidEntity = service.findOne(predicate);
+    
+        verify(repositoryMock).findOne(predicate);
+        assertThat(foundUuidEntity).isEqualTo(existingUuidEntity);
+    }
+
+    @Test
+    public void shouldCallRepositoryFindAllAndReturnAllResources_whenFindingAllResources() {
         Collection<UuidPersistentResource> allUuidEntities = Arrays.asList(
                 UuidPersistentResourceLibrary.uuidPersistentResource1(),
                 UuidPersistentResourceLibrary.uuidPersistentResource2(),
@@ -163,6 +182,26 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
         assertThat(foundUuidEntities).containsAll(allUuidEntities);
     }
 
+    @Test
+    public void shouldCallRepositoryFindAllWithPredicateAndReturnResources_whenFindingResourcesWithPredicate() {
+        Predicate predicate =
+                QUuidPersistentResource.uuidPersistentResource.uuid.eq(UuidPersistentResourceLibrary.uuidPersistentResource1().id())
+                .or(QUuidPersistentResource.uuidPersistentResource.uuid.eq(UuidPersistentResourceLibrary.uuidPersistentResource2().id()));
+
+        Collection<UuidPersistentResource> existingUuidEntities = Arrays.asList(
+                UuidPersistentResourceLibrary.uuidPersistentResource1(),
+                UuidPersistentResourceLibrary.uuidPersistentResource2());
+
+        doReturn(conversion.map(existingUuidEntities)).when(repositoryMock).findAll(predicate);
+
+        Collection<UuidPersistentResource> foundUuidEntities = service.findAll(predicate);
+
+        verify(repositoryMock).findAll(predicate);
+        assertThat(foundUuidEntities).containsOnly(
+                UuidPersistentResourceLibrary.uuidPersistentResource1(),
+                UuidPersistentResourceLibrary.uuidPersistentResource2());
+    }
+    
     @Test
     public void shouldCallRepositoryFindAllWithPageRequest_whenFindingAllResoucesWithPageRequest() {
         PageRequest pageRequest = new PageRequest(1, 10, Sets.newLinkedHashSet(Arrays.asList(new Sort("uuid", Sort.Direction.ASC))));
