@@ -135,6 +135,19 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
     }
 
     /**
+     * Finds a page of resources according to a predicate.
+     * @param predicate the predicate
+     * @param pageRequest resource page request
+     * @return resource page
+     */
+    @Override
+    public Page<T> findAll(Predicate predicate, PageRequest pageRequest) {
+        Page<R> rowPage = repository.findAll(predicate, pageRequest);
+
+        return new Page<>(conversion.instantiate(rowPage.items), rowPage.totalItems, rowPage.totalPages);
+    }
+
+    /**
      * Finds multiple resources by their ids.
      * @param resourcesIds resources ids
      * @return resources

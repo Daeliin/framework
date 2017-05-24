@@ -216,6 +216,20 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
     }
 
     @Test
+    public void shouldCallRepositoryFindAllWithPredicateAndPageRequest_whenFindingAllResoucesWithPredicateAndPageRequest() {
+        PageRequest pageRequest = new PageRequest(1, 10, Sets.newLinkedHashSet(Arrays.asList(new Sort("uuid", Sort.Direction.ASC))));
+        Predicate predicate = QUuidPersistentResource.uuidPersistentResource.uuid.isNotNull();
+
+        Page<BUuidPersistentResource> pageFake =
+                new Page<>(Arrays.asList(conversion.map(UuidPersistentResourceLibrary.uuidPersistentResource1())), 1, 1);
+
+        doReturn(pageFake).when(repositoryMock).findAll(predicate, pageRequest);
+
+        service.findAll(predicate, pageRequest);
+        verify(repositoryMock).findAll(predicate, pageRequest);
+    }
+
+    @Test
     public void shouldCallRepositoryFindAllWithResourceIds_whenFindingResources() {
         Collection<String> uuidEntityIds = Arrays.asList(
                 UuidPersistentResourceLibrary.uuidPersistentResource1().id(),
