@@ -32,9 +32,9 @@ public final class ArticleConversion {
         return new BArticle(
                 authorId,
                 article.content,
-                Timestamp.valueOf(article.creationDate()),
+                Timestamp.valueOf(article.getCreationDate()),
                 article.description,
-                article.id(),
+                article.getId(),
                 article.publicationDate != null ? Timestamp.valueOf(article.publicationDate) : null,
                 article.published,
                 article.title,

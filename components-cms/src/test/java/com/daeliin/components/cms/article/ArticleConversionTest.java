@@ -14,12 +14,12 @@ public final class ArticleConversionTest {
 
     @Test
     public void shouldMapToNull_whenNull() {
-        assertThat(articleConversion.map(null, AccountLibrary.admin().id())).isNull();
+        assertThat(articleConversion.map(null, AccountLibrary.admin().getId())).isNull();
     }
 
     @Test
     public void shouldMapArticle() {
-        BArticle mappedArticle = articleConversion.map(ArticleLibrary.publishedArticle(),  AccountLibrary.admin().id());
+        BArticle mappedArticle = articleConversion.map(ArticleLibrary.publishedArticle(),  AccountLibrary.admin().getId());
 
         assertThat(mappedArticle).isEqualToComparingFieldByField(ArticleFixtures.publishedArticle());
     }

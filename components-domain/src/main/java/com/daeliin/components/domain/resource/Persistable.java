@@ -12,11 +12,11 @@ public interface Persistable<ID> {
      * Returns the resource id.
      * @return the resource id
      */
-    ID id();
+    ID getId();
 
     /**
      * Returns the resource creation date.
      * @return the resource creation date
      */
-    LocalDateTime creationDate();
+    LocalDateTime getCreationDate();
 }

@@ -29,7 +29,7 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
 
     @Test
     public void shouldFindNewsOfAnArticle_orderedByCreationDateAsc() {
-        Collection<News> newsOfArticle = newsService.findForArticle(ArticleLibrary.notPublishedArticle().id());
+        Collection<News> newsOfArticle = newsService.findForArticle(ArticleLibrary.notPublishedArticle().getId());
 
         assertThat(newsOfArticle).containsExactly(NewsLibrary.newsWithSource(), NewsLibrary.newsWithoutSource());
     }
@@ -45,23 +45,23 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
     public void shouldThrowPersistentResourceNotFoundException_whenCreatingNewsOfUnexistingAuthor() {
         News news = new News("NEWSID", LocalDateTime.now(), "ZADAZD", "Content", null);
 
-        newsService.create(ArticleLibrary.notPublishedArticle().id(), news);
+        newsService.create(ArticleLibrary.notPublishedArticle().getId(), news);
     }
 
     @Test(expected = IllegalStateException.class)
     public void shouldThrowIllegalStateException_whenCreatingNewsOnPublishedArticle() {
         News news = new News("NEWSID", LocalDateTime.now(), AccountLibrary.admin().username, "Content", null);
 
-        newsService.create(ArticleLibrary.publishedArticle().id(), news);
+        newsService.create(ArticleLibrary.publishedArticle().getId(), news);
     }
 
     @Test
     public void shouldCreateANews() {
         News news = new News("", LocalDateTime.now(), AccountLibrary.admin().username, "Content", null);
 
-        News createdNews = newsService.create(ArticleLibrary.notPublishedArticle().id(), news);
+        News createdNews = newsService.create(ArticleLibrary.notPublishedArticle().getId(), news);
 
-        assertThat(createdNews.id()).isNotBlank();
+        assertThat(createdNews.getId()).isNotBlank();
         assertThat(createdNews.author).isEqualTo(news.author);
         assertThat(createdNews.content).isEqualTo(news.content);
         assertThat(createdNews.source).isEqualTo(news.source);
@@ -77,12 +77,12 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
         News newsToUpdate = NewsLibrary.newsWithSource();
         News news = new News(" ", LocalDateTime.now(), "", "newContent", "http://newsource.com");
 
-        News updatedNews = newsService.update(newsToUpdate.id(), news);
+        News updatedNews = newsService.update(newsToUpdate.getId(), news);
 
         assertThat(updatedNews.content).isEqualTo(news.content);
         assertThat(updatedNews.source).isEqualTo(news.source);
-        assertThat(updatedNews.id()).isEqualTo(newsToUpdate.id());
-        assertThat(updatedNews.creationDate()).isEqualTo(newsToUpdate.creationDate());
+        assertThat(updatedNews.getId()).isEqualTo(newsToUpdate.getId());
+        assertThat(updatedNews.getCreationDate()).isEqualTo(newsToUpdate.getCreationDate());
         assertThat(updatedNews.author).isEqualTo(newsToUpdate.author);
     }
 }

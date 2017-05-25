@@ -38,7 +38,7 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
      */
     @Override
     public T create(T resource) {
-        if (repository.exists(resource.id())) {
+        if (repository.exists(resource.getId())) {
             throw new PersistentResourceAlreadyExistsException("Resource should not already exist when creating it");
         }
 
@@ -165,7 +165,7 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
      */
     @Override
     public T update(T resource) {
-        if (resource == null || !repository.exists(resource.id())) {
+        if (resource == null || !repository.exists(resource.getId())) {
             throw new PersistentResourceNotFoundException(MESSAGE_RESOURCE_NOT_FOUND);
         }
 
@@ -220,7 +220,7 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
             return false;
         }
 
-        return repository.delete(resource.id());
+        return repository.delete(resource.getId());
     }
 
     /**

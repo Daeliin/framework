@@ -26,8 +26,8 @@ public final class EventLogConversion implements Conversion<EventLog, BEventLog>
         }
 
         return new BEventLog(
-                Timestamp.valueOf(eventLog.creationDate()),
+                Timestamp.valueOf(eventLog.getCreationDate()),
                 eventLog.description,
-                eventLog.id());
+                eventLog.getId());
     }
 }

@@ -50,7 +50,7 @@ public class NewsService {
 
         News newsToCreate = new News(UUID.randomUUID().toString(), LocalDateTime.now(), news.author, news.content, news.source);
 
-        return instantiate(repository.save(map(newsToCreate, articleId, author.id())), author.username);
+        return instantiate(repository.save(map(newsToCreate, articleId, author.getId())), author.username);
     }
 
     public News update(String newsId, News news) {
@@ -88,7 +88,7 @@ public class NewsService {
         Map<String, Account> accountByIds = new HashMap<>();
         Set<String> authorIds = bNewsCollection.stream().map(BNews::getAuthorId).collect(toSet());
 
-        accountService.findAll(authorIds).forEach(account -> accountByIds.put(account.id(), account));
+        accountService.findAll(authorIds).forEach(account -> accountByIds.put(account.getId(), account));
 
         return bNewsCollection
                 .stream()

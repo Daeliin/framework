@@ -23,7 +23,7 @@ public final class EventLog extends PersistentResource<String> implements Compar
             return 0;
         }
 
-        return this.creationDate().compareTo(other.creationDate());
+        return this.getCreationDate().compareTo(other.getCreationDate());
     }
 
     @Override

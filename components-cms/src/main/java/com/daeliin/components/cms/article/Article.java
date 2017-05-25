@@ -42,6 +42,6 @@ public class Article extends PersistentResource<String> implements Comparable<Ar
             return 0;
         }
 
-        return this.creationDate().compareTo(other.creationDate());
+        return this.getCreationDate().compareTo(other.getCreationDate());
     }
 }

@@ -59,7 +59,7 @@ public class MembershipServiceTest extends AbstractTransactionalJUnit4SpringCont
     public void shouldThrowException_whenTokenDoesntMatchWhenActivatingAccount() throws Exception {
         Account account = AccountLibrary.inactive();
 
-        membershipService.activate(account.id(), "wrongToken");
+        membershipService.activate(account.getId(), "wrongToken");
     }
 
     @Test(expected = PersistentResourceNotFoundException.class)
@@ -75,7 +75,7 @@ public class MembershipServiceTest extends AbstractTransactionalJUnit4SpringCont
     @Test(expected = InvalidTokenException.class)
     public void shouldThrowException_whenTokenDoesntMatchWhenResetingPassword() throws Exception {
         Account account = AccountLibrary.admin();
-        membershipService.resetPassword(account.id(), "wrongToken", "newPassword");
+        membershipService.resetPassword(account.getId(), "wrongToken", "newPassword");
     }
 
     private int countAccountRows() {

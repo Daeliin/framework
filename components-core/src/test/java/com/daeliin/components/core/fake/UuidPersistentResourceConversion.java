@@ -26,8 +26,8 @@ public final class UuidPersistentResourceConversion implements Conversion<UuidPe
         }
 
         return new BUuidPersistentResource(
-                Timestamp.valueOf(uuidEntity.creationDate()),
+                Timestamp.valueOf(uuidEntity.getCreationDate()),
                 uuidEntity.label,
-                uuidEntity.id());
+                uuidEntity.getId());
     }
 }

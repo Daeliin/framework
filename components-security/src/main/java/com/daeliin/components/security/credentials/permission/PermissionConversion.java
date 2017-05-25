@@ -26,8 +26,8 @@ public final class PermissionConversion implements Conversion<Permission, BPermi
         }
 
         return new BPermission(
-                Timestamp.valueOf(permission.creationDate()),
-                permission.id(),
+                Timestamp.valueOf(permission.getCreationDate()),
+                permission.getId(),
                 permission.name);
     }
 }

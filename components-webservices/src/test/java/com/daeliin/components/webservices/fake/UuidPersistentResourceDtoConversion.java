@@ -14,8 +14,8 @@ public final class UuidPersistentResourceDtoConversion implements ResourceDtoCon
         }
 
         return new UuidPersistentResourceDto(
-                uuidEntity.id(),
-                uuidEntity.creationDate(),
+                uuidEntity.getId(),
+                uuidEntity.getCreationDate(),
                 uuidEntity.label);
     }
 

@@ -4,7 +4,6 @@ import com.daeliin.components.core.resource.repository.ResourceRepository;
 import com.daeliin.components.security.Application;
 import com.daeliin.components.security.fixtures.PermissionFixtures;
 import com.daeliin.components.security.library.AccountLibrary;
-import com.daeliin.components.security.library.PermissionLibrary;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
@@ -31,12 +30,12 @@ public class AccountRepositoryTest extends AbstractTransactionalJUnit4SpringCont
 
     @Test
     public void shouldReturnEmptyCollection_whenAccountHasNoPermission() {
-        assertThat(accountRepository.findPermissions(AccountLibrary.inactive().id())).isEmpty();
+        assertThat(accountRepository.findPermissions(AccountLibrary.inactive().getId())).isEmpty();
     }
 
     @Test
     public void shouldFindPermissionsOfAccount() {
-        assertThat(accountRepository.findPermissions(AccountLibrary.admin().id()))
+        assertThat(accountRepository.findPermissions(AccountLibrary.admin().getId()))
                 .usingFieldByFieldElementComparator()
                 .containsOnly(PermissionFixtures.admin());
     }

@@ -15,12 +15,12 @@ public final class NewsConversionTest {
 
     @Test
     public void shouldMapToNull_whenNull() {
-        assertThat(newsConversion.map(null, ArticleLibrary.notPublishedArticle().id(), AccountLibrary.admin().id())).isNull();
+        assertThat(newsConversion.map(null, ArticleLibrary.notPublishedArticle().getId(), AccountLibrary.admin().getId())).isNull();
     }
 
     @Test
     public void shouldMapNews() {
-        BNews mappedNews = newsConversion.map(NewsLibrary.newsWithSource(), ArticleLibrary.notPublishedArticle().id(), AccountLibrary.admin().id());
+        BNews mappedNews = newsConversion.map(NewsLibrary.newsWithSource(), ArticleLibrary.notPublishedArticle().getId(), AccountLibrary.admin().getId());
 
         assertThat(mappedNews).isEqualToComparingFieldByField(NewsFixtures.newsWithSource());
     }

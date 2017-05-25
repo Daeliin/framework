@@ -29,10 +29,10 @@ public final class AccountConversion implements Conversion<Account, BAccount> {
         }
 
         return new BAccount(
-            Timestamp.valueOf(account.creationDate()),
+            Timestamp.valueOf(account.getCreationDate()),
             account.email,
             account.enabled,
-            account.id(),
+            account.getId(),
             account.password,
             account.token,
             account.username);

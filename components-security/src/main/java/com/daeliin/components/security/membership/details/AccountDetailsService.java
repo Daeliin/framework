@@ -63,8 +63,8 @@ public class AccountDetailsService implements UserDetailsService {
         AccountEncryption accountEncryption = new AccountEncryption(account.username, "");
 
         Account accountWithNewToken = new Account(
-                account.id(),
-                account.creationDate(),
+                account.getId(),
+                account.getCreationDate(),
                 account.username,
                 account.email,
                 true,
@@ -82,8 +82,8 @@ public class AccountDetailsService implements UserDetailsService {
         AccountEncryption accountEncryption = new AccountEncryption(account.username, newPassword);
 
         Account accountWithNewToken = new Account(
-                account.id(),
-                account.creationDate(),
+                account.getId(),
+                account.getCreationDate(),
                 account.username,
                 account.email,
                 true,

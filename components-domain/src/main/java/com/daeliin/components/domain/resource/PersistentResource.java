@@ -22,11 +22,11 @@ public abstract class PersistentResource<ID> implements Persistable<ID> {
         this.creationDate = creationDate != null ? creationDate : DEFAULT_CREATION_DATE;
     }
 
-    public ID id() {
+    public ID getId() {
         return id;
     }
 
-    public LocalDateTime creationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 

@@ -48,7 +48,7 @@ public class ArticleService  {
                 null,
                 false);
 
-        return instantiate(repository.save(map(articleToCreate, author.id())), author.username);
+        return instantiate(repository.save(map(articleToCreate, author.getId())), author.username);
     }
 
     public Article update(String articleId, Article article) {
@@ -103,7 +103,7 @@ public class ArticleService  {
         Map<String, Account> accountByIds = new HashMap<>();
         Set<String> authorIds = bArticles.stream().map(BArticle::getAuthorId).collect(toSet());
 
-        accountService.findAll(authorIds).forEach(account -> accountByIds.put(account.id(), account));
+        accountService.findAll(authorIds).forEach(account -> accountByIds.put(account.getId(), account));
 
         return bArticles
                 .stream()

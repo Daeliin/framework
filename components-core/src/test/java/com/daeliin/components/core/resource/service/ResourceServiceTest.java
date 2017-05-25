@@ -56,7 +56,7 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
     public void shouldThrowResourceAlreadyExistsException_whenCreatingResourceWithAlreadyExistingId() {
         UuidPersistentResource alreadyExistingUuidPersistentResource = UuidPersistentResourceLibrary.uuidPersistentResource1();
 
-        doReturn(true).when(repositoryMock).exists(alreadyExistingUuidPersistentResource.id());
+        doReturn(true).when(repositoryMock).exists(alreadyExistingUuidPersistentResource.getId());
 
         service.create(UuidPersistentResourceLibrary.uuidPersistentResource1());
     }
@@ -96,7 +96,7 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
 
     @Test
     public void shouldCallRepositoryExistAndReturnTrue_whenResourceIdExists() {
-        String existingUuidEntityId = UuidPersistentResourceLibrary.uuidPersistentResource1().id();
+        String existingUuidEntityId = UuidPersistentResourceLibrary.uuidPersistentResource1().getId();
 
         doReturn(true).when(repositoryMock).exists(existingUuidEntityId);
 
@@ -145,17 +145,17 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
     public void shouldCallRepositoryFindOneAndReturnResource_whenFindingResource() {
         UuidPersistentResource existingUuidEntity = UuidPersistentResourceLibrary.uuidPersistentResource1();
 
-        doReturn(conversion.map(existingUuidEntity)).when(repositoryMock).findOne(existingUuidEntity.id());
+        doReturn(conversion.map(existingUuidEntity)).when(repositoryMock).findOne(existingUuidEntity.getId());
 
-        UuidPersistentResource foundUuidEntity = service.findOne(existingUuidEntity.id());
+        UuidPersistentResource foundUuidEntity = service.findOne(existingUuidEntity.getId());
 
-        verify(repositoryMock).findOne(existingUuidEntity.id());
+        verify(repositoryMock).findOne(existingUuidEntity.getId());
         assertThat(foundUuidEntity).isEqualTo(existingUuidEntity);
     }
 
     @Test
     public void shouldCallRepositoryFindOneWithPredicateAndReturnResource_whenFindingResourceWithPredicate() {
-        Predicate predicate = QUuidPersistentResource.uuidPersistentResource.uuid.eq(UuidPersistentResourceLibrary.uuidPersistentResource1().id());
+        Predicate predicate = QUuidPersistentResource.uuidPersistentResource.uuid.eq(UuidPersistentResourceLibrary.uuidPersistentResource1().getId());
         UuidPersistentResource existingUuidEntity = UuidPersistentResourceLibrary.uuidPersistentResource1();
 
         doReturn(conversion.map(existingUuidEntity)).when(repositoryMock).findOne(predicate);
@@ -185,8 +185,8 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
     @Test
     public void shouldCallRepositoryFindAllWithPredicateAndReturnResources_whenFindingResourcesWithPredicate() {
         Predicate predicate =
-                QUuidPersistentResource.uuidPersistentResource.uuid.eq(UuidPersistentResourceLibrary.uuidPersistentResource1().id())
-                .or(QUuidPersistentResource.uuidPersistentResource.uuid.eq(UuidPersistentResourceLibrary.uuidPersistentResource2().id()));
+                QUuidPersistentResource.uuidPersistentResource.uuid.eq(UuidPersistentResourceLibrary.uuidPersistentResource1().getId())
+                .or(QUuidPersistentResource.uuidPersistentResource.uuid.eq(UuidPersistentResourceLibrary.uuidPersistentResource2().getId()));
 
         Collection<UuidPersistentResource> existingUuidEntities = Arrays.asList(
                 UuidPersistentResourceLibrary.uuidPersistentResource1(),
@@ -232,8 +232,8 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
     @Test
     public void shouldCallRepositoryFindAllWithResourceIds_whenFindingResources() {
         Collection<String> uuidEntityIds = Arrays.asList(
-                UuidPersistentResourceLibrary.uuidPersistentResource1().id(),
-                UuidPersistentResourceLibrary.uuidPersistentResource2().id());
+                UuidPersistentResourceLibrary.uuidPersistentResource1().getId(),
+                UuidPersistentResourceLibrary.uuidPersistentResource2().getId());
 
         service.findAll(uuidEntityIds);
         verify(repositoryMock).findAll(uuidEntityIds);
@@ -257,7 +257,7 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
     public void shouldCallRepositorySaveWithResourceAndReturnResource_whenUpdatingResource() {
         UuidPersistentResource exitingUuidEntity = UuidPersistentResourceLibrary.uuidPersistentResource1();
 
-        doReturn(true).when(repositoryMock).exists(exitingUuidEntity.id());
+        doReturn(true).when(repositoryMock).exists(exitingUuidEntity.getId());
         doReturn(conversion.map(exitingUuidEntity)).when(repositoryMock).save(any(BUuidPersistentResource.class));
 
         UuidPersistentResource updatedUuidEntity = service.update(exitingUuidEntity);
@@ -282,8 +282,8 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
 
     @Test
     public void shouldCallRepositoryDelete_whenDeletingResource() {
-        service.delete(UuidPersistentResourceLibrary.uuidPersistentResource1().id());
-        verify(repositoryMock).delete(UuidPersistentResourceLibrary.uuidPersistentResource1().id());
+        service.delete(UuidPersistentResourceLibrary.uuidPersistentResource1().getId());
+        verify(repositoryMock).delete(UuidPersistentResourceLibrary.uuidPersistentResource1().getId());
     }
 
     @Test
@@ -297,9 +297,9 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
         UuidPersistentResource uuidEntity1 = UuidPersistentResourceLibrary.uuidPersistentResource1();
         UuidPersistentResource uuidEntity2 = UuidPersistentResourceLibrary.uuidPersistentResource2();
 
-        service.delete(Arrays.asList(uuidEntity1.id(), uuidEntity2.id()));
+        service.delete(Arrays.asList(uuidEntity1.getId(), uuidEntity2.getId()));
 
-        verify(repositoryMock).delete(Arrays.asList(uuidEntity1.id(), uuidEntity2.id()));
+        verify(repositoryMock).delete(Arrays.asList(uuidEntity1.getId(), uuidEntity2.getId()));
     }
 
     @Test
@@ -307,14 +307,14 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
         UuidPersistentResource uuidEntity = UuidPersistentResourceLibrary.uuidPersistentResource1();
 
         service.delete(uuidEntity);
-        verify(repositoryMock).delete(uuidEntity.id());
+        verify(repositoryMock).delete(uuidEntity.getId());
     }
 
     @Test
     public void shouldCallRepositoryDeleteWithResources_whenDeletingResources() {
         Collection<String> uuidEntityIds = Arrays.asList(
-                UuidPersistentResourceLibrary.uuidPersistentResource1().id(),
-                UuidPersistentResourceLibrary.uuidPersistentResource2().id());
+                UuidPersistentResourceLibrary.uuidPersistentResource1().getId(),
+                UuidPersistentResourceLibrary.uuidPersistentResource2().getId());
 
         service.delete(uuidEntityIds);
         verify(repositoryMock).delete(uuidEntityIds);

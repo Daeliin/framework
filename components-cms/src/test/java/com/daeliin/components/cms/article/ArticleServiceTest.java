@@ -22,7 +22,7 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
     @Test
     public void shouldFindArticle() {
         Article article = ArticleLibrary.publishedArticle();
-        Article foundArticle = articleService.findOne(article.id());
+        Article foundArticle = articleService.findOne(article.getId());
 
         assertThat(foundArticle).isEqualTo(foundArticle);
     }
@@ -34,7 +34,7 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
 
     @Test
     public void shouldCheckThatArticleExists() {
-        assertThat(articleService.exists(ArticleLibrary.publishedArticle().id())).isTrue();
+        assertThat(articleService.exists(ArticleLibrary.publishedArticle().getId())).isTrue();
     }
 
     @Test(expected = PersistentResourceNotFoundException.class)
@@ -68,7 +68,7 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
 
         Article createdArticle = articleService.create(article);
 
-        assertThat(createdArticle.id()).isNotBlank();
+        assertThat(createdArticle.getId()).isNotBlank();
         assertThat(createdArticle.title).isEqualTo(article.title);
         assertThat(createdArticle.urlFriendlyTitle).isEqualTo(new UrlFriendlyString(article.title).value);
         assertThat(createdArticle.description).isEqualTo(article.description);
@@ -88,14 +88,14 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
         Article articleToUpdate = ArticleLibrary.notPublishedArticle();
         Article article = new Article("", LocalDateTime.now(), "", "New title", "", "New desc", "New content", null, false);
 
-        Article updatedArtice = articleService.update(articleToUpdate.id(), article);
+        Article updatedArtice = articleService.update(articleToUpdate.getId(), article);
 
         assertThat(updatedArtice.title).isEqualTo(article.title);
         assertThat(updatedArtice.urlFriendlyTitle).isEqualTo(new UrlFriendlyString(article.title).value);
         assertThat(updatedArtice.description).isEqualTo(article.description);
         assertThat(updatedArtice.content).isEqualTo(article.content);
-        assertThat(updatedArtice.id()).isEqualTo(articleToUpdate.id());
-        assertThat(updatedArtice.creationDate()).isEqualTo(articleToUpdate.creationDate());
+        assertThat(updatedArtice.getId()).isEqualTo(articleToUpdate.getId());
+        assertThat(updatedArtice.getCreationDate()).isEqualTo(articleToUpdate.getCreationDate());
         assertThat(updatedArtice.author).isEqualTo(articleToUpdate.author);
     }
 }

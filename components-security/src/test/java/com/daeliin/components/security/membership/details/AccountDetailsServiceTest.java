@@ -35,8 +35,8 @@ public class AccountDetailsServiceTest extends AbstractTransactionalJUnit4Spring
 
         Account signedUpAccount = accountDetailsService.signUp(signUpRequest);
 
-        assertThat(signedUpAccount.id()).isNotNull();
-        assertThat(signedUpAccount.creationDate()).isNotNull();
+        assertThat(signedUpAccount.getId()).isNotNull();
+        assertThat(signedUpAccount.getCreationDate()).isNotNull();
         assertThat(signedUpAccount.username).isEqualTo(signUpRequest.username);
         assertThat(signedUpAccount.email).isEqualTo(signUpRequest.email);
         assertThat(signedUpAccount.password).isNotNull();
@@ -110,7 +110,7 @@ public class AccountDetailsServiceTest extends AbstractTransactionalJUnit4Spring
         } catch (InvalidTokenException e) {
         }
 
-        Account accountAfterResetPasswordTry = accountService.findOne(account.id());
+        Account accountAfterResetPasswordTry = accountService.findOne(account.getId());
 
         assertThat(accountAfterResetPasswordTry.password).isEqualTo(account.password);
     }

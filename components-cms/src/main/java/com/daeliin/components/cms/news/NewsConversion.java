@@ -28,8 +28,8 @@ public final class NewsConversion {
                 articleId,
                 authorId,
                 news.content,
-                Timestamp.valueOf(news.creationDate()),
-                news.id(),
+                Timestamp.valueOf(news.getCreationDate()),
+                news.getId(),
                 news.source);
     }
 }
