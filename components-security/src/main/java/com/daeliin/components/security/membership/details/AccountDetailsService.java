@@ -1,5 +1,6 @@
 package com.daeliin.components.security.membership.details;
 
+import com.daeliin.components.domain.utils.Id;
 import com.daeliin.components.security.credentials.account.Account;
 import com.daeliin.components.security.credentials.account.AccountService;
 import com.daeliin.components.security.credentials.permission.Permission;
@@ -14,7 +15,9 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -46,7 +49,7 @@ public class AccountDetailsService implements UserDetailsService {
         AccountEncryption accountEncryption = new AccountEncryption(signUpRequest.username, signUpRequest.clearPassword);
 
         return accountService.create(new Account(
-                UUID.randomUUID().toString(),
+                new Id().value,
                 LocalDateTime.now(),
                 signUpRequest.username,
                 signUpRequest.email,

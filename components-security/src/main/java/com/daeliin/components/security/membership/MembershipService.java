@@ -3,6 +3,7 @@ package com.daeliin.components.security.membership;
 import com.daeliin.components.core.event.EventLog;
 import com.daeliin.components.core.event.EventLogService;
 import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
+import com.daeliin.components.domain.utils.Id;
 import com.daeliin.components.security.credentials.account.Account;
 import com.daeliin.components.security.credentials.account.AccountService;
 import com.daeliin.components.security.exception.AccountAlreadyExistException;
@@ -15,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -46,7 +46,7 @@ public class MembershipService {
         }
 
         Account account = accountDetailsService.signUp(signUpRequest);
-        eventLogService.create(new EventLog(UUID.randomUUID().toString(), LocalDateTime.now(), "daeliin.membership.signup.event"));
+        eventLogService.create(new EventLog(new Id().value, LocalDateTime.now(), "daeliin.membership.signup.event"));
         membershipNotifications.signUp(account);
 
         log.info(String.format("%s signed up", account));
@@ -62,7 +62,7 @@ public class MembershipService {
 
         try {
             account = accountDetailsService.activate(account, activationToken);
-            eventLogService.create(new EventLog(UUID.randomUUID().toString(), LocalDateTime.now(), "daeliin.membership.activate.event"));
+            eventLogService.create(new EventLog(new Id().value, LocalDateTime.now(), "daeliin.membership.activate.event"));
             membershipNotifications.activate(account);
             log.info(String.format("%s activated", account));
         } catch(InvalidTokenException e) {
@@ -77,7 +77,7 @@ public class MembershipService {
             throw new PersistentResourceNotFoundException(String.format("Account[%s] not found", accountId));
         }
 
-        eventLogService.create(new EventLog(UUID.randomUUID().toString(), LocalDateTime.now(), "daeliin.membership.newpassword.event"));
+        eventLogService.create(new EventLog(new Id().value, LocalDateTime.now(), "daeliin.membership.newpassword.event"));
         membershipNotifications.newPassword(accountService.findOne(accountId));
 
         log.info(String.format("%s requested a new password", accountId));
@@ -93,7 +93,7 @@ public class MembershipService {
 
         try {
             account = accountDetailsService.resetPassword(account, resetPasswordToken, newPassword);
-            eventLogService.create(new EventLog(UUID.randomUUID().toString(), LocalDateTime.now(), "daeliin.membership.resetpassword.event"));
+            eventLogService.create(new EventLog(new Id().value, LocalDateTime.now(), "daeliin.membership.resetpassword.event"));
             membershipNotifications.resetPassword(account);
             log.info(String.format("%s reseted its password", account));
         } catch (InvalidTokenException e) {
