@@ -129,11 +129,11 @@ public abstract class ResourceController<V, T extends Persistable<ID>, ID, S ext
     }
 
     /**
-     * Exposes a delete by id entry point, returns a 410 if the resource is found, a 404 otherwise.
+     * Exposes a delete by id entry point, returns a 204 if the resource is found, a 404 otherwise.
      * @param resourceId resource id to delete
      */
     @RequestMapping(value="{resourceId}", method = DELETE)
-    @ResponseStatus(HttpStatus.GONE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Override
     public void delete(@PathVariable ID resourceId) {
         boolean deleted = service.delete(resourceId);
@@ -144,14 +144,14 @@ public abstract class ResourceController<V, T extends Persistable<ID>, ID, S ext
     }
     
     /**
-     * Exposes a delete entry point for a list of ids, returns a 410,
+     * Exposes a delete entry point for a list of ids, returns a 204,
      * it's exposed as a POST and not a DELETE because if the list of ids is passed as a request parameters,
      * which is the only way of passing data for a DELETE request since it has no body,
      * the URL maximum size limits the number of ids we can pass.
      * @param resourceIds resource ids to delete
      */
     @RequestMapping(value="deleteSeveral", method = POST)
-    @ResponseStatus(HttpStatus.GONE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Override
     public void delete(@RequestBody Collection<ID> resourceIds) {
         service.delete(resourceIds);

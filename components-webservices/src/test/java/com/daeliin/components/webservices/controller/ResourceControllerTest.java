@@ -288,10 +288,10 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
     }
 
     @Test
-    public void shouldReturnHttpGone_whenDeletingAResource() throws Exception {
+    public void shouldReturnHttpNoContent_whenDeletingAResource() throws Exception {
         mockMvc
                 .perform(delete("/uuid/" + UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id))
-                .andExpect(status().isGone());
+                .andExpect(status().isNoContent());
     }
 
     @Test
@@ -310,14 +310,14 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
     }
 
     @Test
-    public void shouldReturnHttpGone_whenDeletingResources() throws Exception {
+    public void shouldReturnHttpNoContent_whenDeletingResources() throws Exception {
         mockMvc
             .perform(post("/uuid/deleteSeveral")
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(Arrays.asList(
                     UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
                     UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto2().id))))
-            .andExpect(status().isGone());
+            .andExpect(status().isNoContent());
     }
 
     @Test
