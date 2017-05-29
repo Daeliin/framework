@@ -34,8 +34,8 @@ public class AccountService extends ResourceService<Account, BAccount, String, A
         return account;
     }
 
-    public Collection<Permission> findPermissions(Account account) {
-        return repository.findPermissions(account.getId())
+    public Collection<Permission> findPermissions(String accountId) {
+        return repository.findPermissions(accountId)
                 .stream()
                 .map(permissionConversion::instantiate)
                 .collect(toCollection(TreeSet::new));
