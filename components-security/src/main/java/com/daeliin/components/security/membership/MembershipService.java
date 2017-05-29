@@ -40,7 +40,7 @@ public class MembershipService {
     }
 
     @Transactional
-    public void signUp(SignUpRequest signUpRequest) {
+    public Account signUp(SignUpRequest signUpRequest) {
         if (accountService.usernameExists(signUpRequest.username)) {
             throw new AccountAlreadyExistException("The username already exist");
         }
@@ -50,6 +50,8 @@ public class MembershipService {
         membershipNotifications.signUp(account);
 
         log.info(String.format("%s signed up", account));
+
+        return account;
     }
 
     @Transactional

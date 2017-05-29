@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 
 import javax.inject.Inject;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ContextConfiguration(classes = Application.class)
 public class MembershipServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
@@ -34,7 +34,7 @@ public class MembershipServiceTest extends AbstractTransactionalJUnit4SpringCont
     }
 
     @Test
-    public void signup_existingAccount_doesntCreateAccount() {
+    public void shouldNotCreateAccount_whenSigningUpExistingAccount() {
         Account existingAccount = AccountLibrary.admin();
         SignUpRequest signUpRequest = new SignUpRequest(existingAccount.username, existingAccount.email, "password");
 
@@ -47,7 +47,7 @@ public class MembershipServiceTest extends AbstractTransactionalJUnit4SpringCont
 
         int accountCountAfterSignUp = countAccountRows();
 
-        assertEquals(accountCountAfterSignUp, accountCountBeforeSignUp);
+        assertThat(accountCountAfterSignUp).isEqualTo(accountCountBeforeSignUp);
     }
 
     @Test(expected = PersistentResourceNotFoundException.class)
