@@ -2,13 +2,13 @@ package com.daeliin.components.core.country;
 
 import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
 import com.google.common.base.Strings;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Component
+@Service
 public final class CountryService {
 
     private final Map<String, Country> countryByCode;

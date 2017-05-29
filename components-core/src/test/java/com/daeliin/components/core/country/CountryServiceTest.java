@@ -24,9 +24,9 @@ public class CountryServiceTest extends AbstractTransactionalJUnit4SpringContext
 
     @Test(expected = PersistentResourceNotFoundException.class)
     public void shouldThrowException_whenFindingNullCountryCode() {
-        String nullContryCode = null;
+        String nullCountryCode = null;
 
-        countryService.findByCode(nullContryCode);
+        countryService.findByCode(nullCountryCode);
     }
 
     @Test
