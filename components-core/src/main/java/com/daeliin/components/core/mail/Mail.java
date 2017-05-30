@@ -1,9 +1,10 @@
 package com.daeliin.components.core.mail;
 
-import java.util.HashMap;
-import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Represents a mail.
@@ -24,8 +25,8 @@ public class Mail {
         final String templateName,
         final Map<String, String> parameters) throws MailBuildingException {
         
-        this.from = new EmailAddress(from).toString();
-        this.to = new EmailAddress(to).toString();
+        this.from = new EmailAddress(from).value;
+        this.to = new EmailAddress(to).value;
         this.subject = subject;
         buildTemplateName(templateName);
         buildParameters(parameters);

@@ -1,14 +1,13 @@
 package com.daeliin.components.core.mail;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import com.google.common.base.MoreObjects;
 import org.apache.commons.lang3.StringUtils;
 
-@ToString(of = {"toString"})
-@EqualsAndHashCode(of = {"toString"})
+import java.util.Objects;
+
 public class EmailAddress {
     
-    private final String toString;
+    public final String value;
     
     public EmailAddress(final String emailAddress) throws MailBuildingException {
         if (StringUtils.isBlank(emailAddress)) {
@@ -17,6 +16,26 @@ public class EmailAddress {
             throw new MailBuildingException("Email address format is not valid");
         }
         
-        this.toString = emailAddress;
+        this.value = emailAddress;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EmailAddress that = (EmailAddress) o;
+        return Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+            .add("value", value)
+            .toString();
     }
 }

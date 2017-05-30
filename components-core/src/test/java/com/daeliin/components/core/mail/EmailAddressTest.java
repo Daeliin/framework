@@ -1,37 +1,44 @@
 package com.daeliin.components.core.mail;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class EmailAddressTest {
 
     @Test(expected = MailBuildingException.class)
-    public void new_nullAddress_throwsMailBuildingException() throws Exception {
-        new EmailAddress(null);
+    public void shouldThrowException_whenNullAddress() throws Exception {
+        String nullAddress = null;
+        new EmailAddress(nullAddress);
     }
     
     @Test(expected = MailBuildingException.class)
-    public void new_blankAddress_throwsMailBuildingException() throws Exception {
+    public void shouldThrowException_whenBlankkAddress() throws Exception {
         new EmailAddress(" ");
     }
     
     @Test(expected = MailBuildingException.class)
-    public void new_invalidAddress_throwsMailBuildingException() throws Exception {
+    public void shouldThrowException_whenInvalidAddress() throws Exception {
         new EmailAddress("a@");
     }
     
     @Test
-    public void new_validAddress_doesntThrowAnyException() throws Exception {
-        try {
-            new EmailAddress("john.doe@example.com");
-        } catch(Exception e) {
-            fail();
-        }
-    }
-    
-    @Test
     public void toString_containsAddress() throws Exception {
-        assertTrue(new EmailAddress("john.doe@example.com").toString().contains("john.doe@example.com"));
+        assertThat(new EmailAddress("john.doe@example.com").value).contains("john.doe@example.com");
+    }
+
+    @Test
+    public void shouldBeEqual_whenAddressesAreEqual() throws Exception {
+        EmailAddress johnDoe = new EmailAddress("john.doe@example.com");
+        EmailAddress johnDoeAsWell = new EmailAddress("john.doe@example.com");
+
+        assertThat(johnDoe).isEqualTo(johnDoeAsWell);
+    }
+
+    @Test
+    public void shouldPrintItsAdress() throws Exception {
+        EmailAddress johnDoe = new EmailAddress("john.doe@example.com");
+
+        assertThat(johnDoe.toString()).contains(johnDoe.value);
     }
 }
