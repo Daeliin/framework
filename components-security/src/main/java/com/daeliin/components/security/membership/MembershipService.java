@@ -46,7 +46,7 @@ public class MembershipService {
         }
 
         Account account = accountDetailsService.signUp(signUpRequest);
-        eventLogService.create(new EventLog(new Id().value, LocalDateTime.now(), "daeliin.membership.signup.event"));
+        eventLogService.create(new EventLog(new Id().value, LocalDateTime.now(), String.format("%s signed up", account.username)));
         membershipNotifications.signUp(account);
 
         log.info(String.format("%s signed up", account));
@@ -64,7 +64,7 @@ public class MembershipService {
 
         try {
             account = accountDetailsService.activate(account, activationToken);
-            eventLogService.create(new EventLog(new Id().value, LocalDateTime.now(), "daeliin.membership.activate.event"));
+            eventLogService.create(new EventLog(new Id().value, LocalDateTime.now(), String.format("%s activated its account", account.username)));
             membershipNotifications.activate(account);
             log.info(String.format("%s activated", account));
         } catch(InvalidTokenException e) {
@@ -79,10 +79,11 @@ public class MembershipService {
             throw new PersistentResourceNotFoundException(String.format("Account[%s] not found", accountId));
         }
 
-        eventLogService.create(new EventLog(new Id().value, LocalDateTime.now(), "daeliin.membership.newpassword.event"));
+        Account account = accountService.findOne(accountId);
+        eventLogService.create(new EventLog(new Id().value, LocalDateTime.now(), String.format("%s requested a new password ", account.username)));
         membershipNotifications.newPassword(accountService.findOne(accountId));
 
-        log.info(String.format("%s requested a new password", accountId));
+        log.info(String.format("%s requested a new password", account));
     }
 
     @Transactional
@@ -95,7 +96,7 @@ public class MembershipService {
 
         try {
             account = accountDetailsService.resetPassword(account, resetPasswordToken, newPassword);
-            eventLogService.create(new EventLog(new Id().value, LocalDateTime.now(), "daeliin.membership.resetpassword.event"));
+            eventLogService.create(new EventLog(new Id().value, LocalDateTime.now(), String.format("%s reseted its password ", account.username)));
             membershipNotifications.resetPassword(account);
             log.info(String.format("%s reseted its password", account));
         } catch (InvalidTokenException e) {
