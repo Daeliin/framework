@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
  * Builds an valid url out of a String, by :
  * - deleting all non alphanumerical characters except '&'
  * - replacing whitespaces with a dash
- * - replacing & with a dash
+ * - replacing & with 'and'
  */
 public class UrlFriendlyString {
 
