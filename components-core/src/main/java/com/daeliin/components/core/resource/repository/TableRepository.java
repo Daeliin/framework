@@ -21,5 +21,7 @@ public interface TableRepository<R> extends Repository<R> {
 
     long count();
 
+    long count(Predicate predicate);
+
     boolean deleteAll();
 }

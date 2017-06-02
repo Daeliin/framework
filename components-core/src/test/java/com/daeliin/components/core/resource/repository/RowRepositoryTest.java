@@ -29,7 +29,27 @@ public class RowRepositoryTest extends AbstractTransactionalJUnit4SpringContextT
 
     @Test
     public void shouldCountResources() {
-        assertThat(repository.count()).isEqualTo(4);
+        assertThat(repository.count()).isEqualTo(countRows());
+    }
+
+    @Test
+    public void shouldCountAllResources_whenCountingWithNullPredicate() {
+        Predicate nullPredicate = null;
+        assertThat(repository.count(nullPredicate)).isEqualTo(countRows());
+    }
+
+    @Test
+    public void shouldReturnZero_whenCountingWithPredicateThatDoesntMachAnyResource() {
+        Predicate nullPredicate = QUuidPersistentResource.uuidPersistentResource.label.eq("Foo");
+        assertThat(repository.count(nullPredicate)).isEqualTo(0);
+    }
+
+    @Test
+    public void shouldCountResourcesWithPredicate() {
+        Predicate predicate = QUuidPersistentResource.uuidPersistentResource.label.eq(UuidPersistentResourceFixtures.uuidPersistentResource1().getLabel())
+                .or(QUuidPersistentResource.uuidPersistentResource.label.eq(UuidPersistentResourceFixtures.uuidPersistentResource2().getLabel()));
+
+        assertThat(repository.count(predicate)).isEqualTo(2);
     }
 
     @Test
@@ -42,7 +62,7 @@ public class RowRepositoryTest extends AbstractTransactionalJUnit4SpringContextT
     }
 
     @Test
-    public void shouldReturnEmptyCollection_whenPredicateDoesntMatchAnyRow() {
+    public void shouldReturnEmptyCollection_whenPredicateDoesntMatchAnyResource() {
         Predicate labelIsEqualToFoo = QUuidPersistentResource.uuidPersistentResource.label.eq("Foo");
 
         Collection<BUuidPersistentResource> foundUuidEntities = repository.findAll(labelIsEqualToFoo);
@@ -118,6 +138,9 @@ public class RowRepositoryTest extends AbstractTransactionalJUnit4SpringContextT
         assertThat(page.items).usingFieldByFieldElementComparator().containsOnly(
                 UuidPersistentResourceFixtures.uuidPersistentResource2(),
                 UuidPersistentResourceFixtures.uuidPersistentResource3());
+
+        assertThat(page.totalItems).isEqualTo(3);
+        assertThat(page.totalPages).isEqualTo(2);
     }
 
     @Test

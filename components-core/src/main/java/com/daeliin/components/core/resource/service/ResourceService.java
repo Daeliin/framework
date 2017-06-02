@@ -83,6 +83,16 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
     }
 
     /**
+     * Returns the total number of resources according to a predicate
+     * @param predicate the predicate
+     * @return total number of resources matching the predicate
+     */
+    @Override
+    public long count(Predicate predicate) {
+        return repository.count(predicate);
+    }
+
+    /**
      * Finds a resource by its id.
      * @param resourceId resource id
      * @return resource

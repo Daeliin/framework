@@ -120,6 +120,16 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
         verify(repositoryMock).count();
     }
 
+    @Test
+    public void shouldCallRepositoryCountWithPredicateAndReturnTheSameResult_whenCountingWithPredicate() {
+        Predicate predicate = QUuidPersistentResource.uuidPersistentResource.uuid.eq(UuidPersistentResourceLibrary.uuidPersistentResource1().getId());
+
+        doReturn(1L).when(repositoryMock).count(predicate);
+
+        assertThat(service.count(predicate)).isEqualTo(1L);
+        verify(repositoryMock).count(predicate);
+    }
+
     @Test(expected = PersistentResourceNotFoundException.class)
     public void shouldThrowPersistentResourceNotFoundException_whenIdIsNull() {
         String nullId = null;

@@ -105,6 +105,13 @@ public interface PagingService<T extends Persistable<ID>, ID> {
     long count();
 
     /**
+     * Returns the total number of resources according to a predicate
+     * @param predicate the predicate
+     * @return total number of resources matching the predicate
+     */
+    long count(Predicate predicate);
+
+    /**
      * Delete a resource by its id.
      * @param resourceId id of the resource to delete
      */

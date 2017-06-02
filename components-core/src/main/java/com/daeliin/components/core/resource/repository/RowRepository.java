@@ -44,7 +44,7 @@ public abstract class RowRepository<R> extends BaseRepository<R> implements Tabl
     @Transactional(readOnly = true)
     @Override
     public Page<R> findAll(Predicate predicate, PageRequest pageRequest) {
-        long totalItems = count();
+        long totalItems = count(predicate);
         long totalPages = rowOrder.computeTotalPages(totalItems, pageRequest.size);
         OrderSpecifier[] orders = rowOrder.computeOrders(pageRequest);
 
@@ -75,6 +75,19 @@ public abstract class RowRepository<R> extends BaseRepository<R> implements Tabl
         return queryFactory.select(rowPath)
                 .from(rowPath)
                 .fetchCount();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public long count(Predicate predicate) {
+        SQLQuery<R> query = queryFactory.select(rowPath)
+                .from(rowPath);
+
+        if (predicate != null) {
+            query = query.where(predicate);
+        }
+
+        return query.fetchCount();
     }
 
     @Transactional
