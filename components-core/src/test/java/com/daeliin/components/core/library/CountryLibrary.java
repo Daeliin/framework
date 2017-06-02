@@ -12,4 +12,11 @@ public final class CountryLibrary {
                 LocalDateTime.of(2017, 1, 1, 12, 0, 0),
                 "France");
     }
+
+    public static Country belgium() {
+        return new Country(
+                "BE",
+                LocalDateTime.of(2017, 1, 1, 12, 0, 0),
+                "Belgium");
+    }
 }

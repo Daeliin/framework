@@ -9,6 +9,8 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 
 import javax.inject.Inject;
 
+import java.util.Collection;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ContextConfiguration(classes = Application.class)
@@ -27,6 +29,13 @@ public class CountryServiceTest extends AbstractTransactionalJUnit4SpringContext
         String nullCountryCode = null;
 
         countryService.findByCode(nullCountryCode);
+    }
+
+    @Test
+    public void shouldFindAllCountries() {
+        Collection<Country> allCountries = countryService.findAll();
+
+        assertThat(allCountries).containsOnly(CountryLibrary.france(), CountryLibrary.belgium());
     }
 
     @Test

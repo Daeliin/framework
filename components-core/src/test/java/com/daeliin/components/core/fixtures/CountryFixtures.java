@@ -13,4 +13,11 @@ public final class CountryFixtures {
                 Timestamp.valueOf(LocalDateTime.of(2017, 1, 1, 12, 0, 0)),
                 "France");
     }
+
+    public static BCountry belgium() {
+        return new BCountry(
+                "BE",
+                Timestamp.valueOf(LocalDateTime.of(2017, 1, 1, 12, 0, 0)),
+                "Belgium");
+    }
 }

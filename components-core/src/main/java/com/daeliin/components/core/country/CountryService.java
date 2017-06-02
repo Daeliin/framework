@@ -5,7 +5,9 @@ import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.Collection;
 import java.util.Map;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -20,6 +22,14 @@ public final class CountryService {
         this.repository = repository;
         this.conversion = new CountryConversion();
         this.countryByCode = new ConcurrentHashMap<>();
+    }
+
+    public Collection<Country> findAll() {
+        if (countryByCode.isEmpty()) {
+            invalidateCache();
+        }
+
+        return new TreeSet<>(countryByCode.values());
     }
 
     public Country findByCode(String countryCode) {
