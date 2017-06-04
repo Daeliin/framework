@@ -1,8 +1,5 @@
 package com.daeliin.components.webservices.controller;
 
-import com.daeliin.components.domain.pagination.Page;
-import com.daeliin.components.webservices.exception.PageRequestException;
-
 import java.util.Collection;
 
 /**
@@ -24,17 +21,6 @@ public interface PagingController<T, ID> {
      * @return resource
      */
     T getOne(ID resourceId);
-    
-    /**
-     * Exposes a pagination entry point.
-     * @param page page index
-     * @param size page size
-     * @param direction sort direction
-     * @param properties resource properties to sort on
-     * @return resource page
-     * @throws PageRequestException if one of the parameter is not valid
-     */
-    Page<T> getAll(String page, String size, String direction, String... properties) throws PageRequestException;
     
     /**
      * Exposes an update by id entry point.

@@ -11,6 +11,7 @@ import com.daeliin.components.webservices.exception.PageRequestException;
 import com.daeliin.components.webservices.exception.ResourceAlreadyExistsException;
 import com.daeliin.components.webservices.exception.ResourceNotFoundException;
 import com.daeliin.components.webservices.validation.PageRequestValidation;
+import com.querydsl.core.types.Predicate;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,7 @@ import java.util.Collection;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /***
- * Exposes CRUD and pagination for a resource.
+ * Exposes CRUD and provides a simple pagination for a resource.
  * @param <V> resource view type
  * @param <T> resource type
  * @param <ID> resource ID type
@@ -80,7 +81,8 @@ public abstract class ResourceController<V, T extends Persistable<ID>, ID, S ext
     }
     
     /**
-     * Exposes a pagination entry point, returns the resource page and a 200, or a 400 if one of the parameters is not valid.
+     * Returns the resource page.
+     * @param predicate the predicate to apply
      * @param page 0-based page index
      * @param size page size
      * @param direction sort direction
@@ -88,20 +90,11 @@ public abstract class ResourceController<V, T extends Persistable<ID>, ID, S ext
      * @return resource page
      * @throws PageRequestException if pageNumber &lt; 0, pageSize &lt; 0, direction doesnt equal "asc" or "desc  
      */
-    @RequestMapping(method = GET)
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    @Override
-    public Page<V> getAll(
-        @RequestParam(value = "page", defaultValue = DEFAULT_PAGE) String page,
-        @RequestParam(value = "size", defaultValue = DEFAULT_SIZE) String size,
-        @RequestParam(value = "direction", defaultValue = DEFAULT_DIRECTION) String direction,
-        @RequestParam(value = "properties", defaultValue = DEFAULT_PROPERTIES) String... properties) {
-
+    public Page<V> getAll(Predicate predicate, String page, String size, String direction, String... properties) {
         PageRequestValidation pageRequestValidation = new PageRequestValidation(page, size, direction, properties);
         PageRequest pageRequest = new PageRequest(pageRequestValidation.index, pageRequestValidation.size, pageRequestValidation.sorts);
 
-        Page<T> pageResult = service.findAll(pageRequest);
+        Page<T> pageResult = service.findAll(predicate, pageRequest);
 
         return new Page<>(conversion.instantiate(pageResult.items), pageResult.totalItems, pageResult.totalPages);
     }
