@@ -5,8 +5,12 @@ import com.daeliin.components.cms.article.ArticleService;
 import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
 import com.daeliin.components.core.sql.BNews;
 import com.daeliin.components.core.sql.QNews;
+import com.daeliin.components.domain.pagination.PageRequest;
+import com.daeliin.components.domain.pagination.Sort;
 import com.daeliin.components.security.credentials.account.Account;
 import com.daeliin.components.security.credentials.account.AccountService;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -73,7 +77,17 @@ public class NewsService {
             throw new PersistentResourceNotFoundException(String.format("Article %s doesn't exist", articleId));
         }
 
-        return instantiate(repository.findAll(QNews.news.articleId.eq(articleId)));
+        PageRequest pageRequest = new PageRequest(0, 1000, Sets.newLinkedHashSet(ImmutableSet.of(new Sort("creationDate", Sort.Direction.DESC))));
+
+        return instantiate(repository.findAll(QNews.news.articleId.eq(articleId), pageRequest).items);
+    }
+
+    public boolean deleteForArticle(String articleId) {
+        if (!articleService.exists(articleId)) {
+            throw new PersistentResourceNotFoundException(String.format("Article %s doesn't exist", articleId));
+        }
+
+        return repository.deleteForArticle(articleId);
     }
 
     private BNews map(News news, String articleId, String authorId) {

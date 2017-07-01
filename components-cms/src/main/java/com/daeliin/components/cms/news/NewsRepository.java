@@ -13,4 +13,10 @@ public class NewsRepository extends ResourceRepository<BNews, String> {
     public NewsRepository() {
         super(QNews.news, QNews.news.id, BNews::getId);
     }
+
+    public boolean deleteForArticle(String articleId) {
+        return queryFactory.delete(rowPath)
+                .where(QNews.news.articleId.eq(articleId))
+                .execute() > 0;
+    }
 }

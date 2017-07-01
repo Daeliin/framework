@@ -1,9 +1,11 @@
 package com.daeliin.components.cms.article;
 
+import com.daeliin.components.cms.news.NewsService;
 import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
 import com.daeliin.components.core.sql.BArticle;
 import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
+import com.daeliin.components.domain.utils.Id;
 import com.daeliin.components.domain.utils.UrlFriendlyString;
 import com.daeliin.components.security.credentials.account.Account;
 import com.daeliin.components.security.credentials.account.AccountService;
@@ -25,6 +27,9 @@ public class ArticleService  {
     private final AccountService accountService;
 
     @Inject
+    private NewsService newsService;
+
+    @Inject
     public ArticleService(ArticleRepository repository, AccountService accountService) {
         this.repository = repository;
         this.conversion = new ArticleConversion();
@@ -39,7 +44,7 @@ public class ArticleService  {
         }
 
         Article articleToCreate = new Article(
-                UUID.randomUUID().toString(),
+                new Id().value,
                 LocalDateTime.now(),
                 article.author,
                 article.title,
@@ -89,6 +94,12 @@ public class ArticleService  {
 
     public boolean exists(String articleId) {
         return repository.exists(articleId);
+    }
+
+    public boolean delete(String id) {
+        newsService.deleteForArticle(id);
+
+        return repository.delete(id);
     }
 
     public Article publish(String id) {

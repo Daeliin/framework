@@ -2,18 +2,25 @@ package com.daeliin.components.cms.article;
 
 import com.daeliin.components.cms.Application;
 import com.daeliin.components.cms.library.ArticleLibrary;
+import com.daeliin.components.cms.news.News;
+import com.daeliin.components.cms.news.NewsRepository;
+import com.daeliin.components.cms.news.NewsService;
 import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
+import com.daeliin.components.core.sql.BNews;
+import com.daeliin.components.core.sql.QNews;
 import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
 import com.daeliin.components.domain.pagination.Sort;
 import com.daeliin.components.domain.utils.UrlFriendlyString;
-import org.assertj.core.util.Sets;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,6 +29,9 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
 
     @Inject
     private ArticleService articleService;
+
+    @Inject
+    private NewsRepository newsRepository;
 
     @Test
     public void shouldFindArticle() {
@@ -110,7 +120,7 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
 
     @Test
     public void shouldFindAllArticles() {
-        PageRequest pageRequest = new PageRequest(0, 5, Sets.newLinkedHashSet(new Sort("creationDate", Sort.Direction.DESC)));
+        PageRequest pageRequest = new PageRequest(0, 5, Sets.newLinkedHashSet(ImmutableSet.of(new Sort("creationDate", Sort.Direction.DESC))));
 
         Page<Article> articlePage = articleService.findAll(pageRequest);
 
@@ -136,7 +146,7 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
         assertThat(publishedArticle.published).isFalse();
         assertThat(publishedArticle.publicationDate).isNull();
     }
-    
+
     @Test(expected = PersistentResourceNotFoundException.class)
     public void shouldThrowException_whenPublishingANonExistingArticle() {
         articleService.publish("nonExistingId");
@@ -145,5 +155,21 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
     @Test(expected = PersistentResourceNotFoundException.class)
     public void shouldThrowException_whenUnpublishingANonExistingArticle() {
         articleService.unpublish("nonExistingId");
+    }
+
+    @Test
+    public void shouldDeleteAnArticle() {
+        boolean deleted = articleService.delete(ArticleLibrary.publishedArticle().getId());
+
+        assertThat(deleted).isTrue();
+    }
+
+    @Test
+    public void shouldDeleteAnArticleWithAllItsNews() {
+        articleService.delete(ArticleLibrary.notPublishedArticle().getId());
+
+        Collection<BNews> articleNews = newsRepository.findAll(QNews.news.articleId.eq(ArticleLibrary.notPublishedArticle().getId()));
+
+        assertThat(articleNews).isEmpty();
     }
 }
