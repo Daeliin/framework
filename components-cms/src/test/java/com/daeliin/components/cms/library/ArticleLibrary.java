@@ -22,7 +22,7 @@ public final class ArticleLibrary {
     public static Article notPublishedArticle() {
         return new Article(
                 "ARTICLE2",
-                LocalDateTime.of(2016, 5, 20, 14, 30, 0),
+                LocalDateTime.of(2016, 5, 21, 14, 30, 0),
                 "admin",
                 "Sample is live",
                 "sample-is-live",

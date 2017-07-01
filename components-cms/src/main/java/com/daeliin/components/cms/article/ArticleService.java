@@ -10,6 +10,7 @@ import com.daeliin.components.security.credentials.account.AccountService;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -72,7 +73,7 @@ public class ArticleService  {
         BArticle bArticle = repository.findOne(articleId);
 
         if (bArticle == null) {
-            return null;
+            throw new PersistentResourceNotFoundException();
         }
 
         Account author = accountService.findOne(bArticle.getAuthorId());
@@ -80,16 +81,23 @@ public class ArticleService  {
         return instantiate(bArticle, author.username);
     }
 
-    public Collection<Article> findAll(PageRequest pageRequest) {
+    public Page<Article> findAll(PageRequest pageRequest) {
         Page<BArticle> articlePage = repository.findAll(pageRequest);
 
-        return null;
+        return new Page<>(instantiate(articlePage.items), articlePage.totalItems, articlePage.totalPages);
     }
 
     public boolean exists(String articleId) {
         return repository.exists(articleId);
     }
 
+    public Article publish(String id) {
+        return updatePublication(id, true, LocalDateTime.now());
+    }
+
+    public Article unpublish(String id) {
+        return updatePublication(id, false, null);
+    }
 
     private BArticle map(Article article, String authorId) {
         return conversion.map(article, authorId);
@@ -108,6 +116,21 @@ public class ArticleService  {
         return bArticles
                 .stream()
                 .map(bNews -> instantiate(bNews, accountByIds.get(bNews.getAuthorId()).username))
-                .collect(toCollection(TreeSet::new));
+                .collect(toCollection(LinkedHashSet::new));
+    }
+
+    private Article updatePublication(String id, boolean published, LocalDateTime publicationDate) {
+        BArticle existingArticle = repository.findOne(id);
+
+        if (existingArticle == null) {
+            throw new PersistentResourceNotFoundException(String.format("Article %s doesn't exist", id));
+        }
+
+        Account author = accountService.findOne(existingArticle.getAuthorId());
+
+        existingArticle.setPublished(published);
+        existingArticle.setPublicationDate(published ? Timestamp.valueOf(publicationDate) : null);
+
+        return instantiate(repository.save(existingArticle), author.username);
     }
 }

@@ -3,7 +3,11 @@ package com.daeliin.components.cms.article;
 import com.daeliin.components.cms.Application;
 import com.daeliin.components.cms.library.ArticleLibrary;
 import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
+import com.daeliin.components.domain.pagination.Page;
+import com.daeliin.components.domain.pagination.PageRequest;
+import com.daeliin.components.domain.pagination.Sort;
 import com.daeliin.components.domain.utils.UrlFriendlyString;
+import org.assertj.core.util.Sets;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
@@ -25,6 +29,11 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
         Article foundArticle = articleService.findOne(article.getId());
 
         assertThat(foundArticle).isEqualTo(foundArticle);
+    }
+
+    @Test(expected = PersistentResourceNotFoundException.class)
+    public void shouldThrowException_whenfindingAnArticleThatDoesntExist() {
+        articleService.findOne("nonExistingId");
     }
 
     @Test
@@ -97,5 +106,44 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
         assertThat(updatedArtice.getId()).isEqualTo(articleToUpdate.getId());
         assertThat(updatedArtice.getCreationDate()).isEqualTo(articleToUpdate.getCreationDate());
         assertThat(updatedArtice.author).isEqualTo(articleToUpdate.author);
+    }
+
+    @Test
+    public void shouldFindAllArticles() {
+        PageRequest pageRequest = new PageRequest(0, 5, Sets.newLinkedHashSet(new Sort("creationDate", Sort.Direction.DESC)));
+
+        Page<Article> articlePage = articleService.findAll(pageRequest);
+
+        assertThat(articlePage.items).containsExactly(ArticleLibrary.notPublishedArticle(), ArticleLibrary.publishedArticle());
+    }
+
+    @Test
+    public void shouldPublishAnArticle() {
+        articleService.publish(ArticleLibrary.notPublishedArticle().getId());
+
+        Article publishedArticle = articleService.findOne(ArticleLibrary.notPublishedArticle().getId());
+
+        assertThat(publishedArticle.published).isTrue();
+        assertThat(publishedArticle.publicationDate).isNotNull();
+    }
+
+    @Test
+    public void shouldUnpublishAnArticle() {
+        articleService.unpublish(ArticleLibrary.publishedArticle().getId());
+
+        Article publishedArticle = articleService.findOne(ArticleLibrary.notPublishedArticle().getId());
+
+        assertThat(publishedArticle.published).isFalse();
+        assertThat(publishedArticle.publicationDate).isNull();
+    }
+    
+    @Test(expected = PersistentResourceNotFoundException.class)
+    public void shouldThrowException_whenPublishingANonExistingArticle() {
+        articleService.publish("nonExistingId");
+    }
+
+    @Test(expected = PersistentResourceNotFoundException.class)
+    public void shouldThrowException_whenUnpublishingANonExistingArticle() {
+        articleService.unpublish("nonExistingId");
     }
 }
