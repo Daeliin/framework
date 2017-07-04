@@ -63,11 +63,6 @@ public final class ArticleTest {
         assertThat(article.urlFriendlyTitle).isEqualTo("hello-world");
     }
 
-    @Test(expected = Exception.class)
-    public void shouldThrowException_whenDescriptionIsNull() {
-        new Article("ARTICLEID1", LocalDateTime.now(), "john", "Hello world", "hello-world", null, "Content", null, false);
-    }
-
     @Test
     public void shouldAssignADescription() {
         Article article = new Article("ARTICLEID1", LocalDateTime.now(), "john", "Hello world", "hello-world", "Desc", "Content", null, false);

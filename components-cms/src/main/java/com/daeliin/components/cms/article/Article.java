@@ -20,7 +20,7 @@ public class Article extends PersistentResource<String> implements Comparable<Ar
         this.author = Objects.requireNonNull(author, "author should not be null");
         this.title = Objects.requireNonNull(title, "title should not be null");
         this.urlFriendlyTitle = Objects.requireNonNull(urlFriendlyTitle, "urlFriendlyTitle should not be null");
-        this.description = Objects.requireNonNull(description, "description should not be null");
+        this.description = description;
         this.content = content;
         this.publicationDate = publicationDate;
         this.published = published;
