@@ -15,7 +15,12 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.UUID;
 
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toSet;
@@ -26,14 +31,15 @@ public class NewsService {
     private final NewsRepository repository;
     private final NewsConversion conversion;
     private final AccountService accountService;
-    private final ArticleService articleService;
 
     @Inject
-    public NewsService(NewsRepository repository, AccountService accountService, ArticleService articleService) {
+    private ArticleService articleService;
+
+    @Inject
+    public NewsService(NewsRepository repository, AccountService accountService) {
         this.repository = repository;
         this.conversion = new NewsConversion();
         this.accountService = accountService;
-        this.articleService = articleService;
     }
 
     public News create(String articleId, News news) {
