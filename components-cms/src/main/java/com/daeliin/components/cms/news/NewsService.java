@@ -88,6 +88,18 @@ public class NewsService {
         return instantiate(repository.findAll(QNews.news.articleId.eq(articleId), pageRequest).items);
     }
 
+    public boolean exists(String id) {
+        return repository.exists(id);
+    }
+
+    public boolean delete(String id) {
+        if (!exists(id)) {
+            throw new PersistentResourceNotFoundException(String.format("News %s doesn't exist", id));
+        }
+
+        return repository.delete(id);
+    }
+
     public boolean deleteForArticle(String articleId) {
         if (!articleService.exists(articleId)) {
             throw new PersistentResourceNotFoundException(String.format("Article %s doesn't exist", articleId));
