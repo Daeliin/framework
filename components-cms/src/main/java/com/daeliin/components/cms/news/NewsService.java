@@ -88,6 +88,18 @@ public class NewsService {
         return instantiate(repository.findAll(QNews.news.articleId.eq(articleId), pageRequest).items);
     }
 
+    public News findOne(String id) {
+        BNews existingNews = repository.findOne(id);
+
+        if (existingNews == null) {
+            throw new PersistentResourceNotFoundException(String.format("News %s doesn't exist", id));
+        }
+
+        Account author = accountService.findOne(existingNews.getAuthorId());
+
+        return instantiate(existingNews, author.username);
+    }
+
     public boolean exists(String id) {
         return repository.exists(id);
     }

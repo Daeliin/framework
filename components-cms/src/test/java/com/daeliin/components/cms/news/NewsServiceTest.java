@@ -86,6 +86,18 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
         assertThat(updatedNews.author).isEqualTo(newsToUpdate.author);
     }
 
+    @Test(expected = PersistentResourceNotFoundException.class)
+    public void shouldThrowException_whenFindingNonExistingNews() {
+        newsService.findOne("nonExistingId");
+    }
+
+    @Test
+    public void shouldFindNews() {
+        News existingNews = newsService.findOne(NewsLibrary.newsWithSource().getId());
+
+        assertThat(existingNews).isEqualTo(NewsLibrary.newsWithSource());
+    }
+
     @Test
     public void shouldCheckThatANewsDoesntExist() {
         assertThat(newsService.exists("nonExistingId")).isFalse();
