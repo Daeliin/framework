@@ -58,7 +58,7 @@ public abstract class RowRepository<R> extends BaseRepository<R> implements Tabl
             query = query.where(predicate);
         }
 
-        return new Page(query.fetch(), totalItems, totalPages);
+        return new Page<>(query.fetch(), totalItems, totalPages);
     }
 
     @Transactional(readOnly = true)
