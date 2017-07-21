@@ -55,6 +55,12 @@ public class PermissionRepository extends ResourceRepository<BPermission, String
         }
     }
 
+    public void deleteForAccount(String accountId) {
+        queryFactory.delete(QAccountPermission.accountPermission)
+                .where(QAccountPermission.accountPermission.accountId.eq(accountId))
+                .execute();
+    }
+
     public void deleteForAccount(String accountId, String permissionId) {
         queryFactory.delete(QAccountPermission.accountPermission)
                 .where(QAccountPermission.accountPermission.accountId.eq(accountId)

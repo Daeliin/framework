@@ -29,6 +29,10 @@ public final class PermissionService extends ResourceService<Permission, BPermis
         repository.addToAccount(accountId, permissionId);
     }
 
+    public void deleteForAccount(String accountId) {
+        repository.deleteForAccount(accountId);
+    }
+
     public void deleteForAccount(String accountId, String permissionId) {
         repository.deleteForAccount(accountId, permissionId);
     }

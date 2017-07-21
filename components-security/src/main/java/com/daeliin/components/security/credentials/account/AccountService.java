@@ -1,6 +1,7 @@
 package com.daeliin.components.security.credentials.account;
 
 import com.daeliin.components.core.resource.service.ResourceService;
+import com.daeliin.components.security.credentials.permission.PermissionService;
 import com.daeliin.components.security.sql.BAccount;
 import com.daeliin.components.security.sql.QAccount;
 import org.springframework.stereotype.Service;
@@ -11,9 +12,12 @@ import java.util.Collection;
 @Service
 public class AccountService extends ResourceService<Account, BAccount, String, AccountRepository> {
 
+    private final PermissionService permissionService;
+
     @Inject
-    public AccountService(AccountRepository repository) {
+    public AccountService(AccountRepository repository, PermissionService permissionService) {
         super(repository, new AccountConversion());
+        this.permissionService = permissionService;
     }
 
     public Account findByUsernameAndEnabled(String username) {
@@ -28,5 +32,11 @@ public class AccountService extends ResourceService<Account, BAccount, String, A
 
     public boolean usernameExists(String username) {
         return !repository.findAll(QAccount.account.username.equalsIgnoreCase(username)).isEmpty();
+    }
+
+    @Override
+    public boolean delete(String id) {
+        permissionService.deleteForAccount(id);
+        return super.delete(id);
     }
 }

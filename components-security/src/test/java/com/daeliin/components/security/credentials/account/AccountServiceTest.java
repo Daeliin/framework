@@ -2,12 +2,15 @@ package com.daeliin.components.security.credentials.account;
 
 import com.daeliin.components.core.resource.service.ResourceService;
 import com.daeliin.components.security.Application;
+import com.daeliin.components.security.credentials.permission.Permission;
+import com.daeliin.components.security.credentials.permission.PermissionService;
 import com.daeliin.components.security.library.AccountLibrary;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 import javax.inject.Inject;
+import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,6 +20,8 @@ public class AccountServiceTest extends AbstractTransactionalJUnit4SpringContext
     @Inject
     private AccountService accountService;
 
+    @Inject
+    private PermissionService permissionService;
 
     @Test
     public void shouldExtendResourceService() {
@@ -42,5 +47,14 @@ public class AccountServiceTest extends AbstractTransactionalJUnit4SpringContext
     @Test
     public void shouldCheckThatUsernameAlreadyExists() {
         assertThat(accountService.usernameExists(AccountLibrary.admin().username)).isTrue();
+    }
+
+    @Test
+    public void shouldDeleteAllPermissionsOfAccount() {
+        accountService.delete(AccountLibrary.admin().getId());
+
+        Collection<Permission> accountPermissions = permissionService.findForAccount(AccountLibrary.admin().getId());
+
+        assertThat(accountPermissions).isEmpty();
     }
 }

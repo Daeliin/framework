@@ -62,6 +62,14 @@ public class PermissionRepositoryTest extends AbstractTransactionalJUnit4SpringC
 
     @Test
     public void shouldDeletePermissionForAccount() {
+        permissionRepository.deleteForAccount(AccountFixtures.admin().getId());
+
+        Collection<BPermission> accountPermissions = permissionRepository.findForAccount(AccountFixtures.admin().getId());
+        assertThat(accountPermissions).isEmpty();
+    }
+
+    @Test
+    public void shouldDeleteSpecificPermissionForAccount() {
         permissionRepository.deleteForAccount(AccountFixtures.admin().getId(), PermissionFixtures.admin().getId());
 
         Collection<BPermission> accountPermissions = permissionRepository.findForAccount(AccountFixtures.admin().getId());
