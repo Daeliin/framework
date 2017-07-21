@@ -4,6 +4,7 @@ import com.daeliin.components.domain.utils.Id;
 import com.daeliin.components.security.credentials.account.Account;
 import com.daeliin.components.security.credentials.account.AccountService;
 import com.daeliin.components.security.credentials.permission.Permission;
+import com.daeliin.components.security.credentials.permission.PermissionService;
 import com.daeliin.components.security.exception.InvalidTokenException;
 import com.daeliin.components.security.membership.SignUpRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,9 @@ public class AccountDetailsService implements UserDetailsService {
     @Inject
     private AccountService accountService;
 
+    @Inject
+    private PermissionService permissionService;
+
     @Override
     public org.springframework.security.core.userdetails.UserDetails loadUserByUsername(String username) {
         Account account = accountService.findByUsernameAndEnabled(username);
@@ -35,7 +39,7 @@ public class AccountDetailsService implements UserDetailsService {
         }
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-        Collection<Permission> permissions = accountService.findPermissions(account.getId());
+        Collection<Permission> permissions = permissionService.findForAccount(account.getId());
         permissions.forEach(accountPermission -> authorities.add(new SimpleGrantedAuthority(accountPermission.name)));
 
         return new org.springframework.security.core.userdetails.User(account.username, account.password, authorities);

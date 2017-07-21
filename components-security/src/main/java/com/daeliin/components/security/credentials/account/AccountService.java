@@ -1,27 +1,19 @@
 package com.daeliin.components.security.credentials.account;
 
 import com.daeliin.components.core.resource.service.ResourceService;
-import com.daeliin.components.security.credentials.permission.Permission;
-import com.daeliin.components.security.credentials.permission.PermissionConversion;
 import com.daeliin.components.security.sql.BAccount;
 import com.daeliin.components.security.sql.QAccount;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.Collection;
-import java.util.TreeSet;
-
-import static java.util.stream.Collectors.toCollection;
 
 @Service
 public class AccountService extends ResourceService<Account, BAccount, String, AccountRepository> {
 
-    protected final PermissionConversion permissionConversion;
-
     @Inject
     public AccountService(AccountRepository repository) {
         super(repository, new AccountConversion());
-        permissionConversion = new PermissionConversion();
     }
 
     public Account findByUsernameAndEnabled(String username) {
@@ -32,13 +24,6 @@ public class AccountService extends ResourceService<Account, BAccount, String, A
         Account account = conversion.instantiate(bAccounts.stream().findFirst().orElse(null));
 
         return account;
-    }
-
-    public Collection<Permission> findPermissions(String accountId) {
-        return repository.findPermissions(accountId)
-                .stream()
-                .map(permissionConversion::instantiate)
-                .collect(toCollection(TreeSet::new));
     }
 
     public boolean usernameExists(String username) {

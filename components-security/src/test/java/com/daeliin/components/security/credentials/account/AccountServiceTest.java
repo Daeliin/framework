@@ -2,15 +2,12 @@ package com.daeliin.components.security.credentials.account;
 
 import com.daeliin.components.core.resource.service.ResourceService;
 import com.daeliin.components.security.Application;
-import com.daeliin.components.security.credentials.permission.Permission;
 import com.daeliin.components.security.library.AccountLibrary;
-import com.daeliin.components.security.library.PermissionLibrary;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 import javax.inject.Inject;
-import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,15 +32,6 @@ public class AccountServiceTest extends AbstractTransactionalJUnit4SpringContext
     @Test
     public void shouldReturnNull_whenFindingEnabledAccountByUsername_ifAccountIsDisabled() {
         assertThat(accountService.findByUsernameAndEnabled(AccountLibrary.inactive().username)).isEqualTo(null);
-    }
-
-    @Test
-    public void shouldFindPermissionsOfAccount() {
-        Account account = AccountLibrary.admin();
-
-        Collection<Permission> permissions = accountService.findPermissions(account.getId());
-
-        assertThat(permissions).containsExactly(PermissionLibrary.admin());
     }
 
     @Test

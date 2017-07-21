@@ -5,6 +5,10 @@ import com.daeliin.components.security.sql.BPermission;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.Collection;
+import java.util.TreeSet;
+
+import static java.util.stream.Collectors.toCollection;
 
 @Service
 public final class PermissionService extends ResourceService<Permission, BPermission, String, PermissionRepository> {
@@ -12,5 +16,20 @@ public final class PermissionService extends ResourceService<Permission, BPermis
     @Inject
     public PermissionService(PermissionRepository repository) {
         super(repository, new PermissionConversion());
+    }
+
+    public Collection<Permission> findForAccount(String accountId) {
+        return repository.findForAccount(accountId)
+                .stream()
+                .map(conversion::instantiate)
+                .collect(toCollection(TreeSet::new));
+    }
+
+    public void addToAccount(String accountId, String permissionId) {
+        repository.addToAccount(accountId, permissionId);
+    }
+
+    public void deleteForAccount(String accountId, String permissionId) {
+        repository.deleteForAccount(accountId, permissionId);
     }
 }
