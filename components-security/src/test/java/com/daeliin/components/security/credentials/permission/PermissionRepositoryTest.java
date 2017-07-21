@@ -75,4 +75,18 @@ public class PermissionRepositoryTest extends AbstractTransactionalJUnit4SpringC
         Collection<BPermission> accountPermissions = permissionRepository.findForAccount(AccountFixtures.admin().getId());
         assertThat(accountPermissions).isEmpty();
     }
+
+    @Test
+    public void shouldCheckThatPermissionIsUsed() {
+        boolean isUsed = permissionRepository.isUsed(PermissionFixtures.admin().getId());
+
+        assertThat(isUsed).isTrue();
+    }
+
+    @Test
+    public void shouldCheckThatPermissionIsNotUsed() {
+        boolean isUsed = permissionRepository.isUsed("nonExistingPermissionId");
+
+        assertThat(isUsed).isFalse();
+    }
 }

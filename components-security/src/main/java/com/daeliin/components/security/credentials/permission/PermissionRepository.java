@@ -67,4 +67,11 @@ public class PermissionRepository extends ResourceRepository<BPermission, String
                 .and(QAccountPermission.accountPermission.permissionId.eq(permissionId)))
                 .execute();
     }
+
+    public boolean isUsed(String permissionId) {
+        return queryFactory.select(QAccountPermission.accountPermission)
+                .from(QAccountPermission.accountPermission)
+                .where(QAccountPermission.accountPermission.permissionId.eq(permissionId))
+                .fetchCount() > 0;
+    }
 }
