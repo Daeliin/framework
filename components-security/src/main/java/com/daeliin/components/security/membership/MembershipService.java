@@ -1,9 +1,7 @@
 package com.daeliin.components.security.membership;
 
-import com.daeliin.components.core.event.EventLog;
 import com.daeliin.components.core.event.EventLogService;
 import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
-import com.daeliin.components.domain.utils.Id;
 import com.daeliin.components.security.credentials.account.Account;
 import com.daeliin.components.security.credentials.account.AccountService;
 import com.daeliin.components.security.exception.AccountAlreadyExistException;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.time.LocalDateTime;
 
 @Slf4j
 @Service
@@ -46,7 +43,7 @@ public class MembershipService {
         }
 
         Account account = accountDetailsService.signUp(signUpRequest);
-        eventLogService.create(new EventLog(new Id().value, LocalDateTime.now(), String.format("%s signed up", account.username)));
+        eventLogService.create(String.format("%s signed up", account.username));
         membershipNotifications.signUp(account);
 
         log.info(String.format("%s signed up", account));
@@ -64,7 +61,7 @@ public class MembershipService {
 
         try {
             account = accountDetailsService.activate(account, activationToken);
-            eventLogService.create(new EventLog(new Id().value, LocalDateTime.now(), String.format("%s activated its account", account.username)));
+            eventLogService.create(String.format("%s activated its account", account.username));
             membershipNotifications.activate(account);
             log.info(String.format("%s activated", account));
         } catch(InvalidTokenException e) {
@@ -80,7 +77,7 @@ public class MembershipService {
         }
 
         Account account = accountService.findOne(accountId);
-        eventLogService.create(new EventLog(new Id().value, LocalDateTime.now(), String.format("%s requested a new password ", account.username)));
+        eventLogService.create(String.format("%s requested a new password ", account.username));
         membershipNotifications.newPassword(accountService.findOne(accountId));
 
         log.info(String.format("%s requested a new password", account));
@@ -96,7 +93,7 @@ public class MembershipService {
 
         try {
             account = accountDetailsService.resetPassword(account, resetPasswordToken, newPassword);
-            eventLogService.create(new EventLog(new Id().value, LocalDateTime.now(), String.format("%s reseted its password ", account.username)));
+            eventLogService.create(String.format("%s reseted its password ", account.username));
             membershipNotifications.resetPassword(account);
             log.info(String.format("%s reseted its password", account));
         } catch (InvalidTokenException e) {

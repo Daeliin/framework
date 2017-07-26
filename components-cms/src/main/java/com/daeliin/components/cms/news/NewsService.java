@@ -2,6 +2,7 @@ package com.daeliin.components.cms.news;
 
 import com.daeliin.components.cms.article.Article;
 import com.daeliin.components.cms.article.ArticleService;
+import com.daeliin.components.core.event.EventLogService;
 import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
 import com.daeliin.components.core.sql.BNews;
 import com.daeliin.components.core.sql.QNews;
@@ -31,15 +32,17 @@ public class NewsService {
     private final NewsRepository repository;
     private final NewsConversion conversion;
     private final AccountService accountService;
+    private final EventLogService eventLogService;
 
     @Inject
     private ArticleService articleService;
 
     @Inject
-    public NewsService(NewsRepository repository, AccountService accountService) {
+    public NewsService(NewsRepository repository, AccountService accountService, EventLogService eventLogService) {
         this.repository = repository;
         this.conversion = new NewsConversion();
         this.accountService = accountService;
+        this.eventLogService = eventLogService;
     }
 
     public News create(String articleId, News news) {
@@ -60,7 +63,11 @@ public class NewsService {
 
         News newsToCreate = new News(UUID.randomUUID().toString(), LocalDateTime.now(), news.author, news.content, news.source);
 
-        return instantiate(repository.save(map(newsToCreate, articleId, author.getId())), author.username);
+        News createdNews = instantiate(repository.save(map(newsToCreate, articleId, author.getId())), author.username);
+
+        eventLogService.create(String.format("A news has been added for article %s", article.title));
+
+        return createdNews;
     }
 
     public News update(String newsId, News news) {
@@ -109,7 +116,13 @@ public class NewsService {
             throw new PersistentResourceNotFoundException(String.format("News %s doesn't exist", id));
         }
 
-        return repository.delete(id);
+        News newsToDelete = findOne(id);
+
+        boolean deleted = repository.delete(id);
+
+        eventLogService.create(String.format("The news has been deleted", newsToDelete.content));
+
+        return deleted;
     }
 
     public boolean deleteForArticle(String articleId) {

@@ -1,6 +1,7 @@
 package com.daeliin.components.cms.article;
 
 import com.daeliin.components.cms.news.NewsService;
+import com.daeliin.components.core.event.EventLogService;
 import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
 import com.daeliin.components.core.sql.BArticle;
 import com.daeliin.components.domain.pagination.Page;
@@ -25,15 +26,17 @@ public class ArticleService  {
     private final ArticleRepository repository;
     private final ArticleConversion conversion;
     private final AccountService accountService;
+    private final EventLogService eventLogService;
 
     @Inject
     private NewsService newsService;
 
     @Inject
-    public ArticleService(ArticleRepository repository, AccountService accountService) {
+    public ArticleService(ArticleRepository repository, AccountService accountService, EventLogService eventLogService) {
         this.repository = repository;
         this.conversion = new ArticleConversion();
         this.accountService = accountService;
+        this.eventLogService = eventLogService;
     }
 
     public Article create(Article article) {
@@ -54,7 +57,11 @@ public class ArticleService  {
                 null,
                 false);
 
-        return instantiate(repository.save(map(articleToCreate, author.getId())), author.username);
+        Article createdArticle = instantiate(repository.save(map(articleToCreate, author.getId())), author.username);
+
+        eventLogService.create(String.format("The article %s has been created", createdArticle.title));
+
+        return createdArticle;
     }
 
     public Article update(String articleId, Article article) {
@@ -97,17 +104,31 @@ public class ArticleService  {
     }
 
     public boolean delete(String id) {
+        Article article = findOne(id);
+
         newsService.deleteForArticle(id);
 
-        return repository.delete(id);
+        boolean deleted = repository.delete(id);
+
+        eventLogService.create(String.format("The article %s has been deleted", article.title));
+
+        return deleted;
     }
 
     public Article publish(String id) {
-        return updatePublication(id, true, LocalDateTime.now());
+        Article updatedArticle = updatePublication(id, true, LocalDateTime.now());
+
+        eventLogService.create(String.format("The article %s has been published", updatedArticle.title));
+
+        return updatedArticle;
     }
 
     public Article unpublish(String id) {
-        return updatePublication(id, false, null);
+        Article updatedArticle = updatePublication(id, false, null);
+
+        eventLogService.create(String.format("The article %s has been unpublished", updatedArticle.title));
+
+        return updatedArticle;
     }
 
     private BArticle map(Article article, String authorId) {
