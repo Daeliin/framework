@@ -40,4 +40,12 @@ ALTER TABLE news ADD PRIMARY KEY (id);
 ALTER TABLE news ADD CONSTRAINT fk_news_article_id FOREIGN KEY (article_id) REFERENCES article (id);
 ALTER TABLE news ADD CONSTRAINT fk_news_account_id FOREIGN KEY (author_id) REFERENCES account (id);
 
+CREATE TABLE event_log (
+    id VARCHAR(36) NOT NULL,
+    creation_date DATETIME NOT NULL,
+    description VARCHAR(255) NOT NULL
+);
+
+ALTER TABLE event_log ADD PRIMARY KEY (id);
+
 
