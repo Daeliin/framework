@@ -25,7 +25,7 @@
         <daeliin.components.version>0.2-SNAPSHOT</daeliin.components.version>
         <javax-inject.version>1</javax-inject.version>
         <commons-lang.version>3.6</commons-lang.version>
-        <guava.version>22.0</guava.version>
+        <guava.version>23.0</guava.version>
         <querydsl.version>4.1.4</querydsl.version>
         <commons-codec.version>1.10</commons-codec.version>
         <sql.schema>${project.basedir}/src/test/resources/schema.sql</sql.schema>
