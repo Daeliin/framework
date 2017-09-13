@@ -2,7 +2,7 @@ package com.daeliin.components.security.credentials.account;
 
 import com.daeliin.components.domain.resource.PersistentResource;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Objects;
 
 public class Account extends PersistentResource<String> implements Comparable<Account> {
@@ -13,7 +13,7 @@ public class Account extends PersistentResource<String> implements Comparable<Ac
     public final String password;
     public final String token;
 
-    public Account(String id, LocalDateTime creationDate, String username, String email, boolean enabled, String password, String token) {
+    public Account(String id, Instant creationDate, String username, String email, boolean enabled, String password, String token) {
         super(id, creationDate);
         this.username = Objects.requireNonNull(username, "username should not be null");
         this.email = Objects.requireNonNull(email, "email should not be null");

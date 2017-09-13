@@ -11,7 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 import javax.inject.Inject;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,28 +36,28 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
 
     @Test(expected = PersistentResourceNotFoundException.class)
     public void shouldThrowPersistentResourceNotFoundException_whenCreatingNewsOfUnexistingArticleId() {
-        News news = new News("NEWSID", LocalDateTime.now(), AccountLibrary.admin().username, "Content", null);
+        News news = new News("NEWSID", Instant.now(), AccountLibrary.admin().username, "Content", null);
 
         newsService.create("EZOFZEJF-34324", news);
     }
 
     @Test(expected = PersistentResourceNotFoundException.class)
     public void shouldThrowPersistentResourceNotFoundException_whenCreatingNewsOfUnexistingAuthor() {
-        News news = new News("NEWSID", LocalDateTime.now(), "ZADAZD", "Content", null);
+        News news = new News("NEWSID", Instant.now(), "ZADAZD", "Content", null);
 
         newsService.create(ArticleLibrary.notPublishedArticle().getId(), news);
     }
 
     @Test(expected = IllegalStateException.class)
     public void shouldThrowIllegalStateException_whenCreatingNewsOnPublishedArticle() {
-        News news = new News("NEWSID", LocalDateTime.now(), AccountLibrary.admin().username, "Content", null);
+        News news = new News("NEWSID", Instant.now(), AccountLibrary.admin().username, "Content", null);
 
         newsService.create(ArticleLibrary.publishedArticle().getId(), news);
     }
 
     @Test
     public void shouldCreateANews() {
-        News news = new News("", LocalDateTime.now(), AccountLibrary.admin().username, "Content", null);
+        News news = new News("", Instant.now(), AccountLibrary.admin().username, "Content", null);
 
         News createdNews = newsService.create(ArticleLibrary.notPublishedArticle().getId(), news);
 
@@ -75,7 +75,7 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
     @Test
     public void shouldUpdateANewsContentAndSource() {
         News newsToUpdate = NewsLibrary.newsWithSource();
-        News news = new News(" ", LocalDateTime.now(), "", "newContent", "http://newsource.com");
+        News news = new News(" ", Instant.now(), "", "newContent", "http://newsource.com");
 
         News updatedNews = newsService.update(newsToUpdate.getId(), news);
 

@@ -4,6 +4,7 @@ import com.daeliin.components.core.sql.BArticle;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 public final class ArticleFixtures {
 
@@ -11,10 +12,10 @@ public final class ArticleFixtures {
         return new BArticle(
                 "ACCOUNT1",
                 "We open our door today, you'll find content very soon.",
-                Timestamp.valueOf(LocalDateTime.of(2016, 5, 20, 14, 30, 0)),
+                LocalDateTime.of(2016, 5, 20, 14, 30, 0).toInstant(ZoneOffset.UTC),
                 "Today is the day we start sample.com",
                 "ARTICLE1",
-                Timestamp.valueOf(LocalDateTime.of(2016, 5, 20, 15, 30, 0)),
+                LocalDateTime.of(2016, 5, 20, 15, 30, 0).toInstant(ZoneOffset.UTC),
                 true,
                 "Welcome to sample",
                 "welcome-to-sample");
@@ -24,7 +25,7 @@ public final class ArticleFixtures {
         return new BArticle(
                 "ACCOUNT1",
                 "We go live today, here''s our first content.",
-                Timestamp.valueOf(LocalDateTime.of(2016, 5, 20, 14, 30, 0)),
+                LocalDateTime.of(2016, 5, 20, 14, 30, 0).toInstant(ZoneOffset.UTC),
                 "Today is the day we go live at sample.com",
                 "ARTICLE2",
                 null,

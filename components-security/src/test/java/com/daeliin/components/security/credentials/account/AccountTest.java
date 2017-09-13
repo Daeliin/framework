@@ -4,7 +4,7 @@ import com.daeliin.components.domain.resource.PersistentResource;
 import com.daeliin.components.security.library.AccountLibrary;
 import org.junit.Test;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,14 +17,14 @@ public final class AccountTest {
 
     @Test(expected = Exception.class)
     public void shouldThrowExeption_whenUsernameIsNull() {
-        new Account("ACCOUNT4", LocalDateTime.now(), null, "user@email.org", true,
+        new Account("ACCOUNT4", Instant.now(), null, "user@email.org", true,
                 "$2a$10$ggIHKT/gYkYk0Bt2yP4xvOybahPn7GfSwC0T3fYhCzrZ9ta9LAYt6",
                 "b5e655641f1d05a415d5ea30d4fd25dcd03ea4a187c5d121d221454c03770f9f98101c206878b25697a79c924149da6802af8e97fbed4999c0dd838577590d9e");
     }
 
     @Test
     public void shouldAssignAnUsername() {
-        Account account = new Account("ACCOUNT4", LocalDateTime.now(), "user", "user@email.org", true,
+        Account account = new Account("ACCOUNT4", Instant.now(), "user", "user@email.org", true,
                 "$2a$10$ggIHKT/gYkYk0Bt2yP4xvOybahPn7GfSwC0T3fYhCzrZ9ta9LAYt6",
                 "b5e655641f1d05a415d5ea30d4fd25dcd03ea4a187c5d121d221454c03770f9f98101c206878b25697a79c924149da6802af8e97fbed4999c0dd838577590d9e");
 
@@ -33,14 +33,14 @@ public final class AccountTest {
 
     @Test(expected = Exception.class)
     public void shouldThrowExeption_whenEmailIsNull() {
-        new Account("ACCOUNT4", LocalDateTime.now(), "user", null, true,
+        new Account("ACCOUNT4", Instant.now(), "user", null, true,
                 "$2a$10$ggIHKT/gYkYk0Bt2yP4xvOybahPn7GfSwC0T3fYhCzrZ9ta9LAYt6",
                 "b5e655641f1d05a415d5ea30d4fd25dcd03ea4a187c5d121d221454c03770f9f98101c206878b25697a79c924149da6802af8e97fbed4999c0dd838577590d9e");
     }
 
     @Test
     public void shouldAssignAnEmail() {
-        Account account = new Account("ACCOUNT4", LocalDateTime.now(), "user", "user@email.org", true,
+        Account account = new Account("ACCOUNT4", Instant.now(), "user", "user@email.org", true,
                 "$2a$10$ggIHKT/gYkYk0Bt2yP4xvOybahPn7GfSwC0T3fYhCzrZ9ta9LAYt6",
                 "b5e655641f1d05a415d5ea30d4fd25dcd03ea4a187c5d121d221454c03770f9f98101c206878b25697a79c924149da6802af8e97fbed4999c0dd838577590d9e");
 
@@ -49,14 +49,14 @@ public final class AccountTest {
 
     @Test(expected = Exception.class)
     public void shouldThrowExeption_whenPasswordIsNull() {
-        new Account("ACCOUNT4", LocalDateTime.now(), "user", "user@email.org", true,
+        new Account("ACCOUNT4", Instant.now(), "user", "user@email.org", true,
                 null,
                 "b5e655641f1d05a415d5ea30d4fd25dcd03ea4a187c5d121d221454c03770f9f98101c206878b25697a79c924149da6802af8e97fbed4999c0dd838577590d9e");
     }
 
     @Test
     public void shouldAssignAPassword() {
-        Account account = new Account("ACCOUNT4", LocalDateTime.now(), "user", "user@email.org", true,
+        Account account = new Account("ACCOUNT4", Instant.now(), "user", "user@email.org", true,
                 "$2a$10$ggIHKT/gYkYk0Bt2yP4xvOybahPn7GfSwC0T3fYhCzrZ9ta9LAYt6",
                 "b5e655641f1d05a415d5ea30d4fd25dcd03ea4a187c5d121d221454c03770f9f98101c206878b25697a79c924149da6802af8e97fbed4999c0dd838577590d9e");
 
@@ -65,14 +65,14 @@ public final class AccountTest {
 
     @Test(expected = Exception.class)
     public void shouldThrowExeption_whenTokenIsNull() {
-        new Account("ACCOUNT4", LocalDateTime.now(), "user", "user@email.org", true,
+        new Account("ACCOUNT4", Instant.now(), "user", "user@email.org", true,
                 "$2a$10$ggIHKT/gYkYk0Bt2yP4xvOybahPn7GfSwC0T3fYhCzrZ9ta9LAYt6",
                 null);
     }
 
     @Test
     public void shouldAssignAToken() {
-        Account account = new Account("ACCOUNT4", LocalDateTime.now(), "user", "user@email.org", true,
+        Account account = new Account("ACCOUNT4", Instant.now(), "user", "user@email.org", true,
                 "$2a$10$ggIHKT/gYkYk0Bt2yP4xvOybahPn7GfSwC0T3fYhCzrZ9ta9LAYt6",
                 "b5e655641f1d05a415d5ea30d4fd25dcd03ea4a187c5d121d221454c03770f9f98101c206878b25697a79c924149da6802af8e97fbed4999c0dd838577590d9e");
 

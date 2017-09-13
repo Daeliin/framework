@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,19 +29,21 @@ public class JsonTest extends AbstractJUnit4SpringContextTests {
 
     @Test
     public void shouldSerializeImmutableTypes() throws Exception {
-        UuidPersistentResourceDto uuidPersistentResource = new UuidPersistentResourceDto("id", LocalDateTime.of(2017, 1, 1, 12, 32, 12), "label");
+        UuidPersistentResourceDto uuidPersistentResource = new UuidPersistentResourceDto("id",
+            LocalDateTime.of(2017, 1, 1, 12, 32, 12).toInstant(ZoneOffset.UTC), "label");
 
         String serializeduuidPersistentResource = jsonMapper.writeValueAsString(uuidPersistentResource);
 
-        assertThat(serializeduuidPersistentResource).isEqualTo("{\"id\":\"id\",\"creationDate\":\"2017-01-01T12:32:12\",\"label\":\"label\"}");
+        assertThat(serializeduuidPersistentResource).isEqualTo("{\"id\":\"id\",\"creationDate\":\"2017-01-01T12:32:12Z\",\"label\":\"label\"}");
     }
 
     @Test
     public void shouldDeserializeImmutableTypes() throws Exception {
-        UuidPersistentResourceDto uuidPersistentResource = new UuidPersistentResourceDto("id", LocalDateTime.of(2017, 1, 1, 12, 32, 12), "label");
+        UuidPersistentResourceDto uuidPersistentResource = new UuidPersistentResourceDto("id",
+            LocalDateTime.of(2017, 1, 1, 12, 32, 12).toInstant(ZoneOffset.UTC), "label");
 
         UuidPersistentResourceDto deserializedUuidPersistentResource =
-                jsonMapper.readValue("{\"id\":\"id\",\"creationDate\":\"2017-01-01T12:32:12\",\"label\":\"label\"}", UuidPersistentResourceDto.class);
+                jsonMapper.readValue("{\"id\":\"id\",\"creationDate\":\"2017-01-01T12:32:12Z\",\"label\":\"label\"}", UuidPersistentResourceDto.class);
 
         assertThat(deserializedUuidPersistentResource).isEqualToComparingFieldByField(uuidPersistentResource);
     }
@@ -58,7 +61,7 @@ public class JsonTest extends AbstractJUnit4SpringContextTests {
     public void shouldDeserializeISoDateToJSR310() throws Exception {
         LocalDateTime localDateTime = LocalDateTime.of(2017, 1, 1, 12, 32, 12);
 
-        LocalDateTime deserializedLocalDateTime = jsonMapper.readValue("\"2017-01-01T12:32:12\"", LocalDateTime.class);
+        LocalDateTime deserializedLocalDateTime = jsonMapper.readValue("\"2017-01-01T12:32:12Z\"", LocalDateTime.class);
 
         assertThat(deserializedLocalDateTime).isEqualTo(localDateTime);
     }

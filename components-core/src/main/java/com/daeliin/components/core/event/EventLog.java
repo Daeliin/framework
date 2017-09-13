@@ -2,7 +2,7 @@ package com.daeliin.components.core.event;
 
 import com.daeliin.components.domain.resource.PersistentResource;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Objects;
 
 /**
@@ -12,7 +12,7 @@ public final class EventLog extends PersistentResource<String> implements Compar
 
     public final String description;
 
-    public EventLog(String id, LocalDateTime creationDate, String description) {
+    public EventLog(String id, Instant creationDate, String description) {
         super(id, creationDate);
         this.description = Objects.requireNonNull(description, "description should not be null");
     }

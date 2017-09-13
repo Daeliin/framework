@@ -3,6 +3,7 @@ package com.daeliin.components.security.credentials.permission;
 import com.daeliin.components.domain.resource.PersistentResource;
 import org.junit.Test;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,23 +17,23 @@ public final class PermissionTest {
 
     @Test(expected = Exception.class)
     public void shouldThrowException_whenNameIsNull() {
-        new Permission("id", LocalDateTime.now(), null);
+        new Permission("id", Instant.now(), null);
     }
 
     @Test
     public void shouldAssignAName() {
-        assertThat(new Permission("id", LocalDateTime.now(), "ADMIN").name).isEqualTo("ADMIN");
+        assertThat(new Permission("id", Instant.now(), "ADMIN").name).isEqualTo("ADMIN");
     }
 
     @Test
     public void shouldPrintsItsName() {
-        assertThat(new Permission("id", LocalDateTime.now(), "ADMIN").toString()).contains("ADMIN");
+        assertThat(new Permission("id", Instant.now(), "ADMIN").toString()).contains("ADMIN");
     }
 
     @Test
     public void shouldBeComparedOnNames() {
-        Permission adminPermission = new Permission("id", LocalDateTime.now(), "ADMIN");
-        Permission userPermission = new Permission("id", LocalDateTime.now(), "USER");
+        Permission adminPermission = new Permission("id", Instant.now(), "ADMIN");
+        Permission userPermission = new Permission("id", Instant.now(), "USER");
 
         assertThat(adminPermission.compareTo(userPermission)).isNegative();
         assertThat(userPermission.compareTo(adminPermission)).isPositive();

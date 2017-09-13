@@ -13,9 +13,12 @@ import com.daeliin.components.security.credentials.account.AccountService;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.*;
+import java.time.Instant;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toSet;
@@ -48,7 +51,7 @@ public class ArticleService  {
 
         Article articleToCreate = new Article(
                 new Id().value,
-                LocalDateTime.now(),
+                Instant.now(),
                 article.author,
                 article.title,
                 article.urlFriendlyTitle,
@@ -116,7 +119,7 @@ public class ArticleService  {
     }
 
     public Article publish(String id) {
-        Article updatedArticle = updatePublication(id, true, LocalDateTime.now());
+        Article updatedArticle = updatePublication(id, true, Instant.now());
 
         eventLogService.create(String.format("The article %s has been published", updatedArticle.title));
 
@@ -151,7 +154,7 @@ public class ArticleService  {
                 .collect(toCollection(LinkedHashSet::new));
     }
 
-    private Article updatePublication(String id, boolean published, LocalDateTime publicationDate) {
+    private Article updatePublication(String id, boolean published, Instant publicationDate) {
         BArticle existingArticle = repository.findOne(id);
 
         if (existingArticle == null) {
@@ -161,7 +164,7 @@ public class ArticleService  {
         Account author = accountService.findOne(existingArticle.getAuthorId());
 
         existingArticle.setPublished(published);
-        existingArticle.setPublicationDate(published ? Timestamp.valueOf(publicationDate) : null);
+        existingArticle.setPublicationDate(published ? publicationDate : null);
 
         return instantiate(repository.save(existingArticle), author.username);
     }

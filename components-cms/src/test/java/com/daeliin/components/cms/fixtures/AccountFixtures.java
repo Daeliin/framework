@@ -4,12 +4,13 @@ import com.daeliin.components.security.sql.BAccount;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 public final class AccountFixtures {
 
     public static BAccount admin() {
         return new BAccount(
-                Timestamp.valueOf(LocalDateTime.of(2017, 1, 1, 12, 0, 0)),
+                LocalDateTime.of(2017, 1, 1, 12, 0, 0).toInstant(ZoneOffset.UTC),
                 "admin@daeliin.com",
                 true,
                 "ACCOUNT1",

@@ -5,7 +5,7 @@ import com.querydsl.sql.SQLQueryFactory;
 import com.querydsl.sql.SQLTemplates;
 import com.querydsl.sql.spring.SpringConnectionProvider;
 import com.querydsl.sql.spring.SpringExceptionTranslator;
-import com.querydsl.sql.types.*;
+import com.querydsl.sql.types.JSR310InstantType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,12 +24,6 @@ public class Persistence {
 
         configuration.setExceptionTranslator(new SpringExceptionTranslator());
         configuration.register(new JSR310InstantType());
-        configuration.register(new JSR310LocalDateType());
-        configuration.register(new JSR310LocalTimeType());
-        configuration.register(new JSR310LocalDateTimeType());
-        configuration.register(new JSR310OffsetTimeType());
-        configuration.register(new JSR310OffsetDateTimeType());
-        configuration.register(new JSR310ZonedDateTimeType());
 
         return configuration;
     }

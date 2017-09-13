@@ -6,7 +6,7 @@ import com.daeliin.components.domain.utils.Id;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Service
 public final class EventLogService extends ResourceService<EventLog, BEventLog, String, EventLogRepository> {
@@ -17,7 +17,7 @@ public final class EventLogService extends ResourceService<EventLog, BEventLog, 
     }
 
     public EventLog create(String description) {
-        EventLog eventLog = new EventLog(new Id().value, LocalDateTime.now(), description);
+        EventLog eventLog = new EventLog(new Id().value, Instant.now(), description);
         return super.create(eventLog);
     }
 }

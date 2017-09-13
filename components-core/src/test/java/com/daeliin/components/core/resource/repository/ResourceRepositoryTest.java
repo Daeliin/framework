@@ -11,8 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 import javax.inject.Inject;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -45,7 +44,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void shouldPersistAResource() {
-        BUuidPersistentResource newUuuidPersistentResource = new BUuidPersistentResource(Timestamp.valueOf(LocalDateTime.now()), "label100", UUID.randomUUID().toString());
+        BUuidPersistentResource newUuuidPersistentResource = new BUuidPersistentResource(Instant.now(), "label100", UUID.randomUUID().toString());
         int uuidPersistentResourceCountBeforeCreate = countRows();
 
         BUuidPersistentResource persistedUuidEntity = repository.findOne(repository.save(newUuuidPersistentResource).getUuid());
@@ -58,7 +57,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void shouldReturnThePersistedResource() {
-        BUuidPersistentResource newUuuidPersistentResource = new BUuidPersistentResource(Timestamp.valueOf(LocalDateTime.now()), "label100", UUID.randomUUID().toString());
+        BUuidPersistentResource newUuuidPersistentResource = new BUuidPersistentResource(Instant.now(), "label100", UUID.randomUUID().toString());
 
         BUuidPersistentResource returnedUuidEntity = repository.save(newUuuidPersistentResource);
 
@@ -67,8 +66,8 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void shouldPersistResources() {
-        BUuidPersistentResource newUuuidPersistentResource1 = new BUuidPersistentResource(Timestamp.valueOf(LocalDateTime.now()), "label101", UUID.randomUUID().toString());
-        BUuidPersistentResource newUuuidPersistentResource2 = new BUuidPersistentResource(Timestamp.valueOf(LocalDateTime.now()), "label102", UUID.randomUUID().toString());
+        BUuidPersistentResource newUuuidPersistentResource1 = new BUuidPersistentResource(Instant.now(), "label101", UUID.randomUUID().toString());
+        BUuidPersistentResource newUuuidPersistentResource2 = new BUuidPersistentResource(Instant.now(), "label102", UUID.randomUUID().toString());
         List<BUuidPersistentResource> newUuidEntities = Arrays.asList(newUuuidPersistentResource1, newUuuidPersistentResource2);
 
         int uuidPersistentResourceCountBeforeCreate = countRows();
@@ -82,8 +81,8 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void shouldReturnThePersistedResources() {
-        BUuidPersistentResource newUuuidPersistentResource1 = new BUuidPersistentResource(Timestamp.valueOf(LocalDateTime.now()), "label101", UUID.randomUUID().toString());
-        BUuidPersistentResource newUuuidPersistentResource2 = new BUuidPersistentResource(Timestamp.valueOf(LocalDateTime.now()), "label102", UUID.randomUUID().toString());
+        BUuidPersistentResource newUuuidPersistentResource1 = new BUuidPersistentResource(Instant.now(), "label101", UUID.randomUUID().toString());
+        BUuidPersistentResource newUuuidPersistentResource2 = new BUuidPersistentResource(Instant.now(), "label102", UUID.randomUUID().toString());
         List<BUuidPersistentResource> newUuidEntities = Arrays.asList(newUuuidPersistentResource1, newUuuidPersistentResource2);
 
         Collection<BUuidPersistentResource> returnedUuidEntities = repository.save(newUuidEntities);

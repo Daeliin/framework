@@ -2,7 +2,7 @@ package com.daeliin.components.webservices.fake;
 
 import com.daeliin.components.webservices.dto.ResourceDtoConversion;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 public final class UuidPersistentResourceDtoConversion implements ResourceDtoConversion<UuidPersistentResourceDto, UuidPersistentResource, String> {
@@ -20,7 +20,7 @@ public final class UuidPersistentResourceDtoConversion implements ResourceDtoCon
     }
 
     @Override
-    public UuidPersistentResource map(UuidPersistentResourceDto uuidEntityDto, String id, LocalDateTime localDateTime) {
+    public UuidPersistentResource map(UuidPersistentResourceDto uuidEntityDto, String id, Instant localDateTime) {
         if (uuidEntityDto == null) {
             return null;
         }

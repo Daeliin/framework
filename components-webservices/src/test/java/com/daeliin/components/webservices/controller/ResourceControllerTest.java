@@ -16,12 +16,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import javax.inject.Inject;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -43,7 +46,7 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void shouldReturnHttpCreatedAndCreatedResource() throws Exception {
-        UuidPersistentResourceDto uuidPersistentResourceDto = new UuidPersistentResourceDto("id", LocalDateTime.now(), "label");
+        UuidPersistentResourceDto uuidPersistentResourceDto = new UuidPersistentResourceDto("id", Instant.now(), "label");
 
         MvcResult result =
             mockMvc
@@ -62,7 +65,7 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void shouldPersistResource() throws Exception {
-        UuidPersistentResourceDto uuidPersistentResourceDto = new UuidPersistentResourceDto("id", LocalDateTime.now(), "label");
+        UuidPersistentResourceDto uuidPersistentResourceDto = new UuidPersistentResourceDto("id", Instant.now(), "label");
         long uuidPersistentResourceCountBeforeCreate = service.count();
 
          UuidPersistentResourceDto returnedUuidPersistentResourceDto = jsonMapper.readValue(mockMvc
@@ -85,7 +88,7 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void shouldReturnHttpBadRequest_whenCreatingInvalidResource() throws Exception {
-        UuidPersistentResourceDto invalidUuidPersistentResourceDto = new UuidPersistentResourceDto("id", LocalDateTime.now(), " ");
+        UuidPersistentResourceDto invalidUuidPersistentResourceDto = new UuidPersistentResourceDto("id", Instant.now(), " ");
 
         mockMvc
             .perform(post("/uuid")
@@ -98,7 +101,7 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
     public void shouldNotPersistResource_whenCreatingInvalidResource() throws Exception {
         long uuidPersistentResourceCountBeforeCreate = service.count();
 
-        UuidPersistentResourceDto invalidUuidPersistentResourceDto = new UuidPersistentResourceDto("id", LocalDateTime.now(), " ");
+        UuidPersistentResourceDto invalidUuidPersistentResourceDto = new UuidPersistentResourceDto("id", Instant.now(), " ");
 
         mockMvc
             .perform(post("/uuid")
@@ -210,7 +213,7 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
     public void shouldReturnHttpOkAndUpdatedResource_whenUpdatingResource() throws Exception {
         UuidPersistentResourceDto updatedUuidPersistentResourceDto = new UuidPersistentResourceDto(
                 UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
-                LocalDateTime.now(),
+                Instant.now(),
                 "newLabel");
 
         MvcResult result =
@@ -229,7 +232,7 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
     public void shouldUpdateResource() throws Exception {
         UuidPersistentResourceDto updatedUuidPersistentResourceDto = new UuidPersistentResourceDto(
                 UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
-                LocalDateTime.now(),
+                Instant.now(),
                 "newLabel");
 
         mockMvc
@@ -246,7 +249,7 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
     public void shouldReturnHttpBadRequest_whenUpdatingInvalidResource() throws Exception {
         UuidPersistentResourceDto invalidUuidPersistentResourceDto = new UuidPersistentResourceDto(
                 UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
-                LocalDateTime.now(),
+                Instant.now(),
                 " ");
 
         mockMvc
@@ -260,7 +263,7 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
     public void shouldNotUpdateResource_whenUpdatingInvalidResource() throws Exception {
         UuidPersistentResourceDto invalidUuidPersistentResourceDto = new UuidPersistentResourceDto(
                 UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
-                LocalDateTime.now(),
+                Instant.now(),
                 " ");
 
         mockMvc
@@ -277,7 +280,7 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
     public void shouldReturnHttpNotFound_whenUpdatingNonExistingResource() throws Exception {
         UuidPersistentResourceDto updatedUuidPersistentResourceDto = new UuidPersistentResourceDto(
                 UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
-                LocalDateTime.now(),
+                Instant.now(),
                 "newLabel");
 
         mockMvc

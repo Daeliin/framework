@@ -4,6 +4,7 @@ import com.daeliin.components.domain.resource.PersistentResource;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
@@ -19,27 +20,27 @@ public final class EventLogTest {
 
     @Test(expected = Exception.class)
     public void shouldThrowException_whenDescriptionIsNull() {
-        new EventLog(UUID.randomUUID().toString(), LocalDateTime.now(), null);
+        new EventLog(UUID.randomUUID().toString(), Instant.now(), null);
     }
 
     @Test
     public void shouldAssignADescription() {
-        EventLog eventLog = new EventLog(UUID.randomUUID().toString(), LocalDateTime.now(), "description");
+        EventLog eventLog = new EventLog(UUID.randomUUID().toString(), Instant.now(), "description");
 
         assertThat(eventLog.description).isEqualTo("description");
     }
 
     @Test
     public void shouldPrintsItsDescription() {
-        EventLog eventLog = new EventLog(UUID.randomUUID().toString(), LocalDateTime.now(), "description");
+        EventLog eventLog = new EventLog(UUID.randomUUID().toString(), Instant.now(), "description");
 
         assertThat(eventLog.toString()).contains(String.valueOf(eventLog.description));
     }
 
     @Test
     public void shouldBeComparedOnCreationDate() {
-        LocalDateTime creationDate1 = LocalDateTime.now();
-        LocalDateTime creationDate2 = LocalDateTime.now().plus(10, ChronoUnit.SECONDS);
+        Instant creationDate1 = Instant.now();
+        Instant creationDate2 = Instant.now().plus(10, ChronoUnit.SECONDS);
 
         EventLog eventLog1 = new EventLog(UUID.randomUUID().toString(), creationDate1, "description");
         EventLog eventLog2 = new EventLog(UUID.randomUUID().toString(), creationDate2, "description");

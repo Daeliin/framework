@@ -2,6 +2,7 @@ package com.daeliin.components.cms.article;
 
 import com.daeliin.components.domain.resource.PersistentResource;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -12,10 +13,10 @@ public class Article extends PersistentResource<String> implements Comparable<Ar
     public final String urlFriendlyTitle;
     public final String description;
     public final String content;
-    public final LocalDateTime publicationDate;
+    public final Instant publicationDate;
     public final boolean published;
 
-    public Article(String id, LocalDateTime creationDate, String author, String title, String urlFriendlyTitle, String description, String content, LocalDateTime publicationDate, boolean published) {
+    public Article(String id, Instant creationDate, String author, String title, String urlFriendlyTitle, String description, String content, Instant publicationDate, boolean published) {
         super(id, creationDate);
         this.author = Objects.requireNonNull(author, "author should not be null");
         this.title = Objects.requireNonNull(title, "title should not be null");

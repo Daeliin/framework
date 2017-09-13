@@ -3,8 +3,6 @@ package com.daeliin.components.security.credentials.account;
 import com.daeliin.components.domain.resource.Conversion;
 import com.daeliin.components.security.sql.BAccount;
 
-import java.sql.Timestamp;
-
 public final class AccountConversion implements Conversion<Account, BAccount> {
 
     public Account instantiate(BAccount bAccount) {
@@ -14,7 +12,7 @@ public final class AccountConversion implements Conversion<Account, BAccount> {
 
         return new Account(
             bAccount.getId(),
-            bAccount.getCreationDate().toLocalDateTime(),
+            bAccount.getCreationDate(),
             bAccount.getUsername(),
             bAccount.getEmail(),
             bAccount.getEnabled(),
@@ -29,7 +27,7 @@ public final class AccountConversion implements Conversion<Account, BAccount> {
         }
 
         return new BAccount(
-            Timestamp.valueOf(account.getCreationDate()),
+            account.getCreationDate(),
             account.email,
             account.enabled,
             account.getId(),

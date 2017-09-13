@@ -13,14 +13,21 @@ import com.daeliin.components.webservices.exception.ResourceNotFoundException;
 import com.daeliin.components.webservices.validation.PageRequestValidation;
 import com.querydsl.core.types.Predicate;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Collection;
 
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 /***
  * Exposes CRUD and provides a simple pagination for a resource.
@@ -56,7 +63,7 @@ public abstract class ResourceController<V, T extends Persistable<ID>, ID, S ext
     @Override
     public V create(@RequestBody @Valid V resource) {
         try {
-            return conversion.instantiate(service.create(conversion.map(resource, null, LocalDateTime.now())));
+            return conversion.instantiate(service.create(conversion.map(resource, null, Instant.now())));
         } catch (PersistentResourceAlreadyExistsException e) {
             throw new ResourceAlreadyExistsException();
         }

@@ -4,14 +4,14 @@ package com.daeliin.components.security.credentials.permission;
 import com.daeliin.components.domain.resource.PersistentResource;
 import com.google.common.base.MoreObjects;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Objects;
 
 public class Permission extends PersistentResource<String> implements Comparable<Permission> {
 
     public final String name;
 
-    public Permission(String id, LocalDateTime creationDate, String name) {
+    public Permission(String id, Instant creationDate, String name) {
         super(id, creationDate);
         this.name = Objects.requireNonNull(name, "name should not be null");
     }

@@ -2,8 +2,8 @@ package com.daeliin.components.cms.fixtures;
 
 import com.daeliin.components.core.sql.BNews;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 public final class NewsFixtures {
 
@@ -12,7 +12,7 @@ public final class NewsFixtures {
                 "ARTICLE2",
                 "ACCOUNT1",
                 "Some news content 1",
-                Timestamp.valueOf(LocalDateTime.of(2016, 5, 20, 14, 30, 0)),
+                LocalDateTime.of(2016, 5, 20, 14, 30, 0).toInstant(ZoneOffset.UTC),
                 "NEWS1", "https://daeliin.com");
     }
     
@@ -21,7 +21,7 @@ public final class NewsFixtures {
                 "ARTICLE2",
                 "ACCOUNT1",
                 "Some news content 2",
-                Timestamp.valueOf(LocalDateTime.of(2016, 5, 21, 14, 30, 0)),
+                LocalDateTime.of(2016, 5, 21, 14, 30, 0).toInstant(ZoneOffset.UTC),
                 "NEWS2",
                 null);
     }

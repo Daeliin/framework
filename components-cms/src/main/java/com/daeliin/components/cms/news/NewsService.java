@@ -15,7 +15,7 @@ import com.google.common.collect.Sets;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,7 +61,7 @@ public class NewsService {
             throw new PersistentResourceNotFoundException(String.format("Account %s doesn't exist", news.author));
         }
 
-        News newsToCreate = new News(UUID.randomUUID().toString(), LocalDateTime.now(), news.author, news.content, news.source);
+        News newsToCreate = new News(UUID.randomUUID().toString(), Instant.now(), news.author, news.content, news.source);
 
         News createdNews = instantiate(repository.save(map(newsToCreate, articleId, author.getId())), author.username);
 

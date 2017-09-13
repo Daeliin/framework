@@ -2,9 +2,7 @@ package com.daeliin.components.cms.article;
 
 import com.daeliin.components.cms.Application;
 import com.daeliin.components.cms.library.ArticleLibrary;
-import com.daeliin.components.cms.news.News;
 import com.daeliin.components.cms.news.NewsRepository;
-import com.daeliin.components.cms.news.NewsService;
 import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
 import com.daeliin.components.core.sql.BNews;
 import com.daeliin.components.core.sql.QNews;
@@ -19,7 +17,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 import javax.inject.Inject;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -60,13 +60,13 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
     public void shouldThrowPersistentResourceNotFoundException_whenCreatingArticleWithNonExistingAuthor() {
         Article article = new Article(
                 "ARTICLE1",
-                LocalDateTime.of(2016, 5, 20, 14, 30, 0),
+                LocalDateTime.of(2016, 5, 20, 14, 30, 0).toInstant(ZoneOffset.UTC),
                 "AANWN",
                 "Welcome to sample",
                 "welcome-to-sample",
                 "Today is the day we start sample.com",
                 "We open our door today, you'll find content very soon.",
-                LocalDateTime.of(2016, 5, 20, 15, 30, 0),
+                LocalDateTime.of(2016, 5, 20, 15, 30, 0).toInstant(ZoneOffset.UTC),
                 true);
 
         articleService.create(article);
@@ -76,13 +76,13 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
     public void shouldCreateArticle() {
         Article article = new Article(
                 " ",
-                LocalDateTime.of(2016, 5, 20, 14, 30, 0),
+                LocalDateTime.of(2016, 5, 20, 14, 30, 0).toInstant(ZoneOffset.UTC),
                 "admin",
                 "Welcome to sample",
                 "welcome-to-sample",
                 "Today is the day we start sample.com",
                 "We open our door today, you'll find content very soon.",
-                LocalDateTime.of(2016, 5, 20, 15, 30, 0),
+                LocalDateTime.of(2016, 5, 20, 15, 30, 0).toInstant(ZoneOffset.UTC),
                 true);
 
         Article createdArticle = articleService.create(article);
@@ -105,7 +105,7 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
     @Test
     public void shouldUpdateAnArticleTitleDescriptionAndContent() {
         Article articleToUpdate = ArticleLibrary.notPublishedArticle();
-        Article article = new Article("", LocalDateTime.now(), "", "New title", "", "New desc", "New content", null, false);
+        Article article = new Article("", Instant.now(), "", "New title", "", "New desc", "New content", null, false);
 
         Article updatedArtice = articleService.update(articleToUpdate.getId(), article);
 

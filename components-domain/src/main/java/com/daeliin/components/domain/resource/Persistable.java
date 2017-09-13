@@ -1,6 +1,6 @@
 package com.daeliin.components.domain.resource;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * Resource persistable in a RDBMS, with an id.
@@ -18,5 +18,5 @@ public interface Persistable<ID> {
      * Returns the resource creation date.
      * @return the resource creation date
      */
-    LocalDateTime getCreationDate();
+    Instant getCreationDate();
 }

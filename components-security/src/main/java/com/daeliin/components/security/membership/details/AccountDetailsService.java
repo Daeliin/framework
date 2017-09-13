@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -54,7 +54,7 @@ public class AccountDetailsService implements UserDetailsService {
 
         return accountService.create(new Account(
                 new Id().value,
-                LocalDateTime.now(),
+                Instant.now(),
                 signUpRequest.username,
                 signUpRequest.email,
                 false,

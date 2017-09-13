@@ -3,7 +3,7 @@ package com.daeliin.components.domain.resource;
 import com.daeliin.components.domain.resource.fake.UuidPersistentResource;
 import org.junit.Test;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -11,11 +11,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PersistentResourceTest {
     
     private static final String UUID = "c4726093-fa44-4b4c-8108-3fdcacffabd6";
-    private static final LocalDateTime CREATION_DATE = LocalDateTime.now();
+    private static final Instant CREATION_DATE = Instant.now();
+
+    @Test(expected = Exception.class)
+    public void shouldThrowException_whenCreationDateIsNull() {
+        new UuidPersistentResource(UUID, null);
+    }
 
     @Test
     public void shouldAssignADefaultCreationDate() {
-        UuidPersistentResource newUUIDEntity = new UuidPersistentResource(UUID, null);
+        UuidPersistentResource newUUIDEntity = new UuidPersistentResource(UUID);
 
         assertThat(newUUIDEntity.getCreationDate()).isNotNull();
     }

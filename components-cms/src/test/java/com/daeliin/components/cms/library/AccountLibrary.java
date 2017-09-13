@@ -3,13 +3,14 @@ package com.daeliin.components.cms.library;
 import com.daeliin.components.security.credentials.account.Account;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 public final class AccountLibrary {
 
     public static Account admin() {
         return new Account(
                 "ACCOUNT1",
-                LocalDateTime.of(2017, 1, 1, 12, 0, 0),
+                LocalDateTime.of(2017, 1, 1, 12, 0, 0).toInstant(ZoneOffset.UTC),
                 "admin",
                 "admin@daeliin.com",
                 true,

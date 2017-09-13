@@ -2,7 +2,7 @@ package com.daeliin.components.domain.resource;
 
 import com.google.common.base.MoreObjects;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Objects;
 
 /**
@@ -12,21 +12,23 @@ import java.util.Objects;
  */
 public abstract class PersistentResource<ID> implements Persistable<ID> {
     
-    private static final LocalDateTime DEFAULT_CREATION_DATE = LocalDateTime.now();
-
     private final ID id;
-    private final LocalDateTime creationDate;
+    private final Instant creationDate;
 
-    protected PersistentResource(ID id, LocalDateTime creationDate) {
+    protected PersistentResource(ID id) {
+        this(id, Instant.now());
+    }
+
+    protected PersistentResource(ID id, Instant creationDate) {
         this.id = Objects.requireNonNull(id, "id should not be null");
-        this.creationDate = creationDate != null ? creationDate : DEFAULT_CREATION_DATE;
+        this.creationDate = Objects.requireNonNull(creationDate, "creation date should not be null");
     }
 
     public ID getId() {
         return id;
     }
 
-    public LocalDateTime getCreationDate() {
+    public Instant getCreationDate() {
         return creationDate;
     }
 

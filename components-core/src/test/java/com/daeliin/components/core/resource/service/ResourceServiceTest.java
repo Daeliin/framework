@@ -23,7 +23,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -63,7 +63,7 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
 
     @Test
     public void shouldCallRepositorySaveAndReturnResource_whenCreatingResource() {
-        UuidPersistentResource newUuuidEntity = new UuidPersistentResource(UUID.randomUUID().toString(), LocalDateTime.now(), "label100");
+        UuidPersistentResource newUuuidEntity = new UuidPersistentResource(UUID.randomUUID().toString(), Instant.now(), "label100");
 
         doReturn(conversion.map(newUuuidEntity)).when(repositoryMock).save(any(BUuidPersistentResource.class));
 
@@ -75,8 +75,8 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
 
     @Test
     public void shouldCallRepositorySaveAndReturnResources_whenCreatingResources() {
-        UuidPersistentResource newUuidEntity1 = new UuidPersistentResource(UUID.randomUUID().toString(), LocalDateTime.now(), "label101");
-        UuidPersistentResource newUuidEntity2 = new UuidPersistentResource(UUID.randomUUID().toString(), LocalDateTime.now(), "label102");
+        UuidPersistentResource newUuidEntity1 = new UuidPersistentResource(UUID.randomUUID().toString(), Instant.now(), "label101");
+        UuidPersistentResource newUuidEntity2 = new UuidPersistentResource(UUID.randomUUID().toString(), Instant.now(), "label102");
 
         List<UuidPersistentResource> newUuidEntites = Arrays.asList(newUuidEntity1, newUuidEntity2);
 
@@ -258,7 +258,7 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
 
     @Test(expected = PersistentResourceNotFoundException.class)
     public void shouldThrowPersistenceResourceNotFoundException_whenUpdatingNonExistingResource() {
-        UuidPersistentResource nonExistingUuidEntity = new UuidPersistentResource("654684-64684", LocalDateTime.now(), "label-1");
+        UuidPersistentResource nonExistingUuidEntity = new UuidPersistentResource("654684-64684", Instant.now(), "label-1");
 
         service.update(nonExistingUuidEntity);
     }

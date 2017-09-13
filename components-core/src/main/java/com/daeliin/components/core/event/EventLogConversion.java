@@ -3,8 +3,6 @@ package com.daeliin.components.core.event;
 import com.daeliin.components.core.sql.BEventLog;
 import com.daeliin.components.domain.resource.Conversion;
 
-import java.sql.Timestamp;
-
 public final class EventLogConversion implements Conversion<EventLog, BEventLog> {
 
     @Override
@@ -15,7 +13,7 @@ public final class EventLogConversion implements Conversion<EventLog, BEventLog>
 
         return new EventLog(
                 bEventLog.getId(),
-                bEventLog.getCreationDate().toLocalDateTime(),
+                bEventLog.getCreationDate(),
                 bEventLog.getDescription());
     }
 
@@ -26,7 +24,7 @@ public final class EventLogConversion implements Conversion<EventLog, BEventLog>
         }
 
         return new BEventLog(
-                Timestamp.valueOf(eventLog.getCreationDate()),
+                eventLog.getCreationDate(),
                 eventLog.description,
                 eventLog.getId());
     }

@@ -13,7 +13,7 @@ public final class NewsConversion {
 
         return new News(
                 bNews.getId(),
-                bNews.getCreationDate().toLocalDateTime(),
+                bNews.getCreationDate(),
                 author,
                 bNews.getContent(),
                 bNews.getSource());
@@ -28,7 +28,7 @@ public final class NewsConversion {
                 articleId,
                 authorId,
                 news.content,
-                Timestamp.valueOf(news.getCreationDate()),
+                news.getCreationDate(),
                 news.getId(),
                 news.source);
     }

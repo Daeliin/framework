@@ -3,8 +3,6 @@ package com.daeliin.components.core.fake;
 import com.daeliin.components.core.sql.BUuidPersistentResource;
 import com.daeliin.components.domain.resource.Conversion;
 
-import java.sql.Timestamp;
-
 public final class UuidPersistentResourceConversion implements Conversion<UuidPersistentResource, BUuidPersistentResource> {
 
     @Override
@@ -15,7 +13,7 @@ public final class UuidPersistentResourceConversion implements Conversion<UuidPe
 
         return new UuidPersistentResource(
                 bUuidEntity.getUuid(),
-                bUuidEntity.getCreationDate().toLocalDateTime(),
+                bUuidEntity.getCreationDate(),
                 bUuidEntity.getLabel());
     }
 
@@ -26,7 +24,7 @@ public final class UuidPersistentResourceConversion implements Conversion<UuidPe
         }
 
         return new BUuidPersistentResource(
-                Timestamp.valueOf(uuidEntity.getCreationDate()),
+                uuidEntity.getCreationDate(),
                 uuidEntity.label,
                 uuidEntity.getId());
     }

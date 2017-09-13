@@ -3,8 +3,6 @@ package com.daeliin.components.core.country;
 import com.daeliin.components.core.sql.BCountry;
 import com.daeliin.components.domain.resource.Conversion;
 
-import java.sql.Timestamp;
-
 public final class CountryConversion implements Conversion<Country, BCountry> {
 
     @Override
@@ -15,7 +13,7 @@ public final class CountryConversion implements Conversion<Country, BCountry> {
 
         return new Country(
                 bCountry.getCode(),
-                bCountry.getCreationDate().toLocalDateTime(),
+                bCountry.getCreationDate(),
                 bCountry.getName());
     }
 
@@ -27,7 +25,7 @@ public final class CountryConversion implements Conversion<Country, BCountry> {
 
         return new BCountry(
                 country.code,
-                Timestamp.valueOf(country.getCreationDate()),
+                country.getCreationDate(),
                 country.name);
     }
 }
