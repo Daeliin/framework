@@ -13,10 +13,5 @@ Provides commons java components with Spring Boot.
 * Web tier : [Spring Boot 1.5.6.RELEASE](https://projects.spring.io/spring-boot/)
 * Templating : [Thymeleaf 2.1.5.RELEASE](http://www.thymeleaf.org/)
 
-## Modules documentation
-* [Domain](https://github.com/Daeliin/java-components/wiki/Module-:-domain)
-* [Core](https://github.com/Daeliin/java-components/wiki/Module-:-core)
-* [Security](https://github.com/Daeliin/java-components/wiki/Module-:-security)
-* [Webservices](https://github.com/Daeliin/java-components/wiki/Module-:-webservices)
-* [CMS](https://github.com/Daeliin/java-components/wiki/Module-:-cms)
-
+## Documentation
+* [GitHub Wiki](https://github.com/baptistelebail/java-components/wiki
