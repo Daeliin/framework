@@ -14,4 +14,4 @@ Provides commons java components with Spring Boot.
 * Templating : [Thymeleaf 2.1.5.RELEASE](http://www.thymeleaf.org/)
 
 ## Documentation
-* [GitHub Wiki](https://github.com/baptistelebail/java-components/wiki
+* [GitHub Wiki](https://github.com/baptistelebail/java-components/wiki)
