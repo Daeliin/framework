@@ -8,6 +8,8 @@ import com.daeliin.components.security.library.AccountLibrary;
 import com.daeliin.components.security.membership.SignUpRequest;
 import com.daeliin.components.security.sql.QAccount;
 import org.junit.Test;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
@@ -27,6 +29,18 @@ public class AccountDetailsServiceTest extends AbstractTransactionalJUnit4Spring
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentException_whenSignUpRequestIsNull() {
         accountDetailsService.signUp(null);
+    }
+
+    @Test
+    public void shoudLoadUserByUsername() {
+        Account account = AccountLibrary.admin();
+
+        UserDetails userDetails = accountDetailsService.loadUserByUsername(account.username);
+
+        assertThat(userDetails).isNotNull();
+        assertThat(userDetails.getUsername()).isEqualTo(account.username);
+        assertThat(userDetails.isEnabled()).isEqualTo(account.enabled);
+        assertThat(userDetails.getAuthorities().iterator().next()).isEqualTo(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 
     @Test

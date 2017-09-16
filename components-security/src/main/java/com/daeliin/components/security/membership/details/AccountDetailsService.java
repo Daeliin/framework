@@ -40,7 +40,7 @@ public class AccountDetailsService implements UserDetailsService {
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         Collection<Permission> permissions = permissionService.findForAccount(account.getId());
-        permissions.forEach(accountPermission -> authorities.add(new SimpleGrantedAuthority(accountPermission.name)));
+        permissions.forEach(accountPermission -> authorities.add(new SimpleGrantedAuthority("ROLE_" + accountPermission.getId())));
 
         return new org.springframework.security.core.userdetails.User(account.username, account.password, authorities);
     }
