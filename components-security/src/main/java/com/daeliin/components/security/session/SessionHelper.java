@@ -2,7 +2,6 @@ package com.daeliin.components.security.session;
 
 import com.daeliin.components.security.credentials.account.Account;
 import com.daeliin.components.security.credentials.account.AccountService;
-import com.daeliin.components.security.membership.details.AccountDetails;
 import com.daeliin.components.security.membership.details.AccountDetailsService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,12 +42,7 @@ public class SessionHelper {
         return accountService.findByUsernameAndEnabled(currentUsername);
     }
 
-    public AccountDetails getCurrentAccountDetails() {
-        String currentUsername = getCurrentUsername();
-        return accountDetailsService.load(currentUsername);
-    }
-
-    public org.springframework.security.core.userdetails.UserDetails getCurrentUserDetails() {
+    public org.springframework.security.core.userdetails.UserDetails getCurrentAccountDetails() {
         String currentUsername = getCurrentUsername();
 
         return accountDetailsService.loadUserByUsername(currentUsername);
@@ -56,7 +50,7 @@ public class SessionHelper {
 
     public boolean currentAccountIs(final Account account) {
         boolean currentAccountIsAccount = false;
-        org.springframework.security.core.userdetails.UserDetails currentAccount = getCurrentUserDetails();
+        org.springframework.security.core.userdetails.UserDetails currentAccount = getCurrentAccountDetails();
 
         if (currentAccount != null && account != null) {
             currentAccountIsAccount = currentAccount.getUsername().equals(account.username);

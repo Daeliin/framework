@@ -5,7 +5,6 @@ import com.daeliin.components.security.credentials.account.Account;
 import com.daeliin.components.security.credentials.account.AccountService;
 import com.daeliin.components.security.exception.InvalidTokenException;
 import com.daeliin.components.security.library.AccountLibrary;
-import com.daeliin.components.security.library.PermissionLibrary;
 import com.daeliin.components.security.membership.SignUpRequest;
 import com.daeliin.components.security.sql.QAccount;
 import org.junit.Test;
@@ -30,17 +29,6 @@ public class AccountDetailsServiceTest extends AbstractTransactionalJUnit4Spring
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentException_whenSignUpRequestIsNull() {
         accountDetailsService.signUp(null);
-    }
-
-    @Test
-    public void shoudLoadAccountDetailsByUsername() {
-        Account account = AccountLibrary.admin();
-
-        AccountDetails accountDetails = accountDetailsService.load(account.username);
-
-        assertThat(accountDetails).isNotNull();
-        assertThat(accountDetails.account).isEqualTo(account);
-        assertThat(accountDetails.permissions).containsOnly(PermissionLibrary.admin());
     }
 
     @Test

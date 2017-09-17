@@ -30,16 +30,6 @@ public class AccountDetailsService implements UserDetailsService {
     @Inject
     private PermissionService permissionService;
 
-    public AccountDetails load(String username) {
-        Account account = accountService.findByUsernameAndEnabled(username);
-
-        if (account == null) {
-            throw new UsernameNotFoundException("Username not found");
-        }
-
-        return new AccountDetails(account, permissionService.findForAccount(account.getId()));
-    }
-
     @Override
     public org.springframework.security.core.userdetails.UserDetails loadUserByUsername(String username) {
         Account account = accountService.findByUsernameAndEnabled(username);
