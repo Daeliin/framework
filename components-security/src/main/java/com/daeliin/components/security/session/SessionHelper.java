@@ -2,9 +2,10 @@ package com.daeliin.components.security.session;
 
 import com.daeliin.components.security.credentials.account.Account;
 import com.daeliin.components.security.credentials.account.AccountService;
+import com.daeliin.components.security.membership.details.AccountDetails;
+import com.daeliin.components.security.membership.details.AccountDetailsService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -12,12 +13,12 @@ import javax.inject.Inject;
 @Component
 public class SessionHelper {
 
-    private final UserDetailsService userDetailsService;
+    private final AccountDetailsService accountDetailsService;
     private final AccountService accountService;
 
     @Inject
-    public SessionHelper(final UserDetailsService userDetailsService, AccountService accountService) {
-        this.userDetailsService = userDetailsService;
+    public SessionHelper(final AccountDetailsService accountDetailsService, AccountService accountService) {
+        this.accountDetailsService = accountDetailsService;
         this.accountService = accountService;
     }
 
@@ -42,15 +43,20 @@ public class SessionHelper {
         return accountService.findByUsernameAndEnabled(currentUsername);
     }
 
-    public org.springframework.security.core.userdetails.UserDetails getCurrentAccountDetails() {
+    public AccountDetails getCurrentAccountDetails() {
+        String currentUsername = getCurrentUsername();
+        return accountDetailsService.load(currentUsername);
+    }
+
+    public org.springframework.security.core.userdetails.UserDetails getCurrentUserDetails() {
         String currentUsername = getCurrentUsername();
 
-        return userDetailsService.loadUserByUsername(currentUsername);
+        return accountDetailsService.loadUserByUsername(currentUsername);
     }
 
     public boolean currentAccountIs(final Account account) {
         boolean currentAccountIsAccount = false;
-        org.springframework.security.core.userdetails.UserDetails currentAccount = getCurrentAccountDetails();
+        org.springframework.security.core.userdetails.UserDetails currentAccount = getCurrentUserDetails();
 
         if (currentAccount != null && account != null) {
             currentAccountIsAccount = currentAccount.getUsername().equals(account.username);

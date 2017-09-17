@@ -5,7 +5,7 @@ import com.daeliin.components.security.sql.BPermission;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.util.Collection;
+import java.util.Set;
 import java.util.TreeSet;
 
 import static java.util.stream.Collectors.toCollection;
@@ -18,7 +18,7 @@ public final class PermissionService extends ResourceService<Permission, BPermis
         super(repository, new PermissionConversion());
     }
 
-    public Collection<Permission> findForAccount(String accountId) {
+    public Set<Permission> findForAccount(String accountId) {
         return repository.findForAccount(accountId)
                 .stream()
                 .map(conversion::instantiate)
