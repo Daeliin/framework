@@ -78,7 +78,7 @@ public class MembershipService {
 
         Account account = accountService.findOne(accountId);
         eventLogService.create(String.format("%s requested a new password ", account.username));
-        membershipNotifications.newPassword(accountService.findOne(accountId));
+        membershipNotifications.newPassword(account);
 
         log.info(String.format("%s requested a new password", account));
     }
