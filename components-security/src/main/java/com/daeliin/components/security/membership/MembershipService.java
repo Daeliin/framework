@@ -70,7 +70,7 @@ public class MembershipService {
         }
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void newPassword(String accountId) {
         if (!accountService.exists(accountId)) {
             throw new PersistentResourceNotFoundException(String.format("Account[%s] not found", accountId));
