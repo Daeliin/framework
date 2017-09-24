@@ -36,7 +36,7 @@ public class MailingMembershipNotifications implements MembershipNotifications {
         Map<String, String> parameters = addAccountParameters(account);
         
         try {
-            Mail mail = 
+            Mail mail =
                 Mail.builder()
                 .from(from)
                 .to(account.email)
@@ -117,7 +117,7 @@ public class MailingMembershipNotifications implements MembershipNotifications {
     private Map<String, String> addAccountParameters(final Account account) {
         Map<String, String> accountParameters = new HashMap<>();
         
-        accountParameters.put("userid", account.getId());
+        accountParameters.put("userId", account.getId());
         accountParameters.put("userName", account.username);
         accountParameters.put("userEmail", account.email);
         accountParameters.put("userToken", account.token);
