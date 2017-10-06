@@ -5,7 +5,6 @@ import com.daeliin.components.core.fake.UuidPersistentResourceRepository;
 import com.daeliin.components.core.fixtures.UuidPersistentResourceFixtures;
 import com.daeliin.components.core.sql.BUuidPersistentResource;
 import com.daeliin.components.core.sql.QUuidPersistentResource;
-import com.querydsl.core.types.Predicate;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
@@ -124,27 +123,6 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
         String nullId = null;
 
         assertThat(repository.findOne(nullId)).isNull();
-    }
-
-    @Test
-    public void shouldReturnNull_whenFindingResourceWithPredicate() {
-        Predicate nullPredicate = null;
-
-        assertThat(repository.findOne(nullPredicate)).isNull();
-    }
-
-    @Test
-    public void shouldReturnNull_whenPredicateDoesntMatchAnyRow() {
-        Predicate predicate = QUuidPersistentResource.uuidPersistentResource.label.eq("nonExistingLabel");
-
-        assertThat(repository.findOne(predicate)).isNull();
-    }
-
-    @Test
-    public void shouldFindResource_accordingToPredicate() {
-        Predicate predicate = QUuidPersistentResource.uuidPersistentResource.uuid.eq(UuidPersistentResourceFixtures.uuidPersistentResource1().getUuid());
-
-        assertThat(repository.findOne(predicate)).isEqualToComparingFieldByField(UuidPersistentResourceFixtures.uuidPersistentResource1());
     }
 
     @Test

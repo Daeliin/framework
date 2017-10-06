@@ -1,6 +1,5 @@
 package com.daeliin.components.core.resource.repository;
 
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.SimpleExpression;
 import com.querydsl.sql.RelationalPathBase;
 import com.querydsl.sql.dml.SQLInsertClause;
@@ -8,18 +7,19 @@ import com.querydsl.sql.dml.SQLUpdateClause;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public abstract class ResourceRepository<R, ID> extends RowRepository<R> implements PagingRepository<R, ID> {
+public abstract class ResourceRepository<R, ID> extends BaseRepository<R> implements CrudRepository<R, ID> {
 
     protected final SimpleExpression<ID> idPath;
     protected final Function<R, ID> idMapping;
 
     public ResourceRepository(RelationalPathBase<R> rowPath, SimpleExpression<ID> idPath, Function<R, ID> idMapping) {
         super(rowPath);
-        this.idPath = idPath;
-        this.idMapping = idMapping;
+        this.idPath = Objects.requireNonNull(idPath);
+        this.idMapping = Objects.requireNonNull(idMapping);
     }
 
     @Transactional
@@ -87,19 +87,6 @@ public abstract class ResourceRepository<R, ID> extends RowRepository<R> impleme
         return queryFactory.select(rowPath)
                 .from(rowPath)
                 .where(idPath.eq(resourceId))
-                .fetchOne();
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public R findOne(Predicate predicate) {
-        if (predicate == null) {
-            return null;
-        }
-
-        return queryFactory.select(rowPath)
-                .from(rowPath)
-                .where(predicate)
                 .fetchOne();
     }
 

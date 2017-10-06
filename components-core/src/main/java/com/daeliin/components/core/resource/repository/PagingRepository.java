@@ -1,35 +1,33 @@
 package com.daeliin.components.core.resource.repository;
 
+import com.daeliin.components.domain.pagination.Page;
+import com.daeliin.components.domain.pagination.PageRequest;
 import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.SimpleExpression;
+import com.querydsl.sql.RelationalPathBase;
 
 import java.util.Collection;
-import java.util.function.Function;
 
 /**
- * Provides CRUD operations and pagination for a table.
+ * Provides global CRUD and pagination operations for a row type.
  * @param <R> row type
- * @param <ID> resource ID type
  */
-public interface PagingRepository<R, ID> extends TableRepository<R> {
+public interface PagingRepository<R> {
 
-    R save(R resource);
-
-    Collection<R> save(Collection<R> resources);
-
-    R findOne(ID resourceId);
+    RelationalPathBase<R> rowPath();
 
     R findOne(Predicate predicate);
 
-    Collection<R> findAll(Collection<ID> resourceIds);
+    Collection<R> findAll(Predicate predicate);
 
-    boolean exists(ID resourceId);
+    Page<R> findAll(PageRequest pageRequest);
 
-    boolean delete(ID resourceId);
+    Page<R> findAll(Predicate predicate, PageRequest pageRequest);
 
-    boolean delete(Collection<ID> resourceIds);
+    Collection<R> findAll();
 
-    SimpleExpression<ID> idPath();
+    long count();
 
-    Function<R, ID> idMapping();
+    long count(Predicate predicate);
+
+    boolean deleteAll();
 }

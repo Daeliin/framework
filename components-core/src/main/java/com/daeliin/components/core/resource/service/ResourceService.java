@@ -2,7 +2,7 @@ package com.daeliin.components.core.resource.service;
 
 import com.daeliin.components.core.exception.PersistentResourceAlreadyExistsException;
 import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
-import com.daeliin.components.core.resource.repository.PagingRepository;
+import com.daeliin.components.core.resource.repository.CrudRepository;
 import com.daeliin.components.domain.pagination.Page;
 import com.daeliin.components.domain.pagination.PageRequest;
 import com.daeliin.components.domain.resource.Conversion;
@@ -11,6 +11,7 @@ import com.querydsl.core.types.Predicate;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.TreeSet;
 
 /**
@@ -19,7 +20,7 @@ import java.util.TreeSet;
  * @param <R> row type
  * @param <ID> resource id type
  */
-public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extends PagingRepository<R, ID>> implements PagingService<T, ID> {
+public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extends CrudRepository<R, ID>> implements PagingService<T, ID> {
 
     private static final String MESSAGE_RESOURCE_NOT_FOUND = "Resource was not found";
 
@@ -27,8 +28,8 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
     protected final Conversion<T, R> conversion;
 
     public ResourceService(P repository, Conversion<T, R> conversion) {
-        this.repository = repository;
-        this.conversion = conversion;
+        this.repository = Objects.requireNonNull(repository);
+        this.conversion = Objects.requireNonNull(conversion);
     }
 
     /**
