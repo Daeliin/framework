@@ -1,6 +1,6 @@
 package com.daeliin.components.security.credentials.permission;
 
-import com.daeliin.components.core.resource.service.ResourceService;
+import com.daeliin.components.persistence.resource.service.ResourceService;
 import com.daeliin.components.security.sql.BPermission;
 import org.springframework.stereotype.Service;
 

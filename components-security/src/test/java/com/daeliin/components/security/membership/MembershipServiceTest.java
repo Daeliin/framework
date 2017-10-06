@@ -1,6 +1,6 @@
 package com.daeliin.components.security.membership;
 
-import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
+import com.daeliin.components.persistence.exception.PersistentResourceNotFoundException;
 import com.daeliin.components.security.Application;
 import com.daeliin.components.security.credentials.account.Account;
 import com.daeliin.components.security.credentials.account.AccountService;

@@ -1,6 +1,6 @@
 package com.daeliin.components.security.credentials.account;
 
-import com.daeliin.components.core.resource.service.ResourceService;
+import com.daeliin.components.persistence.resource.service.ResourceService;
 import com.daeliin.components.security.credentials.permission.PermissionService;
 import com.daeliin.components.security.sql.BAccount;
 import com.daeliin.components.security.sql.QAccount;

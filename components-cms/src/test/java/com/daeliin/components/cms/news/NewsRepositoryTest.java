@@ -2,7 +2,7 @@ package com.daeliin.components.cms.news;
 
 import com.daeliin.components.cms.Application;
 import com.daeliin.components.cms.fixtures.ArticleFixtures;
-import com.daeliin.components.core.resource.repository.ResourceRepository;
+import com.daeliin.components.persistence.resource.repository.ResourceRepository;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;

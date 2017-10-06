@@ -1,7 +1,7 @@
 package com.daeliin.components.cms.article;
 
 import com.daeliin.components.cms.library.ArticleLibrary;
-import com.daeliin.components.domain.resource.PersistentResource;
+import com.daeliin.components.core.resource.PersistentResource;
 import org.junit.Test;
 
 import java.time.Instant;

@@ -1,6 +1,6 @@
 package com.daeliin.components.webservices.dto;
 
-import com.daeliin.components.domain.resource.Persistable;
+import com.daeliin.components.core.resource.Persistable;
 
 import java.time.Instant;
 import java.util.Collection;

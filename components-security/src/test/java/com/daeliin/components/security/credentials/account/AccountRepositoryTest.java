@@ -1,6 +1,6 @@
 package com.daeliin.components.security.credentials.account;
 
-import com.daeliin.components.core.resource.repository.ResourceRepository;
+import com.daeliin.components.persistence.resource.repository.ResourceRepository;
 import com.daeliin.components.security.Application;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;

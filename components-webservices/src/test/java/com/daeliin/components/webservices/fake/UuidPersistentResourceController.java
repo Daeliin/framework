@@ -1,6 +1,6 @@
 package com.daeliin.components.webservices.fake;
 
-import com.daeliin.components.domain.pagination.Page;
+import com.daeliin.components.core.pagination.Page;
 import com.daeliin.components.webservices.controller.ResourceController;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

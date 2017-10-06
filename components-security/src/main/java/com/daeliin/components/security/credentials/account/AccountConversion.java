@@ -1,6 +1,6 @@
 package com.daeliin.components.security.credentials.account;
 
-import com.daeliin.components.domain.resource.Conversion;
+import com.daeliin.components.core.resource.Conversion;
 import com.daeliin.components.security.sql.BAccount;
 
 public final class AccountConversion implements Conversion<Account, BAccount> {

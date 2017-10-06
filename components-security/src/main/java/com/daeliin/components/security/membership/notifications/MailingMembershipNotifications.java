@@ -2,7 +2,7 @@ package com.daeliin.components.security.membership.notifications;
 
 import com.daeliin.components.core.mail.Mail;
 import com.daeliin.components.core.mail.MailBuildingException;
-import com.daeliin.components.core.mail.Mailing;
+import com.daeliin.components.persistence.mail.Mailing;
 import com.daeliin.components.security.credentials.account.Account;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

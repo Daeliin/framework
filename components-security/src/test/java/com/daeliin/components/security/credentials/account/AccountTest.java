@@ -1,6 +1,6 @@
 package com.daeliin.components.security.credentials.account;
 
-import com.daeliin.components.domain.resource.PersistentResource;
+import com.daeliin.components.core.resource.PersistentResource;
 import com.daeliin.components.security.library.AccountLibrary;
 import org.junit.Test;
 

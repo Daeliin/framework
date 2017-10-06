@@ -1,6 +1,6 @@
 package com.daeliin.components.security.credentials.permission;
 
-import com.daeliin.components.domain.resource.Conversion;
+import com.daeliin.components.core.resource.Conversion;
 import com.daeliin.components.security.sql.BPermission;
 
 public final class PermissionConversion implements Conversion<Permission, BPermission> {

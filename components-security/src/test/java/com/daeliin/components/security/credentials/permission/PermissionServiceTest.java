@@ -1,12 +1,11 @@
 package com.daeliin.components.security.credentials.permission;
 
-import com.daeliin.components.core.resource.service.ResourceService;
+import com.daeliin.components.persistence.resource.service.ResourceService;
 import com.daeliin.components.security.Application;
 import com.daeliin.components.security.credentials.account.Account;
 import com.daeliin.components.security.library.AccountLibrary;
 import com.daeliin.components.security.library.PermissionLibrary;
 import org.junit.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 

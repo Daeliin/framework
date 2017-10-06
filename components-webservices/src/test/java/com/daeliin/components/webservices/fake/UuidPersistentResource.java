@@ -1,6 +1,6 @@
 package com.daeliin.components.webservices.fake;
 
-import com.daeliin.components.domain.resource.PersistentResource;
+import com.daeliin.components.core.resource.PersistentResource;
 
 import java.time.Instant;
 

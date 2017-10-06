@@ -18,7 +18,7 @@
         <!-- Daeliin -->
         <dependency>
             <groupId>com.daeliin.components</groupId>
-            <artifactId>components-core</artifactId>
+            <artifactId>components-persistence</artifactId>
         </dependency>
 
         <!-- Spring -->

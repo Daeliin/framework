@@ -1,9 +1,8 @@
 package com.daeliin.components.cms.article;
 
-import com.daeliin.components.domain.resource.PersistentResource;
+import com.daeliin.components.core.resource.PersistentResource;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Article extends PersistentResource<String> implements Comparable<Article> {

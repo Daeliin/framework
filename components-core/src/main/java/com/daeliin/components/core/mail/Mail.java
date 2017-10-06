@@ -1,7 +1,6 @@
 package com.daeliin.components.core.mail;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.CollectionUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,7 +60,7 @@ public class Mail {
     }
     
     private void buildParameters(final Map<String, String> parameters) {
-        if (CollectionUtils.isEmpty(parameters)) {
+        if (parameters.isEmpty()) {
             this.parameters = new HashMap<>();
         } else {
             this.parameters = parameters;

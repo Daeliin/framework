@@ -1,6 +1,6 @@
 package com.daeliin.components.cms.news;
 
-import com.daeliin.components.core.resource.repository.ResourceRepository;
+import com.daeliin.components.persistence.resource.repository.ResourceRepository;
 import com.daeliin.components.core.sql.BNews;
 import com.daeliin.components.core.sql.QNews;
 import org.springframework.stereotype.Component;

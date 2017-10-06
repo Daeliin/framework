@@ -9,7 +9,7 @@
     
     <logger name="com.daeliin.components.core" level="DEBUG"/>   
     
-    <root level="WARN">
+    <root level="INFO">
         <appender-ref ref="STDOUT" />
     </root>
 </configuration>

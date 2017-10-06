@@ -32,8 +32,8 @@
     </properties>
 
     <modules>
-        <module>components-domain</module>
         <module>components-core</module>
+        <module>components-persistence</module>
         <module>components-security</module>
         <module>components-webservices</module>
         <module>components-cms</module>
@@ -44,12 +44,12 @@
         <dependencies>
             <dependency>
                 <groupId>com.daeliin.components</groupId>
-                <artifactId>components-domain</artifactId>
+                <artifactId>components-core</artifactId>
                 <version>${daeliin.components.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.daeliin.components</groupId>
-                <artifactId>components-core</artifactId>
+                <artifactId>components-persistence</artifactId>
                 <version>${daeliin.components.version}</version>
             </dependency>
             <dependency>

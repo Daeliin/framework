@@ -1,6 +1,6 @@
 package com.daeliin.components.security.credentials.permission;
 
-import com.daeliin.components.core.resource.repository.ResourceRepository;
+import com.daeliin.components.persistence.resource.repository.ResourceRepository;
 import com.daeliin.components.security.Application;
 import com.daeliin.components.security.fixtures.AccountFixtures;
 import com.daeliin.components.security.fixtures.PermissionFixtures;

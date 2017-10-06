@@ -1,6 +1,6 @@
 package com.daeliin.components.webservices.fake;
 
-import com.daeliin.components.core.resource.repository.ResourceRepository;
+import com.daeliin.components.persistence.resource.repository.ResourceRepository;
 import com.daeliin.components.webservices.sql.BUuidPersistentResource;
 import com.daeliin.components.webservices.sql.QUuidPersistentResource;
 import org.springframework.stereotype.Component;

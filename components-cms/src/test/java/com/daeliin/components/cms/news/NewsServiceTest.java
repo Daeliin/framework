@@ -5,7 +5,7 @@ import com.daeliin.components.cms.Application;
 import com.daeliin.components.cms.library.AccountLibrary;
 import com.daeliin.components.cms.library.ArticleLibrary;
 import com.daeliin.components.cms.library.NewsLibrary;
-import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
+import com.daeliin.components.persistence.exception.PersistentResourceNotFoundException;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;

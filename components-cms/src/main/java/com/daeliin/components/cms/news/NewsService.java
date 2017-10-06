@@ -2,12 +2,12 @@ package com.daeliin.components.cms.news;
 
 import com.daeliin.components.cms.article.Article;
 import com.daeliin.components.cms.article.ArticleService;
-import com.daeliin.components.core.event.EventLogService;
-import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
+import com.daeliin.components.persistence.event.EventLogService;
+import com.daeliin.components.persistence.exception.PersistentResourceNotFoundException;
 import com.daeliin.components.core.sql.BNews;
 import com.daeliin.components.core.sql.QNews;
-import com.daeliin.components.domain.pagination.PageRequest;
-import com.daeliin.components.domain.pagination.Sort;
+import com.daeliin.components.core.pagination.PageRequest;
+import com.daeliin.components.core.pagination.Sort;
 import com.daeliin.components.security.credentials.account.Account;
 import com.daeliin.components.security.credentials.account.AccountService;
 import com.google.common.collect.ImmutableSet;

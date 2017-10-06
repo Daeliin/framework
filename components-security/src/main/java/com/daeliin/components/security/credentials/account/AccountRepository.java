@@ -1,6 +1,6 @@
 package com.daeliin.components.security.credentials.account;
 
-import com.daeliin.components.core.resource.repository.ResourceRepository;
+import com.daeliin.components.persistence.resource.repository.ResourceRepository;
 import com.daeliin.components.security.sql.BAccount;
 import com.daeliin.components.security.sql.QAccount;
 import org.springframework.stereotype.Component;

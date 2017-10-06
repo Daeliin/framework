@@ -1,8 +1,7 @@
 package com.daeliin.components.webservices.validation;
 
-import com.daeliin.components.domain.pagination.Sort;
+import com.daeliin.components.core.pagination.Sort;
 import com.daeliin.components.webservices.exception.PageRequestException;
-import com.daeliin.components.webservices.validation.PageRequestValidation;
 import org.junit.Test;
 
 import java.util.Set;

@@ -1,7 +1,7 @@
 package com.daeliin.components.cms.news;
 
 import com.daeliin.components.cms.library.NewsLibrary;
-import com.daeliin.components.domain.resource.PersistentResource;
+import com.daeliin.components.core.resource.PersistentResource;
 import org.junit.Test;
 
 import java.time.Instant;

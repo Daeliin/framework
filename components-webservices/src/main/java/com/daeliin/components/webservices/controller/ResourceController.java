@@ -1,11 +1,11 @@
 package com.daeliin.components.webservices.controller;
 
-import com.daeliin.components.core.exception.PersistentResourceAlreadyExistsException;
-import com.daeliin.components.core.exception.PersistentResourceNotFoundException;
-import com.daeliin.components.core.resource.service.PagingService;
-import com.daeliin.components.domain.pagination.Page;
-import com.daeliin.components.domain.pagination.PageRequest;
-import com.daeliin.components.domain.resource.Persistable;
+import com.daeliin.components.persistence.exception.PersistentResourceAlreadyExistsException;
+import com.daeliin.components.persistence.exception.PersistentResourceNotFoundException;
+import com.daeliin.components.persistence.resource.service.PagingService;
+import com.daeliin.components.core.pagination.Page;
+import com.daeliin.components.core.pagination.PageRequest;
+import com.daeliin.components.core.resource.Persistable;
 import com.daeliin.components.webservices.dto.ResourceDtoConversion;
 import com.daeliin.components.webservices.exception.PageRequestException;
 import com.daeliin.components.webservices.exception.ResourceAlreadyExistsException;

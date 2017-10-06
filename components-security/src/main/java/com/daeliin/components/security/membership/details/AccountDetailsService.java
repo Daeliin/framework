@@ -1,6 +1,6 @@
 package com.daeliin.components.security.membership.details;
 
-import com.daeliin.components.domain.utils.Id;
+import com.daeliin.components.core.resource.Id;
 import com.daeliin.components.security.credentials.account.Account;
 import com.daeliin.components.security.credentials.account.AccountService;
 import com.daeliin.components.security.credentials.permission.Permission;

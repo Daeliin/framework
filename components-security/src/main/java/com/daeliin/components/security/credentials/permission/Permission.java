@@ -1,7 +1,7 @@
 package com.daeliin.components.security.credentials.permission;
 
 
-import com.daeliin.components.domain.resource.PersistentResource;
+import com.daeliin.components.core.resource.PersistentResource;
 
 import java.time.Instant;
 import java.util.Objects;
