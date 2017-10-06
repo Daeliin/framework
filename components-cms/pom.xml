@@ -18,7 +18,17 @@
         <!-- Daeliin -->
         <dependency>
             <groupId>com.daeliin.components</groupId>
+            <artifactId>components-persistence</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.daeliin.components</groupId>
             <artifactId>components-security</artifactId>
+        </dependency>
+
+        <!-- Spring -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
         <!-- Tests -->
@@ -49,7 +59,7 @@
                     <exportBeans>true</exportBeans>
                     <beanPrefix>B</beanPrefix>
                     <beanAddFullConstructor>true</beanAddFullConstructor>
-                    <packageName>com.daeliin.components.core.sql</packageName>
+                    <packageName>com.daeliin.components.cms.sql</packageName>
                     <sourceFolder>${project.basedir}/target/generated-sources/java</sourceFolder>
                     <targetFolder>${project.basedir}/target/generated-sources/java</targetFolder>
                     <customTypes>

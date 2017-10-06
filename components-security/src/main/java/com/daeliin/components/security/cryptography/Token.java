@@ -1,11 +1,12 @@
 package com.daeliin.components.security.cryptography;
 
+import com.google.common.base.MoreObjects;
 import lombok.ToString;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
-@ToString
 public class Token {
     
     public final String asString;
@@ -38,5 +39,25 @@ public class Token {
     
     public Token(final List<String> datas) {
         this(datas, new Sha512(), false);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Token token = (Token) o;
+        return Objects.equals(asString, token.asString);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(asString);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+            .add("asString", asString)
+            .toString();
     }
 }

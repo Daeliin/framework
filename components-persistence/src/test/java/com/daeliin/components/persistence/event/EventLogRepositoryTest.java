@@ -1,7 +1,6 @@
 package com.daeliin.components.persistence.event;
 
 
-import com.daeliin.components.persistence.event.EventLogRepository;
 import com.daeliin.components.persistence.resource.repository.ResourceRepository;
 import org.junit.Test;
 

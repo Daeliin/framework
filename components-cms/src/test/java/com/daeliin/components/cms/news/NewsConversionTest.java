@@ -4,7 +4,7 @@ import com.daeliin.components.cms.fixtures.NewsFixtures;
 import com.daeliin.components.cms.library.AccountLibrary;
 import com.daeliin.components.cms.library.ArticleLibrary;
 import com.daeliin.components.cms.library.NewsLibrary;
-import com.daeliin.components.core.sql.BNews;
+import com.daeliin.components.cms.sql.BNews;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

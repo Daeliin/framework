@@ -1,6 +1,6 @@
 package com.daeliin.components.cms.news;
 
-import com.daeliin.components.core.sql.BNews;
+import com.daeliin.components.cms.sql.BNews;
 
 import java.sql.Timestamp;
 

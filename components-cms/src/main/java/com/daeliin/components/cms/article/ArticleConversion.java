@@ -1,6 +1,6 @@
 package com.daeliin.components.cms.article;
 
-import com.daeliin.components.core.sql.BArticle;
+import com.daeliin.components.cms.sql.BArticle;
 import com.daeliin.components.core.string.UrlFriendlyString;
 
 public final class ArticleConversion {

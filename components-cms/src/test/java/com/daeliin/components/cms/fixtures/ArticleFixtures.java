@@ -1,6 +1,6 @@
 package com.daeliin.components.cms.fixtures;
 
-import com.daeliin.components.core.sql.BArticle;
+import com.daeliin.components.cms.sql.BArticle;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;

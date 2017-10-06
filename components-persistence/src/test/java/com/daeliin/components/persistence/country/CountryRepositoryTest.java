@@ -1,6 +1,5 @@
 package com.daeliin.components.persistence.country;
 
-import com.daeliin.components.persistence.country.CountryRepository;
 import com.daeliin.components.persistence.resource.repository.ResourceRepository;
 import org.junit.Test;
 

@@ -3,7 +3,7 @@ package com.daeliin.components.cms.article;
 import com.daeliin.components.cms.fixtures.ArticleFixtures;
 import com.daeliin.components.cms.library.AccountLibrary;
 import com.daeliin.components.cms.library.ArticleLibrary;
-import com.daeliin.components.core.sql.BArticle;
+import com.daeliin.components.cms.sql.BArticle;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
