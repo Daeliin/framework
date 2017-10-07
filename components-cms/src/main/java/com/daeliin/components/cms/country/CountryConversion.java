@@ -1,7 +1,7 @@
-package com.daeliin.components.persistence.country;
+package com.daeliin.components.cms.country;
 
-import com.daeliin.components.core.sql.BCountry;
 import com.daeliin.components.core.resource.Conversion;
+import com.daeliin.components.cms.sql.BCountry;
 
 public final class CountryConversion implements Conversion<Country, BCountry> {
 

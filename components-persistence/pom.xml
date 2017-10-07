@@ -26,18 +26,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-        </dependency>
 
         <!-- Querydsl -->
         <dependency>
@@ -49,18 +37,6 @@
             <artifactId>querydsl-sql-spring</artifactId>
         </dependency>
 
-        <!-- Caffeine -->
-        <dependency>
-            <groupId>com.github.ben-manes.caffeine</groupId>
-            <artifactId>caffeine</artifactId>
-        </dependency>
-
-        <!-- Mail -->
-        <dependency>
-            <groupId>com.sun.mail</groupId>
-            <artifactId>javax.mail</artifactId>
-        </dependency>
-        
         <!-- Tests -->
         <dependency>
             <groupId>com.daeliin.components</groupId>
@@ -89,7 +65,7 @@
                     <exportBeans>true</exportBeans>
                     <beanPrefix>B</beanPrefix>
                     <beanAddFullConstructor>true</beanAddFullConstructor>
-                    <packageName>com.daeliin.components.core.sql</packageName>
+                    <packageName>com.daeliin.components.persistence.sql</packageName>
                     <sourceFolder>${project.basedir}/target/generated-sources/java</sourceFolder>
                     <targetFolder>${project.basedir}/target/generated-sources/java</targetFolder>
                     <customTypes>

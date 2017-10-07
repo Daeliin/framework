@@ -1,8 +1,8 @@
-package com.daeliin.components.persistence.country;
+package com.daeliin.components.cms.country;
 
+import com.daeliin.components.cms.sql.BCountry;
+import com.daeliin.components.cms.sql.QCountry;
 import com.daeliin.components.persistence.resource.repository.ResourceRepository;
-import com.daeliin.components.core.sql.BCountry;
-import com.daeliin.components.core.sql.QCountry;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 

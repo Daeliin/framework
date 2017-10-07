@@ -1,7 +1,7 @@
-package com.daeliin.components.persistence.event;
+package com.daeliin.components.cms.event;
 
-import com.daeliin.components.core.sql.BEventLog;
 import com.daeliin.components.core.resource.Conversion;
+import com.daeliin.components.cms.sql.BEventLog;
 
 public final class EventLogConversion implements Conversion<EventLog, BEventLog> {
 

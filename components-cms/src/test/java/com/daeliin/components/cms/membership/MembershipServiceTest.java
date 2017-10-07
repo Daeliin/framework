@@ -7,12 +7,12 @@ import com.daeliin.components.cms.exception.AccountAlreadyExistException;
 import com.daeliin.components.cms.exception.InvalidTokenException;
 import com.daeliin.components.cms.library.AccountLibrary;
 import com.daeliin.components.cms.sql.QAccount;
-import com.daeliin.components.persistence.exception.PersistentResourceNotFoundException;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 import javax.inject.Inject;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -50,7 +50,7 @@ public class MembershipServiceTest extends AbstractTransactionalJUnit4SpringCont
         assertThat(accountCountAfterSignUp).isEqualTo(accountCountBeforeSignUp);
     }
 
-    @Test(expected = PersistentResourceNotFoundException.class)
+    @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenActivatingNonExistentAccountId() throws InvalidTokenException {
         membershipService.activate("AOADAZD-65454", "ok");
     }
@@ -62,12 +62,12 @@ public class MembershipServiceTest extends AbstractTransactionalJUnit4SpringCont
         membershipService.activate(account.getId(), "wrongToken");
     }
 
-    @Test(expected = PersistentResourceNotFoundException.class)
+    @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenRequestingANewPasswordForNonExistingAccount() throws Exception {
         membershipService.newPassword("AFEZAFEZ-6544");
     }
 
-    @Test(expected = PersistentResourceNotFoundException.class)
+    @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenResetingPasswordForNonExistingAccount() throws Exception {
         membershipService.resetPassword("AFEZAFEZ-6544", "token", "newPassword");
     }

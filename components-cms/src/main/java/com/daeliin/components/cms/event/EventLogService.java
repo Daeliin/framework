@@ -1,8 +1,8 @@
-package com.daeliin.components.persistence.event;
+package com.daeliin.components.cms.event;
 
-import com.daeliin.components.persistence.resource.service.ResourceService;
-import com.daeliin.components.core.sql.BEventLog;
 import com.daeliin.components.core.resource.Id;
+import com.daeliin.components.cms.sql.BEventLog;
+import com.daeliin.components.persistence.resource.service.ResourceService;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;

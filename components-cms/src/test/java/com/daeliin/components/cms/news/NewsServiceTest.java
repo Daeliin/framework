@@ -5,7 +5,6 @@ import com.daeliin.components.cms.Application;
 import com.daeliin.components.cms.library.AccountLibrary;
 import com.daeliin.components.cms.library.ArticleLibrary;
 import com.daeliin.components.cms.library.NewsLibrary;
-import com.daeliin.components.persistence.exception.PersistentResourceNotFoundException;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
@@ -13,6 +12,7 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 import javax.inject.Inject;
 import java.time.Instant;
 import java.util.Collection;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,8 +22,8 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
     @Inject
     private NewsService newsService;
 
-    @Test(expected = PersistentResourceNotFoundException.class)
-    public void shouldThrowPersistentResourceNotFoundException_whenFindingNewsOfUnexistingArticleId() {
+    @Test(expected = NoSuchElementException.class)
+    public void shouldThrowException_whenFindingNewsOfUnexistingArticleId() {
         newsService.findForArticle("EZOFZEJF-34324");
     }
 
@@ -34,22 +34,22 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
         assertThat(newsOfArticle).containsExactly(NewsLibrary.newsWithSource(), NewsLibrary.newsWithoutSource());
     }
 
-    @Test(expected = PersistentResourceNotFoundException.class)
-    public void shouldThrowPersistentResourceNotFoundException_whenCreatingNewsOfUnexistingArticleId() {
+    @Test(expected = NoSuchElementException.class)
+    public void shouldThrowException_whenCreatingNewsOfUnexistingArticleId() {
         News news = new News("NEWSID", Instant.now(), AccountLibrary.admin().username, "Content", null);
 
         newsService.create("EZOFZEJF-34324", news);
     }
 
-    @Test(expected = PersistentResourceNotFoundException.class)
-    public void shouldThrowPersistentResourceNotFoundException_whenCreatingNewsOfUnexistingAuthor() {
+    @Test(expected = NoSuchElementException.class)
+    public void shouldThrowException_whenCreatingNewsOfUnexistingAuthor() {
         News news = new News("NEWSID", Instant.now(), "ZADAZD", "Content", null);
 
         newsService.create(ArticleLibrary.notPublishedArticle().getId(), news);
     }
 
     @Test(expected = IllegalStateException.class)
-    public void shouldThrowIllegalStateException_whenCreatingNewsOnPublishedArticle() {
+    public void shouldThrowException_whenCreatingNewsOnPublishedArticle() {
         News news = new News("NEWSID", Instant.now(), AccountLibrary.admin().username, "Content", null);
 
         newsService.create(ArticleLibrary.publishedArticle().getId(), news);
@@ -67,8 +67,8 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
         assertThat(createdNews.source).isEqualTo(news.source);
     }
 
-    @Test(expected = PersistentResourceNotFoundException.class)
-    public void shouldThrowPersistentResourceNotFoundException_whenUpdatingNonExistingNews() {
+    @Test(expected = NoSuchElementException.class)
+    public void shouldThrowException_whenUpdatingNonExistingNews() {
         newsService.update("OKOK", null);
     }
 
@@ -86,7 +86,7 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
         assertThat(updatedNews.author).isEqualTo(newsToUpdate.author);
     }
 
-    @Test(expected = PersistentResourceNotFoundException.class)
+    @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenFindingNonExistingNews() {
         newsService.findOne("nonExistingId");
     }
@@ -115,7 +115,7 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
         assertThat(newsService.exists(NewsLibrary.newsWithSource().getId())).isFalse();
     }
 
-    @Test(expected = PersistentResourceNotFoundException.class)
+    @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenDeletingNonExistingNews() {
         newsService.delete("nonExisingId");
     }

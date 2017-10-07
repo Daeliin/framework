@@ -1,8 +1,8 @@
-package com.daeliin.components.persistence.event;
+package com.daeliin.components.cms.event;
 
-import com.daeliin.components.persistence.fixtures.EventLogFixtures;
-import com.daeliin.components.persistence.library.EventLogLibrary;
-import com.daeliin.components.core.sql.BEventLog;
+import com.daeliin.components.cms.fixtures.EventLogFixtures;
+import com.daeliin.components.cms.library.EventLogLibrary;
+import com.daeliin.components.cms.sql.BEventLog;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -1,11 +1,9 @@
 package com.daeliin.components.webservices.controller;
 
-import com.daeliin.components.persistence.exception.PersistentResourceAlreadyExistsException;
-import com.daeliin.components.persistence.exception.PersistentResourceNotFoundException;
-import com.daeliin.components.persistence.resource.service.PagingService;
 import com.daeliin.components.core.pagination.Page;
 import com.daeliin.components.core.pagination.PageRequest;
 import com.daeliin.components.core.resource.Persistable;
+import com.daeliin.components.persistence.resource.service.PagingService;
 import com.daeliin.components.webservices.dto.ResourceDtoConversion;
 import com.daeliin.components.webservices.exception.PageRequestException;
 import com.daeliin.components.webservices.exception.ResourceAlreadyExistsException;
@@ -13,21 +11,15 @@ import com.daeliin.components.webservices.exception.ResourceNotFoundException;
 import com.daeliin.components.webservices.validation.PageRequestValidation;
 import com.querydsl.core.types.Predicate;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
 import java.time.Instant;
 import java.util.Collection;
+import java.util.NoSuchElementException;
 
-import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /***
  * Exposes CRUD and provides a simple pagination for a resource.
@@ -64,7 +56,7 @@ public abstract class ResourceController<V, T extends Persistable<ID>, ID, S ext
     public V create(@RequestBody @Valid V resource) {
         try {
             return conversion.instantiate(service.create(conversion.map(resource, null, Instant.now())));
-        } catch (PersistentResourceAlreadyExistsException e) {
+        } catch (IllegalStateException e) {
             throw new ResourceAlreadyExistsException();
         }
     }
@@ -82,7 +74,7 @@ public abstract class ResourceController<V, T extends Persistable<ID>, ID, S ext
     public V getOne(@PathVariable ID resourceId) {
         try {
             return conversion.instantiate(service.findOne(resourceId));
-        } catch (PersistentResourceNotFoundException e) {
+        } catch (NoSuchElementException e) {
             throw new ResourceNotFoundException();
         }
     }

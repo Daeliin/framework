@@ -65,4 +65,11 @@ CREATE TABLE event_log (
 
 ALTER TABLE event_log ADD PRIMARY KEY (id);
 
+CREATE TABLE country(
+    code VARCHAR(2) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    creation_date DATETIME NOT NULL
+);
+
+ALTER TABLE country ADD PRIMARY KEY (code);
 

@@ -19,3 +19,10 @@ INSERT INTO article(id, creation_date, author_id, title, url_friendly_title, des
 INSERT INTO news(id, creation_date, article_id, author_id, content, source) VALUES
 ('NEWS1', '2016-05-20 14:30:00', 'ARTICLE2', 'ACCOUNT1', 'Some news content 1', 'https://daeliin.com'),
 ('NEWS2', '2016-05-21 14:30:00', 'ARTICLE2', 'ACCOUNT1', 'Some news content 1', null);
+
+INSERT INTO country(code, name, creation_date) VALUES
+( 'FR', 'France', '2017-01-01 12:00:00'),
+( 'BE', 'Belgium', '2017-01-01 12:00:00');
+
+INSERT INTO event_log(id, creation_date, description) VALUES
+('d5666c5a-df28-49be-b711-cfd58d0867cf', '2017-01-01 12:00:00', 'membership.loginmembership.login');

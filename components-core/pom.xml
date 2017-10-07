@@ -15,6 +15,12 @@
     </parent>
     
     <dependencies>
+        <!-- Caffeine -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
+
         <!-- Test -->
         <dependency>
             <groupId>com.daeliin.components</groupId>

@@ -1,6 +1,6 @@
 package com.daeliin.components.persistence.resource.repository;
 
-import com.daeliin.components.core.sql.QUuidPersistentResource;
+import com.daeliin.components.persistence.sql.QUuidPersistentResource;
 import com.daeliin.components.core.pagination.PageRequest;
 import com.daeliin.components.core.pagination.Sort;
 import com.google.common.collect.Sets;

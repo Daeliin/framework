@@ -1,18 +1,16 @@
 package com.daeliin.components.persistence.resource.service;
 
+import com.daeliin.components.core.pagination.Page;
+import com.daeliin.components.core.pagination.PageRequest;
+import com.daeliin.components.core.pagination.Sort;
 import com.daeliin.components.persistence.Application;
-import com.daeliin.components.persistence.exception.PersistentResourceAlreadyExistsException;
-import com.daeliin.components.persistence.exception.PersistentResourceNotFoundException;
 import com.daeliin.components.persistence.fake.UuidPersistentResource;
 import com.daeliin.components.persistence.fake.UuidPersistentResourceConversion;
 import com.daeliin.components.persistence.fake.UuidPersistentResourceRepository;
 import com.daeliin.components.persistence.fake.UuidPersistentResourceService;
 import com.daeliin.components.persistence.library.UuidPersistentResourceLibrary;
-import com.daeliin.components.core.sql.BUuidPersistentResource;
-import com.daeliin.components.core.sql.QUuidPersistentResource;
-import com.daeliin.components.core.pagination.Page;
-import com.daeliin.components.core.pagination.PageRequest;
-import com.daeliin.components.core.pagination.Sort;
+import com.daeliin.components.persistence.sql.BUuidPersistentResource;
+import com.daeliin.components.persistence.sql.QUuidPersistentResource;
 import com.google.common.collect.Sets;
 import com.querydsl.core.types.Predicate;
 import org.junit.Before;
@@ -24,17 +22,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = Application.class)
 public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
@@ -52,8 +45,8 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
         MockitoAnnotations.initMocks(this);
     }
 
-    @Test(expected = PersistentResourceAlreadyExistsException.class)
-    public void shouldThrowResourceAlreadyExistsException_whenCreatingResourceWithAlreadyExistingId() {
+    @Test(expected = IllegalStateException.class)
+    public void shouldThrowException_whenCreatingResourceWithAlreadyExistingId() {
         UuidPersistentResource alreadyExistingUuidPersistentResource = UuidPersistentResourceLibrary.uuidPersistentResource1();
 
         doReturn(true).when(repositoryMock).exists(alreadyExistingUuidPersistentResource.getId());
@@ -130,20 +123,20 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
         verify(repositoryMock).count(predicate);
     }
 
-    @Test(expected = PersistentResourceNotFoundException.class)
-    public void shouldThrowPersistentResourceNotFoundException_whenIdIsNull() {
+    @Test(expected = NoSuchElementException.class)
+    public void shouldThrowException_whenIdIsNull() {
         String nullId = null;
 
         service.findOne(nullId);
     }
 
     @Test
-    public void shouldThrowPersistentResourceNotFoundException_whenResourceIdDoesntExist() {
-        doThrow(new PersistentResourceNotFoundException("")).when(repositoryMock).findOne("654684-64684");
+    public void shouldThrowException_whenResourceIdDoesntExist() {
+        doThrow(new NoSuchElementException("")).when(repositoryMock).findOne("654684-64684");
 
         try {
              service.findOne("654684-64684");
-        } catch (PersistentResourceNotFoundException e) {
+        } catch (NoSuchElementException e) {
             verify(repositoryMock).findOne("654684-64684");
             return;
         }
@@ -249,15 +242,15 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
         verify(repositoryMock).findAll(uuidEntityIds);
     }
 
-    @Test(expected = PersistentResourceNotFoundException.class)
-    public void shouldThrowPersistenceResourceNotFoundException_whenUpdatingNullResource() {
+    @Test(expected = NoSuchElementException.class)
+    public void shouldThrowException_whenUpdatingNullResource() {
         UuidPersistentResource nullUuidEntity = null;
 
         service.update(nullUuidEntity);
     }
 
-    @Test(expected = PersistentResourceNotFoundException.class)
-    public void shouldThrowPersistenceResourceNotFoundException_whenUpdatingNonExistingResource() {
+    @Test(expected = NoSuchElementException.class)
+    public void shouldThrowException_whenUpdatingNonExistingResource() {
         UuidPersistentResource nonExistingUuidEntity = new UuidPersistentResource("654684-64684", Instant.now(), "label-1");
 
         service.update(nonExistingUuidEntity);

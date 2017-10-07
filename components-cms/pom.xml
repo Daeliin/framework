@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.daeliin.components</groupId>
     <artifactId>components-cms</artifactId>
@@ -7,13 +7,13 @@
     <version>0.2-SNAPSHOT</version>
     <name>components-cms</name>
     <description>Daeliin Java CMS Components</description>
-    
+
     <parent>
         <groupId>com.daeliin.components</groupId>
         <artifactId>java-components</artifactId>
         <version>0.2-SNAPSHOT</version>
     </parent>
-    
+
     <dependencies>
         <!-- Daeliin -->
         <dependency>
@@ -29,6 +29,20 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+
+        <!-- Mail -->
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
         </dependency>
 
         <!-- Tests -->

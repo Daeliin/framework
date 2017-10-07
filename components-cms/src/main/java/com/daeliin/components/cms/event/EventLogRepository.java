@@ -1,8 +1,8 @@
-package com.daeliin.components.persistence.event;
+package com.daeliin.components.cms.event;
 
+import com.daeliin.components.cms.sql.BEventLog;
+import com.daeliin.components.cms.sql.QEventLog;
 import com.daeliin.components.persistence.resource.repository.ResourceRepository;
-import com.daeliin.components.core.sql.BEventLog;
-import com.daeliin.components.core.sql.QEventLog;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 

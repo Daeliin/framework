@@ -1,12 +1,12 @@
-package com.daeliin.components.persistence.country;
+package com.daeliin.components.cms.country;
 
-import com.daeliin.components.persistence.exception.PersistentResourceNotFoundException;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.Collection;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -38,7 +38,7 @@ public final class CountryService {
         }
 
         if (Strings.isNullOrEmpty(countryCode) || !countryByCode.containsKey(countryCode)) {
-            throw new PersistentResourceNotFoundException(String.format("There is no country for country code %s", countryCode));
+            throw new NoSuchElementException(String.format("There is no country for country code %s", countryCode));
         }
 
         return countryByCode.get(countryCode);

@@ -1,6 +1,6 @@
 package com.daeliin.components.persistence.fixtures;
 
-import com.daeliin.components.core.sql.BUuidPersistentResource;
+import com.daeliin.components.persistence.sql.BUuidPersistentResource;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;

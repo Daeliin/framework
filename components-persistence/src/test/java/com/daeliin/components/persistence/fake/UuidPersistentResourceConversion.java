@@ -1,6 +1,6 @@
 package com.daeliin.components.persistence.fake;
 
-import com.daeliin.components.core.sql.BUuidPersistentResource;
+import com.daeliin.components.persistence.sql.BUuidPersistentResource;
 import com.daeliin.components.core.resource.Conversion;
 
 public final class UuidPersistentResourceConversion implements Conversion<UuidPersistentResource, BUuidPersistentResource> {

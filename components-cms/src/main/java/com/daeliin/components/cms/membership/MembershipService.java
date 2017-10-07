@@ -2,17 +2,17 @@ package com.daeliin.components.cms.membership;
 
 import com.daeliin.components.cms.credentials.account.Account;
 import com.daeliin.components.cms.credentials.account.AccountService;
+import com.daeliin.components.cms.event.EventLogService;
 import com.daeliin.components.cms.exception.AccountAlreadyExistException;
 import com.daeliin.components.cms.exception.InvalidTokenException;
 import com.daeliin.components.cms.membership.details.AccountDetailsService;
 import com.daeliin.components.cms.membership.notifications.MembershipNotifications;
-import com.daeliin.components.persistence.event.EventLogService;
-import com.daeliin.components.persistence.exception.PersistentResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
@@ -54,7 +54,7 @@ public class MembershipService {
     @Transactional
     public void activate(String accountId, String activationToken) throws InvalidTokenException {
         if (!accountService.exists(accountId)) {
-            throw new PersistentResourceNotFoundException(String.format("account %s not found", accountId));
+            throw new NoSuchElementException(String.format("account %s not found", accountId));
         }
 
         Account account = accountService.findOne(accountId);
@@ -73,7 +73,7 @@ public class MembershipService {
     @Transactional
     public void newPassword(String accountId) {
         if (!accountService.exists(accountId)) {
-            throw new PersistentResourceNotFoundException(String.format("Account[%s] not found", accountId));
+            throw new NoSuchElementException(String.format("Account[%s] not found", accountId));
         }
 
         Account account = accountService.findOne(accountId);
@@ -86,7 +86,7 @@ public class MembershipService {
     @Transactional
     public void resetPassword(String accountId, String resetPasswordToken, String newPassword) throws InvalidTokenException {
         if (!accountService.exists(accountId)) {
-            throw new PersistentResourceNotFoundException(String.format("Account[%s] not found", accountId));
+            throw new NoSuchElementException(String.format("Account[%s] not found", accountId));
         }
 
         Account account = accountService.findOne(accountId);

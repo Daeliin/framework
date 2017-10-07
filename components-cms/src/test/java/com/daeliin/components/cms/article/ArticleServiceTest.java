@@ -3,7 +3,6 @@ package com.daeliin.components.cms.article;
 import com.daeliin.components.cms.Application;
 import com.daeliin.components.cms.library.ArticleLibrary;
 import com.daeliin.components.cms.news.NewsRepository;
-import com.daeliin.components.persistence.exception.PersistentResourceNotFoundException;
 import com.daeliin.components.cms.sql.BNews;
 import com.daeliin.components.cms.sql.QNews;
 import com.daeliin.components.core.pagination.Page;
@@ -21,6 +20,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Collection;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -41,7 +41,7 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
         assertThat(foundArticle).isEqualTo(foundArticle);
     }
 
-    @Test(expected = PersistentResourceNotFoundException.class)
+    @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenfindingAnArticleThatDoesntExist() {
         articleService.findOne("nonExistingId");
     }
@@ -56,8 +56,8 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
         assertThat(articleService.exists(ArticleLibrary.publishedArticle().getId())).isTrue();
     }
 
-    @Test(expected = PersistentResourceNotFoundException.class)
-    public void shouldThrowPersistentResourceNotFoundException_whenCreatingArticleWithNonExistingAuthor() {
+    @Test(expected = NoSuchElementException.class)
+    public void shouldThrowException_whenCreatingArticleWithNonExistingAuthor() {
         Article article = new Article(
                 "ARTICLE1",
                 LocalDateTime.of(2016, 5, 20, 14, 30, 0).toInstant(ZoneOffset.UTC),
@@ -97,8 +97,8 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
         assertThat(createdArticle.published).isFalse();
     }
 
-    @Test(expected = PersistentResourceNotFoundException.class)
-    public void shouldThrowPersistentResourceNotFoundException_whenUpdatingNonExistingArticle() {
+    @Test(expected = NoSuchElementException.class)
+    public void shouldThrowException_whenUpdatingNonExistingArticle() {
         articleService.update("OKOK", null);
     }
 
@@ -147,12 +147,12 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
         assertThat(publishedArticle.publicationDate).isNull();
     }
 
-    @Test(expected = PersistentResourceNotFoundException.class)
+    @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenPublishingANonExistingArticle() {
         articleService.publish("nonExistingId");
     }
 
-    @Test(expected = PersistentResourceNotFoundException.class)
+    @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenUnpublishingANonExistingArticle() {
         articleService.unpublish("nonExistingId");
     }

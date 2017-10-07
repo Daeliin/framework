@@ -1,15 +1,14 @@
-package com.daeliin.components.persistence.country;
+package com.daeliin.components.cms.country;
 
-import com.daeliin.components.persistence.Application;
-import com.daeliin.components.persistence.exception.PersistentResourceNotFoundException;
-import com.daeliin.components.persistence.library.CountryLibrary;
+import com.daeliin.components.cms.Application;
+import com.daeliin.components.cms.library.CountryLibrary;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 import javax.inject.Inject;
-
 import java.util.Collection;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,12 +18,12 @@ public class CountryServiceTest extends AbstractTransactionalJUnit4SpringContext
     @Inject
     private CountryService countryService;
 
-    @Test(expected = PersistentResourceNotFoundException.class)
+    @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenFindingNonExistingCountryCode() {
         countryService.findByCode("nope");
     }
 
-    @Test(expected = PersistentResourceNotFoundException.class)
+    @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenFindingNullCountryCode() {
         String nullCountryCode = null;
 

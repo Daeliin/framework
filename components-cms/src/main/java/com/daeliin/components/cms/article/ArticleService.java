@@ -2,23 +2,18 @@ package com.daeliin.components.cms.article;
 
 import com.daeliin.components.cms.credentials.account.Account;
 import com.daeliin.components.cms.credentials.account.AccountService;
+import com.daeliin.components.cms.event.EventLogService;
 import com.daeliin.components.cms.news.NewsService;
 import com.daeliin.components.cms.sql.BArticle;
 import com.daeliin.components.core.pagination.Page;
 import com.daeliin.components.core.pagination.PageRequest;
 import com.daeliin.components.core.resource.Id;
 import com.daeliin.components.core.string.UrlFriendlyString;
-import com.daeliin.components.persistence.event.EventLogService;
-import com.daeliin.components.persistence.exception.PersistentResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.time.Instant;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toSet;
@@ -46,7 +41,7 @@ public class ArticleService  {
         Account author = accountService.findByUsernameAndEnabled(article.author);
 
         if (author == null) {
-            throw new PersistentResourceNotFoundException(String.format("Account %s doesn't exist", article.author));
+            throw new NoSuchElementException(String.format("Account %s doesn't exist", article.author));
         }
 
         Article articleToCreate = new Article(
@@ -71,7 +66,7 @@ public class ArticleService  {
         BArticle existingArticle = repository.findOne(articleId);
 
         if (existingArticle == null) {
-            throw new PersistentResourceNotFoundException(String.format("Article %s doesn't exist", articleId));
+            throw new NoSuchElementException(String.format("Article %s doesn't exist", articleId));
         }
 
         Account author = accountService.findOne(existingArticle.getAuthorId());
@@ -88,7 +83,7 @@ public class ArticleService  {
         BArticle bArticle = repository.findOne(articleId);
 
         if (bArticle == null) {
-            throw new PersistentResourceNotFoundException();
+            throw new NoSuchElementException();
         }
 
         Account author = accountService.findOne(bArticle.getAuthorId());
@@ -158,7 +153,7 @@ public class ArticleService  {
         BArticle existingArticle = repository.findOne(id);
 
         if (existingArticle == null) {
-            throw new PersistentResourceNotFoundException(String.format("Article %s doesn't exist", id));
+            throw new NoSuchElementException(String.format("Article %s doesn't exist", id));
         }
 
         Account author = accountService.findOne(existingArticle.getAuthorId());

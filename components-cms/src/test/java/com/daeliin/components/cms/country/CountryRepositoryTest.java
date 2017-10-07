@@ -1,4 +1,4 @@
-package com.daeliin.components.persistence.country;
+package com.daeliin.components.cms.country;
 
 import com.daeliin.components.persistence.resource.repository.ResourceRepository;
 import org.junit.Test;

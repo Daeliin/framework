@@ -1,6 +1,6 @@
-package com.daeliin.components.persistence.fixtures;
+package com.daeliin.components.cms.fixtures;
 
-import com.daeliin.components.core.sql.BEventLog;
+import com.daeliin.components.cms.sql.BEventLog;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;

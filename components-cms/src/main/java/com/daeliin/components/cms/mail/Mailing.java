@@ -1,13 +1,7 @@
-package com.daeliin.components.persistence.mail;
-
-import java.util.Date;
-import java.util.Map;
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
+package com.daeliin.components.cms.mail;
 
 import com.daeliin.components.core.mail.Mail;
 import lombok.extern.slf4j.Slf4j;
-import javax.inject.Inject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -15,6 +9,12 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+
+import javax.inject.Inject;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * Processes and sends mails.

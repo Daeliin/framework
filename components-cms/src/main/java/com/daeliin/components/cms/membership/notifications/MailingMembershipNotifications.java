@@ -1,9 +1,9 @@
 package com.daeliin.components.cms.membership.notifications;
 
 import com.daeliin.components.cms.credentials.account.Account;
+import com.daeliin.components.cms.mail.Mailing;
 import com.daeliin.components.core.mail.Mail;
 import com.daeliin.components.core.mail.MailBuildingException;
-import com.daeliin.components.persistence.mail.Mailing;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;

@@ -1,4 +1,4 @@
-package com.daeliin.components.persistence.event;
+package com.daeliin.components.cms.event;
 
 
 import com.daeliin.components.persistence.resource.repository.ResourceRepository;

@@ -1,16 +1,15 @@
 package com.daeliin.components.persistence.resource.service;
 
-import com.daeliin.components.persistence.exception.PersistentResourceAlreadyExistsException;
-import com.daeliin.components.persistence.exception.PersistentResourceNotFoundException;
-import com.daeliin.components.persistence.resource.repository.CrudRepository;
 import com.daeliin.components.core.pagination.Page;
 import com.daeliin.components.core.pagination.PageRequest;
 import com.daeliin.components.core.resource.Conversion;
 import com.daeliin.components.core.resource.Persistable;
+import com.daeliin.components.persistence.resource.repository.CrudRepository;
 import com.querydsl.core.types.Predicate;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.TreeSet;
 
@@ -40,7 +39,7 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
     @Override
     public T create(T resource) {
         if (repository.exists(resource.getId())) {
-            throw new PersistentResourceAlreadyExistsException("Resource should not already exist when creating it");
+            throw new IllegalStateException("Resource should not already exist when creating it");
         }
 
         R createdRow = repository.save(conversion.map(resource));
@@ -97,7 +96,7 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
      * Finds a resource by its id.
      * @param resourceId resource id
      * @return resource
-     * @throws PersistentResourceNotFoundException if the resource is not found
+     * @throws NoSuchElementException if the resource is not found
      */
     @Override
     public T findOne(ID resourceId) {
@@ -108,7 +107,7 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
         }
 
         if (resource == null) {
-            throw new PersistentResourceNotFoundException(MESSAGE_RESOURCE_NOT_FOUND);
+            throw new NoSuchElementException(MESSAGE_RESOURCE_NOT_FOUND);
         }
 
         return resource;
@@ -172,12 +171,12 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
      * Updates a resource.
      * @param resource resource to update
      * @return updated resource
-     * @throws PersistentResourceNotFoundException if the resource is not found
+     * @throws NoSuchElementException if the resource is not found
      */
     @Override
     public T update(T resource) {
         if (resource == null || !repository.exists(resource.getId())) {
-            throw new PersistentResourceNotFoundException(MESSAGE_RESOURCE_NOT_FOUND);
+            throw new NoSuchElementException(MESSAGE_RESOURCE_NOT_FOUND);
         }
 
         return conversion.instantiate(repository.save(conversion.map(resource)));

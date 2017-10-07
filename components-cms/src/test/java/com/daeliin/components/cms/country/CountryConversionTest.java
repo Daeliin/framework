@@ -1,8 +1,8 @@
-package com.daeliin.components.persistence.country;
+package com.daeliin.components.cms.country;
 
-import com.daeliin.components.persistence.fixtures.CountryFixtures;
-import com.daeliin.components.persistence.library.CountryLibrary;
-import com.daeliin.components.core.sql.BCountry;
+import com.daeliin.components.cms.fixtures.CountryFixtures;
+import com.daeliin.components.cms.library.CountryLibrary;
+import com.daeliin.components.cms.sql.BCountry;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

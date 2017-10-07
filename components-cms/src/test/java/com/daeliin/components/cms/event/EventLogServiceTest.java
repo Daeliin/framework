@@ -1,6 +1,6 @@
-package com.daeliin.components.persistence.event;
+package com.daeliin.components.cms.event;
 
-import com.daeliin.components.persistence.Application;
+import com.daeliin.components.cms.Application;
 import com.daeliin.components.persistence.resource.service.ResourceService;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;

@@ -1,6 +1,6 @@
-package com.daeliin.components.persistence.library;
+package com.daeliin.components.cms.library;
 
-import com.daeliin.components.persistence.event.EventLog;
+import com.daeliin.components.cms.event.EventLog;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;

@@ -4,24 +4,18 @@ import com.daeliin.components.cms.article.Article;
 import com.daeliin.components.cms.article.ArticleService;
 import com.daeliin.components.cms.credentials.account.Account;
 import com.daeliin.components.cms.credentials.account.AccountService;
+import com.daeliin.components.cms.event.EventLogService;
 import com.daeliin.components.cms.sql.BNews;
 import com.daeliin.components.cms.sql.QNews;
 import com.daeliin.components.core.pagination.PageRequest;
 import com.daeliin.components.core.pagination.Sort;
-import com.daeliin.components.persistence.event.EventLogService;
-import com.daeliin.components.persistence.exception.PersistentResourceNotFoundException;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.time.Instant;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.UUID;
+import java.util.*;
 
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toSet;
@@ -50,7 +44,7 @@ public class NewsService {
         Account author = accountService.findByUsernameAndEnabled(news.author);
 
         if (article == null) {
-            throw new PersistentResourceNotFoundException(String.format("Article %s doesn't exist", articleId));
+            throw new NoSuchElementException(String.format("Article %s doesn't exist", articleId));
         }
 
         if (article.published) {
@@ -58,7 +52,7 @@ public class NewsService {
         }
 
         if (author == null) {
-            throw new PersistentResourceNotFoundException(String.format("Account %s doesn't exist", news.author));
+            throw new NoSuchElementException(String.format("Account %s doesn't exist", news.author));
         }
 
         News newsToCreate = new News(UUID.randomUUID().toString(), Instant.now(), news.author, news.content, news.source);
@@ -74,7 +68,7 @@ public class NewsService {
         BNews existingNews = repository.findOne(newsId);
 
         if (existingNews == null) {
-            throw new PersistentResourceNotFoundException(String.format("News %s doesn't exist", newsId));
+            throw new NoSuchElementException(String.format("News %s doesn't exist", newsId));
         }
 
         Account author = accountService.findOne(existingNews.getAuthorId());
@@ -87,7 +81,7 @@ public class NewsService {
 
     public Collection<News> findForArticle(String articleId) {
         if (!articleService.exists(articleId)) {
-            throw new PersistentResourceNotFoundException(String.format("Article %s doesn't exist", articleId));
+            throw new NoSuchElementException(String.format("Article %s doesn't exist", articleId));
         }
 
         PageRequest pageRequest = new PageRequest(0, 1000, Sets.newLinkedHashSet(ImmutableSet.of(new Sort("creationDate", Sort.Direction.DESC))));
@@ -99,7 +93,7 @@ public class NewsService {
         BNews existingNews = repository.findOne(id);
 
         if (existingNews == null) {
-            throw new PersistentResourceNotFoundException(String.format("News %s doesn't exist", id));
+            throw new NoSuchElementException(String.format("News %s doesn't exist", id));
         }
 
         Account author = accountService.findOne(existingNews.getAuthorId());
@@ -113,7 +107,7 @@ public class NewsService {
 
     public boolean delete(String id) {
         if (!exists(id)) {
-            throw new PersistentResourceNotFoundException(String.format("News %s doesn't exist", id));
+            throw new NoSuchElementException(String.format("News %s doesn't exist", id));
         }
 
         News newsToDelete = findOne(id);
@@ -127,7 +121,7 @@ public class NewsService {
 
     public boolean deleteForArticle(String articleId) {
         if (!articleService.exists(articleId)) {
-            throw new PersistentResourceNotFoundException(String.format("Article %s doesn't exist", articleId));
+            throw new NoSuchElementException(String.format("Article %s doesn't exist", articleId));
         }
 
         return repository.deleteForArticle(articleId);

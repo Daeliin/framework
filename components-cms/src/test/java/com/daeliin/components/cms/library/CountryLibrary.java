@@ -1,6 +1,6 @@
-package com.daeliin.components.persistence.library;
+package com.daeliin.components.cms.library;
 
-import com.daeliin.components.persistence.country.Country;
+import com.daeliin.components.cms.country.Country;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;

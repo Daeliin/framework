@@ -1,4 +1,4 @@
-package com.daeliin.components.persistence.mail;
+package com.daeliin.components.cms.mail;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
