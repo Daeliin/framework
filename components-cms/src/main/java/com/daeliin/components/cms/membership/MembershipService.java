@@ -3,7 +3,6 @@ package com.daeliin.components.cms.membership;
 import com.daeliin.components.cms.credentials.account.Account;
 import com.daeliin.components.cms.credentials.account.AccountService;
 import com.daeliin.components.cms.event.EventLogService;
-import com.daeliin.components.cms.exception.AccountAlreadyExistException;
 import com.daeliin.components.cms.exception.InvalidTokenException;
 import com.daeliin.components.cms.membership.details.AccountDetailsService;
 import com.daeliin.components.cms.membership.notifications.MembershipNotifications;
@@ -39,7 +38,7 @@ public class MembershipService {
     @Transactional
     public Account signUp(SignUpRequest signUpRequest) {
         if (accountService.usernameExists(signUpRequest.username)) {
-            throw new AccountAlreadyExistException("The username already exist");
+            throw new IllegalStateException("The username already exist");
         }
 
         Account account = accountDetailsService.signUp(signUpRequest);

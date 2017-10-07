@@ -3,7 +3,6 @@ package com.daeliin.components.cms.membership;
 import com.daeliin.components.cms.Application;
 import com.daeliin.components.cms.credentials.account.Account;
 import com.daeliin.components.cms.credentials.account.AccountService;
-import com.daeliin.components.cms.exception.AccountAlreadyExistException;
 import com.daeliin.components.cms.exception.InvalidTokenException;
 import com.daeliin.components.cms.library.AccountLibrary;
 import com.daeliin.components.cms.sql.QAccount;
@@ -25,7 +24,7 @@ public class MembershipServiceTest extends AbstractTransactionalJUnit4SpringCont
     @Inject
     private AccountService accountService;
 
-    @Test(expected = AccountAlreadyExistException.class)
+    @Test(expected = IllegalStateException.class)
     public void shouldThrowException_whenSigningUpExistingAccount() {
         Account existingAccount = AccountLibrary.admin();
         SignUpRequest signUpRequest = new SignUpRequest(existingAccount.username, existingAccount.email, "password");
@@ -42,7 +41,7 @@ public class MembershipServiceTest extends AbstractTransactionalJUnit4SpringCont
 
         try {
             membershipService.signUp(signUpRequest);
-        } catch (AccountAlreadyExistException e) {
+        } catch (IllegalStateException e) {
         }
 
         int accountCountAfterSignUp = countAccountRows();

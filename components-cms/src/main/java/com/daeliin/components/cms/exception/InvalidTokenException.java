@@ -1,8 +1,7 @@
 package com.daeliin.components.cms.exception;
 
 public class InvalidTokenException extends Exception {
-    private static final long serialVersionUID = 4544034001377379204L;
-    
+
     public InvalidTokenException(String message) {
         super(message);
     }

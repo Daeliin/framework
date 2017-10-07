@@ -13,16 +13,16 @@ import static java.util.stream.Collectors.toCollection;
  */
 public class PageRequestValidation {
     
-    public int index;
-    public int size;
-    public LinkedHashSet<Sort> sorts;
+    public final int index;
+    public final int size;
+    public final LinkedHashSet<Sort> sorts;
 
     public PageRequestValidation(
             final String index,
             final String size,
             final String direction,
             final String... properties) throws PageRequestException {
-        
+
         this.index = validateIndex(index);
         this.size = validateSize(size);
         this.sorts = validateSorts(direction, properties);
@@ -31,11 +31,11 @@ public class PageRequestValidation {
     private int validateIndex(final String index) throws PageRequestException {
         try {
             int pageNumberValue = Integer.parseInt(index);
-            
+
             if (pageNumberValue < 0) {
                 throw new PageRequestException("Page number should be equal to or greater than 0");
             }
-            
+
             return pageNumberValue;
         } catch (NumberFormatException e) {
             throw new PageRequestException("Page number should be an integer");
@@ -45,11 +45,11 @@ public class PageRequestValidation {
     private int validateSize(final String pageSizeParameter) throws PageRequestException {
         try {
             int pageSizeValue = Integer.parseInt(pageSizeParameter);
-            
+
             if (pageSizeValue <= 0) {
                 throw new PageRequestException("Page size should be greater than 0");
             }
-            
+
             return pageSizeValue;
         } catch (NumberFormatException e) {
             throw new PageRequestException("Page size should be an integer");

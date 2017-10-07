@@ -6,8 +6,6 @@ import com.daeliin.components.core.resource.Persistable;
 import com.daeliin.components.persistence.resource.service.PagingService;
 import com.daeliin.components.webservices.dto.ResourceDtoConversion;
 import com.daeliin.components.webservices.exception.PageRequestException;
-import com.daeliin.components.webservices.exception.ResourceAlreadyExistsException;
-import com.daeliin.components.webservices.exception.ResourceNotFoundException;
 import com.daeliin.components.webservices.validation.PageRequestValidation;
 import com.querydsl.core.types.Predicate;
 import org.springframework.http.HttpStatus;
@@ -54,11 +52,7 @@ public abstract class ResourceController<V, T extends Persistable<ID>, ID, S ext
     @ResponseBody
     @Override
     public V create(@RequestBody @Valid V resource) {
-        try {
-            return conversion.instantiate(service.create(conversion.map(resource, null, Instant.now())));
-        } catch (IllegalStateException e) {
-            throw new ResourceAlreadyExistsException();
-        }
+        return conversion.instantiate(service.create(conversion.map(resource, null, Instant.now())));
     }
     
     /**
@@ -72,11 +66,7 @@ public abstract class ResourceController<V, T extends Persistable<ID>, ID, S ext
     @ResponseBody
     @Override
     public V getOne(@PathVariable ID resourceId) {
-        try {
-            return conversion.instantiate(service.findOne(resourceId));
-        } catch (NoSuchElementException e) {
-            throw new ResourceNotFoundException();
-        }
+        return conversion.instantiate(service.findOne(resourceId));
     }
     
     /**
@@ -112,7 +102,7 @@ public abstract class ResourceController<V, T extends Persistable<ID>, ID, S ext
     @Override
     public V update(@PathVariable ID resourceId, @RequestBody @Valid V resource) {
         if (!service.exists(resourceId)) {
-            throw new ResourceNotFoundException();
+            throw new NoSuchElementException();
         }
 
         T existingResource = service.findOne(resourceId);
@@ -128,11 +118,11 @@ public abstract class ResourceController<V, T extends Persistable<ID>, ID, S ext
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Override
     public void delete(@PathVariable ID resourceId) {
-        boolean deleted = service.delete(resourceId);
-
-        if (!deleted) {
-            throw new ResourceNotFoundException();
+        if (!service.exists(resourceId)) {
+            throw new NoSuchElementException();
         }
+
+        service.delete(resourceId);
     }
     
     /**
