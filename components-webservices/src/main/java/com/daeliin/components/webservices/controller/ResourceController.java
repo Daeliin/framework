@@ -81,7 +81,7 @@ public abstract class ResourceController<V, T extends Persistable<ID>, ID, S ext
      */
     public Page<V> getAll(Predicate predicate, String page, String size, String direction, String... properties) {
         PageRequestValidation pageRequestValidation = new PageRequestValidation(page, size, direction, properties);
-        PageRequest pageRequest = new PageRequest(pageRequestValidation.index, pageRequestValidation.size, pageRequestValidation.sorts);
+        PageRequest pageRequest = pageRequestValidation.validate();
 
         Page<T> pageResult = service.findAll(predicate, pageRequest);
 

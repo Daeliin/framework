@@ -1,10 +1,12 @@
 package com.daeliin.components.webservices.validation;
 
+import com.daeliin.components.core.pagination.PageRequest;
 import com.daeliin.components.core.pagination.Sort;
 import com.daeliin.components.webservices.exception.PageRequestException;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 
 import static java.util.stream.Collectors.toCollection;
 
@@ -13,24 +15,29 @@ import static java.util.stream.Collectors.toCollection;
  */
 public class PageRequestValidation {
     
-    public final int index;
-    public final int size;
-    public final LinkedHashSet<Sort> sorts;
+    private final String page;
+    private final String size;
+    private final String direction;
+    private final String[] properties;
 
     public PageRequestValidation(
-            final String index,
+            final String page,
             final String size,
             final String direction,
             final String... properties) throws PageRequestException {
-
-        this.index = validateIndex(index);
-        this.size = validateSize(size);
-        this.sorts = validateSorts(direction, properties);
+        this.page = Objects.requireNonNull(page);
+        this.size = Objects.requireNonNull(size);
+        this.direction = Objects.requireNonNull(direction);
+        this.properties = Objects.requireNonNull(properties);
     }
 
-    private int validateIndex(final String index) throws PageRequestException {
+    public PageRequest validate() throws PageRequestException {
+        return new PageRequest(validateIndex(), validateSize(), validateSorts());
+    }
+
+    private int validateIndex() throws PageRequestException {
         try {
-            int pageNumberValue = Integer.parseInt(index);
+            int pageNumberValue = Integer.parseInt(page);
 
             if (pageNumberValue < 0) {
                 throw new PageRequestException("Page number should be equal to or greater than 0");
@@ -42,9 +49,9 @@ public class PageRequestValidation {
         }
     }
     
-    private int validateSize(final String pageSizeParameter) throws PageRequestException {
+    private int validateSize() throws PageRequestException {
         try {
-            int pageSizeValue = Integer.parseInt(pageSizeParameter);
+            int pageSizeValue = Integer.parseInt(size);
 
             if (pageSizeValue <= 0) {
                 throw new PageRequestException("Page size should be greater than 0");
@@ -56,7 +63,7 @@ public class PageRequestValidation {
         }
     }
     
-    private LinkedHashSet<Sort> validateSorts(String direction, String[] properties) throws PageRequestException {
+    private LinkedHashSet<Sort> validateSorts() throws PageRequestException {
         Sort.Direction sortDirection;
 
         if ("asc".equalsIgnoreCase(direction)) {
