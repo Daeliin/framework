@@ -13,5 +13,44 @@ Provides commons java components with Spring Boot.
 * Web tier : [Spring Boot 1.5.7.RELEASE](https://projects.spring.io/spring-boot/)
 * Templating : [Thymeleaf 2.1.5.RELEASE](http://www.thymeleaf.org/)
 
+## Getting started
+### Repository
+```xml
+<repositories>
+    <repository>
+        <id>daeliin-repository</id>
+        <url>http://daeliin.com/repository/</url>
+    </repository>   
+</repositories>
+```
+### Maven depencencies
+```xml
+<dependency>
+    <groupId>com.daeliin.components</groupId>
+    <artifactId>components-core</artifactId>
+    <version>0.2-SNAPSHOT</version>
+</dependency>
+<dependency>
+    <groupId>com.daeliin.components</groupId>
+    <artifactId>components-persistence</artifactId>
+    <version>0.2-SNAPSHOT</version>
+</dependency>
+<dependency>
+    <groupId>com.daeliin.components</groupId>
+    <artifactId>components-security</artifactId>
+    <version>0.2-SNAPSHOT</version>
+</dependency>
+<dependency>
+    <groupId>com.daeliin.components</groupId>
+    <artifactId>components-cms</artifactId>
+    <version>0.2-SNAPSHOT</version>
+</dependency>
+<dependency>
+    <groupId>com.daeliin.components</groupId>
+    <artifactId>components-webservices</artifactId>
+    <version>0.2-SNAPSHOT</version>
+</dependency>
+```
+
 ## Documentation
 * [GitHub Wiki](https://github.com/baptistelebail/java-components/wiki)
