@@ -65,11 +65,8 @@ public class NewsService {
     }
 
     public News update(String newsId, News news) {
-        BNews existingNews = repository.findOne(newsId);
-
-        if (existingNews == null) {
-            throw new NoSuchElementException(String.format("News %s doesn't exist", newsId));
-        }
+        BNews existingNews = repository.findOne(newsId).orElseThrow(() ->
+                new NoSuchElementException(String.format("News %s doesn't exist", newsId)));
 
         Account author = accountService.findOne(existingNews.getAuthorId());
 
@@ -90,11 +87,8 @@ public class NewsService {
     }
 
     public News findOne(String id) {
-        BNews existingNews = repository.findOne(id);
-
-        if (existingNews == null) {
-            throw new NoSuchElementException(String.format("News %s doesn't exist", id));
-        }
+        BNews existingNews = repository.findOne(id).orElseThrow(() ->
+                new NoSuchElementException(String.format("News %s doesn't exist", id)));
 
         Account author = accountService.findOne(existingNews.getAuthorId());
 

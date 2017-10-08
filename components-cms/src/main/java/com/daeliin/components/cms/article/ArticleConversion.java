@@ -6,10 +6,6 @@ import com.daeliin.components.core.string.UrlFriendlyString;
 public final class ArticleConversion {
 
     public Article instantiate(BArticle bArticle, String author) {
-        if (bArticle == null) {
-            return null;
-        }
-
         return new Article(
                 bArticle.getId(),
                 bArticle.getCreationDate(),
@@ -23,10 +19,6 @@ public final class ArticleConversion {
     }
 
     public BArticle map(Article article, String authorId) {
-        if (article == null) {
-            return null;
-        }
-
         return new BArticle(
                 authorId,
                 article.content,

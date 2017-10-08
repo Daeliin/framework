@@ -148,7 +148,7 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
     public void shouldCallRepositoryFindOneAndReturnResource_whenFindingResource() {
         UuidPersistentResource existingUuidEntity = UuidPersistentResourceLibrary.uuidPersistentResource1();
 
-        doReturn(conversion.map(existingUuidEntity)).when(repositoryMock).findOne(existingUuidEntity.getId());
+        doReturn(Optional.of(conversion.map(existingUuidEntity))).when(repositoryMock).findOne(existingUuidEntity.getId());
 
         UuidPersistentResource foundUuidEntity = service.findOne(existingUuidEntity.getId());
 
@@ -161,7 +161,7 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
         Predicate predicate = QUuidPersistentResource.uuidPersistentResource.uuid.eq(UuidPersistentResourceLibrary.uuidPersistentResource1().getId());
         UuidPersistentResource existingUuidEntity = UuidPersistentResourceLibrary.uuidPersistentResource1();
 
-        doReturn(conversion.map(existingUuidEntity)).when(repositoryMock).findOne(predicate);
+        doReturn(Optional.of(conversion.map(existingUuidEntity))).when(repositoryMock).findOne(predicate);
 
         UuidPersistentResource foundUuidEntity = service.findOne(predicate);
     

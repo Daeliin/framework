@@ -11,11 +11,11 @@ public final class EventLogConversionTest {
 
     private EventLogConversion eventLogConversion = new EventLogConversion();
 
-    @Test
-    public void shouldMapToNull_whenNull() {
+    @Test(expected = Exception.class)
+    public void shouldThrowException_whenMappingNull() {
         EventLog nullEventLog = null;
 
-        assertThat(eventLogConversion.map(nullEventLog)).isNull();
+        eventLogConversion.map(nullEventLog);
     }
 
     @Test
@@ -25,11 +25,11 @@ public final class EventLogConversionTest {
         assertThat(mappedEventLog).isEqualToComparingFieldByField(EventLogFixtures.login());
     }
 
-    @Test
-    public void shouldInstantiateNull_fromNull() {
+    @Test(expected = Exception.class)
+    public void shouldThrowException_whenInstantiatingNull() {
         BEventLog nullEventLogRow = null;
 
-        assertThat(eventLogConversion.instantiate(nullEventLogRow)).isNull();
+        eventLogConversion.instantiate(nullEventLogRow);
     }
 
     @Test

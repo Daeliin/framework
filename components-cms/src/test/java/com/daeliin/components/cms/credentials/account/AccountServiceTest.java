@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 
 import javax.inject.Inject;
 import java.util.Collection;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,9 +35,9 @@ public class AccountServiceTest extends AbstractTransactionalJUnit4SpringContext
         assertThat(accountService.findByUsernameAndEnabled(account.username)).isEqualTo(account);
     }
 
-    @Test
-    public void shouldReturnNull_whenFindingEnabledAccountByUsername_ifAccountIsDisabled() {
-        assertThat(accountService.findByUsernameAndEnabled(AccountLibrary.inactive().username)).isEqualTo(null);
+    @Test(expected = NoSuchElementException.class)
+    public void shouldThrowException_whenFindingEnabledAccountByUsername_ifAccountIsDisabled() {
+        accountService.findByUsernameAndEnabled(AccountLibrary.inactive().username);
     }
 
     @Test

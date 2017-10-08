@@ -8,10 +8,7 @@ import com.daeliin.components.persistence.resource.repository.CrudRepository;
 import com.querydsl.core.types.Predicate;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Collection;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * Provides CRUD operations and pagination for a resource, with caching.
@@ -100,22 +97,26 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
      */
     @Override
     public T findOne(ID resourceId) {
-        T resource = null;
-
-        if (resourceId != null) {
-            resource = conversion.instantiate(repository.findOne(resourceId));
-        }
-
-        if (resource == null) {
+        if (resourceId == null) {
             throw new NoSuchElementException(MESSAGE_RESOURCE_NOT_FOUND);
         }
 
-        return resource;
+        Optional<R> resourceRow = repository.findOne(resourceId);
+
+        R resource = resourceRow.orElseThrow(() -> new NoSuchElementException(MESSAGE_RESOURCE_NOT_FOUND));
+
+        return conversion.instantiate(resource);
     }
 
     @Override
     public T findOne(Predicate predicate) {
-        return conversion.instantiate(repository.findOne(predicate));
+        Optional<R> resource = repository.findOne(predicate);
+
+        if (!resource.isPresent()) {
+            throw new NoSuchElementException(MESSAGE_RESOURCE_NOT_FOUND);
+        }
+
+        return conversion.instantiate(resource.get());
     }
 
     /**

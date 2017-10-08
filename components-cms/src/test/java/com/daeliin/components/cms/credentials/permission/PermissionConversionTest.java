@@ -11,11 +11,11 @@ public final class PermissionConversionTest {
 
     private PermissionConversion permissionConversion = new PermissionConversion();
 
-    @Test
-    public void shouldMapToNull_whenNull() {
+    @Test(expected = Exception.class)
+    public void shouldThrowException_whenMappingNull() {
         Permission nullPermission = null;
 
-        assertThat(permissionConversion.map(nullPermission)).isNull();
+        permissionConversion.map(nullPermission);
     }
 
     @Test
@@ -25,11 +25,11 @@ public final class PermissionConversionTest {
         assertThat(mappedPermission).isEqualToComparingFieldByField(PermissionFixtures.admin());
     }
 
-    @Test
-    public void shouldInstantiateNull_fromNull() {
+    @Test(expected = Exception.class)
+    public void shouldThrowException_whenInstantiatingNull() {
         BPermission nullPermissionRow = null;
 
-        assertThat(permissionConversion.instantiate(nullPermissionRow)).isNull();
+        permissionConversion.instantiate(nullPermissionRow);
     }
 
     @Test

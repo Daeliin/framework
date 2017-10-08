@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.Collection;
+import java.util.NoSuchElementException;
 
 @Service
 public class AccountService extends ResourceService<Account, BAccount, String, AccountRepository> {
@@ -25,9 +26,9 @@ public class AccountService extends ResourceService<Account, BAccount, String, A
                 .and(QAccount.account.enabled.isTrue()));
 
 
-        Account account = conversion.instantiate(bAccounts.stream().findFirst().orElse(null));
+        BAccount firstMatch = bAccounts.stream().findFirst().orElseThrow(NoSuchElementException::new);
 
-        return account;
+        return conversion.instantiate(firstMatch);
     }
 
     public boolean usernameExists(String username) {

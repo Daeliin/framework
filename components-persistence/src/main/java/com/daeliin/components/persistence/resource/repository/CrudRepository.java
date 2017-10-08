@@ -3,6 +3,7 @@ package com.daeliin.components.persistence.resource.repository;
 import com.querydsl.core.types.dsl.SimpleExpression;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -16,7 +17,7 @@ public interface CrudRepository<R, ID> extends PagingRepository<R> {
 
     Collection<R> save(Collection<R> resources);
 
-    R findOne(ID resourceId);
+    Optional<R> findOne(ID resourceId);
 
     Collection<R> findAll(Collection<ID> resourceIds);
 

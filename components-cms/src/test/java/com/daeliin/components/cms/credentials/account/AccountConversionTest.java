@@ -11,11 +11,11 @@ public final class AccountConversionTest {
 
     private AccountConversion accountConversion = new AccountConversion();
 
-    @Test
-    public void shouldMapToNull_whenNull() {
+    @Test(expected = Exception.class)
+    public void shouldThrowException_whenMappingNull() {
         Account nullAccount = null;
 
-        assertThat(accountConversion.map(nullAccount)).isNull();
+        accountConversion.map(nullAccount);
     }
 
     @Test
@@ -25,11 +25,11 @@ public final class AccountConversionTest {
         assertThat(mappedAccount).isEqualToComparingFieldByField(AccountFixtures.admin());
     }
 
-    @Test
-    public void shouldInstantiateNull_fromNull() {
+    @Test(expected = Exception.class)
+    public void shouldThrowException_whenInstantiatingNull() {
         BAccount nullAccountRow = null;
 
-        assertThat(accountConversion.instantiate(nullAccountRow)).isNull();
+        accountConversion.instantiate(nullAccountRow);
     }
 
     @Test

@@ -11,11 +11,11 @@ public final class CountryConversionTest {
 
     private CountryConversion countryConversion = new CountryConversion();
 
-    @Test
-    public void shouldMapToNull_whenNull() {
+    @Test(expected = Exception.class)
+    public void shouldThrowException_whenMappingNull() {
         Country nullCountry = null;
 
-        assertThat(countryConversion.map(nullCountry)).isNull();
+        countryConversion.map(nullCountry);
     }
 
     @Test
@@ -25,11 +25,11 @@ public final class CountryConversionTest {
         assertThat(mappedCountry).isEqualToComparingFieldByField(CountryFixtures.france());
     }
 
-    @Test
-    public void shouldInstantiateNull_fromNull() {
+    @Test(expected = Exception.class)
+    public void shouldThrowException_whenInstantiatingNull() {
         BCountry nullCountryRow = null;
 
-        assertThat(countryConversion.instantiate(nullCountryRow)).isNull();
+        countryConversion.instantiate(nullCountryRow);
     }
 
     @Test

@@ -1,14 +1,14 @@
 package com.daeliin.components.persistence.resource.repository;
 
 
+import com.daeliin.components.core.pagination.Page;
+import com.daeliin.components.core.pagination.PageRequest;
+import com.daeliin.components.core.pagination.Sort;
 import com.daeliin.components.persistence.Application;
 import com.daeliin.components.persistence.fake.UuidPersistentResourceBaseRepository;
 import com.daeliin.components.persistence.fixtures.UuidPersistentResourceFixtures;
 import com.daeliin.components.persistence.sql.BUuidPersistentResource;
 import com.daeliin.components.persistence.sql.QUuidPersistentResource;
-import com.daeliin.components.core.pagination.Page;
-import com.daeliin.components.core.pagination.PageRequest;
-import com.daeliin.components.core.pagination.Sort;
 import com.google.common.collect.Sets;
 import com.querydsl.core.types.Predicate;
 import org.junit.Test;
@@ -58,24 +58,24 @@ public class BaseRepositoryTest extends AbstractTransactionalJUnit4SpringContext
     }
 
     @Test
-    public void shouldReturnNull_whenFindingResourceWithPredicate() {
+    public void shouldReturnEmpty_whenFindingResourceWithNullPredicate() {
         Predicate nullPredicate = null;
 
-        assertThat(repository.findOne(nullPredicate)).isNull();
+        assertThat(repository.findOne(nullPredicate).isPresent()).isFalse();
     }
 
     @Test
-    public void shouldReturnNull_whenPredicateDoesntMatchAnyRow() {
+    public void shouldReturnEmpty_whenPredicateDoesntMatchAnyRow() {
         Predicate predicate = QUuidPersistentResource.uuidPersistentResource.label.eq("nonExistingLabel");
 
-        assertThat(repository.findOne(predicate)).isNull();
+        assertThat(repository.findOne(predicate).isPresent()).isFalse();
     }
 
     @Test
     public void shouldFindResource_accordingToPredicate() {
         Predicate predicate = QUuidPersistentResource.uuidPersistentResource.uuid.eq(UuidPersistentResourceFixtures.uuidPersistentResource1().getUuid());
 
-        assertThat(repository.findOne(predicate)).isEqualToComparingFieldByField(UuidPersistentResourceFixtures.uuidPersistentResource1());
+        assertThat(repository.findOne(predicate).get()).isEqualToComparingFieldByField(UuidPersistentResourceFixtures.uuidPersistentResource1());
     }
 
     @Test

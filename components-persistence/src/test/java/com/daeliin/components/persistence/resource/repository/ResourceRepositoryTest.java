@@ -46,7 +46,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
         BUuidPersistentResource newUuuidPersistentResource = new BUuidPersistentResource(Instant.now(), "label100", UUID.randomUUID().toString());
         int uuidPersistentResourceCountBeforeCreate = countRows();
 
-        BUuidPersistentResource persistedUuidEntity = repository.findOne(repository.save(newUuuidPersistentResource).getUuid());
+        BUuidPersistentResource persistedUuidEntity = repository.findOne(repository.save(newUuuidPersistentResource).getUuid()).get();
 
         int uuidPersistentResourceCountAfterCreate = countRows();
 
@@ -108,21 +108,21 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
     public void shouldFindResource() {
         BUuidPersistentResource uuidPersistentResource1 = UuidPersistentResourceFixtures.uuidPersistentResource1();
 
-        BUuidPersistentResource foundUuidEntity = repository.findOne(uuidPersistentResource1.getUuid());
+        BUuidPersistentResource foundUuidEntity = repository.findOne(uuidPersistentResource1.getUuid()).get();
 
         assertThat(foundUuidEntity).isEqualToComparingFieldByField(UuidPersistentResourceFixtures.uuidPersistentResource1());
     }
 
     @Test
-    public void shouldReturnNull_whenFindingNonExistingResource() {
-        assertThat(repository.findOne("6846984-864684")).isNull();
+    public void shouldReturnEmpty_whenFindingNonExistingResource() {
+        assertThat(repository.findOne("6846984-864684").isPresent()).isFalse();
     }
 
     @Test
-    public void shouldReturnNull_whenFindingNull() {
+    public void shouldReturnEmpty_whenFindingNull() {
         String nullId = null;
 
-        assertThat(repository.findOne(nullId)).isNull();
+        assertThat(repository.findOne(nullId).isPresent()).isFalse();
     }
 
     @Test

@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -79,15 +80,15 @@ public abstract class ResourceRepository<R, ID> extends BaseRepository<R> implem
 
     @Transactional(readOnly = true)
     @Override
-    public R findOne(ID resourceId) {
+    public Optional<R> findOne(ID resourceId) {
         if (resourceId == null) {
-            return null;
+            return Optional.empty();
         }
 
-        return queryFactory.select(rowPath)
+        return Optional.ofNullable(queryFactory.select(rowPath)
                 .from(rowPath)
                 .where(idPath.eq(resourceId))
-                .fetchOne();
+                .fetchOne());
     }
 
     @Transactional(readOnly = true)

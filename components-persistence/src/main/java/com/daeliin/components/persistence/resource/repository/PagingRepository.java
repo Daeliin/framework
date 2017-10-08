@@ -6,6 +6,7 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.sql.RelationalPathBase;
 
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * Provides global CRUD and pagination operations for a row type.
@@ -15,7 +16,7 @@ public interface PagingRepository<R> {
 
     RelationalPathBase<R> rowPath();
 
-    R findOne(Predicate predicate);
+    Optional<R> findOne(Predicate predicate);
 
     Collection<R> findAll(Predicate predicate);
 

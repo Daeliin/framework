@@ -7,10 +7,6 @@ public final class PermissionConversion implements Conversion<Permission, BPermi
 
     @Override
     public Permission instantiate(BPermission bPermission) {
-        if (bPermission == null) {
-            return null;
-        }
-
         return new Permission(
                 bPermission.getId(),
                 bPermission.getCreationDate(),
@@ -19,10 +15,6 @@ public final class PermissionConversion implements Conversion<Permission, BPermi
 
     @Override
     public BPermission map(Permission permission) {
-        if (permission == null) {
-            return null;
-        }
-
         return new BPermission(
                 permission.getCreationDate(),
                 permission.getId(),

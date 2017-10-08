@@ -6,10 +6,6 @@ import com.daeliin.components.core.resource.Conversion;
 public final class AccountConversion implements Conversion<Account, BAccount> {
 
     public Account instantiate(BAccount bAccount) {
-        if (bAccount == null) {
-            return null;
-        }
-
         return new Account(
             bAccount.getId(),
             bAccount.getCreationDate(),
@@ -22,10 +18,6 @@ public final class AccountConversion implements Conversion<Account, BAccount> {
 
     @Override
     public BAccount map(Account account) {
-        if (account == null) {
-            return null;
-        }
-
         return new BAccount(
             account.getCreationDate(),
             account.email,

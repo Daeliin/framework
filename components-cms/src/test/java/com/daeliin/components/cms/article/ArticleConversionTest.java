@@ -12,9 +12,9 @@ public final class ArticleConversionTest {
 
     private ArticleConversion articleConversion = new ArticleConversion();
 
-    @Test
-    public void shouldMapToNull_whenNull() {
-        assertThat(articleConversion.map(null, AccountLibrary.admin().getId())).isNull();
+    @Test(expected = Exception.class)
+    public void shouldThrowException_whenMappingNull() {
+        articleConversion.map(null, AccountLibrary.admin().getId());
     }
 
     @Test
@@ -24,9 +24,9 @@ public final class ArticleConversionTest {
         assertThat(mappedArticle).isEqualToComparingFieldByField(ArticleFixtures.publishedArticle());
     }
 
-    @Test
-    public void shouldInstantiateNull_fromNull() {
-        assertThat(articleConversion.instantiate(null, AccountLibrary.admin().username)).isNull();
+    @Test(expected = Exception.class)
+    public void shouldThrowException_whenInstantiatingNull() {
+        articleConversion.instantiate(null, AccountLibrary.admin().username);
     }
 
     @Test

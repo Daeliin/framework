@@ -63,11 +63,8 @@ public class ArticleService  {
     }
 
     public Article update(String articleId, Article article) {
-        BArticle existingArticle = repository.findOne(articleId);
-
-        if (existingArticle == null) {
-            throw new NoSuchElementException(String.format("Article %s doesn't exist", articleId));
-        }
+        BArticle existingArticle = repository.findOne(articleId).orElseThrow(() ->
+                new NoSuchElementException(String.format("Article %s doesn't exist", articleId)));
 
         Account author = accountService.findOne(existingArticle.getAuthorId());
 
@@ -80,11 +77,8 @@ public class ArticleService  {
     }
 
     public Article findOne(String articleId) {
-        BArticle bArticle = repository.findOne(articleId);
-
-        if (bArticle == null) {
-            throw new NoSuchElementException();
-        }
+        BArticle bArticle = repository.findOne(articleId).orElseThrow(() ->
+                new NoSuchElementException(String.format("Article %s doesn't exist", articleId)));
 
         Account author = accountService.findOne(bArticle.getAuthorId());
 
@@ -150,11 +144,8 @@ public class ArticleService  {
     }
 
     private Article updatePublication(String id, boolean published, Instant publicationDate) {
-        BArticle existingArticle = repository.findOne(id);
-
-        if (existingArticle == null) {
-            throw new NoSuchElementException(String.format("Article %s doesn't exist", id));
-        }
+        BArticle existingArticle = repository.findOne(id).orElseThrow(() ->
+                new NoSuchElementException(String.format("Article %s doesn't exist", id)));
 
         Account author = accountService.findOne(existingArticle.getAuthorId());
 

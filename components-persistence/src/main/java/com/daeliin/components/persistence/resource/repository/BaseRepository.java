@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @param <R> row type
@@ -36,15 +37,15 @@ public class BaseRepository<R> implements PagingRepository<R> {
 
     @Transactional(readOnly = true)
     @Override
-    public R findOne(Predicate predicate) {
+    public Optional<R> findOne(Predicate predicate) {
         if (predicate == null) {
-            return null;
+            return Optional.empty();
         }
 
-        return queryFactory.select(rowPath)
+        return Optional.ofNullable(queryFactory.select(rowPath)
             .from(rowPath)
             .where(predicate)
-            .fetchOne();
+            .fetchOne());
     }
 
     @Transactional(readOnly = true)
