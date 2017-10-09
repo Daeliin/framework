@@ -6,10 +6,11 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
@@ -17,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class JsonTest extends AbstractJUnit4SpringContextTests {
+public class JsonTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Inject
     private ObjectMapper jsonMapper;
@@ -50,20 +51,20 @@ public class JsonTest extends AbstractJUnit4SpringContextTests {
 
     @Test
     public void shouldSerializeJSR310AsIso() throws Exception{
-        LocalDateTime localDateTime = LocalDateTime.of(2017, 1, 1, 12, 32, 12);
+        Instant instant = LocalDateTime.of(2017, 1, 1, 12, 32, 12).toInstant(ZoneOffset.UTC);
 
-        String serializedLocalDateTime = jsonMapper.writeValueAsString(localDateTime);
+        String serializedInstant = jsonMapper.writeValueAsString(instant);
 
-        assertThat(serializedLocalDateTime).isEqualTo("\"2017-01-01T12:32:12\"");
+        assertThat(serializedInstant).isEqualTo("\"2017-01-01T12:32:12Z\"");
     }
 
     @Test
     public void shouldDeserializeISoDateToJSR310() throws Exception {
-        LocalDateTime localDateTime = LocalDateTime.of(2017, 1, 1, 12, 32, 12);
+        Instant instant = LocalDateTime.of(2017, 1, 1, 12, 32, 12).toInstant(ZoneOffset.UTC);
 
-        LocalDateTime deserializedLocalDateTime = jsonMapper.readValue("\"2017-01-01T12:32:12Z\"", LocalDateTime.class);
+        Instant deserializedInstant = jsonMapper.readValue("\"2017-01-01T12:32:12Z\"", Instant.class);
 
-        assertThat(deserializedLocalDateTime).isEqualTo(localDateTime);
+        assertThat(deserializedInstant).isEqualTo(instant);
     }
 
     @Test
