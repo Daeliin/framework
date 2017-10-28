@@ -2,9 +2,12 @@ package com.daeliin.components.cms.news;
 
 
 import com.daeliin.components.cms.Application;
+import com.daeliin.components.cms.article.Article;
+import com.daeliin.components.cms.fixtures.ArticleFixtures;
 import com.daeliin.components.cms.library.AccountLibrary;
 import com.daeliin.components.cms.library.ArticleLibrary;
 import com.daeliin.components.cms.library.NewsLibrary;
+import com.google.common.collect.Sets;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
@@ -12,6 +15,7 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 import javax.inject.Inject;
 import java.time.Instant;
 import java.util.Collection;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -118,5 +122,23 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
     @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenDeletingNonExistingNews() {
         newsService.delete("nonExisingId");
+    }
+
+    @Test
+    public void shouldCountNewsByArticle() {
+        final Article article = ArticleLibrary.notPublishedArticle();
+
+        Map<Article, Long> newsCountByArticle = newsService.countByArticle(Sets.newHashSet(article));
+
+        assertThat(newsCountByArticle.get(article)).isEqualTo(2);
+    }
+
+    @Test
+    public void shouldCountZeroNews_whenArticleHasNoNews() {
+        final Article article = ArticleLibrary.publishedArticle();
+
+        Map<Article, Long> newsCountByArticleId = newsService.countByArticle(Sets.newHashSet(article));
+
+        assertThat(newsCountByArticleId.get(article)).isEqualTo(0);
     }
 }

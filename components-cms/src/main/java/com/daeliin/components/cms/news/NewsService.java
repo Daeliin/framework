@@ -9,6 +9,7 @@ import com.daeliin.components.cms.sql.BNews;
 import com.daeliin.components.cms.sql.QNews;
 import com.daeliin.components.core.pagination.PageRequest;
 import com.daeliin.components.core.pagination.Sort;
+import com.daeliin.components.core.resource.PersistentResource;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,10 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.time.Instant;
 import java.util.*;
+import java.util.function.Function;
 
 import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
 @Service
@@ -74,6 +77,29 @@ public class NewsService {
         existingNews.setSource(news.source);
 
         return  instantiate(repository.save(existingNews), author.username);
+    }
+
+    public long countForArticle(String articleId) {
+        if (!articleService.exists(articleId)) {
+            throw new NoSuchElementException(String.format("Article %s doesn't exist", articleId));
+        }
+
+        return repository.count(QNews.news.articleId.eq(articleId));
+    }
+
+    public Map<Article, Long> countByArticle(Set<Article> articles) {
+        Map<String, Article> articleById = articles.stream()
+                .collect(toMap(Article::getId, Function.identity()));
+
+        Map<String, Long> countByArticleId = repository.countByArticleId(articleById.keySet());
+
+        Map<Article, Long> countByArticle = new LinkedHashMap<>();
+
+        for (Article article : articles) {
+            countByArticle.put(article, countByArticleId.get(article.getId()));
+        }
+
+        return countByArticle;
     }
 
     public Collection<News> findForArticle(String articleId) {
