@@ -118,6 +118,17 @@ public class BaseRepository<R> implements PagingRepository<R> {
 
     @Transactional
     @Override
+    public boolean delete(Predicate predicate) {
+        if (predicate == null) {
+            throw new IllegalArgumentException("Predicate should not be null on a delete, otherwise whole table will be deleted, " +
+                    "call deleteAll() instead if it's the desired operation");
+        }
+
+        return queryFactory.delete(rowPath).where(predicate).execute() > 0;
+    }
+
+    @Transactional
+    @Override
     public boolean deleteAll() {
         return queryFactory.delete(rowPath).execute() > 0;
     }

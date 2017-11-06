@@ -30,5 +30,7 @@ public interface PagingRepository<R> {
 
     long count(Predicate predicate);
 
+    boolean delete(Predicate predicate);
+
     boolean deleteAll();
 }

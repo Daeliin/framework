@@ -208,6 +208,11 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
         return repository.delete(id);
     }
 
+    @Override
+    public boolean delete(Predicate predicate) {
+        return repository.delete(predicate);
+    }
+
     /**
      * Delete resources by their ids.
      * @param resourceIds resources ids

@@ -118,14 +118,23 @@ public interface PagingService<T extends Persistable<ID>, ID> {
     boolean delete(ID resourceId);
 
     /**
+     * Delete resources accoding to a predicate
+     * @param predicate the predicate
+     * @return true if resources were deleted, false otherwise
+     */
+    boolean delete(Predicate predicate);
+
+    /**
      * Delete resources by their ids.
      * @param resourceIds resources ids
+     * @return true if resources were deleted, false otherwise
      */
     boolean delete(Collection<ID> resourceIds);
 
     /**
      * Deletes a resource.
      * @param resource resource to delete
+     * @return true if the resource was deleted, false otherwise
      */
     boolean delete(T resource);
 

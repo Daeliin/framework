@@ -296,6 +296,14 @@ public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContex
     }
 
     @Test
+    public void shouldCallRepositoryDeleteWithPredicate_whenDeletingResourcesWithPredicate() {
+        Predicate predicate = QUuidPersistentResource.uuidPersistentResource.uuid.eq(UuidPersistentResourceLibrary.uuidPersistentResource1().getId());
+
+        service.delete(predicate);
+        verify(repositoryMock).delete(predicate);
+    }
+
+    @Test
     public void shouldCallRepositoryDeleteWithResourceIds_whenDeletingResources() {
         UuidPersistentResource uuidEntity1 = UuidPersistentResourceLibrary.uuidPersistentResource1();
         UuidPersistentResource uuidEntity2 = UuidPersistentResourceLibrary.uuidPersistentResource2();

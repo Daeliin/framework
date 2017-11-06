@@ -45,8 +45,8 @@ public class BaseRepositoryTest extends AbstractTransactionalJUnit4SpringContext
 
     @Test
     public void shouldReturnZero_whenCountingWithPredicateThatDoesntMachAnyResource() {
-        Predicate nullPredicate = QUuidPersistentResource.uuidPersistentResource.label.eq("Foo");
-        assertThat(repository.count(nullPredicate)).isEqualTo(0);
+        Predicate noMatchPredicate = QUuidPersistentResource.uuidPersistentResource.label.eq("Foo");
+        assertThat(repository.count(noMatchPredicate)).isEqualTo(0);
     }
 
     @Test
@@ -167,6 +167,33 @@ public class BaseRepositoryTest extends AbstractTransactionalJUnit4SpringContext
 
         assertThat(page.totalItems).isEqualTo(3);
         assertThat(page.totalPages).isEqualTo(2);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowExpcetion_whenDeletingWithNullPredicate() {
+        Predicate nullPredicate = null;
+        repository.delete(nullPredicate);
+    }
+
+    @Test
+    public void shouldNotDeleteAnyResource_whenDeletingWithPredicateThatDoesntMachAnyResource() {
+        int uuidPersistentResourceCount = countRows();
+
+        Predicate noMatchPredicate = QUuidPersistentResource.uuidPersistentResource.label.eq("Foo");
+        assertThat(repository.delete(noMatchPredicate)).isFalse();
+
+        assertThat(countRows()).isEqualTo(uuidPersistentResourceCount);
+    }
+
+    @Test
+    public void shouldDeleteResourcesWithPredicate() {
+        int uuidPersistentResourceCount = countRows();
+
+        Predicate predicate = QUuidPersistentResource.uuidPersistentResource.label.eq(UuidPersistentResourceFixtures.uuidPersistentResource1().getLabel())
+                .or(QUuidPersistentResource.uuidPersistentResource.label.eq(UuidPersistentResourceFixtures.uuidPersistentResource2().getLabel()));
+
+        assertThat(repository.delete(predicate)).isTrue();
+        assertThat(countRows()).isEqualTo(uuidPersistentResourceCount - 2);
     }
 
     @Test
