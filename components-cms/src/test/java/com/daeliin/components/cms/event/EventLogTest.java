@@ -1,6 +1,6 @@
 package com.daeliin.components.cms.event;
 
-import com.daeliin.components.core.resource.PersistentResource;
+import com.daeliin.components.persistence.resource.PersistentResource;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 

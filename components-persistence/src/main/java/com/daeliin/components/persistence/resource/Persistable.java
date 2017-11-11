@@ -1,4 +1,4 @@
-package com.daeliin.components.core.resource;
+package com.daeliin.components.persistence.resource;
 
 import java.time.Instant;
 

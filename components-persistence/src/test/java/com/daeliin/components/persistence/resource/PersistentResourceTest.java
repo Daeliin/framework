@@ -1,6 +1,6 @@
-package com.daeliin.components.core.resource;
+package com.daeliin.components.persistence.resource;
 
-import com.daeliin.components.core.resource.fake.UuidPersistentResource;
+import com.daeliin.components.persistence.fake.UuidPersistentResource;
 import org.junit.Test;
 
 import java.time.Instant;

@@ -2,7 +2,7 @@ package com.daeliin.components.persistence.resource.service;
 
 import com.daeliin.components.core.pagination.Page;
 import com.daeliin.components.core.pagination.PageRequest;
-import com.daeliin.components.core.resource.Persistable;
+import com.daeliin.components.persistence.resource.Persistable;
 import com.querydsl.core.types.Predicate;
 
 import java.util.Collection;

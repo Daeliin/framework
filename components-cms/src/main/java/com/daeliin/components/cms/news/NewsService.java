@@ -9,7 +9,6 @@ import com.daeliin.components.cms.sql.BNews;
 import com.daeliin.components.cms.sql.QNews;
 import com.daeliin.components.core.pagination.PageRequest;
 import com.daeliin.components.core.pagination.Sort;
-import com.daeliin.components.core.resource.PersistentResource;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import org.springframework.stereotype.Service;

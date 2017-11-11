@@ -1,6 +1,6 @@
 package com.daeliin.components.cms.credentials.account;
 
-import com.daeliin.components.core.resource.PersistentResource;
+import com.daeliin.components.persistence.resource.PersistentResource;
 
 import java.time.Instant;
 import java.util.Objects;

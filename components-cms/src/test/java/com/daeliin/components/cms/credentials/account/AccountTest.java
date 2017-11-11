@@ -1,7 +1,7 @@
 package com.daeliin.components.cms.credentials.account;
 
 import com.daeliin.components.cms.library.AccountLibrary;
-import com.daeliin.components.core.resource.PersistentResource;
+import com.daeliin.components.persistence.resource.PersistentResource;
 import org.junit.Test;
 
 import java.time.Instant;

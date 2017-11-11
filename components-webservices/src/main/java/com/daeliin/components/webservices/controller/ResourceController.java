@@ -2,7 +2,7 @@ package com.daeliin.components.webservices.controller;
 
 import com.daeliin.components.core.pagination.Page;
 import com.daeliin.components.core.pagination.PageRequest;
-import com.daeliin.components.core.resource.Persistable;
+import com.daeliin.components.persistence.resource.Persistable;
 import com.daeliin.components.persistence.resource.service.PagingService;
 import com.daeliin.components.webservices.dto.ResourceDtoConversion;
 import com.daeliin.components.webservices.exception.PageRequestException;
