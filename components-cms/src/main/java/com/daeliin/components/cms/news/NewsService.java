@@ -18,9 +18,7 @@ import java.time.Instant;
 import java.util.*;
 import java.util.function.Function;
 
-import static java.util.stream.Collectors.toCollection;
-import static java.util.stream.Collectors.toMap;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.*;
 
 @Service
 public class NewsService {
@@ -86,22 +84,25 @@ public class NewsService {
         return repository.count(QNews.news.articleId.eq(articleId));
     }
 
-    public Map<Article, Long> countByArticle(Set<Article> articles) {
+    public Map<Article, Set<News>> findByArticle(Set<Article> articles) {
         Map<String, Article> articleById = articles.stream()
                 .collect(toMap(Article::getId, Function.identity()));
 
-        Map<String, Long> countByArticleId = repository.countByArticleId(articleById.keySet());
+        Map<String, Set<BNews>> bNewsByArticleId = repository.findByArticleId(articleById.keySet());
 
-        Map<Article, Long> countByArticle = new LinkedHashMap<>();
+        Map<Article, Set<News>> newsByArticle = new LinkedHashMap<>();
 
         for (Article article : articles) {
-            countByArticle.put(article, countByArticleId.get(article.getId()));
+            Map<BNews, String> authorByBNews = bNewsByArticleId.get(article.getId()).stream()
+                    .collect(toMap(Function.identity(), BNews::getAuthorId));
+
+            newsByArticle.put(article, conversion.instantiate(authorByBNews));
         }
 
-        return countByArticle;
+        return newsByArticle;
     }
 
-    public Collection<News> findForArticle(String articleId) {
+    public Set<News> findForArticle(String articleId) {
         if (!articleService.exists(articleId)) {
             throw new NoSuchElementException(String.format("Article %s doesn't exist", articleId));
         }
@@ -154,7 +155,7 @@ public class NewsService {
         return conversion.instantiate(bNews, author);
     }
 
-    private Collection<News> instantiate(Collection<BNews> bNewsCollection) {
+    private Set<News> instantiate(Collection<BNews> bNewsCollection) {
         Map<String, Account> accountByIds = new HashMap<>();
         Set<String> authorIds = bNewsCollection.stream().map(BNews::getAuthorId).collect(toSet());
 

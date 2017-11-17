@@ -3,7 +3,6 @@ package com.daeliin.components.cms.news;
 
 import com.daeliin.components.cms.Application;
 import com.daeliin.components.cms.article.Article;
-import com.daeliin.components.cms.fixtures.ArticleFixtures;
 import com.daeliin.components.cms.library.AccountLibrary;
 import com.daeliin.components.cms.library.ArticleLibrary;
 import com.daeliin.components.cms.library.NewsLibrary;
@@ -17,6 +16,7 @@ import java.time.Instant;
 import java.util.Collection;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -125,20 +125,20 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
     }
 
     @Test
-    public void shouldCountNewsByArticle() {
+    public void shouldFindNewsByArticle() {
         final Article article = ArticleLibrary.notPublishedArticle();
 
-        Map<Article, Long> newsCountByArticle = newsService.countByArticle(Sets.newHashSet(article));
+        Map<Article, Set<News>> newsByArticle = newsService.findByArticle(Sets.newHashSet(article));
 
-        assertThat(newsCountByArticle.get(article)).isEqualTo(2);
+        assertThat(newsByArticle.get(article)).hasSize(2);
     }
 
     @Test
-    public void shouldCountZeroNews_whenArticleHasNoNews() {
+    public void shouldFindZeroNews_whenArticleHasNoNews() {
         final Article article = ArticleLibrary.publishedArticle();
 
-        Map<Article, Long> newsCountByArticleId = newsService.countByArticle(Sets.newHashSet(article));
+        Map<Article, Set<News>> newsByArticleId = newsService.findByArticle(Sets.newHashSet(article));
 
-        assertThat(newsCountByArticleId.get(article)).isEqualTo(0);
+        assertThat(newsByArticleId.get(article)).isEmpty();
     }
 }
