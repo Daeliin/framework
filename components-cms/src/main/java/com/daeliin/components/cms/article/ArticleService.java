@@ -9,6 +9,7 @@ import com.daeliin.components.core.pagination.Page;
 import com.daeliin.components.core.pagination.PageRequest;
 import com.daeliin.components.core.resource.Id;
 import com.daeliin.components.core.string.UrlFriendlyString;
+import com.querydsl.core.types.Predicate;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -87,6 +88,12 @@ public class ArticleService  {
 
     public Page<Article> findAll(PageRequest pageRequest) {
         Page<BArticle> articlePage = repository.findAll(pageRequest);
+
+        return new Page<>(instantiate(articlePage.items), articlePage.totalItems, articlePage.totalPages);
+    }
+
+    public Page<Article> findAll(Predicate predicate, PageRequest pageRequest) {
+        Page<BArticle> articlePage = repository.findAll(predicate, pageRequest);
 
         return new Page<>(instantiate(articlePage.items), articlePage.totalItems, articlePage.totalPages);
     }
