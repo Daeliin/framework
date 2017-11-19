@@ -93,10 +93,9 @@ public class NewsService {
         Map<Article, Set<News>> newsByArticle = new LinkedHashMap<>();
 
         for (Article article : articles) {
-            Map<BNews, String> authorByBNews = bNewsByArticleId.get(article.getId()).stream()
-                    .collect(toMap(Function.identity(), BNews::getAuthorId));
+            Set<News> news = instantiate(bNewsByArticleId.get(article.getId()));
 
-            newsByArticle.put(article, conversion.instantiate(authorByBNews));
+            newsByArticle.put(article, news);
         }
 
         return newsByArticle;

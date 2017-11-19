@@ -31,7 +31,6 @@ public class NewsRepository extends ResourceRepository<BNews, String> {
         Collection<BNews> news = findAll(QNews.news.articleId.in(articleIds));
         Map<String, Set<BNews>> newsByArticle = new HashMap<>();
 
-
         for (String articleId : articleIds) {
             Set<BNews> newsForArticle = news.stream().filter(bNews -> bNews.getArticleId().equals(articleId)).collect(toSet());
             newsByArticle.put(articleId, newsForArticle);
