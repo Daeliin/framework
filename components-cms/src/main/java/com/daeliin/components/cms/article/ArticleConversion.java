@@ -14,6 +14,7 @@ public final class ArticleConversion {
                 bArticle.getUrlFriendlyTitle(),
                 bArticle.getDescription(),
                 bArticle.getContent(),
+                bArticle.getSource(),
                 bArticle.getPublicationDate(),
                 bArticle.getPublished());
     }
@@ -27,6 +28,7 @@ public final class ArticleConversion {
                 article.getId(),
                 article.publicationDate,
                 article.published,
+                article.source,
                 article.title,
                 new UrlFriendlyString(article.title).value);
     }

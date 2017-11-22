@@ -3,7 +3,6 @@ package com.daeliin.components.cms.article;
 import com.daeliin.components.cms.credentials.account.Account;
 import com.daeliin.components.cms.credentials.account.AccountService;
 import com.daeliin.components.cms.event.EventLogService;
-import com.daeliin.components.cms.news.NewsService;
 import com.daeliin.components.cms.sql.BArticle;
 import com.daeliin.components.core.pagination.Page;
 import com.daeliin.components.core.pagination.PageRequest;
@@ -28,9 +27,6 @@ public class ArticleService  {
     private final EventLogService eventLogService;
 
     @Inject
-    private NewsService newsService;
-
-    @Inject
     public ArticleService(ArticleRepository repository, AccountService accountService, EventLogService eventLogService) {
         this.repository = repository;
         this.conversion = new ArticleConversion();
@@ -53,6 +49,7 @@ public class ArticleService  {
                 article.urlFriendlyTitle,
                 article.description,
                 article.content,
+                article.source,
                 null,
                 false);
 
@@ -77,6 +74,7 @@ public class ArticleService  {
         existingArticle.setUrlFriendlyTitle(new UrlFriendlyString(article.title).value);
         existingArticle.setDescription(article.description);
         existingArticle.setContent(article.content);
+        existingArticle.setSource(article.source);
 
         return  instantiate(repository.save(existingArticle), author.username);
     }

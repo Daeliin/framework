@@ -16,6 +16,7 @@ public final class ArticleLibrary {
                 "welcome-to-sample",
                 "Today is the day we start sample.com",
                 "We open our door today, you'll find content very soon.",
+                "https://google.fr",
                 LocalDateTime.of(2016, 5, 20, 15, 30, 0).toInstant(ZoneOffset.UTC),
                 true);
     }
@@ -29,6 +30,7 @@ public final class ArticleLibrary {
                 "sample-is-live",
                 "Today is the day we go live at sample.com",
                 "We go live today, here''s our first content.",
+                null,
                 null,
                 false);
     }

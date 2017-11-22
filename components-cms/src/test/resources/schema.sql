@@ -37,25 +37,13 @@ CREATE TABLE article(
     url_friendly_title VARCHAR(255) NOT NULL,
     description VARCHAR(500) NOT NULL,
     content VARCHAR(5000),
+    source VARCHAR(500),
     publication_date DATETIME,
     published BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 ALTER TABLE article ADD PRIMARY KEY (id);
 ALTER TABLE article ADD CONSTRAINT fk_article_account_id FOREIGN KEY (author_id) REFERENCES account (id);
-
-CREATE TABLE news(
-    id VARCHAR(36) NOT NULL,
-    creation_date DATETIME NOT NULL,
-    author_id VARCHAR(36) NOT NULL,
-    content VARCHAR(500) NOT NULL,
-    source VARCHAR(500),
-    publication_date DATETIME,
-    published BOOLEAN NOT NULL DEFAULT FALSE
-);
-
-ALTER TABLE news ADD PRIMARY KEY (id);
-ALTER TABLE news ADD CONSTRAINT fk_news_account_id FOREIGN KEY (author_id) REFERENCES account (id);
 
 CREATE TABLE event_log (
     id VARCHAR(36) NOT NULL,

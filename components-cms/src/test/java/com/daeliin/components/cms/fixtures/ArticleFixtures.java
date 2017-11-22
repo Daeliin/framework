@@ -2,7 +2,6 @@ package com.daeliin.components.cms.fixtures;
 
 import com.daeliin.components.cms.sql.BArticle;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
@@ -17,6 +16,7 @@ public final class ArticleFixtures {
                 "ARTICLE1",
                 LocalDateTime.of(2016, 5, 20, 15, 30, 0).toInstant(ZoneOffset.UTC),
                 true,
+                "https://google.fr",
                 "Welcome to sample",
                 "welcome-to-sample");
     }
@@ -30,6 +30,7 @@ public final class ArticleFixtures {
                 "ARTICLE2",
                 null,
                 false,
+                null,
                 "Sample is live",
                 "sample-is-live");
     }

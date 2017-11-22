@@ -12,16 +12,19 @@ public class Article extends PersistentResource<String> implements Comparable<Ar
     public final String urlFriendlyTitle;
     public final String description;
     public final String content;
+    public final String source;
     public final Instant publicationDate;
     public final boolean published;
 
-    public Article(String id, Instant creationDate, String author, String title, String urlFriendlyTitle, String description, String content, Instant publicationDate, boolean published) {
+    public Article(String id, Instant creationDate, String author, String title, String urlFriendlyTitle, String description, String content,
+                   String source, Instant publicationDate, boolean published) {
         super(id, creationDate);
         this.author = Objects.requireNonNull(author, "author should not be null");
-        this.title = Objects.requireNonNull(title, "title should not be null");
-        this.urlFriendlyTitle = Objects.requireNonNull(urlFriendlyTitle, "urlFriendlyTitle should not be null");
+        this.title = title;
+        this.urlFriendlyTitle = urlFriendlyTitle;
         this.description = description;
         this.content = content;
+        this.source = source;
         this.publicationDate = publicationDate;
         this.published = published;
     }

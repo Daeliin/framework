@@ -29,51 +29,55 @@ public final class ArticleTest {
 
     @Test(expected = Exception.class)
     public void shouldThrowException_whenAuthorIsNull() {
-        new Article("ARTICLEID1", Instant.now(), null, "Hello world", "hello-world", "Desc", "Content", null, false);
+        new Article("ARTICLEID1", Instant.now(), null, "Hello world", "hello-world", "Desc", "Content", null, null, false);
     }
 
     @Test
     public void shouldAssignAnAuthor() {
-        Article article = new Article("ARTICLEID1", Instant.now(), "john", "Hello world", "hello-world", "Desc", "Content", null, false);
+        Article article = new Article("ARTICLEID1", Instant.now(), "john", "Hello world", "hello-world", "Desc", "Content", null, null, false);
 
         assertThat(article.author).isEqualTo("john");
     }
 
-    @Test(expected = Exception.class)
-    public void shouldThrowException_whenTitleIsNull() {
-        new Article("ARTICLEID1", Instant.now(), "john", null, "hello-world", "Desc", "Content", null, false);
-    }
-
     @Test
     public void shouldAssignATitle() {
-        Article article = new Article("ARTICLEID1", Instant.now(), "john", "Hello world", "hello-world", "Desc", "Content", null, false);
+        Article article = new Article("ARTICLEID1", Instant.now(), "john", "Hello world", "hello-world", "Desc", "Content", null, null, false);
 
         assertThat(article.title).isEqualTo("Hello world");
     }
 
-    @Test(expected = Exception.class)
-    public void shouldThrowException_whenUrlFriendlyTitleIsNull() {
-        new Article("ARTICLEID1", Instant.now(), "john", "Hello world", null, "Desc", "Content", null, false);
-    }
-
     @Test
     public void shouldAssignAnUrlFriendlyTitle() {
-        Article article = new Article("ARTICLEID1", Instant.now(), "john", "Hello world", "hello-world", "Desc", "Content", null, false);
+        Article article = new Article("ARTICLEID1", Instant.now(), "john", "Hello world", "hello-world", "Desc", "Content", null, null, false);
 
         assertThat(article.urlFriendlyTitle).isEqualTo("hello-world");
     }
 
     @Test
     public void shouldAssignADescription() {
-        Article article = new Article("ARTICLEID1", Instant.now(), "john", "Hello world", "hello-world", "Desc", "Content", null, false);
+        Article article = new Article("ARTICLEID1", Instant.now(), "john", "Hello world", "hello-world", "Desc", "Content", null, null, false);
 
         assertThat(article.description).isEqualTo("Desc");
     }
 
     @Test
+    public void shouldAssignAContent() {
+        Article article = new Article("ARTICLEID1", Instant.now(), "john", "Hello world", "hello-world", "Desc", "Content", null, null, false);
+
+        assertThat(article.content).isEqualTo("Content");
+    }
+
+    @Test
+    public void shouldAssignASource() {
+        Article article = new Article("ARTICLEID1", Instant.now(), "john", "Hello world", "hello-world", "Desc", "Content", "https://google.com", null, false);
+
+        assertThat(article.source).isEqualTo("https://google.com");
+    }
+
+    @Test
     public void shouldBeComparedOnCreationDate() {
-        Article article1 = new Article("ARTICLEID1", Instant.now(), "john", "Hello world", "hello-world", "Desc", "Content", null, false);
-        Article article2 = new Article("ARTICLEID2", Instant.now().plus(10, ChronoUnit.SECONDS), "john", "Hello world", "hello-world", "Desc", "Content", null, false);
+        Article article1 = new Article("ARTICLEID1", Instant.now(), "john", "Hello world", "hello-world", "Desc", "Content", null, null, false);
+        Article article2 = new Article("ARTICLEID2", Instant.now().plus(10, ChronoUnit.SECONDS), "john", "Hello world", "hello-world", "Desc", "Content", null, null, false);
 
         assertThat(article1.compareTo(article2)).isNegative();
         assertThat(article2.compareTo(article1)).isPositive();

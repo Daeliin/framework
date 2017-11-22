@@ -2,7 +2,6 @@ package com.daeliin.components.cms.article;
 
 import com.daeliin.components.cms.Application;
 import com.daeliin.components.cms.library.ArticleLibrary;
-import com.daeliin.components.cms.news.NewsRepository;
 import com.daeliin.components.core.pagination.Page;
 import com.daeliin.components.core.pagination.PageRequest;
 import com.daeliin.components.core.pagination.Sort;
@@ -26,9 +25,6 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
 
     @Inject
     private ArticleService articleService;
-
-    @Inject
-    private NewsRepository newsRepository;
 
     @Test
     public void shouldFindArticle() {
@@ -63,6 +59,7 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
                 "welcome-to-sample",
                 "Today is the day we start sample.com",
                 "We open our door today, you'll find content very soon.",
+                "https://google.fr",
                 LocalDateTime.of(2016, 5, 20, 15, 30, 0).toInstant(ZoneOffset.UTC),
                 true);
 
@@ -79,6 +76,7 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
                 "welcome-to-sample",
                 "Today is the day we start sample.com",
                 "We open our door today, you'll find content very soon.",
+                "https://google.fr",
                 LocalDateTime.of(2016, 5, 20, 15, 30, 0).toInstant(ZoneOffset.UTC),
                 true);
 
@@ -89,6 +87,7 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
         assertThat(createdArticle.urlFriendlyTitle).isEqualTo(new UrlFriendlyString(article.title).value);
         assertThat(createdArticle.description).isEqualTo(article.description);
         assertThat(createdArticle.content).isEqualTo(article.content);
+        assertThat(createdArticle.source).isEqualTo(article.source);
         assertThat(createdArticle.author).isEqualTo(article.author);
         assertThat(createdArticle.publicationDate).isNull();
         assertThat(createdArticle.published).isFalse();
@@ -105,9 +104,9 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
     }
 
     @Test
-    public void shouldUpdateAnArticleTitleDescriptionAndContent() {
+    public void shouldUpdateAnArticleTitleDescriptionContentAndSource() {
         Article articleToUpdate = ArticleLibrary.notPublishedArticle();
-        Article article = new Article("", Instant.now(), "", "New title", "", "New desc", "New content", null, false);
+        Article article = new Article("", Instant.now(), "", "New title", "", "New desc", "New content", "https://google.fr", null, false);
 
         Article updatedArtice = articleService.update(articleToUpdate.getId(), article);
 
@@ -115,6 +114,7 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
         assertThat(updatedArtice.urlFriendlyTitle).isEqualTo(new UrlFriendlyString(article.title).value);
         assertThat(updatedArtice.description).isEqualTo(article.description);
         assertThat(updatedArtice.content).isEqualTo(article.content);
+        assertThat(updatedArtice.source).isEqualTo(article.source);
         assertThat(updatedArtice.getId()).isEqualTo(articleToUpdate.getId());
         assertThat(updatedArtice.getCreationDate()).isEqualTo(articleToUpdate.getCreationDate());
         assertThat(updatedArtice.author).isEqualTo(articleToUpdate.author);

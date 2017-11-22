@@ -12,13 +12,9 @@ INSERT INTO account_permission(account_id, permission_id) VALUES
 ('ACCOUNT1', 'ADMIN'),
 ('ACCOUNT2', 'USER');
 
-INSERT INTO article(id, creation_date, author_id, title, url_friendly_title, description, content, publication_date, published) VALUES
-('ARTICLE1', '2016-05-20 14:30:00', 'ACCOUNT1', 'Welcome to sample.com', 'welcome-to-sample', 'Today is the day we start sample.com', 'We open our door today, you''ll find content very soon.', '2016-05-20 15:30:00', true),
-('ARTICLE2', '2016-05-21 14:30:00', 'ACCOUNT1', 'Sample.com is live', 'sample-is-live', 'Today is the day we go live at sample.com', 'We go live today, here''s our first content.', null, false);
-
-INSERT INTO news(id, creation_date, author_id   , content, source, publication_date, published) VALUES
-('NEWS1', '2016-05-20 14:30:00', 'ACCOUNT1', 'Some news content 1', 'https://daeliin.com', '2016-05-20 15:30:00', true),
-('NEWS2', '2016-05-21 14:30:00', 'ACCOUNT1', 'Some news content 1', null, null, false);
+INSERT INTO article(id, creation_date, author_id, title, url_friendly_title, description, content, source, publication_date, published) VALUES
+('ARTICLE1', '2016-05-20 14:30:00', 'ACCOUNT1', 'Welcome to sample.com', 'welcome-to-sample', 'Today is the day we start sample.com', 'We open our door today, you''ll find content very soon.', 'https://google.com', '2016-05-20 15:30:00', true),
+('ARTICLE2', '2016-05-21 14:30:00', 'ACCOUNT1', 'Sample.com is live', 'sample-is-live', 'Today is the day we go live at sample.com', 'We go live today, here''s our first content.', null, null, false);
 
 INSERT INTO country(code, name, creation_date) VALUES
 ( 'FR', 'France', '2017-01-01 12:00:00'),
