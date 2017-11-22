@@ -3,8 +3,6 @@ package com.daeliin.components.cms.article;
 import com.daeliin.components.cms.Application;
 import com.daeliin.components.cms.library.ArticleLibrary;
 import com.daeliin.components.cms.news.NewsRepository;
-import com.daeliin.components.cms.sql.BNews;
-import com.daeliin.components.cms.sql.QNews;
 import com.daeliin.components.core.pagination.Page;
 import com.daeliin.components.core.pagination.PageRequest;
 import com.daeliin.components.core.pagination.Sort;
@@ -19,7 +17,6 @@ import javax.inject.Inject;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Collection;
 import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -102,6 +99,11 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
         articleService.update("OKOK", null);
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void shouldThrowException_whenUpdatingPublishedArticle() {
+        articleService.update(ArticleLibrary.publishedArticle().getId(), null);
+    }
+
     @Test
     public void shouldUpdateAnArticleTitleDescriptionAndContent() {
         Article articleToUpdate = ArticleLibrary.notPublishedArticle();
@@ -129,9 +131,7 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
 
     @Test
     public void shouldPublishAnArticle() {
-        articleService.publish(ArticleLibrary.notPublishedArticle().getId());
-
-        Article publishedArticle = articleService.findOne(ArticleLibrary.notPublishedArticle().getId());
+        Article publishedArticle = articleService.publish(ArticleLibrary.notPublishedArticle().getId());
 
         assertThat(publishedArticle.published).isTrue();
         assertThat(publishedArticle.publicationDate).isNotNull();
@@ -139,12 +139,10 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
 
     @Test
     public void shouldUnpublishAnArticle() {
-        articleService.unpublish(ArticleLibrary.publishedArticle().getId());
+        Article unpublishedArticle = articleService.unpublish(ArticleLibrary.publishedArticle().getId());
 
-        Article publishedArticle = articleService.findOne(ArticleLibrary.notPublishedArticle().getId());
-
-        assertThat(publishedArticle.published).isFalse();
-        assertThat(publishedArticle.publicationDate).isNull();
+        assertThat(unpublishedArticle.published).isFalse();
+        assertThat(unpublishedArticle.publicationDate).isNull();
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -162,14 +160,5 @@ public class ArticleServiceTest extends AbstractTransactionalJUnit4SpringContext
         boolean deleted = articleService.delete(ArticleLibrary.publishedArticle().getId());
 
         assertThat(deleted).isTrue();
-    }
-
-    @Test
-    public void shouldDeleteAnArticleWithAllItsNews() {
-        articleService.delete(ArticleLibrary.notPublishedArticle().getId());
-
-        Collection<BNews> articleNews = newsRepository.findAll(QNews.news.articleId.eq(ArticleLibrary.notPublishedArticle().getId()));
-
-        assertThat(articleNews).isEmpty();
     }
 }

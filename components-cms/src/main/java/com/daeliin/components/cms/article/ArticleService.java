@@ -67,6 +67,10 @@ public class ArticleService  {
         BArticle existingArticle = repository.findOne(articleId).orElseThrow(() ->
                 new NoSuchElementException(String.format("Article %s doesn't exist", articleId)));
 
+        if (existingArticle.getPublished()) {
+            throw new IllegalStateException(String.format("Article %s is published, it can't be updated", articleId));
+        }
+
         Account author = accountService.findOne(existingArticle.getAuthorId());
 
         existingArticle.setTitle(article.title);
@@ -104,8 +108,6 @@ public class ArticleService  {
 
     public boolean delete(String id) {
         Article article = findOne(id);
-
-        newsService.deleteForArticle(id);
 
         boolean deleted = repository.delete(id);
 

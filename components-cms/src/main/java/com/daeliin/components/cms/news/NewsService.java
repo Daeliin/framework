@@ -1,24 +1,20 @@
 package com.daeliin.components.cms.news;
 
-import com.daeliin.components.cms.article.Article;
-import com.daeliin.components.cms.article.ArticleService;
 import com.daeliin.components.cms.credentials.account.Account;
 import com.daeliin.components.cms.credentials.account.AccountService;
 import com.daeliin.components.cms.event.EventLogService;
 import com.daeliin.components.cms.sql.BNews;
-import com.daeliin.components.cms.sql.QNews;
+import com.daeliin.components.core.pagination.Page;
 import com.daeliin.components.core.pagination.PageRequest;
-import com.daeliin.components.core.pagination.Sort;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
+import com.querydsl.core.types.Predicate;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.time.Instant;
 import java.util.*;
-import java.util.function.Function;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toSet;
 
 @Service
 public class NewsService {
@@ -29,9 +25,6 @@ public class NewsService {
     private final EventLogService eventLogService;
 
     @Inject
-    private ArticleService articleService;
-
-    @Inject
     public NewsService(NewsRepository repository, AccountService accountService, EventLogService eventLogService) {
         this.repository = repository;
         this.conversion = new NewsConversion();
@@ -39,27 +32,17 @@ public class NewsService {
         this.eventLogService = eventLogService;
     }
 
-    public News create(String articleId, News news) {
-        Article article = articleService.findOne(articleId);
+    public News create(News news) {
         Account author = accountService.findByUsernameAndEnabled(news.author);
-
-        if (article == null) {
-            throw new NoSuchElementException(String.format("Article %s doesn't exist", articleId));
-        }
-
-        if (article.published) {
-            throw new IllegalStateException(String.format("Article %s is published, can't add news to it", article));
-        }
 
         if (author == null) {
             throw new NoSuchElementException(String.format("Account %s doesn't exist", news.author));
         }
 
-        News newsToCreate = new News(UUID.randomUUID().toString(), Instant.now(), news.author, news.content, news.source);
+        News newsToCreate = new News(UUID.randomUUID().toString(), Instant.now(), news.author, news.content, news.source, null, false);
+        News createdNews = instantiate(repository.save(conversion.map(newsToCreate, author.getId())), author.username);
 
-        News createdNews = instantiate(repository.save(map(newsToCreate, articleId, author.getId())), author.username);
-
-        eventLogService.create(String.format("A news has been added for article %s", article.title));
+        eventLogService.create(String.format("A news has been added : %s", createdNews.content));
 
         return createdNews;
     }
@@ -67,6 +50,10 @@ public class NewsService {
     public News update(String newsId, News news) {
         BNews existingNews = repository.findOne(newsId).orElseThrow(() ->
                 new NoSuchElementException(String.format("News %s doesn't exist", newsId)));
+
+        if (existingNews.getPublished()) {
+            throw new IllegalStateException(String.format("News %s is published, it can't be updated", newsId));
+        }
 
         Account author = accountService.findOne(existingNews.getAuthorId());
 
@@ -76,41 +63,6 @@ public class NewsService {
         return  instantiate(repository.save(existingNews), author.username);
     }
 
-    public long countForArticle(String articleId) {
-        if (!articleService.exists(articleId)) {
-            throw new NoSuchElementException(String.format("Article %s doesn't exist", articleId));
-        }
-
-        return repository.count(QNews.news.articleId.eq(articleId));
-    }
-
-    public Map<Article, Set<News>> findByArticle(Set<Article> articles) {
-        Map<String, Article> articleById = articles.stream()
-                .collect(toMap(Article::getId, Function.identity()));
-
-        Map<String, Set<BNews>> bNewsByArticleId = repository.findByArticleId(articleById.keySet());
-
-        Map<Article, Set<News>> newsByArticle = new LinkedHashMap<>();
-
-        for (Article article : articles) {
-            Set<News> news = instantiate(bNewsByArticleId.get(article.getId()));
-
-            newsByArticle.put(article, news);
-        }
-
-        return newsByArticle;
-    }
-
-    public Set<News> findForArticle(String articleId) {
-        if (!articleService.exists(articleId)) {
-            throw new NoSuchElementException(String.format("Article %s doesn't exist", articleId));
-        }
-
-        PageRequest pageRequest = new PageRequest(0, 1000, Sets.newLinkedHashSet(ImmutableSet.of(new Sort("creationDate", Sort.Direction.DESC))));
-
-        return instantiate(repository.findAll(QNews.news.articleId.eq(articleId), pageRequest).items);
-    }
-
     public News findOne(String id) {
         BNews existingNews = repository.findOne(id).orElseThrow(() ->
                 new NoSuchElementException(String.format("News %s doesn't exist", id)));
@@ -118,6 +70,18 @@ public class NewsService {
         Account author = accountService.findOne(existingNews.getAuthorId());
 
         return instantiate(existingNews, author.username);
+    }
+
+    public Page<News> findAll(PageRequest pageRequest) {
+        Page<BNews> newsPage = repository.findAll(pageRequest);
+
+        return new Page<>(instantiate(newsPage.items), newsPage.totalItems, newsPage.totalPages);
+    }
+
+    public Page<News> findAll(Predicate predicate, PageRequest pageRequest) {
+        Page<BNews> newsPage = repository.findAll(predicate, pageRequest);
+
+        return new Page<>(instantiate(newsPage.items), newsPage.totalItems, newsPage.totalPages);
     }
 
     public boolean exists(String id) {
@@ -138,16 +102,32 @@ public class NewsService {
         return deleted;
     }
 
-    public boolean deleteForArticle(String articleId) {
-        if (!articleService.exists(articleId)) {
-            throw new NoSuchElementException(String.format("Article %s doesn't exist", articleId));
-        }
+    public News publish(String id) {
+        News updatedNews = updatePublication(id, true, Instant.now());
 
-        return repository.deleteForArticle(articleId);
+        eventLogService.create(String.format("The news %s has been published", updatedNews.content));
+
+        return updatedNews;
     }
 
-    private BNews map(News news, String articleId, String authorId) {
-        return conversion.map(news, articleId, authorId);
+    public News unpublish(String id) {
+        News updatedNews = updatePublication(id, false, null);
+
+        eventLogService.create(String.format("The news %s has been unpublished", updatedNews.content));
+
+        return updatedNews;
+    }
+
+    private News updatePublication(String id, boolean published, Instant publicationDate) {
+        BNews existingNews = repository.findOne(id).orElseThrow(() ->
+                new NoSuchElementException(String.format("News %s doesn't exist", id)));
+
+        Account author = accountService.findOne(existingNews.getAuthorId());
+
+        existingNews.setPublished(published);
+        existingNews.setPublicationDate(published ? publicationDate : null);
+
+        return instantiate(repository.save(existingNews), author.username);
     }
 
     private News instantiate(BNews bNews, String author) {

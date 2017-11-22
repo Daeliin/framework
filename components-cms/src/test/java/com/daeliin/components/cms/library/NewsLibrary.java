@@ -13,7 +13,9 @@ public final class NewsLibrary {
                 LocalDateTime.of(2016, 5, 20, 14, 30, 0).toInstant(ZoneOffset.UTC),
                 "admin",
                 "Some news content 1",
-                "https://daeliin.com");
+                "https://daeliin.com",
+                LocalDateTime.of(2016, 5, 20, 15, 30, 0).toInstant(ZoneOffset.UTC),
+                true);
     }
 
     public static News newsWithoutSource() {
@@ -22,6 +24,8 @@ public final class NewsLibrary {
                 LocalDateTime.of(2016, 5, 21, 14, 30, 0).toInstant(ZoneOffset.UTC),
                 "admin",
                 "Some news content 2",
-                null);
+                null,
+                null,
+                false);
     }
 }

@@ -16,9 +16,9 @@ INSERT INTO article(id, creation_date, author_id, title, url_friendly_title, des
 ('ARTICLE1', '2016-05-20 14:30:00', 'ACCOUNT1', 'Welcome to sample.com', 'welcome-to-sample', 'Today is the day we start sample.com', 'We open our door today, you''ll find content very soon.', '2016-05-20 15:30:00', true),
 ('ARTICLE2', '2016-05-21 14:30:00', 'ACCOUNT1', 'Sample.com is live', 'sample-is-live', 'Today is the day we go live at sample.com', 'We go live today, here''s our first content.', null, false);
 
-INSERT INTO news(id, creation_date, article_id, author_id, content, source) VALUES
-('NEWS1', '2016-05-20 14:30:00', 'ARTICLE2', 'ACCOUNT1', 'Some news content 1', 'https://daeliin.com'),
-('NEWS2', '2016-05-21 14:30:00', 'ARTICLE2', 'ACCOUNT1', 'Some news content 1', null);
+INSERT INTO news(id, creation_date, author_id   , content, source, publication_date, published) VALUES
+('NEWS1', '2016-05-20 14:30:00', 'ACCOUNT1', 'Some news content 1', 'https://daeliin.com', '2016-05-20 15:30:00', true),
+('NEWS2', '2016-05-21 14:30:00', 'ACCOUNT1', 'Some news content 1', null, null, false);
 
 INSERT INTO country(code, name, creation_date) VALUES
 ( 'FR', 'France', '2017-01-01 12:00:00'),

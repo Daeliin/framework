@@ -9,20 +9,23 @@ public final class NewsFixtures {
 
     public static BNews newsWithSource() {
         return new BNews(
-                "ARTICLE2",
                 "ACCOUNT1",
                 "Some news content 1",
                 LocalDateTime.of(2016, 5, 20, 14, 30, 0).toInstant(ZoneOffset.UTC),
-                "NEWS1", "https://daeliin.com");
+                "NEWS1",
+                LocalDateTime.of(2016, 5, 20, 15, 30, 0).toInstant(ZoneOffset.UTC),
+                true,
+                "https://daeliin.com");
     }
     
     public static BNews newsWithoutSource() {
         return new BNews(
-                "ARTICLE2",
                 "ACCOUNT1",
                 "Some news content 2",
                 LocalDateTime.of(2016, 5, 21, 14, 30, 0).toInstant(ZoneOffset.UTC),
                 "NEWS2",
+                null,
+                false,
                 null);
     }
 }

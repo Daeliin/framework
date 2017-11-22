@@ -2,21 +2,15 @@ package com.daeliin.components.cms.news;
 
 
 import com.daeliin.components.cms.Application;
-import com.daeliin.components.cms.article.Article;
 import com.daeliin.components.cms.library.AccountLibrary;
-import com.daeliin.components.cms.library.ArticleLibrary;
 import com.daeliin.components.cms.library.NewsLibrary;
-import com.google.common.collect.Sets;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 import javax.inject.Inject;
 import java.time.Instant;
-import java.util.Collection;
-import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,43 +21,17 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
     private NewsService newsService;
 
     @Test(expected = NoSuchElementException.class)
-    public void shouldThrowException_whenFindingNewsOfUnexistingArticleId() {
-        newsService.findForArticle("EZOFZEJF-34324");
-    }
-
-    @Test
-    public void shouldFindNewsOfAnArticle_orderedByCreationDateAsc() {
-        Collection<News> newsOfArticle = newsService.findForArticle(ArticleLibrary.notPublishedArticle().getId());
-
-        assertThat(newsOfArticle).containsExactly(NewsLibrary.newsWithSource(), NewsLibrary.newsWithoutSource());
-    }
-
-    @Test(expected = NoSuchElementException.class)
-    public void shouldThrowException_whenCreatingNewsOfUnexistingArticleId() {
-        News news = new News("NEWSID", Instant.now(), AccountLibrary.admin().username, "Content", null);
-
-        newsService.create("EZOFZEJF-34324", news);
-    }
-
-    @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenCreatingNewsOfUnexistingAuthor() {
-        News news = new News("NEWSID", Instant.now(), "ZADAZD", "Content", null);
+        News news = new News("NEWSID", Instant.now(), "ZADAZD", "Content", null, null, false);
 
-        newsService.create(ArticleLibrary.notPublishedArticle().getId(), news);
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void shouldThrowException_whenCreatingNewsOnPublishedArticle() {
-        News news = new News("NEWSID", Instant.now(), AccountLibrary.admin().username, "Content", null);
-
-        newsService.create(ArticleLibrary.publishedArticle().getId(), news);
+        newsService.create(news);
     }
 
     @Test
     public void shouldCreateANews() {
-        News news = new News("", Instant.now(), AccountLibrary.admin().username, "Content", null);
+        News news = new News("", Instant.now(), AccountLibrary.admin().username, "Content", null, null, false);
 
-        News createdNews = newsService.create(ArticleLibrary.notPublishedArticle().getId(), news);
+        News createdNews = newsService.create(news);
 
         assertThat(createdNews.getId()).isNotBlank();
         assertThat(createdNews.author).isEqualTo(news.author);
@@ -76,10 +44,15 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
         newsService.update("OKOK", null);
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void shouldThrowException_whenUpdatingPublishedNews() {
+        newsService.update(NewsLibrary.newsWithSource().getId(), null);
+    }
+
     @Test
     public void shouldUpdateANewsContentAndSource() {
-        News newsToUpdate = NewsLibrary.newsWithSource();
-        News news = new News(" ", Instant.now(), "", "newContent", "http://newsource.com");
+        News newsToUpdate = NewsLibrary.newsWithoutSource();
+        News news = new News(" ", Instant.now(), "", "newContent", "http://newsource.com", null, false);
 
         News updatedNews = newsService.update(newsToUpdate.getId(), news);
 
@@ -88,6 +61,8 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
         assertThat(updatedNews.getId()).isEqualTo(newsToUpdate.getId());
         assertThat(updatedNews.getCreationDate()).isEqualTo(newsToUpdate.getCreationDate());
         assertThat(updatedNews.author).isEqualTo(newsToUpdate.author);
+        assertThat(updatedNews.publicationDate).isNull();
+        assertThat(updatedNews.published).isFalse();
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -125,20 +100,28 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
     }
 
     @Test
-    public void shouldFindNewsByArticle() {
-        final Article article = ArticleLibrary.notPublishedArticle();
+    public void shouldPublishANews() {
+        News publishedNews = newsService.publish(NewsLibrary.newsWithoutSource().getId());
 
-        Map<Article, Set<News>> newsByArticle = newsService.findByArticle(Sets.newHashSet(article));
-
-        assertThat(newsByArticle.get(article)).hasSize(2);
+        assertThat(publishedNews.published).isTrue();
+        assertThat(publishedNews.publicationDate).isNotNull();
     }
 
     @Test
-    public void shouldFindZeroNews_whenArticleHasNoNews() {
-        final Article article = ArticleLibrary.publishedArticle();
+    public void shouldUnpublishANews() {
+        News unpublishedNews = newsService.unpublish(NewsLibrary.newsWithSource().getId());
 
-        Map<Article, Set<News>> newsByArticleId = newsService.findByArticle(Sets.newHashSet(article));
+        assertThat(unpublishedNews.published).isFalse();
+        assertThat(unpublishedNews.publicationDate).isNull();
+    }
 
-        assertThat(newsByArticleId.get(article)).isEmpty();
+    @Test(expected = NoSuchElementException.class)
+    public void shouldThrowException_whenPublishingANonExistingNews() {
+        newsService.publish("nonExistingId");
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void shouldThrowException_whenUnpublishingANonExistingNews() {
+        newsService.unpublish("nonExistingId");
     }
 }

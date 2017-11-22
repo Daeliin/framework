@@ -47,14 +47,14 @@ ALTER TABLE article ADD CONSTRAINT fk_article_account_id FOREIGN KEY (author_id)
 CREATE TABLE news(
     id VARCHAR(36) NOT NULL,
     creation_date DATETIME NOT NULL,
-    article_id VARCHAR(36) NOT NULL,
     author_id VARCHAR(36) NOT NULL,
     content VARCHAR(500) NOT NULL,
-    source VARCHAR(500)
+    source VARCHAR(500),
+    publication_date DATETIME,
+    published BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 ALTER TABLE news ADD PRIMARY KEY (id);
-ALTER TABLE news ADD CONSTRAINT fk_news_article_id FOREIGN KEY (article_id) REFERENCES article (id);
 ALTER TABLE news ADD CONSTRAINT fk_news_account_id FOREIGN KEY (author_id) REFERENCES account (id);
 
 CREATE TABLE event_log (

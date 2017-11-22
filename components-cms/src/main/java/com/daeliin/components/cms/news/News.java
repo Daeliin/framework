@@ -10,12 +10,16 @@ public class News extends PersistentResource<String> implements Comparable<News>
     public final String author;
     public final String content;
     public final String source;
+    public final Instant publicationDate;
+    public final boolean published;
 
-    public News(String id, Instant creationDate, String author, String content, String source) {
+    public News(String id, Instant creationDate, String author, String content, String source, Instant publicationDate, boolean published) {
         super(id, creationDate);
         this.author = Objects.requireNonNull(author, "author should not be null");
         this.content = Objects.requireNonNull(content, "content should not be null");
         this.source = source;
+        this.publicationDate = publicationDate;
+        this.published = published;
     }
 
     @Override
@@ -24,6 +28,8 @@ public class News extends PersistentResource<String> implements Comparable<News>
                 .add("author", author)
                 .add("content", content)
                 .add("source", source)
+                .add("publicationDate", publicationDate)
+                .add("published", published)
                 .toString();
     }
 

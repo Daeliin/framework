@@ -16,16 +16,19 @@ public final class NewsConversion {
                 bNews.getCreationDate(),
                 author,
                 bNews.getContent(),
-                bNews.getSource());
+                bNews.getSource(),
+                bNews.getPublicationDate(),
+                bNews.getPublished());
     }
 
-    public BNews map(News news, String articleId, String authorId) {
+    public BNews map(News news, String authorId) {
         return new BNews(
-                articleId,
                 authorId,
                 news.content,
                 news.getCreationDate(),
                 news.getId(),
+                news.publicationDate,
+                news.published,
                 news.source);
     }
 
