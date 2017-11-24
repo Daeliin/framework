@@ -11,9 +11,9 @@ public final class SignUpRequest {
     public final String clearPassword;
 
     public SignUpRequest(String username, String email, String clearPassword) {
-        this.username = Objects.requireNonNull(username, "username should not be null");
-        this.email = Objects.requireNonNull(email, "email should not be null");
-        this.clearPassword = Objects.requireNonNull(clearPassword, "password should not be null");
+        this.username = Objects.requireNonNull(username);
+        this.email = Objects.requireNonNull(email);
+        this.clearPassword = Objects.requireNonNull(clearPassword);
     }
 
     @Override

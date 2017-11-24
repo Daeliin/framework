@@ -1,17 +1,17 @@
 package com.daeliin.components.cms.library;
 
-import com.daeliin.components.cms.article.Article;
+import com.daeliin.components.cms.news.News;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-public final class ArticleLibrary {
+public final class NewsLibrary {
 
-    public static Article publishedArticle() {
-        return new Article(
-                "ARTICLE1",
+    public static News publishedNews() {
+        return new News(
+                "NEWS1",
                 LocalDateTime.of(2016, 5, 20, 14, 30, 0).toInstant(ZoneOffset.UTC),
-                "admin",
+                "ACCOUNT1",
                 "Welcome to sample",
                 "welcome-to-sample",
                 "Today is the day we start sample.com",
@@ -21,11 +21,11 @@ public final class ArticleLibrary {
                 true);
     }
 
-    public static Article notPublishedArticle() {
-        return new Article(
-                "ARTICLE2",
+    public static News notPublishedNews() {
+        return new News(
+                "NEWS2",
                 LocalDateTime.of(2016, 5, 21, 14, 30, 0).toInstant(ZoneOffset.UTC),
-                "admin",
+                "ACCOUNT1",
                 "Sample is live",
                 "sample-is-live",
                 "Today is the day we go live at sample.com",

@@ -29,7 +29,7 @@ ALTER TABLE account_permission ADD PRIMARY KEY (account_id, permission_id);
 ALTER TABLE account_permission ADD CONSTRAINT fk_account_permission_account_id FOREIGN KEY (account_id) REFERENCES account (id);
 ALTER TABLE account_permission ADD CONSTRAINT fk_account_permission_permission_idl FOREIGN KEY (permission_id) REFERENCES permission (id);
 
-CREATE TABLE article(
+CREATE TABLE news(
     id VARCHAR(36) NOT NULL,
     creation_date DATETIME NOT NULL,
     author_id VARCHAR(36) NOT NULL,
@@ -42,8 +42,8 @@ CREATE TABLE article(
     published BOOLEAN NOT NULL DEFAULT FALSE
 );
 
-ALTER TABLE article ADD PRIMARY KEY (id);
-ALTER TABLE article ADD CONSTRAINT fk_article_account_id FOREIGN KEY (author_id) REFERENCES account (id);
+ALTER TABLE news ADD PRIMARY KEY (id);
+ALTER TABLE news ADD CONSTRAINT fk_news_account_id FOREIGN KEY (author_id) REFERENCES account (id);
 
 CREATE TABLE event_log (
     id VARCHAR(36) NOT NULL,

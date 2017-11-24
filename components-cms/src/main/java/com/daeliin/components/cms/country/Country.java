@@ -12,8 +12,8 @@ public class Country extends PersistentResource<String> implements Comparable<Co
     
     public Country(String code, Instant creationDate, String name) {
         super(code, creationDate);
-        this.code = Objects.requireNonNull(code, "code should not be null");
-        this.name = Objects.requireNonNull(name, "name should not be null");
+        this.code = Objects.requireNonNull(code);
+        this.name = Objects.requireNonNull(name);
     }
 
     @Override

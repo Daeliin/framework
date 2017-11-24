@@ -1,13 +1,13 @@
-package com.daeliin.components.cms.article;
+package com.daeliin.components.cms.news;
 
 import com.daeliin.components.persistence.resource.PersistentResource;
 
 import java.time.Instant;
 import java.util.Objects;
 
-public class Article extends PersistentResource<String> implements Comparable<Article> {
+public class News extends PersistentResource<String> implements Comparable<News> {
     
-    public final String author;
+    public final String authorId;
     public final String title;
     public final String urlFriendlyTitle;
     public final String description;
@@ -16,14 +16,14 @@ public class Article extends PersistentResource<String> implements Comparable<Ar
     public final Instant publicationDate;
     public final boolean published;
 
-    public Article(String id, Instant creationDate, String author, String title, String urlFriendlyTitle, String description, String content,
-                   String source, Instant publicationDate, boolean published) {
+    public News(String id, Instant creationDate, String authorId, String title, String urlFriendlyTitle, String description, String content,
+                String source, Instant publicationDate, boolean published) {
         super(id, creationDate);
-        this.author = Objects.requireNonNull(author, "author should not be null");
+        this.authorId = Objects.requireNonNull(authorId);
         this.title = title;
         this.urlFriendlyTitle = urlFriendlyTitle;
         this.description = description;
-        this.content = content;
+        this.content = Objects.requireNonNull(content);
         this.source = source;
         this.publicationDate = publicationDate;
         this.published = published;
@@ -32,7 +32,7 @@ public class Article extends PersistentResource<String> implements Comparable<Ar
     @Override
     public String toString() {
         return super.toStringHelper()
-                .add("author", author)
+                .add("authorId", authorId)
                 .add("title", title)
                 .add("published", published)
                 .add("publicationDate", publicationDate)
@@ -40,7 +40,7 @@ public class Article extends PersistentResource<String> implements Comparable<Ar
     }
 
     @Override
-    public int compareTo(Article other) {
+    public int compareTo(News other) {
         if (this.equals(other)) {
             return 0;
         }

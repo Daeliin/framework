@@ -1,14 +1,14 @@
-package com.daeliin.components.cms.article;
+package com.daeliin.components.cms.news;
 
 import com.daeliin.components.persistence.resource.repository.ResourceRepository;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ArticleRepositoryTest {
+public class NewsRepositoryTest {
 
     @Test
     public void shouldExtendResourceRepository() {
-        assertThat(ArticleRepository.class.getSuperclass().getClass()).isEqualTo(ResourceRepository.class.getClass());
+        assertThat(NewsRepository.class.getSuperclass().getClass()).isEqualTo(ResourceRepository.class.getClass());
     }
 }

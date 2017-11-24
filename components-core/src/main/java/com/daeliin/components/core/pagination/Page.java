@@ -17,7 +17,7 @@ public final class Page<E> {
     public final long totalPages;
 
     public Page(Collection<E> items, long totalItems, long totalPages) {
-        this.items = Objects.requireNonNull(items, " items should not be null");
+        this.items = Objects.requireNonNull(items);
         this.nbItems = items.size();
         this.totalItems = (totalItems > 0L && totalItems < Long.MAX_VALUE) ? totalItems : 0L;
         this.totalPages = (totalPages > 1L && totalPages < Long.MAX_VALUE) ? totalPages : 1L;

@@ -20,8 +20,8 @@ public abstract class PersistentResource<ID> implements Persistable<ID> {
     }
 
     protected PersistentResource(ID id, Instant creationDate) {
-        this.id = Objects.requireNonNull(id, "id should not be null");
-        this.creationDate = Objects.requireNonNull(creationDate, "creation date should not be null");
+        this.id = Objects.requireNonNull(id);
+        this.creationDate = Objects.requireNonNull(creationDate);
     }
 
     public ID getId() {

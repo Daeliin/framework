@@ -12,7 +12,7 @@ public class Permission extends PersistentResource<String> implements Comparable
 
     public Permission(String id, Instant creationDate, String name) {
         super(id, creationDate);
-        this.name = Objects.requireNonNull(name, "name should not be null");
+        this.name = Objects.requireNonNull(name);
     }
 
     public String toString() {

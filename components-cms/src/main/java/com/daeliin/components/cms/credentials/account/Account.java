@@ -15,11 +15,11 @@ public class Account extends PersistentResource<String> implements Comparable<Ac
 
     public Account(String id, Instant creationDate, String username, String email, boolean enabled, String password, String token) {
         super(id, creationDate);
-        this.username = Objects.requireNonNull(username, "username should not be null");
-        this.email = Objects.requireNonNull(email, "email should not be null");
+        this.username = Objects.requireNonNull(username);
+        this.email = Objects.requireNonNull(email);
         this.enabled = enabled;
-        this.password = Objects.requireNonNull(password, "password should not be null");
-        this.token = Objects.requireNonNull(token, "token should not be null");
+        this.password = Objects.requireNonNull(password);
+        this.token = Objects.requireNonNull(token);
     }
 
     @Override

@@ -13,8 +13,8 @@ public class AccountEncryption {
     public final String token;
 
     public AccountEncryption(String username, String clearPassword) {
-        Objects.requireNonNull(username, "username should not be null");
-        Objects.requireNonNull(clearPassword, "clearPassword should not be null");
+        Objects.requireNonNull(username);
+        Objects.requireNonNull(clearPassword);
 
         this.password = new BCryptPasswordEncoder().encode(clearPassword);
         this.token = new Token(Arrays.asList(username), new Sha512(), true).asString;
