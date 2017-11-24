@@ -1,6 +1,7 @@
 package com.daeliin.components.cms.news;
 
 import com.daeliin.components.cms.Application;
+import com.daeliin.components.cms.credentials.account.Account;
 import com.daeliin.components.cms.library.AccountLibrary;
 import com.daeliin.components.cms.library.NewsLibrary;
 import com.daeliin.components.core.string.UrlFriendlyString;
@@ -13,6 +14,9 @@ import javax.inject.Inject;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -147,5 +151,15 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
     @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenUnpublishingANonExistingNews() {
         newsService.unpublish("nonExistingId");
+    }
+
+    @Test
+    public void shouldFindAuthorByNews() throws Exception {
+        List<String> news = Arrays.asList(NewsLibrary.publishedNews().getId(), NewsLibrary.notPublishedNews().getId());
+
+        Map<News, Account> authorByNews = newsService.authorByNews(news);
+
+        assertThat(authorByNews.get(NewsLibrary.publishedNews())).isEqualTo(AccountLibrary.admin());
+        assertThat(authorByNews.get(NewsLibrary.notPublishedNews())).isEqualTo(AccountLibrary.john());
     }
 }

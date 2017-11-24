@@ -4,6 +4,8 @@ import com.daeliin.components.cms.credentials.account.Account;
 import com.daeliin.components.cms.credentials.account.AccountService;
 import com.daeliin.components.cms.event.EventLogService;
 import com.daeliin.components.cms.sql.BNews;
+import com.daeliin.components.cms.sql.QAccount;
+import com.daeliin.components.cms.sql.QNews;
 import com.daeliin.components.core.resource.Id;
 import com.daeliin.components.core.string.UrlFriendlyString;
 import com.daeliin.components.persistence.resource.service.ResourceService;
@@ -11,7 +13,14 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.time.Instant;
+import java.util.Collection;
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.function.Function;
+
+import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.toSet;
 
 @Service
 public class NewsService extends ResourceService<News, BNews, String, NewsRepository> {
@@ -100,6 +109,15 @@ public class NewsService extends ResourceService<News, BNews, String, NewsReposi
         eventLogService.create(String.format("The news %s has been unpublished", updatedNews.getId()));
 
         return updatedNews;
+    }
+
+    public Map<News, Account> authorByNews(Collection<String> newsIds) {
+        Collection<News> news = findAll(QNews.news.id.in(newsIds));
+        Set<String> accountIds = news.stream().map(newsItem -> newsItem.authorId).collect(toSet());
+        Map<String, Account> accountById = accountService.findAll(QAccount.account.id.in(accountIds)).stream().collect(toMap(Account::getId, Function.identity()));
+
+        return news.stream()
+            .collect(toMap(Function.identity(), newsItem -> accountById.get(newsItem.authorId)));
     }
 
     private News updatePublication(String id, boolean published, Instant publicationDate) {

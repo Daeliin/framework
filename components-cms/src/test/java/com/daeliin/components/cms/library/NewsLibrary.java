@@ -25,7 +25,7 @@ public final class NewsLibrary {
         return new News(
                 "NEWS2",
                 LocalDateTime.of(2016, 5, 21, 14, 30, 0).toInstant(ZoneOffset.UTC),
-                "ACCOUNT1",
+                "ACCOUNT2",
                 "Sample is live",
                 "sample-is-live",
                 "Today is the day we go live at sample.com",

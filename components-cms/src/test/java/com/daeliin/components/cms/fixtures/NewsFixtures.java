@@ -23,7 +23,7 @@ public final class NewsFixtures {
 
     public static BNews notPublishedNews() {
         return new BNews(
-                "ACCOUNT1",
+                "ACCOUNT2",
                 "We go live today, here''s our first content.",
                 LocalDateTime.of(2016, 5, 20, 14, 30, 0).toInstant(ZoneOffset.UTC),
                 "Today is the day we go live at sample.com",
