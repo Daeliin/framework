@@ -44,7 +44,7 @@ public class NewsService extends ResourceService<News, BNews, String, NewsReposi
         }
 
         News newsToCreate = new News(
-                new Id().value,
+                Id.random(),
                 Instant.now(),
                 news.authorId,
                 news.title,

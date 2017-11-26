@@ -1,7 +1,7 @@
 package com.daeliin.components.cms.event;
 
-import com.daeliin.components.core.resource.Id;
 import com.daeliin.components.cms.sql.BEventLog;
+import com.daeliin.components.core.resource.Id;
 import com.daeliin.components.persistence.resource.service.ResourceService;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ public final class EventLogService extends ResourceService<EventLog, BEventLog, 
     }
 
     public EventLog create(String description) {
-        EventLog eventLog = new EventLog(new Id().value, Instant.now(), description);
+        EventLog eventLog = new EventLog(Id.random(), Instant.now(), description);
         return super.create(eventLog);
     }
 }

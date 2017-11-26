@@ -53,7 +53,7 @@ public class AccountDetailsService implements UserDetailsService {
         AccountEncryption accountEncryption = new AccountEncryption(signUpRequest.username, signUpRequest.clearPassword);
 
         return accountService.create(new Account(
-                new Id().value,
+                Id.random(),
                 Instant.now(),
                 signUpRequest.username,
                 signUpRequest.email,
