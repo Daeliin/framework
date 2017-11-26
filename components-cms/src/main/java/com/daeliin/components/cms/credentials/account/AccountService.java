@@ -21,6 +21,15 @@ public class AccountService extends ResourceService<Account, BAccount, String, A
         this.permissionService = permissionService;
     }
 
+    public Account findByUsername(String username) {
+        BAccount bAccount = repository.findAll(QAccount.account.username.equalsIgnoreCase(username))
+                .stream()
+                .findFirst()
+                .orElseThrow(NoSuchElementException::new);
+
+        return conversion.instantiate(bAccount);
+    }
+
     public Account findByUsernameAndEnabled(String username) {
         Collection<BAccount> bAccounts = repository.findAll(QAccount.account.username.equalsIgnoreCase(username)
                 .and(QAccount.account.enabled.isTrue()));

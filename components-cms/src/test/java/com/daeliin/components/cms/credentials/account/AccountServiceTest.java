@@ -30,6 +30,17 @@ public class AccountServiceTest extends AbstractTransactionalJUnit4SpringContext
     }
 
     @Test
+    public void shouldFindAnAccount_byUsername() {
+        Account account = AccountLibrary.admin();
+        assertThat(accountService.findByUsername(account.username)).isEqualTo(account);
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void shouldThrowException_whenFindingAnAccountByUsername_ifUsernameDoesntExist() {
+        accountService.findByUsername("nonExistingUsername");
+    }
+
+    @Test
     public void shouldFindAnEnabledAccount_byUsername() {
         Account account = AccountLibrary.admin();
         assertThat(accountService.findByUsernameAndEnabled(account.username)).isEqualTo(account);
