@@ -32,7 +32,7 @@ public abstract class ResourceController<V, T extends Persistable<ID>, ID, S ext
     public static final String DEFAULT_SIZE = "20";
     public static final String DEFAULT_DIRECTION = "ASC";
     public static final String DEFAULT_PROPERTIES = "id";
-    
+
     protected final S service;
     protected final ResourceDtoConversion<V, T, ID> conversion;
 

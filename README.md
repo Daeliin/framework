@@ -10,7 +10,7 @@ Provides commons java components with Spring Boot.
 * Testing : [JUnit 4.12](http://junit.org)
 * Data access : [Querydsl 4.1.4](http://www.querydsl.com/), [MySQL Dialect](https://www.mysql.com/)
 * Caching : [Caffeine 2.3.5](https://github.com/ben-manes/caffeine)
-* Web tier : [Spring Boot 1.5.8.RELEASE](https://projects.spring.io/spring-boot/)
+* Web tier : [Spring Boot 1.5.9.RELEASE](https://projects.spring.io/spring-boot/)
 * Templating : [Thymeleaf 2.1.5.RELEASE](http://www.thymeleaf.org/)
 
 ## Getting started
