@@ -46,7 +46,7 @@ public final class CountryTest {
     }
 
     @Test
-    public void shouldBeComparedOnCode() {
+    public void shouldBeComparedOnName() {
         Country country1 = new Country("BE", Instant.now(), "Belgique");
         Country country2 = new Country("FR", Instant.now(), "France");
 

@@ -30,6 +30,6 @@ public class Country extends PersistentResource<String> implements Comparable<Co
             return 0;
         }
         
-        return this.code.compareTo(other.code);
+        return this.name.compareTo(other.name);
     }
 }
