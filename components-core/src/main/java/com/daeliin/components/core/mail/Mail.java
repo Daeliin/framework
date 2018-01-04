@@ -15,14 +15,14 @@ public class Mail {
     private final String to;
     private final String subject;
     private String templateName;
-    private Map<String, String> parameters; 
+    private Map<String, Object> parameters;
     
     private Mail(
         final String from,
         final String to,
         final String subject,
         final String templateName,
-        final Map<String, String> parameters) throws MailBuildingException {
+        final Map<String, Object> parameters) throws MailBuildingException {
         
         this.from = new EmailAddress(from).value;
         this.to = new EmailAddress(to).value;
@@ -47,7 +47,7 @@ public class Mail {
         return this.templateName;
     }
     
-    public Map<String, String> parameters() {
+    public Map<String, Object> parameters() {
         return this.parameters;
     }
     
@@ -59,7 +59,7 @@ public class Mail {
         }
     }
     
-    private void buildParameters(final Map<String, String> parameters) {
+    private void buildParameters(final Map<String, Object> parameters) {
         if (parameters.isEmpty()) {
             this.parameters = new HashMap<>();
         } else {
@@ -80,7 +80,7 @@ public class Mail {
         private String to;
         private String subject;
         private String templateName;
-        private Map<String, String> parameters; 
+        private Map<String, Object> parameters;
 
         @Override
         public To from(final String from) {
@@ -119,7 +119,7 @@ public class Mail {
         }
         
         @Override
-        public MailBuilder parameters(final Map<String, String> parameters) {
+        public MailBuilder parameters(final Map<String, Object> parameters) {
             this.parameters = parameters;
             return this;
         }
@@ -148,6 +148,6 @@ public class Mail {
 
     public interface Parameters {
         MailBuilder noParameters();
-        MailBuilder parameters(final Map<String, String> parameters);
+        MailBuilder parameters(final Map<String, Object> parameters);
     }
 }

@@ -33,7 +33,7 @@ public class MailingMembershipNotifications implements MembershipNotifications {
     @Async
     @Override
     public void signUp(final Account account) {
-        Map<String, String> parameters = addAccountParameters(account);
+        Map<String, Object> parameters = addAccountParameters(account);
         
         try {
             Mail mail =
@@ -54,7 +54,7 @@ public class MailingMembershipNotifications implements MembershipNotifications {
     @Async
     @Override
     public void activate(final Account account) {
-        Map<String, String> parameters = addAccountParameters(account);
+        Map<String, Object> parameters = addAccountParameters(account);
         
         try {
             Mail mail = 
@@ -75,7 +75,7 @@ public class MailingMembershipNotifications implements MembershipNotifications {
     @Async
     @Override
     public void newPassword(final Account account) {
-        Map<String, String> parameters = addAccountParameters(account);
+        Map<String, Object> parameters = addAccountParameters(account);
         
         try {
             Mail mail = 
@@ -96,7 +96,7 @@ public class MailingMembershipNotifications implements MembershipNotifications {
     @Async
     @Override
     public void resetPassword(final Account account) {
-        Map<String, String> parameters = addAccountParameters(account);
+        Map<String, Object> parameters = addAccountParameters(account);
         
         try {
             Mail mail = 
@@ -114,8 +114,8 @@ public class MailingMembershipNotifications implements MembershipNotifications {
         }
     }
     
-    private Map<String, String> addAccountParameters(final Account account) {
-        Map<String, String> accountParameters = new HashMap<>();
+    private Map<String, Object> addAccountParameters(final Account account) {
+        Map<String, Object> accountParameters = new HashMap<>();
         
         accountParameters.put("userId", account.getId());
         accountParameters.put("userName", account.username);

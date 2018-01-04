@@ -56,17 +56,16 @@ public class Mailing {
         } 
     }
     
-    private String processBody(Map<String, String> parameters, final String templateName) {
+    private String processBody(Map<String, Object> parameters, final String templateName) {
         Context context = new Context();
         
         addGlobalParameters(parameters);
-        
-        parameters.entrySet().forEach(parameter -> context.setVariable(parameter.getKey(), parameter.getValue()));
+        parameters.forEach(context::setVariable);
         
         return this.templateEngine.process(templateName, context);
     }
     
-    private void addGlobalParameters(Map<String, String> parameters) {
+    private void addGlobalParameters(Map<String, Object> parameters) {
         parameters.put("domainName", domainName);
         parameters.put("domainUrl", domainUrl);
     }
