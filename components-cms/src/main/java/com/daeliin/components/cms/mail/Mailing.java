@@ -29,10 +29,7 @@ public class Mailing {
     
     @Value("${daeliin.mail.domain.url}")
     private String domainUrl;
-
-    @Value("${daeliin.static-endpoint}")
-    private String staticEndpoint;
-
+    
     private final TemplateEngine templateEngine;
     private final JavaMailSenderImpl mailSender;
 
@@ -71,6 +68,5 @@ public class Mailing {
     private void addGlobalParameters(Map<String, Object> parameters) {
         parameters.put("domainName", domainName);
         parameters.put("domainUrl", domainUrl);
-        parameters.put("staticEndpoint", staticEndpoint);
     }
 }
