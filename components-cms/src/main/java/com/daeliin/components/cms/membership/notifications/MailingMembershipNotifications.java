@@ -4,7 +4,8 @@ import com.daeliin.components.cms.credentials.account.Account;
 import com.daeliin.components.cms.mail.Mailing;
 import com.daeliin.components.core.mail.Mail;
 import com.daeliin.components.core.mail.MailBuildingException;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Profile;
@@ -16,11 +17,12 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-@Slf4j
 @Service
 @Profile("mail")
 public class MailingMembershipNotifications implements MembershipNotifications {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(MailingMembershipNotifications.class);
+    
     @Value("${daeliin.mail.from}")
     private String from;
     
@@ -47,7 +49,7 @@ public class MailingMembershipNotifications implements MembershipNotifications {
                 
                 mails.send(mail);
         } catch (MailBuildingException e) {
-            log.error(String.format("Sign up mail for account %s was invalid", account), e);
+            LOGGER.error(String.format("Sign up mail for account %s was invalid", account), e);
         }
     }
 
@@ -68,7 +70,7 @@ public class MailingMembershipNotifications implements MembershipNotifications {
             
             mails.send(mail);
         } catch (MailBuildingException e) {
-            log.error(String.format("Activate mail for account %s was invalid", account), e);
+            LOGGER.error(String.format("Activate mail for account %s was invalid", account), e);
         }
     }
 
@@ -89,7 +91,7 @@ public class MailingMembershipNotifications implements MembershipNotifications {
             
             mails.send(mail);
         } catch (MailBuildingException e) {
-            log.error(String.format("New password mail for account %s was invalid", account), e);
+            LOGGER.error(String.format("New password mail for account %s was invalid", account), e);
         }
     }
 
@@ -110,7 +112,7 @@ public class MailingMembershipNotifications implements MembershipNotifications {
             
             mails.send(mail);
         } catch (MailBuildingException e) {
-            log.error(String.format("Reset password mail for account %s was invalid", account), e);
+            LOGGER.error(String.format("Reset password mail for account %s was invalid", account), e);
         }
     }
     

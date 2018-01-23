@@ -6,17 +6,19 @@ import com.daeliin.components.cms.event.EventLogService;
 import com.daeliin.components.cms.exception.InvalidTokenException;
 import com.daeliin.components.cms.membership.details.AccountDetailsService;
 import com.daeliin.components.cms.membership.notifications.MembershipNotifications;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.NoSuchElementException;
 
-@Slf4j
 @Service
 public class MembershipService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(MembershipService.class);
+    
     protected final AccountService accountService;
     protected final AccountDetailsService accountDetailsService;
     protected final EventLogService eventLogService;
@@ -45,7 +47,7 @@ public class MembershipService {
         eventLogService.create(String.format("%s signed up", account.username));
         membershipNotifications.signUp(account);
 
-        log.info(String.format("%s signed up", account));
+        LOGGER.info(String.format("%s signed up", account));
 
         return account;
     }
@@ -62,9 +64,9 @@ public class MembershipService {
             account = accountDetailsService.activate(account, activationToken);
             eventLogService.create(String.format("%s activated its account", account.username));
             membershipNotifications.activate(account);
-            log.info(String.format("%s activated", account));
+            LOGGER.info(String.format("%s activated", account));
         } catch(InvalidTokenException e) {
-            log.warn(String.format("an attempt to activate %s with an invalid token[%s] has been made", account, activationToken));
+            LOGGER.warn(String.format("an attempt to activate %s with an invalid token[%s] has been made", account, activationToken));
             throw e;
         }
     }
@@ -79,7 +81,7 @@ public class MembershipService {
         eventLogService.create(String.format("%s requested a new password ", account.username));
         membershipNotifications.newPassword(account);
 
-        log.info(String.format("%s requested a new password", account));
+        LOGGER.info(String.format("%s requested a new password", account));
     }
 
     @Transactional
@@ -94,9 +96,9 @@ public class MembershipService {
             account = accountDetailsService.resetPassword(account, resetPasswordToken, newPassword);
             eventLogService.create(String.format("%s reseted its password ", account.username));
             membershipNotifications.resetPassword(account);
-            log.info(String.format("%s reseted its password", account));
+            LOGGER.info(String.format("%s reseted its password", account));
         } catch (InvalidTokenException e) {
-            log.warn(String.format("an attempt to reset %s password with an invalid token[%s] has been made", account, resetPasswordToken));
+            LOGGER.warn(String.format("an attempt to reset %s password with an invalid token[%s] has been made", account, resetPasswordToken));
             throw e;
         }
     }

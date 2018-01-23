@@ -1,7 +1,8 @@
 package com.daeliin.components.cms.mail;
 
 import com.daeliin.components.core.mail.Mail;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -19,10 +20,11 @@ import java.util.Map;
 /**
  * Processes and sends mails.
  */
-@Slf4j
 @Profile("mail")
 @Component
 public class Mailing {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(Mailing.class);
     
     @Value("${daeliin.mail.domain.name}")
     private String domainName;
@@ -52,7 +54,7 @@ public class Mailing {
             
             this.mailSender.send(message);
         } catch (MessagingException e) {
-            log.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         } 
     }
     
