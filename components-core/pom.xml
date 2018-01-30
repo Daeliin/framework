@@ -13,12 +13,23 @@
         <artifactId>java-components</artifactId>
         <version>0.2-SNAPSHOT</version>
     </parent>
+
+    <properties>
+        <imgscalr.version>4.2</imgscalr.version>
+    </properties>
     
     <dependencies>
         <!-- Caffeine -->
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
+        </dependency>
+
+        <!-- Img Sclar -->
+        <dependency>
+            <groupId>org.imgscalr</groupId>
+            <artifactId>imgscalr-lib</artifactId>
+            <version>${imgscalr.version}</version>
         </dependency>
 
         <!-- Test -->
