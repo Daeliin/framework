@@ -44,7 +44,7 @@ public final class CountryService {
         return countryByCode.get(countryCode);
     }
 
-    private void invalidateCache() {
+    public void invalidateCache() {
         countryByCode.clear();
 
         repository.findAll()
