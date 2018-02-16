@@ -5,7 +5,7 @@ import com.daeliin.components.core.resource.Conversion;
 
 public final class AccountConversion implements Conversion<Account, BAccount> {
 
-    public Account instantiate(BAccount bAccount) {
+    public Account from(BAccount bAccount) {
         return new Account(
             bAccount.getId(),
             bAccount.getCreationDate(),
@@ -17,7 +17,7 @@ public final class AccountConversion implements Conversion<Account, BAccount> {
     }
 
     @Override
-    public BAccount map(Account account) {
+    public BAccount to(Account account) {
         return new BAccount(
             account.getCreationDate(),
             account.email,

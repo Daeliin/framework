@@ -7,7 +7,7 @@ import com.daeliin.components.core.string.UrlFriendlyString;
 public final class NewsConversion implements Conversion<News, BNews> {
 
     @Override
-    public News instantiate(BNews bNews) {
+    public News from(BNews bNews) {
         return new News(
                 bNews.getId(),
                 bNews.getCreationDate(),
@@ -22,7 +22,7 @@ public final class NewsConversion implements Conversion<News, BNews> {
     }
 
     @Override
-    public BNews map(News news) {
+    public BNews to(News news) {
         return new BNews(
                 news.authorId,
                 news.content,

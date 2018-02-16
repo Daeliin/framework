@@ -21,7 +21,7 @@ public final class PermissionService extends ResourceService<Permission, BPermis
     public Set<Permission> findForAccount(String accountId) {
         return repository.findForAccount(accountId)
                 .stream()
-                .map(conversion::instantiate)
+                .map(conversion::from)
                 .collect(toCollection(TreeSet::new));
     }
 

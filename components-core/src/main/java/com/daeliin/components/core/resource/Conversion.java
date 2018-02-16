@@ -14,40 +14,40 @@ import static java.util.stream.Collectors.toCollection;
 public interface Conversion<O, C> {
 
     /**
-     * Instantiates an object from a converted object.
+     * Builds an object from a converted object.
      * @param conversion a converted object
      * @return the new instance
      */
-    O instantiate(C conversion);
+    O from(C conversion);
 
     /**
-     * Maps an object to a converted object.
-     * @param object the object to map
+     * Converts an object to a converted object.
+     * @param object the object to to
      * @return the converted object
      */
-    C map(O object);
+    C to(O object);
 
     /**
-     * Instantiates a collection of objects from a collection of converted objects.
-     * @param conversions the converted objects to instantiate
+     * Builds a collection of objects from a collection of converted objects.
+     * @param conversions the converted objects to from
      * @return the new collection of instance, in the same order as the converted objects
      */
-    default Set<O> instantiate(Collection<C> conversions) {
+    default Set<O> from(Collection<C> conversions) {
         return conversions
                 .stream()
-                .map(this::instantiate)
+                .map(this::from)
                 .collect(toCollection(LinkedHashSet::new));
     }
 
     /**
-     * Maps a collection of objects to a collection of converted objects.
-     * @param objects the objects to map
+     * Convers a collection of objects to a collection of converted objects.
+     * @param objects the objects to to
      * @return the converted objects in the same order as the objects
      */
-    default Set<C> map(Collection<O> objects) {
+    default Set<C> to(Collection<O> objects) {
         return objects
                 .stream()
-                .map(this::map)
+                .map(this::to)
                 .collect(toCollection(LinkedHashSet::new));
     }
 }

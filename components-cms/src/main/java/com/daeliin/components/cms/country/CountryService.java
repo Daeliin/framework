@@ -49,7 +49,7 @@ public final class CountryService {
 
         repository.findAll()
                 .stream()
-                .map(conversion::instantiate)
+                .map(conversion::from)
                 .forEach(country -> countryByCode.put(country.code, country));
     }
 }

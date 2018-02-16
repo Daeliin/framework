@@ -27,7 +27,7 @@ public class AccountService extends ResourceService<Account, BAccount, String, A
                 .findFirst()
                 .orElseThrow(NoSuchElementException::new);
 
-        return conversion.instantiate(bAccount);
+        return conversion.from(bAccount);
     }
 
     public Account findByUsernameAndEnabled(String username) {
@@ -37,7 +37,7 @@ public class AccountService extends ResourceService<Account, BAccount, String, A
 
         BAccount firstMatch = bAccounts.stream().findFirst().orElseThrow(NoSuchElementException::new);
 
-        return conversion.instantiate(firstMatch);
+        return conversion.from(firstMatch);
     }
 
     public boolean usernameExists(String username) {

@@ -22,7 +22,7 @@ public class Mail {
         final String to,
         final String subject,
         final String templateName,
-        final Map<String, Object> parameters) throws MailBuildingException {
+        final Map<String, Object> parameters) {
         
         this.from = new EmailAddress(from).value;
         this.to = new EmailAddress(to).value;
@@ -51,9 +51,9 @@ public class Mail {
         return this.parameters;
     }
     
-    private void buildTemplateName(final String templateName) throws MailBuildingException {
+    private void buildTemplateName(final String templateName) {
         if (StringUtils.isBlank(templateName)) {
-            throw new MailBuildingException("Mail template name must not be blank");
+            throw new IllegalArgumentException("Mail template name must not be blank");
         } else {
             this.templateName = templateName;
         }
@@ -73,7 +73,7 @@ public class Mail {
     
     /**
      * Builds a mail, example : 
-     * Mail mail = Mail.builder().instantiate("instantiate@mail.com").to("to@mail.com").subject("Subject").templateName("template.html").noParameters().build();
+     * Mail mail = Mail.builder().from("from@mail.com").to("to@mail.com").subject("Subject").templateName("template.html").noParameters().build();
      */
     public static class MailBuilder implements From, To, Subject, Parameters, TemplateName {
         private String from;
@@ -124,7 +124,7 @@ public class Mail {
             return this;
         }
 
-        public Mail build() throws MailBuildingException {
+        public Mail build() throws IllegalArgumentException {
             return new Mail(this.from, this.to, this.subject, this.templateName, this.parameters);
         }
     }

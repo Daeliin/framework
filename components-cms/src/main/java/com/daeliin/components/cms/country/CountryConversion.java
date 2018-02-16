@@ -6,7 +6,7 @@ import com.daeliin.components.core.resource.Conversion;
 public final class CountryConversion implements Conversion<Country, BCountry> {
 
     @Override
-    public Country instantiate(BCountry bCountry) {
+    public Country from(BCountry bCountry) {
         return new Country(
                 bCountry.getCode(),
                 bCountry.getCreationDate(),
@@ -14,7 +14,7 @@ public final class CountryConversion implements Conversion<Country, BCountry> {
     }
 
     @Override
-    public BCountry map(Country country) {
+    public BCountry to(Country country) {
         return new BCountry(
                 country.code,
                 country.getCreationDate(),

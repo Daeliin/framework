@@ -6,7 +6,7 @@ import com.daeliin.components.core.resource.Conversion;
 public final class EventLogConversion implements Conversion<EventLog, BEventLog> {
 
     @Override
-    public EventLog instantiate(BEventLog bEventLog) {
+    public EventLog from(BEventLog bEventLog) {
         return new EventLog(
                 bEventLog.getId(),
                 bEventLog.getCreationDate(),
@@ -14,7 +14,7 @@ public final class EventLogConversion implements Conversion<EventLog, BEventLog>
     }
 
     @Override
-    public BEventLog map(EventLog eventLog) {
+    public BEventLog to(EventLog eventLog) {
         return new BEventLog(
                 eventLog.getCreationDate(),
                 eventLog.description,

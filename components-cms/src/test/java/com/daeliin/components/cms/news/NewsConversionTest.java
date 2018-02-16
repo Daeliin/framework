@@ -15,12 +15,12 @@ public final class NewsConversionTest {
     public void shouldThrowException_whenMappingNull() {
         News nullNews = null;
 
-        newsConversion.map(nullNews);
+        newsConversion.to(nullNews);
     }
 
     @Test
     public void shouldMapNews() {
-        BNews mappedNews = newsConversion.map(NewsLibrary.publishedNews());
+        BNews mappedNews = newsConversion.to(NewsLibrary.publishedNews());
 
         assertThat(mappedNews).isEqualToComparingFieldByField(NewsFixtures.publishedNews());
     }
@@ -29,12 +29,12 @@ public final class NewsConversionTest {
     public void shouldThrowException_whenInstantiatingNull() {
         BNews nullNewsRow = null;
 
-        newsConversion.instantiate(nullNewsRow);
+        newsConversion.from(nullNewsRow);
     }
 
     @Test
     public void shouldInstantiateANews() {
-        News rebuiltNews = newsConversion.instantiate(NewsFixtures.publishedNews());
+        News rebuiltNews = newsConversion.from(NewsFixtures.publishedNews());
 
         assertThat(rebuiltNews).isEqualTo(NewsLibrary.publishedNews());
     }

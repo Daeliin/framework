@@ -2,7 +2,7 @@ package com.daeliin.components.persistence.resource.predicate;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 
-public interface ResourcePredicate {
+public interface PersistentResourcePredicate {
 
     BooleanExpression compute();
 }

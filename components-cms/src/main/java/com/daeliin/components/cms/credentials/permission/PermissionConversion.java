@@ -6,7 +6,7 @@ import com.daeliin.components.core.resource.Conversion;
 public final class PermissionConversion implements Conversion<Permission, BPermission> {
 
     @Override
-    public Permission instantiate(BPermission bPermission) {
+    public Permission from(BPermission bPermission) {
         return new Permission(
                 bPermission.getId(),
                 bPermission.getCreationDate(),
@@ -14,7 +14,7 @@ public final class PermissionConversion implements Conversion<Permission, BPermi
     }
 
     @Override
-    public BPermission map(Permission permission) {
+    public BPermission to(Permission permission) {
         return new BPermission(
                 permission.getCreationDate(),
                 permission.getId(),

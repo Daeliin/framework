@@ -15,12 +15,12 @@ public final class AccountConversionTest {
     public void shouldThrowException_whenMappingNull() {
         Account nullAccount = null;
 
-        accountConversion.map(nullAccount);
+        accountConversion.to(nullAccount);
     }
 
     @Test
     public void shouldMapAccount() {
-        BAccount mappedAccount = accountConversion.map(AccountLibrary.admin());
+        BAccount mappedAccount = accountConversion.to(AccountLibrary.admin());
 
         assertThat(mappedAccount).isEqualToComparingFieldByField(AccountFixtures.admin());
     }
@@ -29,12 +29,12 @@ public final class AccountConversionTest {
     public void shouldThrowException_whenInstantiatingNull() {
         BAccount nullAccountRow = null;
 
-        accountConversion.instantiate(nullAccountRow);
+        accountConversion.from(nullAccountRow);
     }
 
     @Test
     public void shouldInstantiateAnAccount() {
-        Account rebuiltAccount = accountConversion.instantiate(AccountFixtures.admin());
+        Account rebuiltAccount = accountConversion.from(AccountFixtures.admin());
 
         assertThat(rebuiltAccount).isEqualTo(AccountLibrary.admin());
     }

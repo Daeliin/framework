@@ -15,12 +15,12 @@ public final class EventLogConversionTest {
     public void shouldThrowException_whenMappingNull() {
         EventLog nullEventLog = null;
 
-        eventLogConversion.map(nullEventLog);
+        eventLogConversion.to(nullEventLog);
     }
 
     @Test
     public void shouldMapEventLog() {
-        BEventLog mappedEventLog = eventLogConversion.map(EventLogLibrary.login());
+        BEventLog mappedEventLog = eventLogConversion.to(EventLogLibrary.login());
 
         assertThat(mappedEventLog).isEqualToComparingFieldByField(EventLogFixtures.login());
     }
@@ -29,12 +29,12 @@ public final class EventLogConversionTest {
     public void shouldThrowException_whenInstantiatingNull() {
         BEventLog nullEventLogRow = null;
 
-        eventLogConversion.instantiate(nullEventLogRow);
+        eventLogConversion.from(nullEventLogRow);
     }
 
     @Test
     public void shouldInstantiateAnEventLog() {
-        EventLog rebuiltEventLog = eventLogConversion.instantiate(EventLogFixtures.login());
+        EventLog rebuiltEventLog = eventLogConversion.from(EventLogFixtures.login());
 
         assertThat(rebuiltEventLog).isEqualTo(EventLogLibrary.login());
     }

@@ -39,9 +39,9 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
             throw new IllegalStateException("Resource should not already exist when creating it");
         }
 
-        R createdRow = repository.save(conversion.map(resource));
+        R createdRow = repository.save(conversion.to(resource));
 
-        return conversion.instantiate(createdRow);
+        return conversion.from(createdRow);
     }
 
     /**
@@ -51,9 +51,9 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
      */
     @Override
     public Collection<T> create(Collection<T> resources) {
-        Collection<R> createdRows = repository.save(conversion.map(resources));
+        Collection<R> createdRows = repository.save(conversion.to(resources));
 
-        return conversion.instantiate(createdRows);
+        return conversion.from(createdRows);
     }
 
     /**
@@ -105,7 +105,7 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
 
         R resource = resourceRow.orElseThrow(() -> new NoSuchElementException(MESSAGE_RESOURCE_NOT_FOUND));
 
-        return conversion.instantiate(resource);
+        return conversion.from(resource);
     }
 
     @Override
@@ -116,7 +116,7 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
             throw new NoSuchElementException(MESSAGE_RESOURCE_NOT_FOUND);
         }
 
-        return conversion.instantiate(resource.get());
+        return conversion.from(resource.get());
     }
 
     /**
@@ -125,12 +125,12 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
      */
     @Override
     public Collection<T> findAll() {
-        return new TreeSet<>(conversion.instantiate(repository.findAll()));
+        return new TreeSet<>(conversion.from(repository.findAll()));
     }
 
     @Override
     public Collection<T> findAll(Predicate predicate) {
-        return conversion.instantiate(repository.findAll(predicate));
+        return conversion.from(repository.findAll(predicate));
     }
 
     /**
@@ -142,7 +142,7 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
     public Page<T> findAll(PageRequest pageRequest) {
         Page<R> rowPage = repository.findAll(pageRequest);
 
-        return new Page<>(conversion.instantiate(rowPage.items), rowPage.totalItems, rowPage.totalPages);
+        return new Page<>(conversion.from(rowPage.items), rowPage.totalItems, rowPage.totalPages);
     }
 
     /**
@@ -155,7 +155,7 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
     public Page<T> findAll(Predicate predicate, PageRequest pageRequest) {
         Page<R> rowPage = repository.findAll(predicate, pageRequest);
 
-        return new Page<>(conversion.instantiate(rowPage.items), rowPage.totalItems, rowPage.totalPages);
+        return new Page<>(conversion.from(rowPage.items), rowPage.totalItems, rowPage.totalPages);
     }
 
     /**
@@ -165,7 +165,7 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
      */
     @Override
     public Collection<T> findAll(Collection<ID> resourcesIds) {
-        return new TreeSet(conversion.instantiate(repository.findAll(resourcesIds)));
+        return new TreeSet(conversion.from(repository.findAll(resourcesIds)));
     }
 
     /**
@@ -180,7 +180,7 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
             throw new NoSuchElementException(MESSAGE_RESOURCE_NOT_FOUND);
         }
 
-        return conversion.instantiate(repository.save(conversion.map(resource)));
+        return conversion.from(repository.save(conversion.to(resource)));
     }
 
     /**
@@ -190,9 +190,9 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
      */
     @Override
     public Collection<T> update(Collection<T> resources) {
-        Collection<R> mappedResources = conversion.map(resources);
+        Collection<R> mappedResources = conversion.to(resources);
 
-        return conversion.instantiate(repository.save(mappedResources));
+        return conversion.from(repository.save(mappedResources));
     }
 
     /**

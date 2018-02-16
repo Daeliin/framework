@@ -15,12 +15,12 @@ public final class CountryConversionTest {
     public void shouldThrowException_whenMappingNull() {
         Country nullCountry = null;
 
-        countryConversion.map(nullCountry);
+        countryConversion.to(nullCountry);
     }
 
     @Test
     public void shouldMapCountry() {
-        BCountry mappedCountry = countryConversion.map(CountryLibrary.france());
+        BCountry mappedCountry = countryConversion.to(CountryLibrary.france());
 
         assertThat(mappedCountry).isEqualToComparingFieldByField(CountryFixtures.france());
     }
@@ -29,12 +29,12 @@ public final class CountryConversionTest {
     public void shouldThrowException_whenInstantiatingNull() {
         BCountry nullCountryRow = null;
 
-        countryConversion.instantiate(nullCountryRow);
+        countryConversion.from(nullCountryRow);
     }
 
     @Test
     public void shouldInstantiateAnCountry() {
-        Country rebuiltCountry = countryConversion.instantiate(CountryFixtures.france());
+        Country rebuiltCountry = countryConversion.from(CountryFixtures.france());
 
         assertThat(rebuiltCountry).isEqualTo(CountryLibrary.france());
     }

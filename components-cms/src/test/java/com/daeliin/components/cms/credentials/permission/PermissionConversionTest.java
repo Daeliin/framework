@@ -15,12 +15,12 @@ public final class PermissionConversionTest {
     public void shouldThrowException_whenMappingNull() {
         Permission nullPermission = null;
 
-        permissionConversion.map(nullPermission);
+        permissionConversion.to(nullPermission);
     }
 
     @Test
     public void shouldMapPermission() {
-        BPermission mappedPermission = permissionConversion.map(PermissionLibrary.admin());
+        BPermission mappedPermission = permissionConversion.to(PermissionLibrary.admin());
 
         assertThat(mappedPermission).isEqualToComparingFieldByField(PermissionFixtures.admin());
     }
@@ -29,12 +29,12 @@ public final class PermissionConversionTest {
     public void shouldThrowException_whenInstantiatingNull() {
         BPermission nullPermissionRow = null;
 
-        permissionConversion.instantiate(nullPermissionRow);
+        permissionConversion.from(nullPermissionRow);
     }
 
     @Test
     public void shouldInstantiateAnPermission() {
-        Permission rebuiltPermission = permissionConversion.instantiate(PermissionFixtures.admin());
+        Permission rebuiltPermission = permissionConversion.from(PermissionFixtures.admin());
 
         assertThat(rebuiltPermission).isEqualTo(PermissionLibrary.admin());
     }

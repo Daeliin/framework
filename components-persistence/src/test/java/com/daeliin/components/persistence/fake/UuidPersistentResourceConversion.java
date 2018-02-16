@@ -6,7 +6,7 @@ import com.daeliin.components.core.resource.Conversion;
 public final class UuidPersistentResourceConversion implements Conversion<UuidPersistentResource, BUuidPersistentResource> {
 
     @Override
-    public UuidPersistentResource instantiate(BUuidPersistentResource bUuidEntity) {
+    public UuidPersistentResource from(BUuidPersistentResource bUuidEntity) {
         if (bUuidEntity == null) {
             return null;
         }
@@ -18,7 +18,7 @@ public final class UuidPersistentResourceConversion implements Conversion<UuidPe
     }
 
     @Override
-    public BUuidPersistentResource map(UuidPersistentResource uuidEntity) {
+    public BUuidPersistentResource to(UuidPersistentResource uuidEntity) {
         if (uuidEntity == null) {
             return null;
         }

@@ -3,7 +3,6 @@ package com.daeliin.components.cms.membership.notifications;
 import com.daeliin.components.cms.credentials.account.Account;
 import com.daeliin.components.cms.mail.Mailing;
 import com.daeliin.components.core.mail.Mail;
-import com.daeliin.components.core.mail.MailBuildingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,7 +47,7 @@ public class MailingMembershipNotifications implements MembershipNotifications {
                 .build();
                 
                 mails.send(mail);
-        } catch (MailBuildingException e) {
+        } catch (IllegalArgumentException e) {
             LOGGER.error(String.format("Sign up mail for account %s was invalid", account), e);
         }
     }
@@ -69,7 +68,7 @@ public class MailingMembershipNotifications implements MembershipNotifications {
                 .build();
             
             mails.send(mail);
-        } catch (MailBuildingException e) {
+        } catch (IllegalArgumentException e) {
             LOGGER.error(String.format("Activate mail for account %s was invalid", account), e);
         }
     }
@@ -90,7 +89,7 @@ public class MailingMembershipNotifications implements MembershipNotifications {
                 .build();
             
             mails.send(mail);
-        } catch (MailBuildingException e) {
+        } catch (IllegalArgumentException e) {
             LOGGER.error(String.format("New password mail for account %s was invalid", account), e);
         }
     }
@@ -111,7 +110,7 @@ public class MailingMembershipNotifications implements MembershipNotifications {
                 .build();
             
             mails.send(mail);
-        } catch (MailBuildingException e) {
+        } catch (IllegalArgumentException e) {
             LOGGER.error(String.format("Reset password mail for account %s was invalid", account), e);
         }
     }

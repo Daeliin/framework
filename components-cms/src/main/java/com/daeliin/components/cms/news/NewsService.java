@@ -81,7 +81,7 @@ public class NewsService extends ResourceService<News, BNews, String, NewsReposi
         existingNews.setContent(news.content);
         existingNews.setSource(news.source);
 
-        return conversion.instantiate(repository.save(existingNews));
+        return conversion.from(repository.save(existingNews));
     }
 
     @Override
@@ -127,6 +127,6 @@ public class NewsService extends ResourceService<News, BNews, String, NewsReposi
         existingNews.setPublished(published);
         existingNews.setPublicationDate(published ? publicationDate : null);
 
-        return conversion.instantiate(repository.save(existingNews));
+        return conversion.from(repository.save(existingNews));
     }
 }

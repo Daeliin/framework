@@ -12,7 +12,7 @@ public class Token {
     
     /**
      * Builds a token based on list of datas, according to a digest algorithm, random flag can be added to add random salt.
-     * @param datas datas to generate the token instantiate
+     * @param datas datas to generate the token from
      * @param algorithm digest algorithm 
      * @param random whether random salt should be added or not
      */

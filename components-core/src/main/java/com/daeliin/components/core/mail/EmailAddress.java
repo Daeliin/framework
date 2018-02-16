@@ -9,11 +9,11 @@ public class EmailAddress {
     
     public final String value;
     
-    public EmailAddress(final String emailAddress) throws MailBuildingException {
+    public EmailAddress(final String emailAddress) {
         if (StringUtils.isBlank(emailAddress)) {
-            throw new MailBuildingException("Email address is blank");
+            throw new IllegalArgumentException("Email address is blank");
         } else if (!emailAddress.matches(".+@.+")) {
-            throw new MailBuildingException("Email address format is not valid");
+            throw new IllegalArgumentException("Email address format is not valid");
         }
         
         this.value = emailAddress;
