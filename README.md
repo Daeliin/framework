@@ -7,11 +7,11 @@ Provides commons java components with Spring Boot.
 ## Technical stack
 * Java : [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 * Build : [Maven](https://maven.apache.org/)
-* Testing : [JUnit 4.12](http://junit.org)
-* Data access : [Querydsl 4.1.4](http://www.querydsl.com/), [MySQL Dialect](https://www.mysql.com/)
-* Caching : [Caffeine 2.3.5](https://github.com/ben-manes/caffeine)
-* Web tier : [Spring Boot 2.0.0.RC1](https://projects.spring.io/spring-boot/)
-* Templating : [Thymeleaf 2.1.5.RELEASE](http://www.thymeleaf.org/)
+* Testing : [JUnit 4](http://junit.org)
+* Data access : [Querydsl 4](http://www.querydsl.com/), [MySQL Dialect](https://www.mysql.com/)
+* Caching : [Caffeine 2.3](https://github.com/ben-manes/caffeine)
+* Web tier : [Spring Boot 2](https://projects.spring.io/spring-boot/)
+* Templating : [Thymeleaf 3](http://www.thymeleaf.org/)
 
 ## Getting started
 ### Repository
