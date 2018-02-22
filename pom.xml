@@ -29,6 +29,7 @@
         <querydsl.version>4.1.4</querydsl.version>
         <commons-codec.version>1.11</commons-codec.version>
         <sql.schema>${project.basedir}/src/test/resources/schema.sql</sql.schema>
+        <jsoup.version>1.11.2</jsoup.version>
     </properties>
 
     <modules>
@@ -86,6 +87,11 @@
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>${commons-codec.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>${jsoup.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

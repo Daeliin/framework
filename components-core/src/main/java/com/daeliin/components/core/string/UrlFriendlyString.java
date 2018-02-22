@@ -24,6 +24,6 @@ public class UrlFriendlyString {
                     .replace("&", "and");
         }
 
-        value = computedValue;
+        this.value = computedValue;
     }
 }
