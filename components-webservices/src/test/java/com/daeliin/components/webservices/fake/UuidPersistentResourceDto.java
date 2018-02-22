@@ -1,6 +1,8 @@
 package com.daeliin.components.webservices.fake;
 
-import javax.validation.constraints.NotBlank;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 import java.time.Instant;
 
 public final class UuidPersistentResourceDto {
