@@ -19,4 +19,11 @@ public final class SanitizedStringTest {
 
         assertThat(new SanitizedString(input).value).isEqualTo("This is a test");
     }
+
+    @Test
+    public void shouldAllowRawLinks() {
+        String input = "https://www.google.com";
+
+        assertThat(new SanitizedString(input).value).isEqualTo("https://www.google.com");
+    }
 }
