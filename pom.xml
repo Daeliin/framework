@@ -30,6 +30,7 @@
         <commons-codec.version>1.11</commons-codec.version>
         <sql.schema>${project.basedir}/src/test/resources/schema.sql</sql.schema>
         <jsoup.version>1.11.2</jsoup.version>
+        <imgscalr.version>4.2</imgscalr.version>
     </properties>
 
     <modules>
@@ -92,6 +93,11 @@
                 <groupId>org.jsoup</groupId>
                 <artifactId>jsoup</artifactId>
                 <version>${jsoup.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.imgscalr</groupId>
+                <artifactId>imgscalr-lib</artifactId>
+                <version>${imgscalr.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
