@@ -17,4 +17,10 @@ public final class SanitizedString {
 
         this.value = Jsoup.clean(originalString, Whitelist.none());
     }
+
+    public SanitizedString(String originalString, Whitelist whitelist) {
+        Objects.requireNonNull(originalString);
+
+        this.value = Jsoup.clean(originalString, whitelist);
+    }
 }
