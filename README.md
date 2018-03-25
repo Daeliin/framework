@@ -50,6 +50,11 @@ Provides commons java components with Spring Boot.
     <artifactId>components-webservices</artifactId>
     <version>0.2-SNAPSHOT</version>
 </dependency>
+<dependency>
+    <groupId>com.daeliin.components</groupId>
+    <artifactId>components-thirdparty</artifactId>
+    <version>0.2-SNAPSHOT</version>
+</dependency>
 ```
 
 ## Documentation
