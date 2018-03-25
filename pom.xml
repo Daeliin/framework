@@ -39,6 +39,7 @@
         <module>components-security</module>
         <module>components-webservices</module>
         <module>components-cms</module>
+        <module>components-thirdparty</module>
         <module>components-test</module>
     </modules>
 
