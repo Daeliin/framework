@@ -15,4 +15,14 @@ public final class GoogleUrlBuilderTest {
 
         assertThat(url).isEqualTo("https://google.com/search?q=test");
     }
+
+    @Test
+    public void shouldEncodeUrl() {
+        String url = new GoogleUrlBuilder()
+            .withPath("search")
+            .withParam("q", "a test")
+            .build();
+
+        assertThat(url).isEqualTo("https://google.com/search?q=a%20test");
+    }
 }

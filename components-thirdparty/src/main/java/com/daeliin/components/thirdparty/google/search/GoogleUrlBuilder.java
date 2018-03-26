@@ -25,6 +25,8 @@ public final class GoogleUrlBuilder {
     }
 
     public String build() {
-        return this.uriBuilder.build().toUriString();
+        return this.uriBuilder.build()
+            .encode()
+            .toUriString();
     }
 }
