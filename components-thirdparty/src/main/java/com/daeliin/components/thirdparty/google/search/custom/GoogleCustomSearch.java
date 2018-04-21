@@ -51,13 +51,8 @@ public class GoogleCustomSearch {
             .withPath("customsearch/v1")
             .withParam("q", query.text)
             .withParam("num", String.valueOf(query.maxResults))
-            .withParam("apiKey", apiKey)
+            .withParam("key", apiKey)
             .withParam("cx", contextId)
             .build();
     }
-
-    private String extractUrl(String href){
-        return href.split("&")[0].split("q=")[1];
-    }
-
 }

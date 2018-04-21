@@ -37,7 +37,7 @@ public final class GoogleCustomSearchTest {
             .withPath("customsearch/v1")
             .withParam("q", "architects spotify")
             .withParam("num", "4")
-            .withParam("apiKey", "key")
+            .withParam("key", "key")
             .withParam("cx", "5")
             .build();
 
