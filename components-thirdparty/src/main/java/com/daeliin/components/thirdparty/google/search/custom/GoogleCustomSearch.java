@@ -18,7 +18,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public final class GoogleCustomSearch {
+public class GoogleCustomSearch {
 
     private final RestTemplate restTemplate;
 

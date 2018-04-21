@@ -16,7 +16,7 @@ import java.util.Set;
 import static java.util.stream.Collectors.toSet;
 
 @Service
-public final class GoogleHtmlSearch {
+public class GoogleHtmlSearch {
 
     private final RestTemplate restTemplate;
 
