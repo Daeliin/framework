@@ -1,5 +1,7 @@
-package com.daeliin.components.thirdparty.google.search;
+package com.daeliin.components.thirdparty.google.search.html;
 
+import com.daeliin.components.thirdparty.google.search.GoogleSearchQuery;
+import com.daeliin.components.thirdparty.google.search.GoogleSearchResult;
 import com.daeliin.components.thirdparty.library.GoogleLibrary;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,7 +45,7 @@ public final class GoogleHtmlSearchTest {
     }
 
     @Test
-    public void shouldSearchTest() {
+    public void shouldParseResults() {
         Set<GoogleSearchResult> results = googleHtmlSearch.search(new GoogleSearchQuery("test", 5));
 
         assertThat(results).containsExactly(

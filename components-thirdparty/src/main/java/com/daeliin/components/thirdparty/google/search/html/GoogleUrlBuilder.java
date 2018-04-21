@@ -1,4 +1,4 @@
-package com.daeliin.components.thirdparty.google.search;
+package com.daeliin.components.thirdparty.google.search.html;
 
 import org.springframework.web.util.UriComponentsBuilder;
 

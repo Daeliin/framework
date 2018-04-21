@@ -1,5 +1,7 @@
-package com.daeliin.components.thirdparty.google.search;
+package com.daeliin.components.thirdparty.google.search.html;
 
+import com.daeliin.components.thirdparty.google.search.GoogleSearchQuery;
+import com.daeliin.components.thirdparty.google.search.GoogleSearchResult;
 import org.jsoup.Jsoup;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
