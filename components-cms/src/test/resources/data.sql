@@ -12,9 +12,10 @@ INSERT INTO account_permission(account_id, permission_id) VALUES
 ('ACCOUNT1', 'ADMIN'),
 ('ACCOUNT2', 'USER');
 
-INSERT INTO news(id, creation_date, author_id, title, url_friendly_title, description, content, source, publication_date, published) VALUES
-('NEWS1', '2016-05-20 14:30:00', 'ACCOUNT1', 'Welcome to sample.com', 'welcome-to-sample', 'Today is the day we start sample.com', 'We open our door today, you''ll find content very soon.', 'https://google.com', '2016-05-20 15:30:00', true),
-('NEWS2', '2016-05-21 14:30:00', 'ACCOUNT2', 'Sample.com is live', 'sample-is-live', 'Today is the day we go live at sample.com', 'We go live today, here''s our first content.', null, null, false);
+INSERT INTO news(id, creation_date, author_id, title, url_friendly_title, description, content, source, publication_date, status) VALUES
+('NEWS1', '2016-05-20 14:30:00', 'ACCOUNT1', 'Welcome to sample.com', 'welcome-to-sample', 'Today is the day we start sample.com', 'We open our door today, you''ll find content very soon.', 'https://google.com', '2016-05-20 15:30:00', 'PUBLISHED'),
+('NEWS2', '2016-05-21 14:30:00', 'ACCOUNT2', 'Sample.com is live', 'sample-is-live', 'Today is the day we go live at sample.com', 'We go live today, here''s our first content.', null, null, 'VALIDATED'),
+('NEWS3', '2016-05-21 14:30:00', 'ACCOUNT2', 'Sample.com is in beta', 'sample-is-in-beta', 'Today is the day we go beta at sample.com', 'We go beta today.', null, null, 'DRAFT');
 
 INSERT INTO country(code, name, creation_date) VALUES
 ( 'FR', 'France', '2017-01-01 12:00:00'),

@@ -39,7 +39,7 @@ CREATE TABLE news(
     content VARCHAR(5000),
     source VARCHAR(500),
     publication_date DATETIME,
-    published BOOLEAN NOT NULL DEFAULT FALSE
+    status VARCHAR(128) NOT NULL
 );
 
 ALTER TABLE news ADD PRIMARY KEY (id);
