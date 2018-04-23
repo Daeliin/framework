@@ -128,14 +128,4 @@ public class NewsService extends ResourceService<News, BNews, String, NewsReposi
         return news.stream()
             .collect(toMap(Function.identity(), newsItem -> accountById.get(newsItem.authorId)));
     }
-
-    private News updatePublication(String id, NewsStatus newsStatus, Instant publicationDate) {
-        BNews existingNews = repository.findOne(id).orElseThrow(() ->
-                new NoSuchElementException(String.format("News %s doesn't exist", id)));
-
-        existingNews.setStatus(newsStatus.name());
-        existingNews.setPublicationDate(newsStatus == NewsStatus.PUBLISHED ? publicationDate : null);
-
-        return conversion.from(repository.save(existingNews));
-    }
 }
