@@ -105,7 +105,6 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
         newsService.update(nullNews);
     }
 
-
     @Test(expected = IllegalStateException.class)
     public void shouldThrowException_whenUpdatingValidatedNews() {
         newsService.update(NewsLibrary.validatedNews());
@@ -136,12 +135,12 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
 
     @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenMarkingANonExistingNewsAsDraft() {
-        newsService.markAsDraft("nonExistingId");
+        newsService.markAs("nonExistingId", NewsStatus.DRAFT);
     }
 
     @Test
     public void shouldMarkANewsAsDraft() {
-        News news = newsService.markAsDraft(NewsLibrary.validatedNews().getId());
+        News news = newsService.markAs(NewsLibrary.validatedNews().getId(), NewsStatus.DRAFT);
 
         assertThat(news.status).isEqualTo(NewsStatus.DRAFT);
         assertThat(news.publicationDate).isNull();
@@ -149,12 +148,12 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
 
     @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenMArkingANonExistingNewsAsValidated() {
-        newsService.markAsValidated("nonExistingId");
+        newsService.markAs("nonExistingId", NewsStatus.VALIDATED);
     }
 
     @Test
     public void shouldMarkANewsAsValidated() {
-        News news = newsService.markAsValidated(NewsLibrary.draftNews().getId());
+        News news = newsService.markAs(NewsLibrary.draftNews().getId(), NewsStatus.VALIDATED);
 
         assertThat(news.status).isEqualTo(NewsStatus.VALIDATED);
         assertThat(news.publicationDate).isNull();
@@ -162,12 +161,12 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
 
     @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenMarkingANonExistingNewsAsPublished() {
-        newsService.markAsPublished("nonExistingId");
+        newsService.markAs("nonExistingId", NewsStatus.PUBLISHED);
     }
 
     @Test
     public void shouldMarkANewsAsPublished() {
-        News news = newsService.markAsPublished(NewsLibrary.validatedNews().getId());
+        News news = newsService.markAs(NewsLibrary.validatedNews().getId(), NewsStatus.PUBLISHED);
 
         assertThat(news.status).isEqualTo(NewsStatus.PUBLISHED);
         assertThat(news.publicationDate).isNotNull();

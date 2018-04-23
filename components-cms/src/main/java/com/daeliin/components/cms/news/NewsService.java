@@ -99,26 +99,23 @@ public class NewsService extends ResourceService<News, BNews, String, NewsReposi
         return deleted;
     }
 
-    public News markAsDraft(String id) {
-        News updatedNews = updatePublication(id, NewsStatus.DRAFT, null);
+    public News markAs(String id, NewsStatus status) {
+        BNews existingNews = repository.findOne(id).orElseThrow(() ->
+            new NoSuchElementException(String.format("News %s doesn't exist", id)));
 
-        eventLogService.create(String.format("The news %s has been put in draft", updatedNews.getId()));
+        existingNews.setStatus(status.name());
+        existingNews.setPublicationDate(status == NewsStatus.PUBLISHED ? Instant.now() : null);
 
-        return updatedNews;
-    }
+        News updatedNews = conversion.from(repository.save(existingNews));
 
-    public News markAsValidated(String id) {
-        News updatedNews = updatePublication(id, NewsStatus.VALIDATED, null);
-
-        eventLogService.create(String.format("The news %s has been validated for publication", updatedNews.getId()));
-
-        return updatedNews;
-    }
-
-    public News markAsPublished(String id) {
-        News updatedNews = updatePublication(id, NewsStatus.PUBLISHED, Instant.now());
-
-        eventLogService.create(String.format("The news %s has been published", updatedNews.getId()));
+        switch (status) {
+            case DRAFT: eventLogService.create(String.format("The news %s has been put in draft", id));
+                break;
+            case VALIDATED: eventLogService.create(String.format("The news %s has been validated for publication", id));
+                break;
+            case PUBLISHED: eventLogService.create(String.format("The news %s has been published", id));
+                break;
+        }
 
         return updatedNews;
     }
