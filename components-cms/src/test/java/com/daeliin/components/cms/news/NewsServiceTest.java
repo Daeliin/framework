@@ -118,7 +118,7 @@ public class NewsServiceTest extends AbstractTransactionalJUnit4SpringContextTes
     @Test
     public void shouldUpdateANewsTitleDescriptionContentAndSource() {
         News newsToUpdate = NewsLibrary.draftNews();
-        News news = new News(newsToUpdate.getId(), Instant.now(), "", "New title", "", "New desc", "New content", "https://google.fr", null, NewsStatus.DRAFT);
+        News news = new News(newsToUpdate.getId(), Instant.now(), "", "New title", "", "New desc", "New content", "https://google.fr", null, NewsStatus.PUBLISHED);
 
         News updatedArtice = newsService.update(news);
 
