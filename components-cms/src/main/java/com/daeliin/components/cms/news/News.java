@@ -45,6 +45,10 @@ public class News extends PersistentResource<String> implements Comparable<News>
             return 0;
         }
 
+        if (getCreationDate().equals(other.getCreationDate())) {
+            return 1;
+        }
+
         return this.getCreationDate().compareTo(other.getCreationDate());
     }
 }
