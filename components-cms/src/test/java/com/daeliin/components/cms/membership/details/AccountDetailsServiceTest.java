@@ -3,7 +3,6 @@ package com.daeliin.components.cms.membership.details;
 import com.daeliin.components.cms.Application;
 import com.daeliin.components.cms.credentials.account.Account;
 import com.daeliin.components.cms.credentials.account.AccountService;
-import com.daeliin.components.cms.exception.InvalidTokenException;
 import com.daeliin.components.cms.library.AccountLibrary;
 import com.daeliin.components.cms.membership.SignUpRequest;
 import com.daeliin.components.cms.sql.QAccount;
@@ -71,8 +70,8 @@ public class AccountDetailsServiceTest extends AbstractTransactionalJUnit4Spring
         assertThat(accountCountAfterSignUp).isEqualTo(accountCountBeforeSignUp + 1);
     }
 
-    @Test(expected = InvalidTokenException.class)
-    public void shouldThrowInvalidTokenException_whenTokenDoesntMatchWhenActivatingIt() throws Exception {
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowIllegalArgumentException_whenTokenDoesntMatchWhenActivatingIt() {
         Account account = AccountLibrary.admin();
 
         accountDetailsService.activate(account, "differentToken");
@@ -84,14 +83,14 @@ public class AccountDetailsServiceTest extends AbstractTransactionalJUnit4Spring
 
         try {
             account = accountDetailsService.activate(account, "differentToken");
-        } catch(InvalidTokenException e) {
+        } catch(IllegalArgumentException e) {
         }
 
         assertThat(account.enabled).isFalse();
     }
 
     @Test
-    public void shouldAssignANewTokenToAccount_whenActivatingIt() throws Exception {
+    public void shouldAssignANewTokenToAccount_whenActivatingIt() {
         Account account = AccountLibrary.admin();
 
         Account activatedAccount = accountDetailsService.activate(account, account.token);
@@ -101,7 +100,7 @@ public class AccountDetailsServiceTest extends AbstractTransactionalJUnit4Spring
     }
 
     @Test
-    public void shouldActivateAnAccount() throws Exception {
+    public void shouldActivateAnAccount() {
         Account account = AccountLibrary.inactive();
 
         Account activatedAccount = accountDetailsService.activate(account, account.token);
@@ -109,8 +108,8 @@ public class AccountDetailsServiceTest extends AbstractTransactionalJUnit4Spring
         assertThat(activatedAccount.enabled).isTrue();
     }
 
-    @Test(expected = InvalidTokenException.class)
-    public void shouldThrowInvalidTokenException_whenTokenDoesntMatchWhenResetingPassword() throws Exception {
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowIllegalArgumentException_whenTokenDoesntMatchWhenResetingPassword() {
         Account account = AccountLibrary.admin();
 
         accountDetailsService.resetPassword(account, "differentToken", "newPassword");
@@ -121,7 +120,7 @@ public class AccountDetailsServiceTest extends AbstractTransactionalJUnit4Spring
         Account account = AccountLibrary.admin();
         try {
             accountDetailsService.resetPassword(account, "differentToken", "newPassword");
-        } catch (InvalidTokenException e) {
+        } catch (IllegalArgumentException e) {
         }
 
         Account accountAfterResetPasswordTry = accountService.findOne(account.getId());
@@ -130,7 +129,7 @@ public class AccountDetailsServiceTest extends AbstractTransactionalJUnit4Spring
     }
 
     @Test
-    public void shouldResetPassword() throws Exception {
+    public void shouldResetPassword() {
         Account account = AccountLibrary.admin();
 
         Account accountAfterResetPassword = accountDetailsService.resetPassword(account, account.token, "newPassword");
@@ -140,7 +139,7 @@ public class AccountDetailsServiceTest extends AbstractTransactionalJUnit4Spring
     }
 
     @Test
-    public void shouldAssignANewTokenToAccount_whenResetingItsPassword() throws Exception {
+    public void shouldAssignANewTokenToAccount_whenResetingItsPassword() {
         Account account = AccountLibrary.admin();
 
         Account accountAfterResetPassword = accountDetailsService.resetPassword(account, account.token, "newPassword");

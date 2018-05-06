@@ -5,11 +5,14 @@ import com.daeliin.components.core.pagination.PageRequest;
 import com.daeliin.components.persistence.resource.Persistable;
 import com.daeliin.components.persistence.resource.service.PagingService;
 import com.daeliin.components.webservices.dto.ResourceDtoConversion;
-import com.daeliin.components.webservices.exception.PageRequestException;
 import com.daeliin.components.webservices.validation.PageRequestValidation;
 import com.querydsl.core.types.Predicate;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -17,7 +20,10 @@ import java.time.Instant;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 /***
  * Exposes CRUD and provides a simple pagination for a resource.
@@ -77,7 +83,7 @@ public abstract class ResourceController<V, T extends Persistable<ID>, ID, S ext
      * @param direction sort direction
      * @param properties resource properties to sort on
      * @return resource page
-     * @throws PageRequestException if pageNumber &lt; 0, pageSize &lt; 0, direction doesnt equal "asc" or "desc  
+     * @throws IllegalArgumentException if pageNumber &lt; 0, pageSize &lt; 0, direction doesnt equal "asc" or "desc
      */
     public Page<V> getAll(Predicate predicate, String page, String size, String direction, String... properties) {
         PageRequestValidation pageRequestValidation = new PageRequestValidation(page, size, direction, properties);

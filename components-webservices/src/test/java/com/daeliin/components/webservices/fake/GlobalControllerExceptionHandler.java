@@ -1,6 +1,5 @@
 package com.daeliin.components.webservices.fake;
 
-import com.daeliin.components.webservices.exception.PageRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,7 +16,7 @@ class GlobalControllerExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(PageRequestException.class)
+    @ExceptionHandler(IllegalArgumentException.class)
     public void handlePageRequestException() {
     }
 }

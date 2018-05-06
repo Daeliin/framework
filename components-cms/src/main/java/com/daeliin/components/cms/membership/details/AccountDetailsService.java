@@ -4,9 +4,10 @@ import com.daeliin.components.cms.credentials.account.Account;
 import com.daeliin.components.cms.credentials.account.AccountService;
 import com.daeliin.components.cms.credentials.permission.Permission;
 import com.daeliin.components.cms.credentials.permission.PermissionService;
-import com.daeliin.components.cms.exception.InvalidTokenException;
 import com.daeliin.components.cms.membership.SignUpRequest;
 import com.daeliin.components.core.resource.Id;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,6 +22,8 @@ import java.util.List;
 
 @Service
 public class AccountDetailsService implements UserDetailsService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AccountDetailsService.class);
 
     @Inject
     private AccountService accountService;
@@ -60,9 +63,10 @@ public class AccountDetailsService implements UserDetailsService {
                 accountEncryption.token));
     }
 
-    public Account activate(Account account, final String activationToken) throws InvalidTokenException {
+    public Account activate(Account account, final String activationToken) {
         if (!account.token.equals(activationToken)) {
-            throw new InvalidTokenException(String.format("Activation token is not valid for %s", account));
+            LOGGER.warn(String.format("an attempt to activate %s with an invalid token[%s] has been made", account, activationToken));
+            throw new IllegalArgumentException(String.format("Activation token is not valid for %s", account));
         }
 
         AccountEncryption accountEncryption = new AccountEncryption(account.username, "");
@@ -79,9 +83,10 @@ public class AccountDetailsService implements UserDetailsService {
         return accountService.update(accountWithNewToken);
     }
 
-    public Account resetPassword(Account account, final String resetPasswordToken, final String newPassword) throws InvalidTokenException {
+    public Account resetPassword(Account account, final String resetPasswordToken, final String newPassword) {
         if (!account.token.equals(resetPasswordToken)) {
-            throw new InvalidTokenException(String.format("Activation token is not valid for %s ", account));
+            LOGGER.warn(String.format("an attempt to reset %s password with an invalid token[%s] has been made", account, resetPasswordToken));
+            throw new IllegalArgumentException(String.format("Activation token is not valid for %s ", account));
         }
 
         AccountEncryption accountEncryption = new AccountEncryption(account.username, newPassword);

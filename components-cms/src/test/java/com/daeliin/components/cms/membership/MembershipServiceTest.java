@@ -3,7 +3,6 @@ package com.daeliin.components.cms.membership;
 import com.daeliin.components.cms.Application;
 import com.daeliin.components.cms.credentials.account.Account;
 import com.daeliin.components.cms.credentials.account.AccountService;
-import com.daeliin.components.cms.exception.InvalidTokenException;
 import com.daeliin.components.cms.library.AccountLibrary;
 import com.daeliin.components.cms.sql.QAccount;
 import org.junit.Test;
@@ -50,29 +49,29 @@ public class MembershipServiceTest extends AbstractTransactionalJUnit4SpringCont
     }
 
     @Test(expected = NoSuchElementException.class)
-    public void shouldThrowException_whenActivatingNonExistentAccountId() throws InvalidTokenException {
+    public void shouldThrowException_whenActivatingNonExistentAccountId() {
         membershipService.activate("AOADAZD-65454", "ok");
     }
 
-    @Test(expected = InvalidTokenException.class)
-    public void shouldThrowException_whenTokenDoesntMatchWhenActivatingAccount() throws Exception {
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowException_whenTokenDoesntMatchWhenActivatingAccount() {
         Account account = AccountLibrary.inactive();
 
         membershipService.activate(account.getId(), "wrongToken");
     }
 
     @Test(expected = NoSuchElementException.class)
-    public void shouldThrowException_whenRequestingANewPasswordForNonExistingAccount() throws Exception {
+    public void shouldThrowException_whenRequestingANewPasswordForNonExistingAccount() {
         membershipService.newPassword("AFEZAFEZ-6544");
     }
 
     @Test(expected = NoSuchElementException.class)
-    public void shouldThrowException_whenResetingPasswordForNonExistingAccount() throws Exception {
+    public void shouldThrowException_whenResetingPasswordForNonExistingAccount() {
         membershipService.resetPassword("AFEZAFEZ-6544", "token", "newPassword");
     }
 
-    @Test(expected = InvalidTokenException.class)
-    public void shouldThrowException_whenTokenDoesntMatchWhenResetingPassword() throws Exception {
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowException_whenTokenDoesntMatchWhenResetingPassword() {
         Account account = AccountLibrary.admin();
         membershipService.resetPassword(account.getId(), "wrongToken", "newPassword");
     }
