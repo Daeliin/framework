@@ -1,4 +1,4 @@
-package com.daeliin.components.security.cryptography;
+package com.daeliin.components.core.security.cryptography;
 
 import com.google.common.base.MoreObjects;
 

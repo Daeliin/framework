@@ -19,10 +19,6 @@
             <groupId>com.daeliin.components</groupId>
             <artifactId>components-persistence</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.daeliin.components</groupId>
-            <artifactId>components-security</artifactId>
-        </dependency>
 
         <!-- Spring -->
         <dependency>

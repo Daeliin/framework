@@ -1,7 +1,7 @@
 package com.daeliin.components.cms.membership.details;
 
-import com.daeliin.components.security.cryptography.Sha512;
-import com.daeliin.components.security.cryptography.Token;
+import com.daeliin.components.core.security.cryptography.Sha512;
+import com.daeliin.components.core.security.cryptography.Token;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Arrays;
