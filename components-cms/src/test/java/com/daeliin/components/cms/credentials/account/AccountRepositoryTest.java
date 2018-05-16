@@ -1,16 +1,18 @@
 package com.daeliin.components.cms.credentials.account;
 
-import com.daeliin.components.cms.Application;
 import com.daeliin.components.persistence.resource.repository.ResourceRepository;
 import org.junit.Test;
-import org.springframework.test.context.ContextConfiguration;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ContextConfiguration(classes = Application.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class AccountRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Inject

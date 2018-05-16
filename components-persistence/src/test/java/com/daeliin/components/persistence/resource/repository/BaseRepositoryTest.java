@@ -4,7 +4,6 @@ package com.daeliin.components.persistence.resource.repository;
 import com.daeliin.components.core.pagination.Page;
 import com.daeliin.components.core.pagination.PageRequest;
 import com.daeliin.components.core.pagination.Sort;
-import com.daeliin.components.persistence.Application;
 import com.daeliin.components.persistence.fake.UuidPersistentResourceBaseRepository;
 import com.daeliin.components.persistence.fixtures.UuidPersistentResourceFixtures;
 import com.daeliin.components.persistence.sql.BUuidPersistentResource;
@@ -12,8 +11,10 @@ import com.daeliin.components.persistence.sql.QUuidPersistentResource;
 import com.google.common.collect.Sets;
 import com.querydsl.core.types.Predicate;
 import org.junit.Test;
-import org.springframework.test.context.ContextConfiguration;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
 import java.util.Arrays;
@@ -21,7 +22,8 @@ import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ContextConfiguration(classes = Application.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class BaseRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Inject

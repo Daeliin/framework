@@ -6,7 +6,6 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
@@ -17,8 +16,8 @@ import java.time.ZoneOffset;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
-public class JsonTest extends AbstractTransactionalJUnit4SpringContextTests {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+public class JsonTest {
 
     @Inject
     private ObjectMapper jsonMapper;

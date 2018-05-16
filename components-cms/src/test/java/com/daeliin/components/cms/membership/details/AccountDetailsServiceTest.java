@@ -1,22 +1,24 @@
 package com.daeliin.components.cms.membership.details;
 
-import com.daeliin.components.cms.Application;
 import com.daeliin.components.cms.credentials.account.Account;
 import com.daeliin.components.cms.credentials.account.AccountService;
 import com.daeliin.components.cms.library.AccountLibrary;
 import com.daeliin.components.cms.membership.SignUpRequest;
 import com.daeliin.components.cms.sql.QAccount;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ContextConfiguration(classes = Application.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class AccountDetailsServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Inject

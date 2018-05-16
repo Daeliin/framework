@@ -3,7 +3,6 @@ package com.daeliin.components.persistence.resource.service;
 import com.daeliin.components.core.pagination.Page;
 import com.daeliin.components.core.pagination.PageRequest;
 import com.daeliin.components.core.pagination.Sort;
-import com.daeliin.components.persistence.Application;
 import com.daeliin.components.persistence.fake.UuidPersistentResource;
 import com.daeliin.components.persistence.fake.UuidPersistentResourceConversion;
 import com.daeliin.components.persistence.fake.UuidPersistentResourceRepository;
@@ -15,21 +14,31 @@ import com.google.common.collect.Sets;
 import com.querydsl.core.types.Predicate;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.Instant;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 
-@ContextConfiguration(classes = Application.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Mock

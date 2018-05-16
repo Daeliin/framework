@@ -1,20 +1,22 @@
 package com.daeliin.components.cms.membership;
 
-import com.daeliin.components.cms.Application;
 import com.daeliin.components.cms.credentials.account.Account;
 import com.daeliin.components.cms.credentials.account.AccountService;
 import com.daeliin.components.cms.library.AccountLibrary;
 import com.daeliin.components.cms.sql.QAccount;
 import org.junit.Test;
-import org.springframework.test.context.ContextConfiguration;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
 import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ContextConfiguration(classes = Application.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class MembershipServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Inject
