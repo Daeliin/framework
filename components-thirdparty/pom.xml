@@ -20,6 +20,12 @@
             <artifactId>components-core</artifactId>
         </dependency>
 
+        <!-- Spring -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
         <!-- Json Path -->
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
@@ -28,14 +34,9 @@
 
         <!-- Tests -->
         <dependency>
-            <groupId>com.daeliin.components</groupId>
-            <artifactId>components-test</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>4.3.13.RELEASE</version>
         </dependency>
     </dependencies>
 </project>

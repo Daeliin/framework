@@ -40,8 +40,14 @@
         <module>components-webservices</module>
         <module>components-cms</module>
         <module>components-thirdparty</module>
-        <module>components-test</module>
     </modules>
+
+    <distributionManagement>
+        <repository>
+            <id>daeliin-repository</id>
+            <url>scp://daeliin.com/repository/</url>
+        </repository>
+    </distributionManagement>
 
     <dependencyManagement>
         <dependencies>
@@ -63,11 +69,6 @@
             <dependency>
                 <groupId>com.daeliin.components</groupId>
                 <artifactId>components-cms</artifactId>
-                <version>${daeliin.components.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.daeliin.components</groupId>
-                <artifactId>components-test</artifactId>
                 <version>${daeliin.components.version}</version>
             </dependency>
             <dependency>
@@ -189,11 +190,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <repository>
-            <id>daeliin-repository</id>
-            <url>scp://daeliin.com/repository/</url>
-        </repository>
-    </distributionManagement>
 </project>

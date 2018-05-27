@@ -64,8 +64,8 @@
 
         <!-- Test -->
         <dependency>
-            <groupId>com.daeliin.components</groupId>
-            <artifactId>components-test</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
