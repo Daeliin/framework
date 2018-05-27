@@ -1,8 +1,9 @@
-package com.daeliin.components.webservices.configuration;
+package com.daeliin.components.core.configuration;
 
-import com.daeliin.components.webservices.fake.UuidPersistentResourceDto;
+import com.daeliin.components.core.fake.ImmutableResource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,13 +24,13 @@ public class JsonTest {
     private ObjectMapper jsonMapper;
 
     @Test
-    public void shouldInjectAnObjectMapper() throws Exception {
+    public void shouldInjectAnObjectMapper() {
         assertThat(jsonMapper).isNotNull();
     }
 
     @Test
     public void shouldSerializeImmutableTypes() throws Exception {
-        UuidPersistentResourceDto uuidPersistentResource = new UuidPersistentResourceDto("id",
+        ImmutableResource uuidPersistentResource = new ImmutableResource("id",
             LocalDateTime.of(2017, 1, 1, 12, 32, 12).toInstant(ZoneOffset.UTC), "label");
 
         String serializeduuidPersistentResource = jsonMapper.writeValueAsString(uuidPersistentResource);
@@ -39,17 +40,17 @@ public class JsonTest {
 
     @Test
     public void shouldDeserializeImmutableTypes() throws Exception {
-        UuidPersistentResourceDto uuidPersistentResource = new UuidPersistentResourceDto("id",
+        ImmutableResource uuidPersistentResource = new ImmutableResource("id",
             LocalDateTime.of(2017, 1, 1, 12, 32, 12).toInstant(ZoneOffset.UTC), "label");
 
-        UuidPersistentResourceDto deserializedUuidPersistentResource =
-                jsonMapper.readValue("{\"id\":\"id\",\"creationDate\":\"2017-01-01T12:32:12Z\",\"label\":\"label\"}", UuidPersistentResourceDto.class);
+        ImmutableResource deserializedUuidPersistentResource =
+                jsonMapper.readValue("{\"id\":\"id\",\"creationDate\":\"2017-01-01T12:32:12Z\",\"label\":\"label\"}", ImmutableResource.class);
 
-        assertThat(deserializedUuidPersistentResource).isEqualToComparingFieldByField(uuidPersistentResource);
+        Assertions.assertThat(deserializedUuidPersistentResource).isEqualToComparingFieldByField(uuidPersistentResource);
     }
 
     @Test
-    public void shouldSerializeJSR310AsIso() throws Exception{
+    public void shouldSerializeJSR310AsIso() throws Exception {
         Instant instant = LocalDateTime.of(2017, 1, 1, 12, 32, 12).toInstant(ZoneOffset.UTC);
 
         String serializedInstant = jsonMapper.writeValueAsString(instant);
