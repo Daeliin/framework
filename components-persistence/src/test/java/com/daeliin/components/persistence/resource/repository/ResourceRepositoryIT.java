@@ -38,25 +38,25 @@ public class ResourceRepositoryIT {
 
     @Test
     public void shouldProvideTheIdPath() {
-        assertThat(repository.idPath()).isEqualTo(QUuidPersistentResource.uuidPersistentResource.uuid);
-
         dbFixture.noRollback();
+
+        assertThat(repository.idPath()).isEqualTo(QUuidPersistentResource.uuidPersistentResource.uuid);
     }
 
     @Test
     public void shouldProvideTheIdMapping() {
-        assertThat(repository.idMapping()).isNotNull();
-
         dbFixture.noRollback();
+
+        assertThat(repository.idMapping()).isNotNull();
     }
 
     @Test(expected = Exception.class)
     public void shouldThrowException_whenPersistingNull() {
+        dbFixture.noRollback();
+
         BUuidPersistentResource nullUuidEntity = null;
 
         repository.save(nullUuidEntity);
-
-        dbFixture.noRollback();
     }
 
     @Test
@@ -109,101 +109,101 @@ public class ResourceRepositoryIT {
 
     @Test
     public void shouldCheckIfResourceExists() {
-        assertThat(repository.exists(UuidPersistentResourceRows.uuidPersistentResource1().getUuid())).isTrue();
-
         dbFixture.noRollback();
+
+        assertThat(repository.exists(UuidPersistentResourceRows.uuidPersistentResource1().getUuid())).isTrue();
     }
 
     @Test
     public void shouldCheckIfResourceDoesntExist_whenIdDoesntExist() {
-        assertThat(repository.exists("894984-984")).isFalse();
-
         dbFixture.noRollback();
+
+        assertThat(repository.exists("894984-984")).isFalse();
     }
 
     @Test
     public void shouldCheckIfResourceDoesntExist_whenIdIsNull() {
-        assertThat(repository.exists(null)).isFalse();
-
         dbFixture.noRollback();
+
+        assertThat(repository.exists(null)).isFalse();
     }
 
     @Test
     public void shouldFindResource() {
+        dbFixture.noRollback();
+
         BUuidPersistentResource uuidPersistentResource1 = UuidPersistentResourceRows.uuidPersistentResource1();
 
         BUuidPersistentResource foundUuidEntity = repository.findOne(uuidPersistentResource1.getUuid()).get();
 
         assertThat(foundUuidEntity).isEqualToComparingFieldByField(UuidPersistentResourceRows.uuidPersistentResource1());
-
-        dbFixture.noRollback();
     }
 
     @Test
     public void shouldReturnEmpty_whenFindingNonExistingResource() {
-        assertThat(repository.findOne("6846984-864684").isPresent()).isFalse();
-
         dbFixture.noRollback();
+
+        assertThat(repository.findOne("6846984-864684").isPresent()).isFalse();
     }
 
     @Test
     public void shouldReturnEmpty_whenFindingNull() {
+        dbFixture.noRollback();
+
         String nullId = null;
 
         assertThat(repository.findOne(nullId).isPresent()).isFalse();
-
-        dbFixture.noRollback();
     }
 
     @Test
     public void shouldFindResources() {
+        dbFixture.noRollback();
+
         List<String> uuidPersistentResourceIds = Arrays.asList(UuidPersistentResourceRows.uuidPersistentResource1().getUuid(), UuidPersistentResourceRows.uuidPersistentResource2().getUuid());
         Collection<BUuidPersistentResource> uuidEntities = repository.findAll(uuidPersistentResourceIds);
 
         assertThat(uuidEntities)
                 .usingFieldByFieldElementComparator()
                 .containsOnly(UuidPersistentResourceRows.uuidPersistentResource1(), UuidPersistentResourceRows.uuidPersistentResource2());
-
-        dbFixture.noRollback();
     }
 
     @Test
     public void shouldReturnNoResources_whenFindingNonExistingResources() {
+        dbFixture.noRollback();
+
         Collection<BUuidPersistentResource> uuidEntities = repository.findAll(Arrays.asList("68464-684", "684684-444"));
 
         assertThat(uuidEntities).isEmpty();
-
-        dbFixture.noRollback();
     }
 
     @Test
     public void shouldReturnNoResources_whenFindingZeroResources() {
+        dbFixture.noRollback();
+
         Collection<BUuidPersistentResource> uuidEntities = repository.findAll(Arrays.asList());
 
         assertThat(uuidEntities).isEmpty();
-
-        dbFixture.noRollback();
     }
 
     @Test
     public void shouldReturnNoResources_whenFindingNulls() {
+        dbFixture.noRollback();
+
         Collection<BUuidPersistentResource> uuidEntities = repository.findAll(Arrays.asList(null, null));
 
         assertThat(uuidEntities).isEmpty();
-
-        dbFixture.noRollback();
     }
 
     @Test
     public void shouldReturnOnlyExistingResources_whenFindingEexistingAndNonExistingResources() {
+        dbFixture.noRollback();
+
         List<String> uuidPersistentResourceIds = Arrays.asList(UuidPersistentResourceRows.uuidPersistentResource1().getUuid(), UuidPersistentResourceRows.uuidPersistentResource2().getUuid(), "646444-218");
         Collection<BUuidPersistentResource> uuidEntities = repository.findAll(uuidPersistentResourceIds);
 
         assertThat(uuidEntities)
                 .usingFieldByFieldElementComparator()
                 .containsOnly(UuidPersistentResourceRows.uuidPersistentResource1(), UuidPersistentResourceRows.uuidPersistentResource2());
-
-        dbFixture.noRollback();
     }
 
     @Test

@@ -41,32 +41,32 @@ public class PermissionRepositoryTest {
 
     @Test
     public void shouldExtendResourceRepository() {
-        assertThat(PermissionRepository.class.getSuperclass().getClass()).isEqualTo(ResourceRepository.class.getClass());
-
         dbFixture.noRollback();
+
+        assertThat(PermissionRepository.class.getSuperclass().getClass()).isEqualTo(ResourceRepository.class.getClass());
     }
 
     @Test
     public void shouldReturnEmptyCollection_whenFindingAccountPermissionOfNull() {
-        assertThat(permissionRepository.findForAccount(null)).isEmpty();
-
         dbFixture.noRollback();
+
+        assertThat(permissionRepository.findForAccount(null)).isEmpty();
     }
 
     @Test
     public void shouldReturnEmptyCollection_whenAccountHasNoPermission() {
-        assertThat(permissionRepository.findForAccount(AccountRows.inactive().getId())).isEmpty();
-
         dbFixture.noRollback();
+
+        assertThat(permissionRepository.findForAccount(AccountRows.inactive().getId())).isEmpty();
     }
 
     @Test
     public void shouldFindPermissionsOfAccount() {
+        dbFixture.noRollback();
+
         assertThat(permissionRepository.findForAccount(AccountRows.admin().getId()))
                 .usingFieldByFieldElementComparator()
                 .containsOnly(PermissionRows.admin());
-
-        dbFixture.noRollback();
     }
 
     @Test
@@ -79,12 +79,12 @@ public class PermissionRepositoryTest {
 
     @Test
     public void shouldNotAddPermissionToAccountTwice() {
+        dbFixture.noRollback();
+
         permissionRepository.addToAccount(AccountRows.admin().getId(), PermissionRows.admin().getId());
 
         Collection<BPermission> accountPermissions = permissionRepository.findForAccount(AccountRows.admin().getId());
         assertThat(accountPermissions).usingFieldByFieldElementComparator().containsOnly(PermissionRows.admin());
-
-        dbFixture.noRollback();
     }
 
     @Test
@@ -105,19 +105,19 @@ public class PermissionRepositoryTest {
 
     @Test
     public void shouldCheckThatPermissionIsUsed() {
+        dbFixture.noRollback();
+
         boolean isUsed = permissionRepository.isUsed(PermissionRows.admin().getId());
 
         assertThat(isUsed).isTrue();
-
-        dbFixture.noRollback();
     }
 
     @Test
     public void shouldCheckThatPermissionIsNotUsed() {
+        dbFixture.noRollback();
+
         boolean isUsed = permissionRepository.isUsed("nonExistingPermissionId");
 
         assertThat(isUsed).isFalse();
-
-        dbFixture.noRollback();
     }
 }

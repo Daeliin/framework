@@ -30,9 +30,9 @@ public class EventLogServiceIT {
 
     @Test
     public void shouldExtendResourceService() {
-        assertThat(EventLogService.class.getSuperclass().getClass()).isEqualTo(ResourceService.class.getClass());
-
         dbFixture.noRollback();
+
+        assertThat(EventLogService.class.getSuperclass().getClass()).isEqualTo(ResourceService.class.getClass());
     }
 
     @Test

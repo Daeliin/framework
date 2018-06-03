@@ -38,53 +38,53 @@ public class AccountServiceIT {
 
     @Test
     public void shouldExtendResourceService() {
-        assertThat(AccountService.class.getSuperclass().getClass()).isEqualTo(ResourceService.class.getClass());
-
         dbFixture.noRollback();
+
+        assertThat(AccountService.class.getSuperclass().getClass()).isEqualTo(ResourceService.class.getClass());
     }
 
     @Test
     public void shouldFindAnAccount_byUsername() {
+        dbFixture.noRollback();
+
         Account account = AccountLibrary.admin();
         assertThat(accountService.findByUsername(account.username)).isEqualTo(account);
-
-        dbFixture.noRollback();
     }
 
     @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenFindingAnAccountByUsername_ifUsernameDoesntExist() {
-        accountService.findByUsername("nonExistingUsername");
-
         dbFixture.noRollback();
+
+        accountService.findByUsername("nonExistingUsername");
     }
 
     @Test
     public void shouldFindAnEnabledAccount_byUsername() {
+        dbFixture.noRollback();
+
         Account account = AccountLibrary.admin();
         assertThat(accountService.findByUsernameAndEnabled(account.username)).isEqualTo(account);
-
-        dbFixture.noRollback();
     }
 
     @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenFindingEnabledAccountByUsername_ifAccountIsDisabled() {
-        accountService.findByUsernameAndEnabled(AccountLibrary.inactive().username);
-
         dbFixture.noRollback();
+
+        accountService.findByUsernameAndEnabled(AccountLibrary.inactive().username);
     }
 
     @Test
     public void shouldCheckThatUsernameDoesntExists() {
-        assertThat(accountService.usernameExists("nonExistingUsername")).isFalse();
-
         dbFixture.noRollback();
+
+        assertThat(accountService.usernameExists("nonExistingUsername")).isFalse();
     }
 
     @Test
     public void shouldCheckThatUsernameAlreadyExists() {
-        assertThat(accountService.usernameExists(AccountLibrary.admin().username)).isTrue();
-
         dbFixture.noRollback();
+
+        assertThat(accountService.usernameExists(AccountLibrary.admin().username)).isTrue();
     }
 
     @Test

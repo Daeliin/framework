@@ -47,19 +47,19 @@ public class NewsServiceIT {
 
     @Test
     public void shouldExtendResourceService() {
-        assertThat(NewsService.class.getSuperclass().getClass()).isEqualTo(ResourceService.class.getClass());
-
         dbFixture.noRollback();
+
+        assertThat(NewsService.class.getSuperclass().getClass()).isEqualTo(ResourceService.class.getClass());
     }
 
     @Test
     public void shouldFindNews() {
+        dbFixture.noRollback();
+
         News news = NewsLibrary.publishedNews();
         News foundNews = newsService.findOne(news.getId());
 
         assertThat(foundNews).isEqualTo(foundNews);
-
-        dbFixture.noRollback();
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -71,16 +71,16 @@ public class NewsServiceIT {
 
     @Test
     public void shouldCheckThatNewsDoesntExist() {
-        assertThat(newsService.exists("ZFZEF-ZEF")).isFalse();
-
         dbFixture.noRollback();
+
+        assertThat(newsService.exists("ZFZEF-ZEF")).isFalse();
     }
 
     @Test
     public void shouldCheckThatNewsExists() {
-        assertThat(newsService.exists(NewsLibrary.publishedNews().getId())).isTrue();
-
         dbFixture.noRollback();
+
+        assertThat(newsService.exists(NewsLibrary.publishedNews().getId())).isTrue();
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -216,13 +216,13 @@ public class NewsServiceIT {
 
     @Test
     public void shouldFindAuthorByNews() {
+        dbFixture.noRollback();
+
         List<String> news = Arrays.asList(NewsLibrary.publishedNews().getId(), NewsLibrary.validatedNews().getId());
 
         Map<News, Account> authorByNews = newsService.authorByNews(news);
 
         assertThat(authorByNews.get(NewsLibrary.publishedNews())).isEqualTo(AccountLibrary.admin());
         assertThat(authorByNews.get(NewsLibrary.validatedNews())).isEqualTo(AccountLibrary.john());
-
-        dbFixture.noRollback();
     }
 }

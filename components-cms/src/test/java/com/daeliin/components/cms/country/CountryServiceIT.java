@@ -33,44 +33,44 @@ public class CountryServiceIT {
 
     @Test
     public void shouldExtendResourceService() {
-        assertThat(CountryService.class.getSuperclass().getClass()).isEqualTo(ResourceService.class.getClass());
-
         dbFixture.noRollback();
+
+        assertThat(CountryService.class.getSuperclass().getClass()).isEqualTo(ResourceService.class.getClass());
     }
 
     @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenFindingNonExistingCountryCode() {
-        countryService.findByCode("nope");
-
         dbFixture.noRollback();
+
+        countryService.findByCode("nope");
     }
 
     @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenFindingNullCountryCode() {
+        dbFixture.noRollback();
+
         String nullCountryCode = null;
 
         countryService.findByCode(nullCountryCode);
-
-        dbFixture.noRollback();
     }
 
     @Test
     public void shouldFindAllCountries() {
+
+        dbFixture.noRollback();
         Collection<Country> allCountries = countryService.findAll();
 
         assertThat(allCountries).containsOnly(CountryLibrary.france(), CountryLibrary.belgium());
-
-        dbFixture.noRollback();
     }
 
     @Test
     public void shouldFindACountryByCode() {
+
+        dbFixture.noRollback();
         Country france = CountryLibrary.france();
 
         Country foundCountry = countryService.findByCode(france.code);
 
         assertThat(foundCountry).isEqualTo(france);
-
-        dbFixture.noRollback();
     }
 }

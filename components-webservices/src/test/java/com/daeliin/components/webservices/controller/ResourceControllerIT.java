@@ -99,6 +99,8 @@ public class ResourceControllerIT {
 
     @Test
     public void shouldReturnHttpBadRequest_whenCreatingInvalidResource() throws Exception {
+        dbFixture.noRollback();
+
         UuidPersistentResourceDto invalidUuidPersistentResourceDto = new UuidPersistentResourceDto("id", Instant.now(), " ");
 
         mockMvc
@@ -106,12 +108,12 @@ public class ResourceControllerIT {
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(invalidUuidPersistentResourceDto)))
             .andExpect(status().isBadRequest());
-
-        dbFixture.noRollback();
     }
 
     @Test
     public void shouldNotPersistResource_whenCreatingInvalidResource() throws Exception {
+        dbFixture.noRollback();
+
         int uuidPersistentResourceCountBeforeCreate = countRows();
 
         UuidPersistentResourceDto invalidUuidPersistentResourceDto = new UuidPersistentResourceDto("id", Instant.now(), " ");
@@ -125,12 +127,12 @@ public class ResourceControllerIT {
 
         assertThat(service.exists(invalidUuidPersistentResourceDto.id)).isFalse();
         assertThat(uuidPersistentResourceCountAfterCreate).isEqualTo(uuidPersistentResourceCountBeforeCreate);
-
-        dbFixture.noRollback();
     }
 
     @Test
     public void shouldReturnHttpOkAndResource_whenResourceExists() throws Exception {
+        dbFixture.noRollback();
+
         UuidPersistentResourceDto existingUuidPersistentResourceDto = UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1();
 
         MvcResult result =
@@ -142,22 +144,22 @@ public class ResourceControllerIT {
 
         UuidPersistentResourceDto retrievedUuidPersistentResourceDto = jsonMapper.readValue(result.getResponse().getContentAsString(), UuidPersistentResourceDto.class);
         assertThat(retrievedUuidPersistentResourceDto).isEqualToComparingFieldByField(existingUuidPersistentResourceDto);
-
-        dbFixture.noRollback();
     }
 
     @Test
     public void shouldReturnHttpNotFound_whenResourceDoesntExist() throws Exception {
+        dbFixture.noRollback();
+
         mockMvc
             .perform(get("/uuid/nonExistingId")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());
-
-        dbFixture.noRollback();
     }
 
     @Test
     public void shouldReturnHttpOkAndPage0WithSize20SortedByIdAsc_byDefault() throws Exception {
+        dbFixture.noRollback();
+
         mockMvc
             .perform(get("/uuid")
             .contentType(MediaType.APPLICATION_JSON))
@@ -166,12 +168,12 @@ public class ResourceControllerIT {
             .andExpect(jsonPath("$.totalPages").value(1))
             .andExpect(jsonPath("$.totalItems").value(4))
             .andExpect(jsonPath("$.nbItems").value(4));
-
-        dbFixture.noRollback();
     }
 
     @Test
     public void shouldReturnHttpOkAndPage1WithSize2SortedByLabelDesc() throws Exception {
+        dbFixture.noRollback();
+
         mockMvc
             .perform(get("/uuid?page=1&size=2&direction=DESC&properties=label")
             .contentType(MediaType.APPLICATION_JSON))
@@ -182,12 +184,12 @@ public class ResourceControllerIT {
             .andExpect(jsonPath("$.nbItems").value(2))
             .andExpect(jsonPath("$.items[0].label").value(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto2().label))
             .andExpect(jsonPath("$.items[1].label").value(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().label));
-
-        dbFixture.noRollback();
     }
 
     @Test
     public void shouldReturnPageSortedByLabelDescThenByIdDesc() throws Exception {
+        dbFixture.noRollback();
+
         mockMvc
             .perform(get("/uuid?direction=DESC&properties=label,id")
             .contentType(MediaType.APPLICATION_JSON))
@@ -196,12 +198,12 @@ public class ResourceControllerIT {
                 .andExpect(jsonPath("$.items[1].label").value(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto3().label))
                 .andExpect(jsonPath("$.items[2].label").value(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto2().label))
                 .andExpect(jsonPath("$.items[3].label").value(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().label));
-
-        dbFixture.noRollback();
     }
 
     @Test
     public void shouldReturnHttpBadRequest_whenPageIsNotValid() throws Exception {
+        dbFixture.noRollback();
+
         mockMvc
             .perform(get("/uuid?page=-1")
             .contentType(MediaType.APPLICATION_JSON))
@@ -211,12 +213,12 @@ public class ResourceControllerIT {
             .perform(get("/uuid?page=invalidPageNumber")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest());
-
-        dbFixture.noRollback();
     }
 
     @Test
     public void shouldReturnHttpBadRequest_whenPageSizeIsNotValid() throws Exception {
+        dbFixture.noRollback();
+
         mockMvc
             .perform(get("/uuid?size=-1")
             .contentType(MediaType.APPLICATION_JSON))
@@ -226,18 +228,16 @@ public class ResourceControllerIT {
             .perform(get("/uuid?size=invalidPageSize")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest());
-
-        dbFixture.noRollback();
     }
 
     @Test
     public void shouldReturnHttpBadRequest_whenPageDirectionIsNotValid() throws Exception {
+        dbFixture.noRollback();
+
         mockMvc
             .perform(get("/uuid?direction=invalidDirection")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest());
-
-        dbFixture.noRollback();
     }
 
     @Test
@@ -278,6 +278,8 @@ public class ResourceControllerIT {
 
     @Test
     public void shouldReturnHttpBadRequest_whenUpdatingInvalidResource() throws Exception {
+        dbFixture.noRollback();
+
         UuidPersistentResourceDto invalidUuidPersistentResourceDto = new UuidPersistentResourceDto(
                 UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
                 Instant.now(),
@@ -288,12 +290,12 @@ public class ResourceControllerIT {
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(invalidUuidPersistentResourceDto)))
             .andExpect(status().isBadRequest());
-
-        dbFixture.noRollback();
     }
 
     @Test
     public void shouldNotUpdateResource_whenUpdatingInvalidResource() throws Exception {
+        dbFixture.noRollback();
+
         UuidPersistentResourceDto invalidUuidPersistentResourceDto = new UuidPersistentResourceDto(
                 UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
                 Instant.now(),
@@ -307,12 +309,12 @@ public class ResourceControllerIT {
         UuidPersistentResourceDto retrievedUuidPersistenceResourceDto = conversion.instantiate(service.findOne(invalidUuidPersistentResourceDto.id));
 
         assertThat(retrievedUuidPersistenceResourceDto).isEqualToComparingFieldByFieldRecursively(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1());
-
-        dbFixture.noRollback();
     }
 
     @Test
     public void shouldReturnHttpNotFound_whenUpdatingNonExistingResource() throws Exception {
+        dbFixture.noRollback();
+
         UuidPersistentResourceDto updatedUuidPersistentResourceDto = new UuidPersistentResourceDto(
                 UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
                 Instant.now(),
@@ -323,8 +325,6 @@ public class ResourceControllerIT {
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(updatedUuidPersistentResourceDto)))
             .andExpect(status().isNotFound());
-
-        dbFixture.noRollback();
     }
 
     @Test
@@ -344,11 +344,11 @@ public class ResourceControllerIT {
 
     @Test
     public void shouldReturnHttpNotFound_whenDeletingNonExistingResource() throws Exception {
+        dbFixture.noRollback();
+
         mockMvc
             .perform(delete("/uuid/nonExistingId"))
             .andExpect(status().isNotFound());
-
-        dbFixture.noRollback();
     }
 
     @Test
@@ -391,13 +391,13 @@ public class ResourceControllerIT {
 
     @Test
     public void shouldReturnHttpBadRequest_whenDeletingNull() throws Exception {
+        dbFixture.noRollback();
+
         mockMvc
             .perform(post("/uuid/deleteSeveral")
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(null)))
             .andExpect(status().isBadRequest());
-
-        dbFixture.noRollback();
     }
 
     private int countRows() throws Exception {
