@@ -1,6 +1,6 @@
 package com.daeliin.components.cms.credentials.account;
 
-import com.daeliin.components.cms.fixtures.AccountFixtures;
+import com.daeliin.components.cms.fixtures.AccountRows;
 import com.daeliin.components.cms.library.AccountLibrary;
 import com.daeliin.components.cms.sql.BAccount;
 import org.junit.Test;
@@ -22,7 +22,7 @@ public final class AccountConversionTest {
     public void shouldMapAccount() {
         BAccount mappedAccount = accountConversion.to(AccountLibrary.admin());
 
-        assertThat(mappedAccount).isEqualToComparingFieldByField(AccountFixtures.admin());
+        assertThat(mappedAccount).isEqualToComparingFieldByField(AccountRows.admin());
     }
 
     @Test(expected = Exception.class)
@@ -34,7 +34,7 @@ public final class AccountConversionTest {
 
     @Test
     public void shouldInstantiateAnAccount() {
-        Account rebuiltAccount = accountConversion.from(AccountFixtures.admin());
+        Account rebuiltAccount = accountConversion.from(AccountRows.admin());
 
         assertThat(rebuiltAccount).isEqualTo(AccountLibrary.admin());
     }

@@ -5,7 +5,7 @@ import com.daeliin.components.cms.sql.BEventLog;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-public final class EventLogFixtures {
+public final class EventLogRows {
 
     public static BEventLog login() {
         return new BEventLog(

@@ -1,6 +1,6 @@
 package com.daeliin.components.cms.credentials.permission;
 
-import com.daeliin.components.cms.fixtures.PermissionFixtures;
+import com.daeliin.components.cms.fixtures.PermissionRows;
 import com.daeliin.components.cms.library.PermissionLibrary;
 import com.daeliin.components.cms.sql.BPermission;
 import org.junit.Test;
@@ -22,7 +22,7 @@ public final class PermissionConversionTest {
     public void shouldMapPermission() {
         BPermission mappedPermission = permissionConversion.to(PermissionLibrary.admin());
 
-        assertThat(mappedPermission).isEqualToComparingFieldByField(PermissionFixtures.admin());
+        assertThat(mappedPermission).isEqualToComparingFieldByField(PermissionRows.admin());
     }
 
     @Test(expected = Exception.class)
@@ -34,7 +34,7 @@ public final class PermissionConversionTest {
 
     @Test
     public void shouldInstantiateAnPermission() {
-        Permission rebuiltPermission = permissionConversion.from(PermissionFixtures.admin());
+        Permission rebuiltPermission = permissionConversion.from(PermissionRows.admin());
 
         assertThat(rebuiltPermission).isEqualTo(PermissionLibrary.admin());
     }

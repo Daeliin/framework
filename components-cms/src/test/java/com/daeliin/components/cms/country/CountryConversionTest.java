@@ -1,6 +1,6 @@
 package com.daeliin.components.cms.country;
 
-import com.daeliin.components.cms.fixtures.CountryFixtures;
+import com.daeliin.components.cms.fixtures.CountryRows;
 import com.daeliin.components.cms.library.CountryLibrary;
 import com.daeliin.components.cms.sql.BCountry;
 import org.junit.Test;
@@ -22,7 +22,7 @@ public final class CountryConversionTest {
     public void shouldMapCountry() {
         BCountry mappedCountry = countryConversion.to(CountryLibrary.france());
 
-        assertThat(mappedCountry).isEqualToComparingFieldByField(CountryFixtures.france());
+        assertThat(mappedCountry).isEqualToComparingFieldByField(CountryRows.france());
     }
 
     @Test(expected = Exception.class)
@@ -34,7 +34,7 @@ public final class CountryConversionTest {
 
     @Test
     public void shouldInstantiateAnCountry() {
-        Country rebuiltCountry = countryConversion.from(CountryFixtures.france());
+        Country rebuiltCountry = countryConversion.from(CountryRows.france());
 
         assertThat(rebuiltCountry).isEqualTo(CountryLibrary.france());
     }

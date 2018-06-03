@@ -2,24 +2,29 @@ package com.daeliin.components.cms.membership.details;
 
 import com.daeliin.components.cms.credentials.account.Account;
 import com.daeliin.components.cms.credentials.account.AccountService;
+import com.daeliin.components.cms.fixtures.JavaFixtures;
 import com.daeliin.components.cms.library.AccountLibrary;
 import com.daeliin.components.cms.membership.SignUpRequest;
 import com.daeliin.components.cms.sql.QAccount;
+import com.daeliin.components.test.rule.DbFixture;
+import com.daeliin.components.test.rule.DbMemory;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
 
+import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class AccountDetailsServiceIT extends AbstractTransactionalJUnit4SpringContextTests {
+public class AccountDetailsServiceIT {
 
     @Inject
     private AccountService accountService;
@@ -27,13 +32,29 @@ public class AccountDetailsServiceIT extends AbstractTransactionalJUnit4SpringCo
     @Inject
     private AccountDetailsService accountDetailsService;
 
+    @ClassRule
+    public static DbMemory dbMemory = new DbMemory();
+
+    @Rule
+    public DbFixture dbFixture = new DbFixture(dbMemory,
+        sequenceOf(
+            JavaFixtures.account(),
+            JavaFixtures.permission(),
+            JavaFixtures.account_permission()
+        )
+    );
+
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentException_whenSignUpRequestIsNull() {
+        dbFixture.noRollback();
+
         accountDetailsService.signUp(null);
     }
 
     @Test
     public void shoudLoadUserByUsername() {
+        dbFixture.noRollback();
+
         Account account = AccountLibrary.admin();
 
         UserDetails userDetails = accountDetailsService.loadUserByUsername(account.username);
@@ -60,20 +81,22 @@ public class AccountDetailsServiceIT extends AbstractTransactionalJUnit4SpringCo
     }
 
     @Test
-    public void shouldCreateAnAccount_whenSigningUpAnAccount() {
+    public void shouldCreateAnAccount_whenSigningUpAnAccount() throws Exception {
         SignUpRequest signUpRequest = new SignUpRequest("jane", "jane@daeliin.com", "clearPassword");
 
-        int accountCountBeforeSignUp = countAccountRows();
+        int accountCountBeforeSignUp = countRows();
 
         accountDetailsService.signUp(signUpRequest);
 
-        int accountCountAfterSignUp = countAccountRows();
+        int accountCountAfterSignUp = countRows();
 
         assertThat(accountCountAfterSignUp).isEqualTo(accountCountBeforeSignUp + 1);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentException_whenTokenDoesntMatchWhenActivatingIt() {
+        dbFixture.noRollback();
+
         Account account = AccountLibrary.admin();
 
         accountDetailsService.activate(account, "differentToken");
@@ -81,6 +104,8 @@ public class AccountDetailsServiceIT extends AbstractTransactionalJUnit4SpringCo
 
     @Test
     public void shouldNotActivateAccount_whenTokenDoesntMatch() {
+        dbFixture.noRollback();
+
         Account account = AccountLibrary.inactive();
 
         try {
@@ -112,6 +137,8 @@ public class AccountDetailsServiceIT extends AbstractTransactionalJUnit4SpringCo
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowIllegalArgumentException_whenTokenDoesntMatchWhenResetingPassword() {
+        dbFixture.noRollback();
+
         Account account = AccountLibrary.admin();
 
         accountDetailsService.resetPassword(account, "differentToken", "newPassword");
@@ -119,7 +146,10 @@ public class AccountDetailsServiceIT extends AbstractTransactionalJUnit4SpringCo
 
     @Test
     public void shouldNotResetPassword_whenTokenDoesntMatch() {
+        dbFixture.noRollback();
+
         Account account = AccountLibrary.admin();
+
         try {
             accountDetailsService.resetPassword(account, "differentToken", "newPassword");
         } catch (IllegalArgumentException e) {
@@ -150,7 +180,7 @@ public class AccountDetailsServiceIT extends AbstractTransactionalJUnit4SpringCo
         assertThat(accountAfterResetPassword.token).isNotEqualTo(account.token);
     }
 
-    private int countAccountRows() {
-        return countRowsInTable(QAccount.account.getTableName());
+    private int countRows() throws Exception {
+        return dbMemory.countRows(QAccount.account.getTableName());
     }
 }

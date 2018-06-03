@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS account;
+
 CREATE TABLE account (
     id VARCHAR(36) NOT NULL,
     username VARCHAR(30) NOT NULL,
@@ -12,6 +14,8 @@ ALTER TABLE account ADD PRIMARY KEY (id);
 ALTER TABLE account ADD CONSTRAINT uk_account_username UNIQUE (username);
 ALTER TABLE account ADD CONSTRAINT uk_account_email UNIQUE (email);
 
+DROP TABLE IF EXISTS permission;
+
 CREATE TABLE permission (
     id VARCHAR(36) NOT NULL,
     name VARCHAR(255) NOT NULL,
@@ -20,14 +24,16 @@ CREATE TABLE permission (
 
 ALTER TABLE permission ADD PRIMARY KEY (id);
 
+DROP TABLE IF EXISTS account_permission;
+
 CREATE TABLE account_permission (
     account_id VARCHAR(36) NOT NULL,
     permission_id VARCHAR(255) NOT NULL
 );
 
 ALTER TABLE account_permission ADD PRIMARY KEY (account_id, permission_id);
-ALTER TABLE account_permission ADD CONSTRAINT fk_account_permission_account_id FOREIGN KEY (account_id) REFERENCES account (id);
-ALTER TABLE account_permission ADD CONSTRAINT fk_account_permission_permission_idl FOREIGN KEY (permission_id) REFERENCES permission (id);
+
+DROP TABLE IF EXISTS news;
 
 CREATE TABLE news(
     id VARCHAR(36) NOT NULL,
@@ -43,7 +49,8 @@ CREATE TABLE news(
 );
 
 ALTER TABLE news ADD PRIMARY KEY (id);
-ALTER TABLE news ADD CONSTRAINT fk_news_account_id FOREIGN KEY (author_id) REFERENCES account (id);
+
+DROP TABLE IF EXISTS event_log;
 
 CREATE TABLE event_log (
     id VARCHAR(36) NOT NULL,
@@ -52,6 +59,8 @@ CREATE TABLE event_log (
 );
 
 ALTER TABLE event_log ADD PRIMARY KEY (id);
+
+DROP TABLE IF EXISTS country;
 
 CREATE TABLE country(
     code VARCHAR(2) NOT NULL,

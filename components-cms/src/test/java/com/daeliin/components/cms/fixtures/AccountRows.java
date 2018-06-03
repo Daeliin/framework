@@ -5,7 +5,7 @@ import com.daeliin.components.cms.sql.BAccount;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-public final class AccountFixtures {
+public final class AccountRows {
 
     public static BAccount admin() {
         return new BAccount(

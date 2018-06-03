@@ -5,7 +5,7 @@ import com.daeliin.components.cms.sql.BPermission;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-public final class PermissionFixtures {
+public final class PermissionRows {
 
     public static BPermission admin() {
         return new BPermission(

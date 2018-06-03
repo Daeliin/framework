@@ -5,7 +5,7 @@ import com.daeliin.components.cms.sql.BCountry;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-public final class CountryFixtures {
+public final class CountryRows {
 
     public static BCountry france() {
         return new BCountry(

@@ -5,7 +5,7 @@ import com.daeliin.components.cms.sql.BNews;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-public final class NewsFixtures {
+public final class NewsRows {
 
     public static BNews publishedNews() {
         return new BNews(

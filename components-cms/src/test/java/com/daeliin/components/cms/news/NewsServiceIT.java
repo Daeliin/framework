@@ -1,14 +1,18 @@
 package com.daeliin.components.cms.news;
 
 import com.daeliin.components.cms.credentials.account.Account;
+import com.daeliin.components.cms.fixtures.JavaFixtures;
 import com.daeliin.components.cms.library.AccountLibrary;
 import com.daeliin.components.cms.library.NewsLibrary;
 import com.daeliin.components.core.string.UrlFriendlyString;
 import com.daeliin.components.persistence.resource.service.ResourceService;
+import com.daeliin.components.test.rule.DbFixture;
+import com.daeliin.components.test.rule.DbMemory;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
@@ -20,18 +24,32 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class NewsServiceIT extends AbstractTransactionalJUnit4SpringContextTests {
+public class NewsServiceIT {
 
     @Inject
     private NewsService newsService;
 
+    @ClassRule
+    public static DbMemory dbMemory = new DbMemory();
+
+    @Rule
+    public DbFixture dbFixture = new DbFixture(dbMemory,
+        sequenceOf(
+            JavaFixtures.account(),
+            JavaFixtures.news()
+        )
+    );
+
     @Test
     public void shouldExtendResourceService() {
         assertThat(NewsService.class.getSuperclass().getClass()).isEqualTo(ResourceService.class.getClass());
+
+        dbFixture.noRollback();
     }
 
     @Test
@@ -40,25 +58,35 @@ public class NewsServiceIT extends AbstractTransactionalJUnit4SpringContextTests
         News foundNews = newsService.findOne(news.getId());
 
         assertThat(foundNews).isEqualTo(foundNews);
+
+        dbFixture.noRollback();
     }
 
     @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenfindingANewsThatDoesntExist() {
+        dbFixture.noRollback();
+
         newsService.findOne("nonExistingId");
     }
 
     @Test
     public void shouldCheckThatNewsDoesntExist() {
         assertThat(newsService.exists("ZFZEF-ZEF")).isFalse();
+
+        dbFixture.noRollback();
     }
 
     @Test
     public void shouldCheckThatNewsExists() {
         assertThat(newsService.exists(NewsLibrary.publishedNews().getId())).isTrue();
+
+        dbFixture.noRollback();
     }
 
     @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenCreatingNewsWithNonExistingAuthor() {
+        dbFixture.noRollback();
+
         News news = new News(
                 "ARTICLE1",
                 LocalDateTime.of(2016, 5, 20, 14, 30, 0).toInstant(ZoneOffset.UTC),
@@ -103,17 +131,23 @@ public class NewsServiceIT extends AbstractTransactionalJUnit4SpringContextTests
 
     @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenUpdatingNonExistingNews() {
+        dbFixture.noRollback();
+
         News nullNews = null;
         newsService.update(nullNews);
     }
 
     @Test(expected = IllegalStateException.class)
     public void shouldThrowException_whenUpdatingValidatedNews() {
+        dbFixture.noRollback();
+
         newsService.update(NewsLibrary.validatedNews());
     }
 
     @Test(expected = IllegalStateException.class)
     public void shouldThrowException_whenUpdatingPublishedNews() {
+        dbFixture.noRollback();
+
         newsService.update(NewsLibrary.publishedNews());
     }
 
@@ -137,6 +171,8 @@ public class NewsServiceIT extends AbstractTransactionalJUnit4SpringContextTests
 
     @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenMarkingANonExistingNewsAsDraft() {
+        dbFixture.noRollback();
+
         newsService.markAs("nonExistingId", NewsStatus.DRAFT);
     }
 
@@ -150,6 +186,8 @@ public class NewsServiceIT extends AbstractTransactionalJUnit4SpringContextTests
 
     @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenMArkingANonExistingNewsAsValidated() {
+        dbFixture.noRollback();
+
         newsService.markAs("nonExistingId", NewsStatus.VALIDATED);
     }
 
@@ -163,6 +201,8 @@ public class NewsServiceIT extends AbstractTransactionalJUnit4SpringContextTests
 
     @Test(expected = NoSuchElementException.class)
     public void shouldThrowException_whenMarkingANonExistingNewsAsPublished() {
+        dbFixture.noRollback();
+
         newsService.markAs("nonExistingId", NewsStatus.PUBLISHED);
     }
 
@@ -182,5 +222,7 @@ public class NewsServiceIT extends AbstractTransactionalJUnit4SpringContextTests
 
         assertThat(authorByNews.get(NewsLibrary.publishedNews())).isEqualTo(AccountLibrary.admin());
         assertThat(authorByNews.get(NewsLibrary.validatedNews())).isEqualTo(AccountLibrary.john());
+
+        dbFixture.noRollback();
     }
 }

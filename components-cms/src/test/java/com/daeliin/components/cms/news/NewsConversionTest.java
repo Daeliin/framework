@@ -1,6 +1,6 @@
 package com.daeliin.components.cms.news;
 
-import com.daeliin.components.cms.fixtures.NewsFixtures;
+import com.daeliin.components.cms.fixtures.NewsRows;
 import com.daeliin.components.cms.library.NewsLibrary;
 import com.daeliin.components.cms.sql.BNews;
 import org.junit.Test;
@@ -22,7 +22,7 @@ public final class NewsConversionTest {
     public void shouldMapNews() {
         BNews mappedNews = newsConversion.to(NewsLibrary.publishedNews());
 
-        assertThat(mappedNews).isEqualToComparingFieldByField(NewsFixtures.publishedNews());
+        assertThat(mappedNews).isEqualToComparingFieldByField(NewsRows.publishedNews());
     }
 
     @Test(expected = Exception.class)
@@ -34,7 +34,7 @@ public final class NewsConversionTest {
 
     @Test
     public void shouldInstantiateANews() {
-        News rebuiltNews = newsConversion.from(NewsFixtures.publishedNews());
+        News rebuiltNews = newsConversion.from(NewsRows.publishedNews());
 
         assertThat(rebuiltNews).isEqualTo(NewsLibrary.publishedNews());
     }
