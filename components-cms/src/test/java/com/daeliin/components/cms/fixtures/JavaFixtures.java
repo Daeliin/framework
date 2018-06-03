@@ -25,8 +25,8 @@ public final class JavaFixtures {
             Operations.insertInto("permission")
             .columns("id", "name", "creation_date")
             .values("ADMIN", "ADMIN", "2017-05-05 12:00:00")
-            .values("USER", "USER", "2017-05-05 12:00:00")
             .values("PUBLISHER", "PUBLISHER", "2017-05-05 12:00:00")
+            .values("USER", "USER", "2017-05-05 12:00:00")
             .build()
         );
     }
