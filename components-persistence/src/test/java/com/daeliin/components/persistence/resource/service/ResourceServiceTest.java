@@ -14,13 +14,6 @@ import com.google.common.collect.Sets;
 import com.querydsl.core.types.Predicate;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.Instant;
 import java.util.Arrays;
@@ -35,23 +28,20 @@ import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class ResourceServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
-
-    @Mock
-    private UuidPersistentResourceRepository repositoryMock;
-
-    @InjectMocks
-    private UuidPersistentResourceService service;
+public class ResourceServiceTest {
 
     private UuidPersistentResourceConversion conversion = new UuidPersistentResourceConversion();
 
+    private UuidPersistentResourceRepository repositoryMock = mock(UuidPersistentResourceRepository.class);
+
+    private UuidPersistentResourceService service;
+
     @Before
-    public void init() {
-        MockitoAnnotations.initMocks(this);
+    public void setUp() {
+        service = new UuidPersistentResourceService(repositoryMock);
     }
 
     @Test(expected = IllegalStateException.class)

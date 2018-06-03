@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class AccountDetailsServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
+public class AccountDetailsServiceIT extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Inject
     private AccountService accountService;

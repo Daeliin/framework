@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class CountryServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
+public class CountryServiceIT extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Inject
     private CountryService countryService;

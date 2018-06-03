@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class JsonTest {
+public class JsonIT {
 
     @Inject
     private ObjectMapper jsonMapper;

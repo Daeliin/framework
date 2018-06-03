@@ -36,15 +36,10 @@
             <artifactId>querydsl-sql-spring</artifactId>
         </dependency>
 
-        <!-- Tests -->
+        <!-- Test -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
+            <groupId>com.daeliin.components</groupId>
+            <artifactId>components-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -64,7 +59,7 @@
                 </executions>
                 <configuration>
                     <jdbcDriver>org.h2.Driver</jdbcDriver>
-                    <jdbcUrl>jdbc:h2:mem:;DATABASE_TO_UPPER=false;DATABASE_TO_UPPER=false;INIT=runscript from '${sql.schema}'</jdbcUrl>
+                    <jdbcUrl>jdbc:h2:mem:;DATABASE_TO_UPPER=false;INIT=runscript from '${sql.schema}'</jdbcUrl>
                     <jdbcUser>sa</jdbcUser>
                     <exportBeans>true</exportBeans>
                     <beanPrefix>B</beanPrefix>

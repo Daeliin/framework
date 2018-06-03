@@ -21,11 +21,11 @@ public final class PermissionLibrary {
                 "USER");
     }
 
-    public static Permission moderator() {
+    public static Permission publisher() {
         return new Permission(
-                "MODERATOR",
+                "PUBLISHER",
                 LocalDateTime.of(2017, 5, 5, 12, 0, 0).toInstant(ZoneOffset.UTC),
-                "MODERATOR");
+                "PUBLISHER");
     }
 }
 

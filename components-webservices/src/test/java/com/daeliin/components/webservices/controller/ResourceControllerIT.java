@@ -1,16 +1,21 @@
 package com.daeliin.components.webservices.controller;
 
+import com.daeliin.components.persistence.sql.QUuidPersistentResource;
+import com.daeliin.components.test.rule.DbFixture;
+import com.daeliin.components.test.rule.DbMemory;
 import com.daeliin.components.webservices.fake.UuidPersistentResourceDto;
 import com.daeliin.components.webservices.fake.UuidPersistentResourceDtoConversion;
 import com.daeliin.components.webservices.fake.UuidPersistentResourceService;
+import com.daeliin.components.webservices.fixtures.JavaFixtures;
 import com.daeliin.components.webservices.library.UuidPersistentResourceDtoLibrary;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -31,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringContextTests {
+public class ResourceControllerIT {
 
     @Inject
     private ObjectMapper jsonMapper;
@@ -43,6 +48,12 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
     private MockMvc mockMvc;
 
     private UuidPersistentResourceDtoConversion conversion = new UuidPersistentResourceDtoConversion();
+
+    @ClassRule
+    public static DbMemory dbMemory = new DbMemory();
+
+    @Rule
+    public DbFixture dbFixture = new DbFixture(dbMemory, JavaFixtures.uuidPersistentResources());
 
     @Test
     public void shouldReturnHttpCreatedAndCreatedResource() throws Exception {
@@ -66,7 +77,7 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
     @Test
     public void shouldPersistResource() throws Exception {
         UuidPersistentResourceDto uuidPersistentResourceDto = new UuidPersistentResourceDto("id", Instant.now(), "label");
-        long uuidPersistentResourceCountBeforeCreate = service.count();
+        int uuidPersistentResourceCountBeforeCreate = countRows();
 
          UuidPersistentResourceDto returnedUuidPersistentResourceDto = jsonMapper.readValue(mockMvc
                 .perform(post("/uuid")
@@ -76,7 +87,7 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
                 .getResponse()
                 .getContentAsString(), UuidPersistentResourceDto.class);
 
-        long uuidPersistentResourceCountAfterCreate = service.count();
+        int uuidPersistentResourceCountAfterCreate = countRows();
 
         UuidPersistentResourceDto persistedUuidPersistentResourceDto = conversion.instantiate(service.findOne(returnedUuidPersistentResourceDto.id));
 
@@ -95,11 +106,13 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(invalidUuidPersistentResourceDto)))
             .andExpect(status().isBadRequest());
+
+        dbFixture.noRollback();
     }
 
     @Test
     public void shouldNotPersistResource_whenCreatingInvalidResource() throws Exception {
-        long uuidPersistentResourceCountBeforeCreate = service.count();
+        int uuidPersistentResourceCountBeforeCreate = countRows();
 
         UuidPersistentResourceDto invalidUuidPersistentResourceDto = new UuidPersistentResourceDto("id", Instant.now(), " ");
 
@@ -108,10 +121,12 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(invalidUuidPersistentResourceDto)));
 
-        long uuidPersistentResourceCountAfterCreate = service.count();
+        int uuidPersistentResourceCountAfterCreate = countRows();
 
         assertThat(service.exists(invalidUuidPersistentResourceDto.id)).isFalse();
         assertThat(uuidPersistentResourceCountAfterCreate).isEqualTo(uuidPersistentResourceCountBeforeCreate);
+
+        dbFixture.noRollback();
     }
 
     @Test
@@ -127,6 +142,8 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
 
         UuidPersistentResourceDto retrievedUuidPersistentResourceDto = jsonMapper.readValue(result.getResponse().getContentAsString(), UuidPersistentResourceDto.class);
         assertThat(retrievedUuidPersistentResourceDto).isEqualToComparingFieldByField(existingUuidPersistentResourceDto);
+
+        dbFixture.noRollback();
     }
 
     @Test
@@ -135,6 +152,8 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
             .perform(get("/uuid/nonExistingId")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());
+
+        dbFixture.noRollback();
     }
 
     @Test
@@ -147,6 +166,8 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
             .andExpect(jsonPath("$.totalPages").value(1))
             .andExpect(jsonPath("$.totalItems").value(4))
             .andExpect(jsonPath("$.nbItems").value(4));
+
+        dbFixture.noRollback();
     }
 
     @Test
@@ -161,6 +182,8 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
             .andExpect(jsonPath("$.nbItems").value(2))
             .andExpect(jsonPath("$.items[0].label").value(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto2().label))
             .andExpect(jsonPath("$.items[1].label").value(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().label));
+
+        dbFixture.noRollback();
     }
 
     @Test
@@ -173,6 +196,8 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
                 .andExpect(jsonPath("$.items[1].label").value(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto3().label))
                 .andExpect(jsonPath("$.items[2].label").value(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto2().label))
                 .andExpect(jsonPath("$.items[3].label").value(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().label));
+
+        dbFixture.noRollback();
     }
 
     @Test
@@ -186,6 +211,8 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
             .perform(get("/uuid?page=invalidPageNumber")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest());
+
+        dbFixture.noRollback();
     }
 
     @Test
@@ -199,6 +226,8 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
             .perform(get("/uuid?size=invalidPageSize")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest());
+
+        dbFixture.noRollback();
     }
 
     @Test
@@ -207,6 +236,8 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
             .perform(get("/uuid?direction=invalidDirection")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest());
+
+        dbFixture.noRollback();
     }
 
     @Test
@@ -257,6 +288,8 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(invalidUuidPersistentResourceDto)))
             .andExpect(status().isBadRequest());
+
+        dbFixture.noRollback();
     }
 
     @Test
@@ -267,13 +300,15 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
                 " ");
 
         mockMvc
-                .perform(put("/uuid/" + invalidUuidPersistentResourceDto.id)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonMapper.writeValueAsString(invalidUuidPersistentResourceDto)));
+            .perform(put("/uuid/" + invalidUuidPersistentResourceDto.id)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonMapper.writeValueAsString(invalidUuidPersistentResourceDto)));
 
-        UuidPersistentResourceDto retrivedUuidPersistenceResourceDto = conversion.instantiate(service.findOne(invalidUuidPersistentResourceDto.id));
+        UuidPersistentResourceDto retrievedUuidPersistenceResourceDto = conversion.instantiate(service.findOne(invalidUuidPersistentResourceDto.id));
 
-        assertThat(retrivedUuidPersistenceResourceDto).isEqualToComparingFieldByFieldRecursively(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1());
+        assertThat(retrievedUuidPersistenceResourceDto).isEqualToComparingFieldByFieldRecursively(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1());
+
+        dbFixture.noRollback();
     }
 
     @Test
@@ -288,6 +323,8 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(updatedUuidPersistentResourceDto)))
             .andExpect(status().isNotFound());
+
+        dbFixture.noRollback();
     }
 
     @Test
@@ -310,6 +347,8 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
         mockMvc
             .perform(delete("/uuid/nonExistingId"))
             .andExpect(status().isNotFound());
+
+        dbFixture.noRollback();
     }
 
     @Test
@@ -357,5 +396,11 @@ public class ResourceControllerTest extends AbstractTransactionalJUnit4SpringCon
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(null)))
             .andExpect(status().isBadRequest());
+
+        dbFixture.noRollback();
+    }
+
+    private int countRows() throws Exception {
+        return dbMemory.countRows(QUuidPersistentResource.uuidPersistentResource.getTableName());
     }
 }

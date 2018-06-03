@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class EventLogServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
+public class EventLogServiceIT extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Inject
     private EventLogService eventLogService;

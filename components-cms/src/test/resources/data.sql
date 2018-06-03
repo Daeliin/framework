@@ -6,7 +6,7 @@ INSERT INTO account(id, username, email, enabled, password, token, creation_date
 INSERT INTO permission(id, name, creation_date) VALUES
 ('ADMIN', 'ADMIN', '2017-05-05 12:00:00'),
 ('USER', 'USER', '2017-05-05 12:00:00'),
-('MODERATOR', 'MODERATOR', '2017-05-05 12:00:00');
+('PUBLISHER', 'PUBLISHER', '2017-05-05 12:00:00');
 
 INSERT INTO account_permission(account_id, permission_id) VALUES
 ('ACCOUNT1', 'ADMIN'),

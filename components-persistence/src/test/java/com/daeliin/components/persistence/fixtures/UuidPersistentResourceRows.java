@@ -5,7 +5,7 @@ import com.daeliin.components.persistence.sql.BUuidPersistentResource;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-public final class UuidPersistentResourceFixtures {
+public final class UuidPersistentResourceRows {
 
     public static BUuidPersistentResource uuidPersistentResource1() {
         return new BUuidPersistentResource(

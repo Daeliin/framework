@@ -1,13 +1,17 @@
 package com.daeliin.components.persistence.resource.repository;
 
 import com.daeliin.components.persistence.fake.UuidPersistentResourceRepository;
-import com.daeliin.components.persistence.fixtures.UuidPersistentResourceFixtures;
+import com.daeliin.components.persistence.fixtures.JavaFixtures;
+import com.daeliin.components.persistence.fixtures.UuidPersistentResourceRows;
 import com.daeliin.components.persistence.sql.BUuidPersistentResource;
 import com.daeliin.components.persistence.sql.QUuidPersistentResource;
+import com.daeliin.components.test.rule.DbFixture;
+import com.daeliin.components.test.rule.DbMemory;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
@@ -21,19 +25,29 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
+public class ResourceRepositoryIT {
 
     @Inject
     private UuidPersistentResourceRepository repository;
 
+    @ClassRule
+    public static DbMemory dbMemory = new DbMemory();
+
+    @Rule
+    public DbFixture dbFixture = new DbFixture(dbMemory, JavaFixtures.uuidPersistentResources());
+
     @Test
     public void shouldProvideTheIdPath() {
         assertThat(repository.idPath()).isEqualTo(QUuidPersistentResource.uuidPersistentResource.uuid);
+
+        dbFixture.noRollback();
     }
 
     @Test
     public void shouldProvideTheIdMapping() {
         assertThat(repository.idMapping()).isNotNull();
+
+        dbFixture.noRollback();
     }
 
     @Test(expected = Exception.class)
@@ -41,10 +55,12 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
         BUuidPersistentResource nullUuidEntity = null;
 
         repository.save(nullUuidEntity);
+
+        dbFixture.noRollback();
     }
 
     @Test
-    public void shouldPersistAResource() {
+    public void shouldPersistAResource() throws Exception {
         BUuidPersistentResource newUuuidPersistentResource = new BUuidPersistentResource(Instant.now(), "label100", UUID.randomUUID().toString());
         int uuidPersistentResourceCountBeforeCreate = countRows();
 
@@ -66,7 +82,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
     }
 
     @Test
-    public void shouldPersistResources() {
+    public void shouldPersistResources() throws Exception {
         BUuidPersistentResource newUuuidPersistentResource1 = new BUuidPersistentResource(Instant.now(), "label101", UUID.randomUUID().toString());
         BUuidPersistentResource newUuuidPersistentResource2 = new BUuidPersistentResource(Instant.now(), "label102", UUID.randomUUID().toString());
         List<BUuidPersistentResource> newUuidEntities = Arrays.asList(newUuuidPersistentResource1, newUuuidPersistentResource2);
@@ -93,31 +109,41 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void shouldCheckIfResourceExists() {
-        assertThat(repository.exists(UuidPersistentResourceFixtures.uuidPersistentResource1().getUuid())).isTrue();
+        assertThat(repository.exists(UuidPersistentResourceRows.uuidPersistentResource1().getUuid())).isTrue();
+
+        dbFixture.noRollback();
     }
 
     @Test
     public void shouldCheckIfResourceDoesntExist_whenIdDoesntExist() {
         assertThat(repository.exists("894984-984")).isFalse();
+
+        dbFixture.noRollback();
     }
 
     @Test
     public void shouldCheckIfResourceDoesntExist_whenIdIsNull() {
         assertThat(repository.exists(null)).isFalse();
+
+        dbFixture.noRollback();
     }
 
     @Test
     public void shouldFindResource() {
-        BUuidPersistentResource uuidPersistentResource1 = UuidPersistentResourceFixtures.uuidPersistentResource1();
+        BUuidPersistentResource uuidPersistentResource1 = UuidPersistentResourceRows.uuidPersistentResource1();
 
         BUuidPersistentResource foundUuidEntity = repository.findOne(uuidPersistentResource1.getUuid()).get();
 
-        assertThat(foundUuidEntity).isEqualToComparingFieldByField(UuidPersistentResourceFixtures.uuidPersistentResource1());
+        assertThat(foundUuidEntity).isEqualToComparingFieldByField(UuidPersistentResourceRows.uuidPersistentResource1());
+
+        dbFixture.noRollback();
     }
 
     @Test
     public void shouldReturnEmpty_whenFindingNonExistingResource() {
         assertThat(repository.findOne("6846984-864684").isPresent()).isFalse();
+
+        dbFixture.noRollback();
     }
 
     @Test
@@ -125,16 +151,20 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
         String nullId = null;
 
         assertThat(repository.findOne(nullId).isPresent()).isFalse();
+
+        dbFixture.noRollback();
     }
 
     @Test
     public void shouldFindResources() {
-        List<String> uuidPersistentResourceIds = Arrays.asList(UuidPersistentResourceFixtures.uuidPersistentResource1().getUuid(), UuidPersistentResourceFixtures.uuidPersistentResource2().getUuid());
+        List<String> uuidPersistentResourceIds = Arrays.asList(UuidPersistentResourceRows.uuidPersistentResource1().getUuid(), UuidPersistentResourceRows.uuidPersistentResource2().getUuid());
         Collection<BUuidPersistentResource> uuidEntities = repository.findAll(uuidPersistentResourceIds);
 
         assertThat(uuidEntities)
                 .usingFieldByFieldElementComparator()
-                .containsOnly(UuidPersistentResourceFixtures.uuidPersistentResource1(), UuidPersistentResourceFixtures.uuidPersistentResource2());
+                .containsOnly(UuidPersistentResourceRows.uuidPersistentResource1(), UuidPersistentResourceRows.uuidPersistentResource2());
+
+        dbFixture.noRollback();
     }
 
     @Test
@@ -142,6 +172,8 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
         Collection<BUuidPersistentResource> uuidEntities = repository.findAll(Arrays.asList("68464-684", "684684-444"));
 
         assertThat(uuidEntities).isEmpty();
+
+        dbFixture.noRollback();
     }
 
     @Test
@@ -149,6 +181,8 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
         Collection<BUuidPersistentResource> uuidEntities = repository.findAll(Arrays.asList());
 
         assertThat(uuidEntities).isEmpty();
+
+        dbFixture.noRollback();
     }
 
     @Test
@@ -156,16 +190,20 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
         Collection<BUuidPersistentResource> uuidEntities = repository.findAll(Arrays.asList(null, null));
 
         assertThat(uuidEntities).isEmpty();
+
+        dbFixture.noRollback();
     }
 
     @Test
     public void shouldReturnOnlyExistingResources_whenFindingEexistingAndNonExistingResources() {
-        List<String> uuidPersistentResourceIds = Arrays.asList(UuidPersistentResourceFixtures.uuidPersistentResource1().getUuid(), UuidPersistentResourceFixtures.uuidPersistentResource2().getUuid(), "646444-218");
+        List<String> uuidPersistentResourceIds = Arrays.asList(UuidPersistentResourceRows.uuidPersistentResource1().getUuid(), UuidPersistentResourceRows.uuidPersistentResource2().getUuid(), "646444-218");
         Collection<BUuidPersistentResource> uuidEntities = repository.findAll(uuidPersistentResourceIds);
 
         assertThat(uuidEntities)
                 .usingFieldByFieldElementComparator()
-                .containsOnly(UuidPersistentResourceFixtures.uuidPersistentResource1(), UuidPersistentResourceFixtures.uuidPersistentResource2());
+                .containsOnly(UuidPersistentResourceRows.uuidPersistentResource1(), UuidPersistentResourceRows.uuidPersistentResource2());
+
+        dbFixture.noRollback();
     }
 
     @Test
@@ -181,7 +219,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
     }
 
     @Test
-    public void shouldNotDeleteAnyResources_whenDeletingNonExistingResource() {
+    public void shouldNotDeleteAnyResources_whenDeletingNonExistingResource() throws Exception {
         int uuidPersistentResourceCountBeforeDelete = countRows();
 
         repository.delete("6984684-685648");
@@ -192,7 +230,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
     }
 
     @Test
-    public void shouldNotDeleteAnyResources_whenDeletingNullId() {
+    public void shouldNotDeleteAnyResources_whenDeletingNullId() throws Exception {
         String nullId = null;
         int uuidPersistentResourceCountBeforeDelete = countRows();
 
@@ -204,10 +242,10 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
     }
 
     @Test
-    public void shouldDeleteAResource() {
+    public void shouldDeleteAResource() throws Exception {
         int uuidPersistentResourceCountBeforeCreate = countRows();
 
-        repository.delete(UuidPersistentResourceFixtures.uuidPersistentResource1().getUuid());
+        repository.delete(UuidPersistentResourceRows.uuidPersistentResource1().getUuid());
 
         int uuidPersistentResourceCountAfterCreate = countRows();
 
@@ -216,14 +254,14 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void shouldReturnTrue_whenDeletingResource() {
-        boolean delete = repository.delete(UuidPersistentResourceFixtures.uuidPersistentResource1().getUuid());
+        boolean delete = repository.delete(UuidPersistentResourceRows.uuidPersistentResource1().getUuid());
 
         assertThat(delete).isTrue();
     }
 
     @Test
-    public void shouldDeleteMultipleResources() {
-        List<String> uuidPersistentResourceIds = Arrays.asList(UuidPersistentResourceFixtures.uuidPersistentResource1().getUuid(), UuidPersistentResourceFixtures.uuidPersistentResource2().getUuid());
+    public void shouldDeleteMultipleResources() throws Exception {
+        List<String> uuidPersistentResourceIds = Arrays.asList(UuidPersistentResourceRows.uuidPersistentResource1().getUuid(), UuidPersistentResourceRows.uuidPersistentResource2().getUuid());
         int uuidPersistentResourceCountBeforeDelete = countRows();
 
         repository.delete(uuidPersistentResourceIds);
@@ -235,7 +273,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
     @Test
     public void shouldReturnTrue_whenDeletingMultipleResources() {
-        List<String> uuidPersistentResourceIds = Arrays.asList(UuidPersistentResourceFixtures.uuidPersistentResource1().getUuid(), UuidPersistentResourceFixtures.uuidPersistentResource2().getUuid());
+        List<String> uuidPersistentResourceIds = Arrays.asList(UuidPersistentResourceRows.uuidPersistentResource1().getUuid(), UuidPersistentResourceRows.uuidPersistentResource2().getUuid());
         boolean delete = repository.delete(uuidPersistentResourceIds);
 
         assertThat(delete).isTrue();
@@ -243,7 +281,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
 
 
     @Test
-    public void shouldNotDeleteAnyResources_whenDeletingNonExistingResources() {
+    public void shouldNotDeleteAnyResources_whenDeletingNonExistingResources() throws Exception {
         List<String> uuidPersistentResourceIds = Arrays.asList("1111-222", "313213-321321");
         int uuidPersistentResourceCountBeforeDelete = countRows();
 
@@ -263,8 +301,8 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
     }
 
     @Test
-    public void shouldDeleteOnlyExistingResources_whenDeletingExistingAndNonExistingResources() {
-        List<String> uuidPersistentResourceIds = Arrays.asList(UuidPersistentResourceFixtures.uuidPersistentResource1().getUuid(), UuidPersistentResourceFixtures.uuidPersistentResource2().getUuid(), "665321-111");
+    public void shouldDeleteOnlyExistingResources_whenDeletingExistingAndNonExistingResources() throws Exception {
+        List<String> uuidPersistentResourceIds = Arrays.asList(UuidPersistentResourceRows.uuidPersistentResource1().getUuid(), UuidPersistentResourceRows.uuidPersistentResource2().getUuid(), "665321-111");
 
         int uuidPersistentResourceCountBeforeDelete = countRows();
 
@@ -275,7 +313,7 @@ public class ResourceRepositoryTest extends AbstractTransactionalJUnit4SpringCon
         assertThat(uuidPersistentResourceCountAfterDelete).isEqualTo(uuidPersistentResourceCountBeforeDelete - 2);
     }
 
-    private int countRows() {
-        return countRowsInTable(QUuidPersistentResource.uuidPersistentResource.getTableName());
+    private int countRows() throws Exception {
+        return dbMemory.countRows(QUuidPersistentResource.uuidPersistentResource.getTableName());
     }
 }

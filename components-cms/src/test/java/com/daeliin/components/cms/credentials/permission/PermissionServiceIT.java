@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class PermissionServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
+public class PermissionServiceIT extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Inject
     private PermissionService permissionService;
