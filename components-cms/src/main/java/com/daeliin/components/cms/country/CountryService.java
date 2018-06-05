@@ -11,7 +11,7 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-public final class CountryService {
+public class CountryService {
 
     private final Map<String, Country> countryByCode;
     private final CountryRepository repository;
