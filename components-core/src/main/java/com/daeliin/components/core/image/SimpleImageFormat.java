@@ -103,26 +103,19 @@ public final class SimpleImageFormat implements ImageFormat {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         SimpleImageFormat that = (SimpleImageFormat) o;
-
-        if (width != that.width) return false;
-        if (height != that.height) return false;
-        if (Float.compare(that.compression, compression) != 0) return false;
-        if (extension != null ? !extension.equals(that.extension) : that.extension != null) return false;
-        if (prefix != null ? !prefix.equals(that.prefix) : that.prefix != null) return false;
-        return suffix != null ? suffix.equals(that.suffix) : that.suffix == null;
+        return width == that.width &&
+            height == that.height &&
+            Float.compare(that.compression, compression) == 0 &&
+            Objects.equals(extension, that.extension) &&
+            Objects.equals(prefix, that.prefix) &&
+            Objects.equals(suffix, that.suffix);
     }
 
     @Override
     public int hashCode() {
-        int result = width;
-        result = 31 * result + height;
-        result = 31 * result + (extension != null ? extension.hashCode() : 0);
-        result = 31 * result + (prefix != null ? prefix.hashCode() : 0);
-        result = 31 * result + (suffix != null ? suffix.hashCode() : 0);
-        result = 31 * result + (compression != +0.0f ? Float.floatToIntBits(compression) : 0);
-        return result;
+
+        return Objects.hash(width, height, extension, prefix, suffix, compression);
     }
 
     @Override
