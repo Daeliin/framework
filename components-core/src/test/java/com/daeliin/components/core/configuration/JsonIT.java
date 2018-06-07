@@ -3,7 +3,6 @@ package com.daeliin.components.core.configuration;
 import com.daeliin.components.core.fake.ImmutableResource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -46,7 +45,7 @@ public class JsonIT {
         ImmutableResource deserializedUuidPersistentResource =
                 jsonMapper.readValue("{\"id\":\"id\",\"creationDate\":\"2017-01-01T12:32:12Z\",\"label\":\"label\"}", ImmutableResource.class);
 
-        Assertions.assertThat(deserializedUuidPersistentResource).isEqualToComparingFieldByField(uuidPersistentResource);
+        assertThat(deserializedUuidPersistentResource).isEqualToComparingFieldByField(uuidPersistentResource);
     }
 
     @Test
@@ -81,5 +80,16 @@ public class JsonIT {
         ImmutableList<String> strings = jsonMapper.readValue("[\"string1\", \"string2\"]", ImmutableList.class);
 
         assertThat(strings).contains("string1", "string2");
+    }
+
+    @Test
+    public void shouldIgnoreUnknownProperties() throws Exception {
+        ImmutableResource uuidPersistentResource = new ImmutableResource("id",
+            LocalDateTime.of(2017, 1, 1, 12, 32, 12).toInstant(ZoneOffset.UTC), "label");
+
+        ImmutableResource deserializedUuidPersistentResource =
+            jsonMapper.readValue("{\"id\":\"id\",\"creationDate\":\"2017-01-01T12:32:12Z\",\"label\":\"label\",\"unknow\":\"unknow\"}", ImmutableResource.class);
+
+        assertThat(deserializedUuidPersistentResource).isEqualToComparingFieldByField(uuidPersistentResource);
     }
 }
