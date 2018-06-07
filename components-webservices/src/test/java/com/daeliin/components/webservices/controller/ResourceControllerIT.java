@@ -1,13 +1,13 @@
 package com.daeliin.components.webservices.controller;
 
-import com.daeliin.components.persistence.sql.QUuidPersistentResource;
 import com.daeliin.components.test.rule.DbFixture;
 import com.daeliin.components.test.rule.DbMemory;
-import com.daeliin.components.webservices.fake.UuidPersistentResourceDto;
-import com.daeliin.components.webservices.fake.UuidPersistentResourceDtoConversion;
-import com.daeliin.components.webservices.fake.UuidPersistentResourceService;
+import com.daeliin.components.webservices.fake.UuidResourceDto;
+import com.daeliin.components.webservices.fake.UuidResourceDtoConversion;
+import com.daeliin.components.webservices.fake.UuidResourceService;
 import com.daeliin.components.webservices.fixtures.JavaFixtures;
-import com.daeliin.components.webservices.library.UuidPersistentResourceDtoLibrary;
+import com.daeliin.components.webservices.library.UuidResourceDtoLibrary;
+import com.daeliin.components.webservices.sql.QUuidResource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -42,22 +42,22 @@ public class ResourceControllerIT {
     private ObjectMapper jsonMapper;
 
     @Inject
-    private UuidPersistentResourceService service;
+    private UuidResourceService service;
 
     @Inject
     private MockMvc mockMvc;
 
-    private UuidPersistentResourceDtoConversion conversion = new UuidPersistentResourceDtoConversion();
+    private UuidResourceDtoConversion conversion = new UuidResourceDtoConversion();
 
     @ClassRule
     public static DbMemory dbMemory = new DbMemory();
 
     @Rule
-    public DbFixture dbFixture = new DbFixture(dbMemory, JavaFixtures.uuidPersistentResources());
+    public DbFixture dbFixture = new DbFixture(dbMemory, JavaFixtures.uuidResources());
 
     @Test
     public void shouldReturnHttpCreatedAndCreatedResource() throws Exception {
-        UuidPersistentResourceDto uuidPersistentResourceDto = new UuidPersistentResourceDto("id", Instant.now(), "label");
+        UuidResourceDto uuidPersistentResourceDto = new UuidResourceDto("id", Instant.now(), "label");
 
         MvcResult result =
             mockMvc
@@ -67,7 +67,7 @@ public class ResourceControllerIT {
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        UuidPersistentResourceDto createdUuidPersistentResourceDto = jsonMapper.readValue(result.getResponse().getContentAsString(), UuidPersistentResourceDto.class);
+        UuidResourceDto createdUuidPersistentResourceDto = jsonMapper.readValue(result.getResponse().getContentAsString(), UuidResourceDto.class);
 
         assertThat(createdUuidPersistentResourceDto.id).isNotBlank();
         assertThat(createdUuidPersistentResourceDto.creationDate).isNotNull();
@@ -76,20 +76,20 @@ public class ResourceControllerIT {
 
     @Test
     public void shouldPersistResource() throws Exception {
-        UuidPersistentResourceDto uuidPersistentResourceDto = new UuidPersistentResourceDto("id", Instant.now(), "label");
+        UuidResourceDto uuidPersistentResourceDto = new UuidResourceDto("id", Instant.now(), "label");
         int uuidPersistentResourceCountBeforeCreate = countRows();
 
-         UuidPersistentResourceDto returnedUuidPersistentResourceDto = jsonMapper.readValue(mockMvc
+         UuidResourceDto returnedUuidPersistentResourceDto = jsonMapper.readValue(mockMvc
                 .perform(post("/uuid")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMapper.writeValueAsString(uuidPersistentResourceDto)))
                 .andReturn()
                 .getResponse()
-                .getContentAsString(), UuidPersistentResourceDto.class);
+                .getContentAsString(), UuidResourceDto.class);
 
         int uuidPersistentResourceCountAfterCreate = countRows();
 
-        UuidPersistentResourceDto persistedUuidPersistentResourceDto = conversion.instantiate(service.findOne(returnedUuidPersistentResourceDto.id));
+        UuidResourceDto persistedUuidPersistentResourceDto = conversion.instantiate(service.findOne(returnedUuidPersistentResourceDto.id));
 
         assertThat(uuidPersistentResourceDto.id).isNotBlank();
         assertThat(uuidPersistentResourceDto.creationDate).isNotNull();
@@ -101,7 +101,7 @@ public class ResourceControllerIT {
     public void shouldReturnHttpBadRequest_whenCreatingInvalidResource() throws Exception {
         dbFixture.noRollback();
 
-        UuidPersistentResourceDto invalidUuidPersistentResourceDto = new UuidPersistentResourceDto("id", Instant.now(), " ");
+        UuidResourceDto invalidUuidPersistentResourceDto = new UuidResourceDto("id", Instant.now(), " ");
 
         mockMvc
             .perform(post("/uuid")
@@ -116,7 +116,7 @@ public class ResourceControllerIT {
 
         int uuidPersistentResourceCountBeforeCreate = countRows();
 
-        UuidPersistentResourceDto invalidUuidPersistentResourceDto = new UuidPersistentResourceDto("id", Instant.now(), " ");
+        UuidResourceDto invalidUuidPersistentResourceDto = new UuidResourceDto("id", Instant.now(), " ");
 
         mockMvc
             .perform(post("/uuid")
@@ -133,7 +133,7 @@ public class ResourceControllerIT {
     public void shouldReturnHttpOkAndResource_whenResourceExists() throws Exception {
         dbFixture.noRollback();
 
-        UuidPersistentResourceDto existingUuidPersistentResourceDto = UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1();
+        UuidResourceDto existingUuidPersistentResourceDto = UuidResourceDtoLibrary.uuidResourceDto1();
 
         MvcResult result =
             mockMvc
@@ -142,7 +142,7 @@ public class ResourceControllerIT {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        UuidPersistentResourceDto retrievedUuidPersistentResourceDto = jsonMapper.readValue(result.getResponse().getContentAsString(), UuidPersistentResourceDto.class);
+        UuidResourceDto retrievedUuidPersistentResourceDto = jsonMapper.readValue(result.getResponse().getContentAsString(), UuidResourceDto.class);
         assertThat(retrievedUuidPersistentResourceDto).isEqualToComparingFieldByField(existingUuidPersistentResourceDto);
     }
 
@@ -182,8 +182,8 @@ public class ResourceControllerIT {
             .andExpect(jsonPath("$.totalPages").value(2))
             .andExpect(jsonPath("$.totalItems").value(4))
             .andExpect(jsonPath("$.nbItems").value(2))
-            .andExpect(jsonPath("$.items[0].label").value(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto2().label))
-            .andExpect(jsonPath("$.items[1].label").value(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().label));
+            .andExpect(jsonPath("$.items[0].label").value(UuidResourceDtoLibrary.uuidResourceDto2().label))
+            .andExpect(jsonPath("$.items[1].label").value(UuidResourceDtoLibrary.uuidResourceDto1().label));
     }
 
     @Test
@@ -194,10 +194,10 @@ public class ResourceControllerIT {
             .perform(get("/uuid?direction=DESC&properties=label,id")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items[0].label").value(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto4().label))
-                .andExpect(jsonPath("$.items[1].label").value(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto3().label))
-                .andExpect(jsonPath("$.items[2].label").value(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto2().label))
-                .andExpect(jsonPath("$.items[3].label").value(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().label));
+                .andExpect(jsonPath("$.items[0].label").value(UuidResourceDtoLibrary.uuidResourceDto4().label))
+                .andExpect(jsonPath("$.items[1].label").value(UuidResourceDtoLibrary.uuidResourceDto3().label))
+                .andExpect(jsonPath("$.items[2].label").value(UuidResourceDtoLibrary.uuidResourceDto2().label))
+                .andExpect(jsonPath("$.items[3].label").value(UuidResourceDtoLibrary.uuidResourceDto1().label));
     }
 
     @Test
@@ -242,8 +242,8 @@ public class ResourceControllerIT {
 
     @Test
     public void shouldReturnHttpOkAndUpdatedResource_whenUpdatingResource() throws Exception {
-        UuidPersistentResourceDto updatedUuidPersistentResourceDto = new UuidPersistentResourceDto(
-                UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
+        UuidResourceDto updatedUuidPersistentResourceDto = new UuidResourceDto(
+                UuidResourceDtoLibrary.uuidResourceDto1().id,
                 Instant.now(),
                 "newLabel");
 
@@ -255,14 +255,14 @@ public class ResourceControllerIT {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        UuidPersistentResourceDto retrievedUuidPersistentResourceDto = jsonMapper.readValue(result.getResponse().getContentAsString(), UuidPersistentResourceDto.class);
+        UuidResourceDto retrievedUuidPersistentResourceDto = jsonMapper.readValue(result.getResponse().getContentAsString(), UuidResourceDto.class);
         assertThat(retrievedUuidPersistentResourceDto.label).isEqualTo(updatedUuidPersistentResourceDto.label);
     }
 
     @Test
     public void shouldUpdateResource() throws Exception {
-        UuidPersistentResourceDto updatedUuidPersistentResourceDto = new UuidPersistentResourceDto(
-                UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
+        UuidResourceDto updatedUuidPersistentResourceDto = new UuidResourceDto(
+                UuidResourceDtoLibrary.uuidResourceDto1().id,
                 Instant.now(),
                 "newLabel");
 
@@ -271,7 +271,7 @@ public class ResourceControllerIT {
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(updatedUuidPersistentResourceDto)));
 
-        UuidPersistentResourceDto retrievedUuidPersistentResourceDto = conversion.instantiate(service.findOne(updatedUuidPersistentResourceDto.id));
+        UuidResourceDto retrievedUuidPersistentResourceDto = conversion.instantiate(service.findOne(updatedUuidPersistentResourceDto.id));
 
         assertThat(retrievedUuidPersistentResourceDto.label).isEqualTo(updatedUuidPersistentResourceDto.label);
     }
@@ -280,8 +280,8 @@ public class ResourceControllerIT {
     public void shouldReturnHttpBadRequest_whenUpdatingInvalidResource() throws Exception {
         dbFixture.noRollback();
 
-        UuidPersistentResourceDto invalidUuidPersistentResourceDto = new UuidPersistentResourceDto(
-                UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
+        UuidResourceDto invalidUuidPersistentResourceDto = new UuidResourceDto(
+                UuidResourceDtoLibrary.uuidResourceDto1().id,
                 Instant.now(),
                 " ");
 
@@ -296,8 +296,8 @@ public class ResourceControllerIT {
     public void shouldNotUpdateResource_whenUpdatingInvalidResource() throws Exception {
         dbFixture.noRollback();
 
-        UuidPersistentResourceDto invalidUuidPersistentResourceDto = new UuidPersistentResourceDto(
-                UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
+        UuidResourceDto invalidUuidPersistentResourceDto = new UuidResourceDto(
+                UuidResourceDtoLibrary.uuidResourceDto1().id,
                 Instant.now(),
                 " ");
 
@@ -306,17 +306,17 @@ public class ResourceControllerIT {
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(invalidUuidPersistentResourceDto)));
 
-        UuidPersistentResourceDto retrievedUuidPersistenceResourceDto = conversion.instantiate(service.findOne(invalidUuidPersistentResourceDto.id));
+        UuidResourceDto retrievedUuidPersistenceResourceDto = conversion.instantiate(service.findOne(invalidUuidPersistentResourceDto.id));
 
-        assertThat(retrievedUuidPersistenceResourceDto).isEqualToComparingFieldByFieldRecursively(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1());
+        assertThat(retrievedUuidPersistenceResourceDto).isEqualToComparingFieldByFieldRecursively(UuidResourceDtoLibrary.uuidResourceDto1());
     }
 
     @Test
     public void shouldReturnHttpNotFound_whenUpdatingNonExistingResource() throws Exception {
         dbFixture.noRollback();
 
-        UuidPersistentResourceDto updatedUuidPersistentResourceDto = new UuidPersistentResourceDto(
-                UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
+        UuidResourceDto updatedUuidPersistentResourceDto = new UuidResourceDto(
+                UuidResourceDtoLibrary.uuidResourceDto1().id,
                 Instant.now(),
                 "newLabel");
 
@@ -330,16 +330,16 @@ public class ResourceControllerIT {
     @Test
     public void shouldReturnHttpNoContent_whenDeletingAResource() throws Exception {
         mockMvc
-                .perform(delete("/uuid/" + UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id))
+                .perform(delete("/uuid/" + UuidResourceDtoLibrary.uuidResourceDto1().id))
                 .andExpect(status().isNoContent());
     }
 
     @Test
     public void shouldDeleteAResource() throws Exception {
         mockMvc
-            .perform(delete("/uuid/" + UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id));
+            .perform(delete("/uuid/" + UuidResourceDtoLibrary.uuidResourceDto1().id));
 
-        assertThat(service.exists(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id)).isFalse();
+        assertThat(service.exists(UuidResourceDtoLibrary.uuidResourceDto1().id)).isFalse();
     }
 
     @Test
@@ -357,8 +357,8 @@ public class ResourceControllerIT {
             .perform(post("/uuid/deleteSeveral")
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(Arrays.asList(
-                    UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
-                    UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto2().id))))
+                    UuidResourceDtoLibrary.uuidResourceDto1().id,
+                    UuidResourceDtoLibrary.uuidResourceDto2().id))))
             .andExpect(status().isNoContent());
     }
 
@@ -368,11 +368,11 @@ public class ResourceControllerIT {
             .perform(post("/uuid/deleteSeveral")
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(Arrays.asList(
-                    UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
-                    UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto2().id))));
+                    UuidResourceDtoLibrary.uuidResourceDto1().id,
+                    UuidResourceDtoLibrary.uuidResourceDto2().id))));
 
-        assertThat(service.exists(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id)).isFalse();
-        assertThat(service.exists(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto2().id)).isFalse();
+        assertThat(service.exists(UuidResourceDtoLibrary.uuidResourceDto1().id)).isFalse();
+        assertThat(service.exists(UuidResourceDtoLibrary.uuidResourceDto2().id)).isFalse();
     }
 
     @Test
@@ -381,12 +381,12 @@ public class ResourceControllerIT {
             .perform(post("/uuid/deleteSeveral")
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(Arrays.asList(
-                    UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id,
-                    UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto2().id,
+                    UuidResourceDtoLibrary.uuidResourceDto1().id,
+                    UuidResourceDtoLibrary.uuidResourceDto2().id,
                     "nonExistingId"))));
 
-        assertThat(service.exists(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto1().id)).isFalse();
-        assertThat(service.exists(UuidPersistentResourceDtoLibrary.uuidPersistentResourceDto2().id)).isFalse();
+        assertThat(service.exists(UuidResourceDtoLibrary.uuidResourceDto1().id)).isFalse();
+        assertThat(service.exists(UuidResourceDtoLibrary.uuidResourceDto2().id)).isFalse();
     }
 
     @Test
@@ -401,6 +401,6 @@ public class ResourceControllerIT {
     }
 
     private int countRows() throws Exception {
-        return dbMemory.countRows(QUuidPersistentResource.uuidPersistentResource.getTableName());
+        return dbMemory.countRows(QUuidResource.uuidResource.getTableName());
     }
 }

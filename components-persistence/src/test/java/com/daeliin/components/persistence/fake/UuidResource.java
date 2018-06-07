@@ -4,27 +4,27 @@ import com.daeliin.components.persistence.resource.PersistentResource;
 
 import java.time.Instant;
 
-public class UuidPersistentResource extends PersistentResource<String> implements Comparable<UuidPersistentResource> {
+public class UuidResource extends PersistentResource<String> implements Comparable<UuidResource> {
 
     public final String label;
 
-    public UuidPersistentResource(String id) {
+    public UuidResource(String id) {
         super(id);
         this.label = "";
     }
 
-    public UuidPersistentResource(String uuid, Instant creationDate) {
+    public UuidResource(String uuid, Instant creationDate) {
         super(uuid, creationDate);
         this.label = "";
     }
 
-    public UuidPersistentResource(String uuid, Instant creationDate, String label) {
+    public UuidResource(String uuid, Instant creationDate, String label) {
         super(uuid, creationDate);
         this.label = label;
     }
 
     @Override
-    public int compareTo(UuidPersistentResource other) {
+    public int compareTo(UuidResource other) {
         return getId().compareTo(other.getId());
     }
 }

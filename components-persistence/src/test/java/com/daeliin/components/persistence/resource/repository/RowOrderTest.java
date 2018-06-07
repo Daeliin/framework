@@ -1,8 +1,8 @@
 package com.daeliin.components.persistence.resource.repository;
 
-import com.daeliin.components.persistence.sql.QUuidPersistentResource;
 import com.daeliin.components.core.pagination.PageRequest;
 import com.daeliin.components.core.pagination.Sort;
+import com.daeliin.components.persistence.sql.QUuidResource;
 import com.google.common.collect.Sets;
 import com.querydsl.core.types.OrderSpecifier;
 import org.junit.Before;
@@ -18,7 +18,7 @@ public final class RowOrderTest {
 
     @Before
     public void setUp() {
-        rowOrder = new RowOrder(QUuidPersistentResource.uuidPersistentResource);
+        rowOrder = new RowOrder(QUuidResource.uuidResource);
     }
 
     @Test
@@ -31,9 +31,9 @@ public final class RowOrderTest {
     @Test
     public void shouldGetSortablePaths() {
         assertThat(rowOrder.getSortablePaths()).containsOnly(
-                QUuidPersistentResource.uuidPersistentResource.uuid,
-                QUuidPersistentResource.uuidPersistentResource.creationDate,
-                QUuidPersistentResource.uuidPersistentResource.label);
+                QUuidResource.uuidResource.uuid,
+                QUuidResource.uuidResource.creationDate,
+                QUuidResource.uuidResource.label);
     }
 
     @Test
@@ -45,7 +45,7 @@ public final class RowOrderTest {
         OrderSpecifier[] orderSpecifiers = rowOrder.computeOrders(pageRequest);
 
         assertThat(orderSpecifiers).containsExactly(
-                QUuidPersistentResource.uuidPersistentResource.uuid.desc(),
-                QUuidPersistentResource.uuidPersistentResource.creationDate.asc());
+                QUuidResource.uuidResource.uuid.desc(),
+                QUuidResource.uuidResource.creationDate.asc());
     }
 }

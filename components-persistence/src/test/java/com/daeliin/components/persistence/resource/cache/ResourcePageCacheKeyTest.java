@@ -1,7 +1,7 @@
 package com.daeliin.components.persistence.resource.cache;
 
 import com.daeliin.components.core.pagination.PageRequest;
-import com.daeliin.components.persistence.fake.UuidPersistentResourcePredicate;
+import com.daeliin.components.persistence.fake.UuidResourcePredicate;
 import com.daeliin.components.persistence.resource.predicate.PersistentResourcePredicate;
 import org.junit.Test;
 
@@ -25,9 +25,9 @@ public final class ResourcePageCacheKeyTest {
     @Test
     public void shouldNotBeEqual_whenDifferentPredicates() {
         Set<PersistentResourcePredicate> predicates1 = new HashSet<>();
-        predicates1.add(new UuidPersistentResourcePredicate("1"));
+        predicates1.add(new UuidResourcePredicate("1"));
         Set<PersistentResourcePredicate> predicates2 = new HashSet<>();
-        predicates2.add(new UuidPersistentResourcePredicate("2"));
+        predicates2.add(new UuidResourcePredicate("2"));
 
         ResourcePageCacheKey resourcePageCacheKey1 = new ResourcePageCacheKey(new PageRequest(1, 5, new LinkedHashSet<>()), predicates1);
         ResourcePageCacheKey resourcePageCacheKey2 = new ResourcePageCacheKey(new PageRequest(1, 5, new LinkedHashSet<>()), predicates2);
@@ -39,7 +39,7 @@ public final class ResourcePageCacheKeyTest {
     @Test
     public void shouldBeEqual_whenSamePageRequestAndPredicates() {
         Set<PersistentResourcePredicate> predicates = new HashSet<>();
-        predicates.add(new UuidPersistentResourcePredicate("1"));
+        predicates.add(new UuidResourcePredicate("1"));
 
         ResourcePageCacheKey resourcePageCacheKey1 = new ResourcePageCacheKey(new PageRequest(1, 5, new LinkedHashSet<>()), predicates);
         ResourcePageCacheKey resourcePageCacheKey2 = new ResourcePageCacheKey(new PageRequest(1, 5, new LinkedHashSet<>()), predicates);

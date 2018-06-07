@@ -4,11 +4,11 @@ package com.daeliin.components.persistence.resource.repository;
 import com.daeliin.components.core.pagination.Page;
 import com.daeliin.components.core.pagination.PageRequest;
 import com.daeliin.components.core.pagination.Sort;
-import com.daeliin.components.persistence.fake.UuidPersistentResourceBaseRepository;
+import com.daeliin.components.persistence.fake.UuidResourceBaseRepository;
 import com.daeliin.components.persistence.fixtures.JavaFixtures;
-import com.daeliin.components.persistence.fixtures.UuidPersistentResourceRows;
-import com.daeliin.components.persistence.sql.BUuidPersistentResource;
-import com.daeliin.components.persistence.sql.QUuidPersistentResource;
+import com.daeliin.components.persistence.fixtures.UuidResourceRows;
+import com.daeliin.components.persistence.sql.BUuidResource;
+import com.daeliin.components.persistence.sql.QUuidResource;
 import com.daeliin.components.test.rule.DbFixture;
 import com.daeliin.components.test.rule.DbMemory;
 import com.google.common.collect.Sets;
@@ -31,19 +31,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BaseRepositoryIT {
 
     @Inject
-    private UuidPersistentResourceBaseRepository repository;
+    private UuidResourceBaseRepository repository;
 
     @ClassRule
     public static DbMemory dbMemory = new DbMemory();
 
     @Rule
-    public DbFixture dbFixture = new DbFixture(dbMemory, JavaFixtures.uuidPersistentResources());
+    public DbFixture dbFixture = new DbFixture(dbMemory, JavaFixtures.uuidResources());
 
     @Test
     public void shouldProvideTheRowPath() {
         dbFixture.noRollback();
 
-        assertThat(repository.rowPath()).isEqualTo(QUuidPersistentResource.uuidPersistentResource);
+        assertThat(repository.rowPath()).isEqualTo(QUuidResource.uuidResource);
     }
 
     @Test
@@ -65,7 +65,7 @@ public class BaseRepositoryIT {
     public void shouldReturnZero_whenCountingWithPredicateThatDoesntMachAnyResource() {
         dbFixture.noRollback();
 
-        Predicate noMatchPredicate = QUuidPersistentResource.uuidPersistentResource.label.eq("Foo");
+        Predicate noMatchPredicate = QUuidResource.uuidResource.label.eq("Foo");
         assertThat(repository.count(noMatchPredicate)).isEqualTo(0);
     }
 
@@ -73,8 +73,8 @@ public class BaseRepositoryIT {
     public void shouldCountResourcesWithPredicate() {
         dbFixture.noRollback();
 
-        Predicate predicate = QUuidPersistentResource.uuidPersistentResource.label.eq(UuidPersistentResourceRows.uuidPersistentResource1().getLabel())
-            .or(QUuidPersistentResource.uuidPersistentResource.label.eq(UuidPersistentResourceRows.uuidPersistentResource2().getLabel()));
+        Predicate predicate = QUuidResource.uuidResource.label.eq(UuidResourceRows.uuidResource1().getLabel())
+            .or(QUuidResource.uuidResource.label.eq(UuidResourceRows.uuidResource2().getLabel()));
 
         assertThat(repository.count(predicate)).isEqualTo(2);
     }
@@ -92,7 +92,7 @@ public class BaseRepositoryIT {
     public void shouldReturnEmpty_whenPredicateDoesntMatchAnyRow() {
         dbFixture.noRollback();
 
-        Predicate predicate = QUuidPersistentResource.uuidPersistentResource.label.eq("nonExistingLabel");
+        Predicate predicate = QUuidResource.uuidResource.label.eq("nonExistingLabel");
 
         assertThat(repository.findOne(predicate).isPresent()).isFalse();
     }
@@ -101,9 +101,9 @@ public class BaseRepositoryIT {
     public void shouldFindResource_accordingToPredicate() {
         dbFixture.noRollback();
 
-        Predicate predicate = QUuidPersistentResource.uuidPersistentResource.uuid.eq(UuidPersistentResourceRows.uuidPersistentResource1().getUuid());
+        Predicate predicate = QUuidResource.uuidResource.uuid.eq(UuidResourceRows.uuidResource1().getUuid());
 
-        assertThat(repository.findOne(predicate).get()).isEqualToComparingFieldByField(UuidPersistentResourceRows.uuidPersistentResource1());
+        assertThat(repository.findOne(predicate).get()).isEqualToComparingFieldByField(UuidResourceRows.uuidResource1());
     }
 
     @Test
@@ -112,7 +112,7 @@ public class BaseRepositoryIT {
 
         Predicate nullPredicate = null;
 
-        Collection<BUuidPersistentResource> foundUuidEntities = repository.findAll(nullPredicate);
+        Collection<BUuidResource> foundUuidEntities = repository.findAll(nullPredicate);
 
         assertThat(foundUuidEntities.size()).isEqualTo(countRows());
     }
@@ -121,9 +121,9 @@ public class BaseRepositoryIT {
     public void shouldReturnEmptyCollection_whenPredicateDoesntMatchAnyResource() {
         dbFixture.noRollback();
 
-        Predicate labelIsEqualToFoo = QUuidPersistentResource.uuidPersistentResource.label.eq("Foo");
+        Predicate labelIsEqualToFoo = QUuidResource.uuidResource.label.eq("Foo");
 
-        Collection<BUuidPersistentResource> foundUuidEntities = repository.findAll(labelIsEqualToFoo);
+        Collection<BUuidResource> foundUuidEntities = repository.findAll(labelIsEqualToFoo);
 
         assertThat(foundUuidEntities).isEmpty();
     }
@@ -132,15 +132,15 @@ public class BaseRepositoryIT {
     public void shouldFindResources_accordingToPredicate() {
         dbFixture.noRollback();
 
-        Predicate labelStartsWithLabel = QUuidPersistentResource.uuidPersistentResource.label.startsWith("label");
+        Predicate labelStartsWithLabel = QUuidResource.uuidResource.label.startsWith("label");
 
-        Collection<BUuidPersistentResource> foundUuidEntities = repository.findAll(labelStartsWithLabel);
+        Collection<BUuidResource> foundUuidEntities = repository.findAll(labelStartsWithLabel);
 
         assertThat(foundUuidEntities).usingFieldByFieldElementComparator().containsOnly(
-            UuidPersistentResourceRows.uuidPersistentResource1(),
-            UuidPersistentResourceRows.uuidPersistentResource2(),
-            UuidPersistentResourceRows.uuidPersistentResource3(),
-            UuidPersistentResourceRows.uuidPersistentResource4()
+            UuidResourceRows.uuidResource1(),
+            UuidResourceRows.uuidResource2(),
+            UuidResourceRows.uuidResource3(),
+            UuidResourceRows.uuidResource4()
         );
     }
 
@@ -148,7 +148,7 @@ public class BaseRepositoryIT {
     public void shouldFindAllResources() throws Exception {
         dbFixture.noRollback();
 
-        Collection<BUuidPersistentResource> uuidEntities = repository.findAll();
+        Collection<BUuidResource> uuidEntities = repository.findAll();
 
         assertThat(uuidEntities.size()).isEqualTo(countRows());
     }
@@ -159,16 +159,16 @@ public class BaseRepositoryIT {
 
         int uuidPersistentResourceCount = countRows();
 
-        Collection<BUuidPersistentResource> uuidPersistentResourcePageContent = Arrays.asList(
-            UuidPersistentResourceRows.uuidPersistentResource2(),
-            UuidPersistentResourceRows.uuidPersistentResource1());
+        Collection<BUuidResource> uuidPersistentResourcePageContent = Arrays.asList(
+            UuidResourceRows.uuidResource2(),
+            UuidResourceRows.uuidResource1());
 
-        Page<BUuidPersistentResource> page = repository.findAll(new PageRequest(1, 2, Sets.newLinkedHashSet(
+        Page<BUuidResource> page = repository.findAll(new PageRequest(1, 2, Sets.newLinkedHashSet(
             Arrays.asList(new Sort("uuid", Sort.Direction.DESC)))));
 
         assertThat(page.items)
             .usingFieldByFieldElementComparator()
-            .containsExactly(uuidPersistentResourcePageContent.toArray(new BUuidPersistentResource[uuidPersistentResourcePageContent.size()]));
+            .containsExactly(uuidPersistentResourcePageContent.toArray(new BUuidResource[uuidPersistentResourcePageContent.size()]));
         assertThat(page.nbItems).isEqualTo(uuidPersistentResourcePageContent.size());
         assertThat(page.totalItems).isEqualTo(uuidPersistentResourceCount);
         assertThat(page.totalPages).isEqualTo(uuidPersistentResourceCount / 2);
@@ -180,32 +180,32 @@ public class BaseRepositoryIT {
 
         int uuidPersistentResourceCount = countRows();
 
-        Collection<BUuidPersistentResource> uuidPersistentResourcePageContent = Arrays.asList(
-            UuidPersistentResourceRows.uuidPersistentResource3(),
-            UuidPersistentResourceRows.uuidPersistentResource2(),
-            UuidPersistentResourceRows.uuidPersistentResource1(),
-            UuidPersistentResourceRows.uuidPersistentResource4());
+        Collection<BUuidResource> uuidPersistentResourcePageContent = Arrays.asList(
+            UuidResourceRows.uuidResource3(),
+            UuidResourceRows.uuidResource2(),
+            UuidResourceRows.uuidResource1(),
+            UuidResourceRows.uuidResource4());
 
-        Page<BUuidPersistentResource> page = repository.findAll(new PageRequest(0, uuidPersistentResourceCount, Sets.newLinkedHashSet(
+        Page<BUuidResource> page = repository.findAll(new PageRequest(0, uuidPersistentResourceCount, Sets.newLinkedHashSet(
             Arrays.asList(new Sort("creationDate", Sort.Direction.ASC), new Sort("uuid", Sort.Direction.DESC)))));
 
         assertThat(page.items)
             .usingFieldByFieldElementComparator()
-            .containsExactly(uuidPersistentResourcePageContent.toArray(new BUuidPersistentResource[uuidPersistentResourcePageContent.size()]));
+            .containsExactly(uuidPersistentResourcePageContent.toArray(new BUuidResource[uuidPersistentResourcePageContent.size()]));
     }
 
     @Test
     public void shouldFindPageWithPredicate() {
         dbFixture.noRollback();
 
-        Predicate uuidDoesntContain511 = QUuidPersistentResource.uuidPersistentResource.uuid.contains("511").not();
+        Predicate uuidDoesntContain511 = QUuidResource.uuidResource.uuid.contains("511").not();
         PageRequest pageRequest = new PageRequest(0, 2, Sets.newLinkedHashSet(Arrays.asList(new Sort("label", Sort.Direction.ASC))));
 
-        Page<BUuidPersistentResource> page = repository.findAll(uuidDoesntContain511, pageRequest);
+        Page<BUuidResource> page = repository.findAll(uuidDoesntContain511, pageRequest);
 
         assertThat(page.items).usingFieldByFieldElementComparator().containsOnly(
-            UuidPersistentResourceRows.uuidPersistentResource2(),
-            UuidPersistentResourceRows.uuidPersistentResource3());
+            UuidResourceRows.uuidResource2(),
+            UuidResourceRows.uuidResource3());
 
         assertThat(page.totalItems).isEqualTo(3);
         assertThat(page.totalPages).isEqualTo(2);
@@ -225,7 +225,7 @@ public class BaseRepositoryIT {
 
         int uuidPersistentResourceCount = countRows();
 
-        Predicate noMatchPredicate = QUuidPersistentResource.uuidPersistentResource.label.eq("Foo");
+        Predicate noMatchPredicate = QUuidResource.uuidResource.label.eq("Foo");
         assertThat(repository.delete(noMatchPredicate)).isFalse();
 
         assertThat(countRows()).isEqualTo(uuidPersistentResourceCount);
@@ -235,8 +235,8 @@ public class BaseRepositoryIT {
     public void shouldDeleteResourcesWithPredicate() throws Exception{
         int uuidPersistentResourceCount = countRows();
 
-        Predicate predicate = QUuidPersistentResource.uuidPersistentResource.label.eq(UuidPersistentResourceRows.uuidPersistentResource1().getLabel())
-                .or(QUuidPersistentResource.uuidPersistentResource.label.eq(UuidPersistentResourceRows.uuidPersistentResource2().getLabel()));
+        Predicate predicate = QUuidResource.uuidResource.label.eq(UuidResourceRows.uuidResource1().getLabel())
+                .or(QUuidResource.uuidResource.label.eq(UuidResourceRows.uuidResource2().getLabel()));
 
         assertThat(repository.delete(predicate)).isTrue();
         assertThat(countRows()).isEqualTo(uuidPersistentResourceCount - 2);
@@ -252,6 +252,6 @@ public class BaseRepositoryIT {
     }
 
     private int countRows() throws Exception {
-        return dbMemory.countRows(QUuidPersistentResource.uuidPersistentResource.getTableName());
+        return dbMemory.countRows(QUuidResource.uuidResource.getTableName());
     }
 }

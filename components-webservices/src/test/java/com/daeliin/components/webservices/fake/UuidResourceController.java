@@ -11,17 +11,17 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RequestMapping("/uuid")
 @RestController
-public final class UuidPersistentResourceController extends ResourceController<UuidPersistentResourceDto, UuidPersistentResource, String, UuidPersistentResourceService> {
+public final class UuidResourceController extends ResourceController<UuidResourceDto, UuidResource, String, UuidResourceService> {
 
     @Inject
-    public UuidPersistentResourceController(UuidPersistentResourceService service) {
-        super(service, new UuidPersistentResourceDtoConversion());
+    public UuidResourceController(UuidResourceService service) {
+        super(service, new UuidResourceDtoConversion());
     }
 
     @RequestMapping(method = GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Page<UuidPersistentResourceDto> getAll(
+    public Page<UuidResourceDto> getAll(
             @RequestParam(value = "page", defaultValue = DEFAULT_PAGE) String page,
             @RequestParam(value = "size", defaultValue = DEFAULT_SIZE) String size,
             @RequestParam(value = "direction", defaultValue = DEFAULT_DIRECTION) String direction,
