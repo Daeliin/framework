@@ -29,7 +29,6 @@ public final class ResourcePageCacheKey {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(pageRequest, predicates);
     }
 }
