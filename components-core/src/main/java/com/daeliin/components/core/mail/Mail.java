@@ -1,9 +1,10 @@
 package com.daeliin.components.core.mail;
 
+import com.google.common.base.MoreObjects;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Represents a mail.
@@ -14,8 +15,8 @@ public class Mail {
     private final String from;
     private final String to;
     private final String subject;
-    private String templateName;
-    private Map<String, Object> parameters;
+    private final String templateName;
+    private final Map<String, Object> parameters;
     
     private Mail(
         final String from,
@@ -27,8 +28,14 @@ public class Mail {
         this.from = new EmailAddress(from).value;
         this.to = new EmailAddress(to).value;
         this.subject = subject;
-        buildTemplateName(templateName);
-        buildParameters(parameters);
+
+        if (StringUtils.isBlank(templateName)) {
+            throw new IllegalArgumentException("Mail template name must not be blank");
+        } else {
+            this.templateName = templateName;
+        }
+
+        this.parameters = parameters;
     }
     
     public String from() {
@@ -50,23 +57,35 @@ public class Mail {
     public Map<String, Object> parameters() {
         return this.parameters;
     }
-    
-    private void buildTemplateName(final String templateName) {
-        if (StringUtils.isBlank(templateName)) {
-            throw new IllegalArgumentException("Mail template name must not be blank");
-        } else {
-            this.templateName = templateName;
-        }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Mail mail = (Mail) o;
+        return Objects.equals(from, mail.from) &&
+                Objects.equals(to, mail.to) &&
+                Objects.equals(subject, mail.subject) &&
+                Objects.equals(templateName, mail.templateName) &&
+                Objects.equals(parameters, mail.parameters);
     }
-    
-    private void buildParameters(final Map<String, Object> parameters) {
-        if (parameters.isEmpty()) {
-            this.parameters = new HashMap<>();
-        } else {
-            this.parameters = parameters;
-        }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(from, to, subject, templateName, parameters);
     }
-    
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("from", from)
+                .add("to", to)
+                .add("subject", subject)
+                .add("templateName", templateName)
+                .add("parameters", parameters)
+                .toString();
+    }
+
     public static From builder() {
         return new MailBuilder();
     }
