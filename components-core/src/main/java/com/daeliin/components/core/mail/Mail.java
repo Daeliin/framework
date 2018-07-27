@@ -1,6 +1,5 @@
 package com.daeliin.components.core.mail;
 
-import com.google.common.base.MoreObjects;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
@@ -73,17 +72,6 @@ public class Mail {
     @Override
     public int hashCode() {
         return Objects.hash(from, to, subject, templateName, parameters);
-    }
-
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("from", from)
-                .add("to", to)
-                .add("subject", subject)
-                .add("templateName", templateName)
-                .add("parameters", parameters)
-                .toString();
     }
 
     public static From builder() {

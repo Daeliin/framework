@@ -2,40 +2,24 @@ package com.daeliin.components.cms.event;
 
 import com.daeliin.components.cms.fixtures.EventLogRows;
 import com.daeliin.components.cms.library.EventLogLibrary;
+import com.daeliin.components.cms.library.PersistentConversionTest;
 import com.daeliin.components.cms.sql.BEventLog;
-import org.junit.Test;
+import com.daeliin.components.core.resource.Conversion;
 
-import static org.assertj.core.api.Assertions.assertThat;
+public final class EventLogConversionTest extends PersistentConversionTest<EventLog, BEventLog> {
 
-public final class EventLogConversionTest {
-
-    private EventLogConversion eventLogConversion = new EventLogConversion();
-
-    @Test(expected = Exception.class)
-    public void shouldThrowException_whenMappingNull() {
-        EventLog nullEventLog = null;
-
-        eventLogConversion.to(nullEventLog);
+    @Override
+    protected Conversion<EventLog, BEventLog> conversion() {
+        return new EventLogConversion();
     }
 
-    @Test
-    public void shouldMapEventLog() {
-        BEventLog mappedEventLog = eventLogConversion.to(EventLogLibrary.login());
-
-        assertThat(mappedEventLog).isEqualToComparingFieldByField(EventLogRows.login());
+    @Override
+    protected EventLog object() {
+        return EventLogLibrary.login();
     }
 
-    @Test(expected = Exception.class)
-    public void shouldThrowException_whenInstantiatingNull() {
-        BEventLog nullEventLogRow = null;
-
-        eventLogConversion.from(nullEventLogRow);
-    }
-
-    @Test
-    public void shouldInstantiateAnEventLog() {
-        EventLog rebuiltEventLog = eventLogConversion.from(EventLogRows.login());
-
-        assertThat(rebuiltEventLog).isEqualTo(EventLogLibrary.login());
+    @Override
+    protected BEventLog converted() {
+        return EventLogRows.login();
     }
 }

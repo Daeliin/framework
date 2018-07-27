@@ -2,40 +2,24 @@ package com.daeliin.components.cms.credentials.account;
 
 import com.daeliin.components.cms.fixtures.AccountRows;
 import com.daeliin.components.cms.library.AccountLibrary;
+import com.daeliin.components.cms.library.PersistentConversionTest;
 import com.daeliin.components.cms.sql.BAccount;
-import org.junit.Test;
+import com.daeliin.components.core.resource.Conversion;
 
-import static org.assertj.core.api.Assertions.assertThat;
+public final class AccountConversionTest extends PersistentConversionTest<Account, BAccount> {
 
-public final class AccountConversionTest {
-
-    private AccountConversion accountConversion = new AccountConversion();
-
-    @Test(expected = Exception.class)
-    public void shouldThrowException_whenMappingNull() {
-        Account nullAccount = null;
-
-        accountConversion.to(nullAccount);
+    @Override
+    protected Conversion<Account, BAccount> conversion() {
+        return new AccountConversion();
     }
 
-    @Test
-    public void shouldMapAccount() {
-        BAccount mappedAccount = accountConversion.to(AccountLibrary.admin());
-
-        assertThat(mappedAccount).isEqualToComparingFieldByField(AccountRows.admin());
+    @Override
+    protected Account object() {
+        return AccountLibrary.admin();
     }
 
-    @Test(expected = Exception.class)
-    public void shouldThrowException_whenInstantiatingNull() {
-        BAccount nullAccountRow = null;
-
-        accountConversion.from(nullAccountRow);
-    }
-
-    @Test
-    public void shouldInstantiateAnAccount() {
-        Account rebuiltAccount = accountConversion.from(AccountRows.admin());
-
-        assertThat(rebuiltAccount).isEqualTo(AccountLibrary.admin());
+    @Override
+    protected BAccount converted() {
+        return AccountRows.admin();
     }
 }

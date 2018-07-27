@@ -2,40 +2,24 @@ package com.daeliin.components.cms.credentials.permission;
 
 import com.daeliin.components.cms.fixtures.PermissionRows;
 import com.daeliin.components.cms.library.PermissionLibrary;
+import com.daeliin.components.cms.library.PersistentConversionTest;
 import com.daeliin.components.cms.sql.BPermission;
-import org.junit.Test;
+import com.daeliin.components.core.resource.Conversion;
 
-import static org.assertj.core.api.Assertions.assertThat;
+public final class PermissionConversionTest extends PersistentConversionTest<Permission, BPermission> {
 
-public final class PermissionConversionTest {
-
-    private PermissionConversion permissionConversion = new PermissionConversion();
-
-    @Test(expected = Exception.class)
-    public void shouldThrowException_whenMappingNull() {
-        Permission nullPermission = null;
-
-        permissionConversion.to(nullPermission);
+    @Override
+    protected Conversion<Permission, BPermission> conversion() {
+        return new PermissionConversion();
     }
 
-    @Test
-    public void shouldMapPermission() {
-        BPermission mappedPermission = permissionConversion.to(PermissionLibrary.admin());
-
-        assertThat(mappedPermission).isEqualToComparingFieldByField(PermissionRows.admin());
+    @Override
+    protected Permission object() {
+        return PermissionLibrary.admin();
     }
 
-    @Test(expected = Exception.class)
-    public void shouldThrowException_whenInstantiatingNull() {
-        BPermission nullPermissionRow = null;
-
-        permissionConversion.from(nullPermissionRow);
-    }
-
-    @Test
-    public void shouldInstantiateAnPermission() {
-        Permission rebuiltPermission = permissionConversion.from(PermissionRows.admin());
-
-        assertThat(rebuiltPermission).isEqualTo(PermissionLibrary.admin());
+    @Override
+    protected BPermission converted() {
+        return PermissionRows.admin();
     }
 }
