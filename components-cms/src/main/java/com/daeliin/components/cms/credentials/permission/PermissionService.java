@@ -11,7 +11,7 @@ import java.util.TreeSet;
 import static java.util.stream.Collectors.toCollection;
 
 @Service
-public final class PermissionService extends ResourceService<Permission, BPermission, String, PermissionRepository> {
+public class PermissionService extends ResourceService<Permission, BPermission, String, PermissionRepository> {
 
     @Inject
     public PermissionService(PermissionRepository repository) {

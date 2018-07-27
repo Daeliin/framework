@@ -11,7 +11,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RequestMapping("/uuid")
 @RestController
-public final class UuidResourceController extends ResourceController<UuidResourceDto, UuidResource, String, UuidResourceService> {
+public class UuidResourceController extends ResourceController<UuidResourceDto, UuidResource, String, UuidResourceService> {
 
     @Inject
     public UuidResourceController(UuidResourceService service) {

@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import java.time.Instant;
 
 @Service
-public final class EventLogService extends ResourceService<EventLog, BEventLog, String, EventLogRepository> {
+public class EventLogService extends ResourceService<EventLog, BEventLog, String, EventLogRepository> {
 
     @Inject
     public EventLogService(EventLogRepository repository) {
