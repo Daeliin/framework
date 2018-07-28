@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public abstract class PersistentConversionTest<O, C> {
+public abstract class PersistenceConversionTest<O, C> {
 
     protected abstract Conversion<O,C> conversion();
 

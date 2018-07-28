@@ -2,11 +2,11 @@ package com.daeliin.components.cms.event;
 
 import com.daeliin.components.cms.fixtures.EventLogRows;
 import com.daeliin.components.cms.library.EventLogLibrary;
-import com.daeliin.components.cms.library.PersistentConversionTest;
+import com.daeliin.components.cms.library.PersistenceConversionTest;
 import com.daeliin.components.cms.sql.BEventLog;
 import com.daeliin.components.core.resource.Conversion;
 
-public final class EventLogConversionTest extends PersistentConversionTest<EventLog, BEventLog> {
+public final class EventLogConversionTest extends PersistenceConversionTest<EventLog, BEventLog> {
 
     @Override
     protected Conversion<EventLog, BEventLog> conversion() {

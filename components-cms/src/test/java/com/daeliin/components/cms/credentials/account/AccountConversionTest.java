@@ -2,11 +2,11 @@ package com.daeliin.components.cms.credentials.account;
 
 import com.daeliin.components.cms.fixtures.AccountRows;
 import com.daeliin.components.cms.library.AccountLibrary;
-import com.daeliin.components.cms.library.PersistentConversionTest;
+import com.daeliin.components.cms.library.PersistenceConversionTest;
 import com.daeliin.components.cms.sql.BAccount;
 import com.daeliin.components.core.resource.Conversion;
 
-public final class AccountConversionTest extends PersistentConversionTest<Account, BAccount> {
+public final class AccountConversionTest extends PersistenceConversionTest<Account, BAccount> {
 
     @Override
     protected Conversion<Account, BAccount> conversion() {

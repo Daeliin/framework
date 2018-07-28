@@ -2,11 +2,11 @@ package com.daeliin.components.cms.country;
 
 import com.daeliin.components.cms.fixtures.CountryRows;
 import com.daeliin.components.cms.library.CountryLibrary;
-import com.daeliin.components.cms.library.PersistentConversionTest;
+import com.daeliin.components.cms.library.PersistenceConversionTest;
 import com.daeliin.components.cms.sql.BCountry;
 import com.daeliin.components.core.resource.Conversion;
 
-public final class CountryConversionTest extends PersistentConversionTest<Country, BCountry> {
+public final class CountryConversionTest extends PersistenceConversionTest<Country, BCountry> {
 
     @Override
     protected Conversion<Country, BCountry> conversion() {
