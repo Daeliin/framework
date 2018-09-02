@@ -4,7 +4,6 @@ import com.daeliin.components.cms.fixtures.AccountRows;
 import com.daeliin.components.cms.fixtures.JavaFixtures;
 import com.daeliin.components.cms.fixtures.PermissionRows;
 import com.daeliin.components.cms.sql.BPermission;
-import com.daeliin.components.persistence.resource.repository.ResourceRepository;
 import com.daeliin.components.test.rule.DbFixture;
 import com.daeliin.components.test.rule.DbMemory;
 import org.junit.ClassRule;
@@ -38,13 +37,6 @@ public class PermissionRepositoryTest {
             JavaFixtures.account_permission()
         )
     );
-
-    @Test
-    public void shouldExtendResourceRepository() {
-        dbFixture.noRollback();
-
-        assertThat(PermissionRepository.class.getSuperclass().getClass()).isEqualTo(ResourceRepository.class.getClass());
-    }
 
     @Test
     public void shouldReturnEmptyCollection_whenFindingAccountPermissionOfNull() {

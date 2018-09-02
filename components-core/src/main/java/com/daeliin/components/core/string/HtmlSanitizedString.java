@@ -8,17 +8,17 @@ import java.util.Objects;
 /**
  * Sanitizes a String by removing any HTML elements.
  */
-public final class SanitizedString {
+public final class HtmlSanitizedString {
 
     public final String value;
 
-    public SanitizedString(String originalString) {
+    public HtmlSanitizedString(String originalString) {
         Objects.requireNonNull(originalString);
 
         this.value = Jsoup.clean(originalString, Whitelist.none());
     }
 
-    public SanitizedString(String originalString, Whitelist whitelist) {
+    public HtmlSanitizedString(String originalString, Whitelist whitelist) {
         Objects.requireNonNull(originalString);
 
         this.value = Jsoup.clean(originalString, whitelist);

@@ -4,7 +4,6 @@ import com.daeliin.components.cms.credentials.account.Account;
 import com.daeliin.components.cms.fixtures.JavaFixtures;
 import com.daeliin.components.cms.library.AccountLibrary;
 import com.daeliin.components.cms.library.PermissionLibrary;
-import com.daeliin.components.persistence.resource.service.ResourceService;
 import com.daeliin.components.test.rule.DbFixture;
 import com.daeliin.components.test.rule.DbMemory;
 import org.junit.ClassRule;
@@ -38,13 +37,6 @@ public class PermissionServiceIT {
             JavaFixtures.account_permission()
         )
     );
-
-    @Test
-    public void shouldExtendResourceService() {
-        assertThat(PermissionService.class.getSuperclass().getClass()).isEqualTo(ResourceService.class.getClass());
-
-        dbFixture.noRollback();
-    }
 
     @Test
     public void shouldFindPermissionsOfAccount() {

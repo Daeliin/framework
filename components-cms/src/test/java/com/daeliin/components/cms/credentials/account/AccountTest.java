@@ -1,7 +1,6 @@
 package com.daeliin.components.cms.credentials.account;
 
 import com.daeliin.components.cms.library.AccountLibrary;
-import com.daeliin.components.persistence.resource.PersistentResource;
 import org.junit.Test;
 
 import java.time.Instant;
@@ -9,11 +8,6 @@ import java.time.Instant;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public final class AccountTest {
-
-    @Test
-    public void shouldExtendPersistentResource() {
-        assertThat(Account.class.getClass().getSuperclass().getClass()).isEqualTo(PersistentResource.class.getClass());
-    }
 
     @Test(expected = Exception.class)
     public void shouldThrowExeption_whenUsernameIsNull() {

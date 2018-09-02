@@ -1,7 +1,5 @@
 package com.daeliin.components.cms.event;
 
-import com.daeliin.components.persistence.resource.PersistentResource;
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import java.time.Instant;
@@ -11,11 +9,6 @@ import java.util.UUID;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 public final class EventLogTest {
-
-    @Test
-    public void shouldExtendPersistentResource() {
-        Assertions.assertThat(EventLog.class.getSuperclass().getClass()).isEqualTo(PersistentResource.class.getClass());
-    }
 
     @Test(expected = Exception.class)
     public void shouldThrowException_whenDescriptionIsNull() {

@@ -5,7 +5,6 @@ import com.daeliin.components.cms.fixtures.JavaFixtures;
 import com.daeliin.components.cms.library.AccountLibrary;
 import com.daeliin.components.cms.library.NewsLibrary;
 import com.daeliin.components.core.string.UrlFriendlyString;
-import com.daeliin.components.persistence.resource.service.ResourceService;
 import com.daeliin.components.test.rule.DbFixture;
 import com.daeliin.components.test.rule.DbMemory;
 import org.junit.ClassRule;
@@ -44,13 +43,6 @@ public class NewsServiceIT {
             JavaFixtures.news()
         )
     );
-
-    @Test
-    public void shouldExtendResourceService() {
-        dbFixture.noRollback();
-
-        assertThat(NewsService.class.getSuperclass().getClass()).isEqualTo(ResourceService.class.getClass());
-    }
 
     @Test
     public void shouldFindNews() {

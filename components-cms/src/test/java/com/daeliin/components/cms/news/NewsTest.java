@@ -1,7 +1,6 @@
 package com.daeliin.components.cms.news;
 
 import com.daeliin.components.cms.library.NewsLibrary;
-import com.daeliin.components.persistence.resource.PersistentResource;
 import org.junit.Test;
 
 import java.time.Instant;
@@ -10,11 +9,6 @@ import java.time.temporal.ChronoUnit;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public final class NewsTest {
-
-    @Test
-    public void shouldExtendPersistentResource() {
-        assertThat(News.class.getSuperclass().getClass()).isEqualTo(PersistentResource.class.getClass());
-    }
 
     @Test
     public void shouldPrintItsAuthorTitlePublishedAndPublicationDate() {

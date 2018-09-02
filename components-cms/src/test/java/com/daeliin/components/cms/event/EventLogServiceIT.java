@@ -1,7 +1,6 @@
 package com.daeliin.components.cms.event;
 
 import com.daeliin.components.cms.fixtures.JavaFixtures;
-import com.daeliin.components.persistence.resource.service.ResourceService;
 import com.daeliin.components.test.rule.DbFixture;
 import com.daeliin.components.test.rule.DbMemory;
 import org.junit.ClassRule;
@@ -27,13 +26,6 @@ public class EventLogServiceIT {
 
     @Rule
     public DbFixture dbFixture = new DbFixture(dbMemory, JavaFixtures.event_log());
-
-    @Test
-    public void shouldExtendResourceService() {
-        dbFixture.noRollback();
-
-        assertThat(EventLogService.class.getSuperclass().getClass()).isEqualTo(ResourceService.class.getClass());
-    }
 
     @Test
     public void shouldCreateAnEventLogFromDescription() {

@@ -1,6 +1,5 @@
 package com.daeliin.components.cms.country;
 
-import com.daeliin.components.persistence.resource.PersistentResource;
 import org.junit.Test;
 
 import java.time.Instant;
@@ -8,11 +7,6 @@ import java.time.Instant;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public final class CountryTest {
-
-    @Test
-    public void shouldExtendPersistentResource() {
-        assertThat(Country.class.getSuperclass().getClass()).isEqualTo(PersistentResource.class.getClass());
-    }
 
     @Test(expected = Exception.class)
     public void shouldThrowException_whenCodeIsNull() {
