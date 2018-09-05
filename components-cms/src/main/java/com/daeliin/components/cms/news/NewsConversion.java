@@ -16,6 +16,7 @@ public final class NewsConversion implements Conversion<News, BNews> {
                 bNews.getUrlFriendlyTitle(),
                 bNews.getDescription(),
                 bNews.getContent(),
+                bNews.getRenderedContent(),
                 bNews.getSource(),
                 bNews.getPublicationDate(),
                 NewsStatus.valueOf(bNews.getStatus()));
@@ -30,6 +31,7 @@ public final class NewsConversion implements Conversion<News, BNews> {
                 news.description,
                 news.getId(),
                 news.publicationDate,
+                news.renderedContent,
                 news.source,
                 news.status.name(),
                 news.title,

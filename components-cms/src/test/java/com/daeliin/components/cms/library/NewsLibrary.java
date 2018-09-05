@@ -17,6 +17,7 @@ public final class NewsLibrary {
                 "welcome-to-sample",
                 "Today is the day we start sample.com",
                 "We open our door today, you'll find content very soon.",
+                "We open our door today, you'll find content very soon.",
                 "https://google.fr",
                 LocalDateTime.of(2016, 5, 20, 15, 30, 0).toInstant(ZoneOffset.UTC),
                 NewsStatus.PUBLISHED);
@@ -31,6 +32,7 @@ public final class NewsLibrary {
                 "sample-is-live",
                 "Today is the day we go live at sample.com",
                 "We go live today, here''s our first content.",
+                "We go live today, here''s our first content.",
                 null,
                 null,
                 NewsStatus.VALIDATED);
@@ -44,6 +46,7 @@ public final class NewsLibrary {
             "Sample.com is in beta",
             "sample-is-in-beta",
             "Today is the day we go beta at sample.com",
+            "We go beta today.",
             "We go beta today.",
             null,
             null,

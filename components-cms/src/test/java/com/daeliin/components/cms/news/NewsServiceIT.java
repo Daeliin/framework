@@ -86,6 +86,7 @@ public class NewsServiceIT {
                 "Welcome to sample",
                 "welcome-to-sample",
                 "Today is the day we start sample.com",
+                "Today is the day we start sample.com",
                 "We open our door today, you'll find content very soon.",
                 "https://google.fr",
                 LocalDateTime.of(2016, 5, 20, 15, 30, 0).toInstant(ZoneOffset.UTC),
@@ -102,6 +103,7 @@ public class NewsServiceIT {
                 AccountLibrary.admin().getId(),
                 "Welcome to sample",
                 "welcome-to-sample",
+                "Today is the day we start sample.com",
                 "Today is the day we start sample.com",
                 "We open our door today, you'll find content very soon.",
                 "https://google.fr",
@@ -146,7 +148,8 @@ public class NewsServiceIT {
     @Test
     public void shouldUpdateANewsTitleDescriptionContentAndSource() {
         News newsToUpdate = NewsLibrary.draftNews();
-        News news = new News(newsToUpdate.getId(), Instant.now(), "", "New title", "", "New desc", "New content", "https://google.fr", null, NewsStatus.PUBLISHED);
+        News news = new News(newsToUpdate.getId(), Instant.now(), "", "New title", "", "New desc", "New content", "New content",
+                "https://google.fr", null, NewsStatus.PUBLISHED);
 
         News updatedArtice = newsService.update(news);
 

@@ -51,6 +51,7 @@ public class NewsService extends ResourceService<News, BNews, String, NewsReposi
                 news.urlFriendlyTitle,
                 news.description,
                 news.content,
+                news.renderedContent,
                 news.source,
                 null,
                 NewsStatus.DRAFT);
@@ -79,10 +80,11 @@ public class NewsService extends ResourceService<News, BNews, String, NewsReposi
         existingNews.setUrlFriendlyTitle(new UrlFriendlyString(news.title).value);
         existingNews.setDescription(news.description);
         existingNews.setContent(news.content);
+        existingNews.setContent(news.renderedContent);
         existingNews.setSource(news.source);
 
         return conversion.from(repository.save(existingNews));
-    }
+}
 
     @Override
     public boolean delete(String id) {

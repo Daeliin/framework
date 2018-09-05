@@ -43,6 +43,7 @@ CREATE TABLE news(
     url_friendly_title VARCHAR(255),
     description VARCHAR(500),
     content VARCHAR(5000),
+    rendered_content VARCHAR(5000),
     source VARCHAR(500),
     publication_date DATETIME,
     status VARCHAR(128) NOT NULL
