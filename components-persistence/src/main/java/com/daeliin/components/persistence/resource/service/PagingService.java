@@ -84,7 +84,7 @@ public interface PagingService<T extends Persistable<ID>, ID> {
     Page<T> findAll(PageRequest pageRequest);
 
     /**
-     * Finds a resource pge according to a predicate.
+     * Finds a resource page according to a predicate.
      * @param predicate the predicate
      * @param pageRequest the resource page request
      * @return the resource page matching the predicate
