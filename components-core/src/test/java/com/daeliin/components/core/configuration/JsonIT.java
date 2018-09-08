@@ -83,6 +83,13 @@ public class JsonIT {
     }
 
     @Test
+    public void shouldNotSerializeNullProperties() throws Exception {
+        ImmutableResource immutableResource = new ImmutableResource("id", null, "label");
+
+        assertThat(jsonMapper.writeValueAsString(immutableResource)).doesNotContain("null");
+    }
+
+    @Test
     public void shouldIgnoreUnknownProperties() throws Exception {
         ImmutableResource uuidPersistentResource = new ImmutableResource("id",
             LocalDateTime.of(2017, 1, 1, 12, 32, 12).toInstant(ZoneOffset.UTC), "label");
