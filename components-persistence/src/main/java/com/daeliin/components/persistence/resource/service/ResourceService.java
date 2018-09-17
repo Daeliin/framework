@@ -113,14 +113,10 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
     }
 
     @Override
-    public T findOne(Predicate predicate) {
+    public Optional<T> findOne(Predicate predicate) {
         Optional<R> resource = repository.findOne(predicate);
 
-        if (!resource.isPresent()) {
-            throw new NoSuchElementException(MESSAGE_RESOURCE_NOT_FOUND);
-        }
-
-        return conversion.from(resource.get());
+        return resource.map(conversion::from);
     }
 
     /**

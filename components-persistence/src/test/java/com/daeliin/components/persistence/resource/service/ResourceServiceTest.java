@@ -156,16 +156,29 @@ public class ResourceServiceTest {
     }
 
     @Test
+    public void shouldCallRepositoryFindOneWithPredicateAndReturnEmpty_whenNoResourceMatchesPredicate() {
+        Predicate predicate = QUuidResource.uuidResource.uuid.eq("nonExistingId");
+
+        doReturn(Optional.empty()).when(repositoryMock).findOne(predicate);
+
+        Optional<UuidResource> foundUuidEntity = service.findOne(predicate);
+
+        verify(repositoryMock).findOne(predicate);
+        assertThat(foundUuidEntity).isEmpty();
+    }
+
+    @Test
     public void shouldCallRepositoryFindOneWithPredicateAndReturnResource_whenFindingResourceWithPredicate() {
         Predicate predicate = QUuidResource.uuidResource.uuid.eq(UuidResourceLibrary.uuidResource1().getId());
         UuidResource existingUuidEntity = UuidResourceLibrary.uuidResource1();
 
         doReturn(Optional.of(conversion.to(existingUuidEntity))).when(repositoryMock).findOne(predicate);
 
-        UuidResource foundUuidEntity = service.findOne(predicate);
+        Optional<UuidResource> foundUuidEntity = service.findOne(predicate);
     
         verify(repositoryMock).findOne(predicate);
-        assertThat(foundUuidEntity).isEqualTo(existingUuidEntity);
+        assertThat(foundUuidEntity).isNotEmpty();
+        assertThat(foundUuidEntity.get()).isEqualTo(existingUuidEntity);
     }
 
     @Test

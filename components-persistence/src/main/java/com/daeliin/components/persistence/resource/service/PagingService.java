@@ -6,6 +6,7 @@ import com.daeliin.components.persistence.resource.Persistable;
 import com.querydsl.core.types.Predicate;
 
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * Provides CRUD operations and pagination for a resource.
@@ -52,9 +53,9 @@ public interface PagingService<T extends Persistable<ID>, ID> {
     /**
      * Finds a resource according to a predicate.
      * @param predicate the predicate
-     * @return the resource matching the predicate
+     * @return the resource matching the predicate if one was found
      */
-    T findOne(Predicate predicate);
+    Optional<T> findOne(Predicate predicate);
 
     /**
      * Finds every resources.
