@@ -1,5 +1,6 @@
 package com.daeliin.components.core.configuration;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
@@ -10,12 +11,18 @@ public class ThreadPool {
 
     private static final String JAVA_COMPONENTS_SPRING_TASK_EXECUTOR_PREFIX = "java-components-spring-task-executor";
 
+    @Value("${daeliin.threadpool.coreSize}")
+    private int corePoolSize;
+
+    @Value("${daeliin.threadpool.maxSize}")
+    private int maxPoolSize;
+
     @Bean
     public TaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
 
-        executor.setCorePoolSize(4);
-        executor.setMaxPoolSize(4);
+        executor.setCorePoolSize(corePoolSize);
+        executor.setMaxPoolSize(maxPoolSize);
         executor.setThreadNamePrefix(JAVA_COMPONENTS_SPRING_TASK_EXECUTOR_PREFIX);
         executor.initialize();
 
