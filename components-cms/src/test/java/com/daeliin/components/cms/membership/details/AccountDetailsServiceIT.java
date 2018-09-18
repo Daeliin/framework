@@ -13,8 +13,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
@@ -49,20 +47,6 @@ public class AccountDetailsServiceIT {
         dbFixture.noRollback();
 
         accountDetailsService.signUp(null);
-    }
-
-    @Test
-    public void shoudLoadUserByUsername() {
-        dbFixture.noRollback();
-
-        Account account = AccountLibrary.admin();
-
-        UserDetails userDetails = accountDetailsService.loadUserByUsername(account.username);
-
-        assertThat(userDetails).isNotNull();
-        assertThat(userDetails.getUsername()).isEqualTo(account.username);
-        assertThat(userDetails.isEnabled()).isEqualTo(account.enabled);
-        assertThat(userDetails.getAuthorities().iterator().next()).isEqualTo(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 
     @Test

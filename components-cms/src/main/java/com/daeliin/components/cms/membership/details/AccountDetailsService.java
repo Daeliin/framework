@@ -2,69 +2,27 @@ package com.daeliin.components.cms.membership.details;
 
 import com.daeliin.components.cms.credentials.account.Account;
 import com.daeliin.components.cms.credentials.account.AccountService;
-import com.daeliin.components.cms.credentials.permission.Permission;
-import com.daeliin.components.cms.credentials.permission.PermissionService;
 import com.daeliin.components.cms.membership.SignUpRequest;
 import com.daeliin.components.core.resource.Id;
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static java.util.Objects.requireNonNull;
 
 @Service
-public class AccountDetailsService implements UserDetailsService {
+public class AccountDetailsService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountDetailsService.class);
 
     private final AccountService accountService;
-    private final PermissionService permissionService;
-
-    private Cache<String, UserDetails>  userDetailsByUsername = Caffeine.newBuilder()
-            .expireAfterWrite(1, TimeUnit.DAYS)
-            .maximumSize(10_000)
-            .build();
 
     @Inject
-    public AccountDetailsService(AccountService accountService, PermissionService permissionService) {
+    public AccountDetailsService(AccountService accountService) {
         this.accountService = requireNonNull(accountService);
-        this.permissionService = requireNonNull(permissionService);
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) {
-        return userDetailsByUsername.get(username, ignored -> {
-            Account account = accountService.findByUsernameAndEnabled(username);
-
-            if (account == null) {
-                throw new UsernameNotFoundException("Username not found");
-            }
-
-            List<GrantedAuthority> authorities = new ArrayList<>();
-            Collection<Permission> permissions = permissionService.findForAccount(account.getId());
-            permissions.forEach(accountPermission -> authorities.add(new SimpleGrantedAuthority("ROLE_" + accountPermission.getId())));
-
-            return new User(account.username, account.password, authorities);
-        });
-    }
-
-    public void invalidateCache() {
-        this.userDetailsByUsername.invalidateAll();
     }
 
     public Account signUp(SignUpRequest signUpRequest) {

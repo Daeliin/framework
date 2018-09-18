@@ -2,8 +2,6 @@ package com.daeliin.components.cms.session;
 
 import com.daeliin.components.cms.credentials.account.Account;
 import com.daeliin.components.cms.credentials.account.AccountService;
-import com.daeliin.components.cms.credentials.permission.Permission;
-import com.daeliin.components.cms.membership.details.AccountDetailsService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,16 +9,16 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 
+import static java.util.Objects.requireNonNull;
+
 @Component
 public class AccountSession {
 
-    private final AccountDetailsService accountDetailsService;
     private final AccountService accountService;
 
     @Inject
-    public AccountSession(final AccountDetailsService accountDetailsService, AccountService accountService) {
-        this.accountDetailsService = accountDetailsService;
-        this.accountService = accountService;
+    public AccountSession(AccountService accountService) {
+        this.accountService = requireNonNull(accountService);
     }
 
     public boolean isLoggedIn() {
@@ -35,7 +33,7 @@ public class AccountSession {
     public org.springframework.security.core.userdetails.UserDetails currentAccountDetails() {
         String currentUsername = username();
 
-        return accountDetailsService.loadUserByUsername(currentUsername);
+        return accountService.loadUserByUsername(currentUsername);
     }
 
     public boolean is(final Account account) {

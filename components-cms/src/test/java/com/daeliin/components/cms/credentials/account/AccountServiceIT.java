@@ -11,12 +11,15 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 
+import static com.ninja_squad.dbsetup.operation.CompositeOperation.sequenceOf;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -33,7 +36,27 @@ public class AccountServiceIT {
     public static DbMemory dbMemory = new DbMemory();
 
     @Rule
-    public DbFixture dbFixture = new DbFixture(dbMemory, JavaFixtures.account());
+    public DbFixture dbFixture = new DbFixture(dbMemory,
+            sequenceOf(
+                    JavaFixtures.account(),
+                    JavaFixtures.permission(),
+                    JavaFixtures.account_permission()
+            )
+    );
+
+    @Test
+    public void shoudLoadUserByUsername() {
+        dbFixture.noRollback();
+
+        Account account = AccountLibrary.admin();
+
+        UserDetails userDetails = accountService.loadUserByUsername(account.username);
+
+        assertThat(userDetails).isNotNull();
+        assertThat(userDetails.getUsername()).isEqualTo(account.username);
+        assertThat(userDetails.isEnabled()).isEqualTo(account.enabled);
+        assertThat(userDetails.getAuthorities().iterator().next()).isEqualTo(new SimpleGrantedAuthority("ROLE_ADMIN"));
+    }
 
     @Test
     public void shouldFindAnAccount_byUsername() {
