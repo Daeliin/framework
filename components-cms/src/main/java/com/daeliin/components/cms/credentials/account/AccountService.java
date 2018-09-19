@@ -7,6 +7,8 @@ import com.daeliin.components.cms.sql.QAccount;
 import com.daeliin.components.persistence.resource.service.ResourceService;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,7 +30,7 @@ public class AccountService extends ResourceService<Account, BAccount, String, A
 
     private final PermissionService permissionService;
 
-    private Cache<String, UserDetails> userDetailsByUsername = Caffeine.newBuilder()
+    private Cache<String, Pair<Account, Collection<GrantedAuthority>>> accountByUsername = Caffeine.newBuilder()
             .expireAfterWrite(1, TimeUnit.DAYS)
             .maximumSize(10_000)
             .build();
@@ -41,23 +43,25 @@ public class AccountService extends ResourceService<Account, BAccount, String, A
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        return userDetailsByUsername.get(username, ignored -> {
-            Account account = findByUsernameAndEnabled(username);
+        Pair<Account, Collection<GrantedAuthority>> account = accountByUsername.get(username, ignored -> {
+            Account accountFromDatabase = findByUsernameAndEnabled(username);
 
-            if (account == null) {
+            if (accountFromDatabase == null) {
                 throw new UsernameNotFoundException("Username not found");
             }
 
             List<GrantedAuthority> authorities = new ArrayList<>();
-            Collection<Permission> permissions = permissionService.findForAccount(account.getId());
+            Collection<Permission> permissions = permissionService.findForAccount(accountFromDatabase.getId());
             permissions.forEach(accountPermission -> authorities.add(new SimpleGrantedAuthority("ROLE_" + accountPermission.getId())));
 
-            return new User(account.username, account.password, authorities);
+            return new ImmutablePair<>(accountFromDatabase, authorities);
         });
+
+        return new User(account.getLeft().username, account.getLeft().password, account.getRight());
     }
 
     public void invalidateCache() {
-        this.userDetailsByUsername.invalidateAll();
+        this.accountByUsername.invalidateAll();
     }
 
     public Account findByUsername(String username) {

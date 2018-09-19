@@ -74,4 +74,26 @@ public final class AccountServiceTest {
         verify(permissionServiceMock, times(1)).findForAccount(account.getId());
     }
 
+    @Test
+    public void shouldHitTheDatabaseAgain_whenLoadingAUserThatWasEvictedFromCache() {
+        BAccount account = AccountRows.admin();;
+        Permission permission = new Permission("admin", Instant.now(), "ADMIN");
+
+        doReturn(List.of(account)).when(accountRepositoryMock).findAll(QAccount.account.username.equalsIgnoreCase(account.getUsername())
+                .and(QAccount.account.enabled.isTrue()));
+
+        doReturn(Set.of(permission)).when(permissionServiceMock).findForAccount(account.getId());
+
+        tested.loadUserByUsername(account.getUsername());
+        tested.invalidateCache();
+        UserDetails tomsearle = tested.loadUserByUsername(account.getUsername());
+
+        assertThat(tomsearle).isNotNull();
+        assertThat(tomsearle.getUsername()).isEqualTo(account.getUsername());
+        assertThat(tomsearle.getAuthorities()).extracting(GrantedAuthority::getAuthority).containsOnly("ROLE_admin");
+
+        verify(accountRepositoryMock, times(2)).findAll(QAccount.account.username.equalsIgnoreCase(account.getUsername())
+                .and(QAccount.account.enabled.isTrue()));
+        verify(permissionServiceMock, times(2)).findForAccount(account.getId());
+    }
 }
