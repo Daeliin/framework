@@ -118,7 +118,7 @@ public class MailingMembershipNotifications implements MembershipNotifications {
     private Map<String, Object> addAccountParameters(final Account account) {
         Map<String, Object> accountParameters = new HashMap<>();
         
-        accountParameters.put("userId", account.getId());
+        accountParameters.put("userId", account.id());
         accountParameters.put("userName", account.username);
         accountParameters.put("userEmail", account.email);
         accountParameters.put("userToken", account.token);

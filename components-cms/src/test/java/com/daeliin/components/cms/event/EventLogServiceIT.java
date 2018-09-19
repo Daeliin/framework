@@ -31,8 +31,8 @@ public class EventLogServiceIT {
     public void shouldCreateAnEventLogFromDescription() {
         EventLog eventLog = eventLogService.create("Test");
 
-        assertThat(eventLog.getId()).isNotBlank();
-        assertThat(eventLog.getCreationDate()).isNotNull();
+        assertThat(eventLog.id()).isNotBlank();
+        assertThat(eventLog.creationDate()).isNotNull();
         assertThat(eventLog.description).isEqualTo("Test");
     }
 }

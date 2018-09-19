@@ -1,5 +1,6 @@
 package com.daeliin.components.persistence.resource;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 
 import java.time.Instant;
@@ -24,11 +25,11 @@ public abstract class PersistentResource<ID> implements Persistable<ID> {
         this.creationDate = Objects.requireNonNull(creationDate);
     }
 
-    public ID getId() {
+    public ID id() {
         return id;
     }
 
-    public Instant getCreationDate() {
+    public Instant creationDate() {
         return creationDate;
     }
 

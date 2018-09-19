@@ -104,9 +104,9 @@ public class AccountServiceIT {
 
     @Test
     public void shouldDeleteAllPermissionsOfAccount() {
-        accountService.delete(AccountLibrary.inactive().getId());
+        accountService.delete(AccountLibrary.inactive().id());
 
-        Collection<Permission> accountPermissions = permissionService.findForAccount(AccountLibrary.inactive().getId());
+        Collection<Permission> accountPermissions = permissionService.findForAccount(AccountLibrary.inactive().id());
 
         assertThat(accountPermissions).isEmpty();
     }

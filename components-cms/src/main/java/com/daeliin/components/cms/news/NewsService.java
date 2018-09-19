@@ -69,11 +69,11 @@ public class NewsService extends ResourceService<News, BNews, String, NewsReposi
             throw new NoSuchElementException();
         }
 
-        BNews existingNews = repository.findOne(news.getId())
-            .orElseThrow(() -> new NoSuchElementException(String.format("News %s doesn't exist", news.getId())));
+        BNews existingNews = repository.findOne(news.id())
+            .orElseThrow(() -> new NoSuchElementException(String.format("News %s doesn't exist", news.id())));
 
         if (NewsStatus.valueOf(existingNews.getStatus()) != NewsStatus.DRAFT) {
-            throw new IllegalStateException(String.format("News %s is not in draft, it can't be updated", news.getId()));
+            throw new IllegalStateException(String.format("News %s is not in draft, it can't be updated", news.id()));
         }
 
         existingNews.setTitle(news.title);
@@ -91,12 +91,12 @@ public class NewsService extends ResourceService<News, BNews, String, NewsReposi
         News news = findOne(id);
 
         if (news.status != NewsStatus.DRAFT) {
-            throw new IllegalStateException(String.format("News %s is not in draft, it can't be deleted", news.getId()));
+            throw new IllegalStateException(String.format("News %s is not in draft, it can't be deleted", news.id()));
         }
 
         boolean deleted = repository.delete(id);
 
-        eventLogService.create(String.format("The news %s has been deleted", news.getId()));
+        eventLogService.create(String.format("The news %s has been deleted", news.id()));
 
         return deleted;
     }
@@ -125,7 +125,7 @@ public class NewsService extends ResourceService<News, BNews, String, NewsReposi
     public Map<News, Account> authorByNews(Collection<String> newsIds) {
         Collection<News> news = findAll(QNews.news.id.in(newsIds));
         Set<String> accountIds = news.stream().map(newsItem -> newsItem.authorId).collect(toSet());
-        Map<String, Account> accountById = accountService.findAll(QAccount.account.id.in(accountIds)).stream().collect(toMap(Account::getId, Function.identity()));
+        Map<String, Account> accountById = accountService.findAll(QAccount.account.id.in(accountIds)).stream().collect(toMap(Account::id, Function.identity()));
 
         return news.stream()
             .collect(toMap(Function.identity(), newsItem -> accountById.get(newsItem.authorId)));

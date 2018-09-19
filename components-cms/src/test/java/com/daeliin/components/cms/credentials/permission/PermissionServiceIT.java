@@ -42,7 +42,7 @@ public class PermissionServiceIT {
     public void shouldFindPermissionsOfAccount() {
         Account account = AccountLibrary.admin();
 
-        Collection<Permission> permissions = permissionService.findForAccount(account.getId());
+        Collection<Permission> permissions = permissionService.findForAccount(account.id());
 
         assertThat(permissions).containsExactly(PermissionLibrary.admin());
 

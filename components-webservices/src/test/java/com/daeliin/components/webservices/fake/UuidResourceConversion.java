@@ -24,8 +24,8 @@ public final class UuidResourceConversion implements Conversion<UuidResource, BU
         }
 
         return new BUuidResource(
-                uuidResource.getCreationDate(),
+                uuidResource.creationDate(),
                 uuidResource.label,
-                uuidResource.getId());
+                uuidResource.id());
     }
 }

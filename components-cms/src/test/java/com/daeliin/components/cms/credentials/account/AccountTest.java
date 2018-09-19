@@ -78,7 +78,7 @@ public final class AccountTest {
         Account account = AccountLibrary.admin();
 
         assertThat(account.toString()).contains(
-                account.getId(),
+                account.id(),
                 account.email,
                 account.username,
                 String.valueOf(account.enabled));

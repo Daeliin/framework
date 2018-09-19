@@ -16,8 +16,8 @@ public final class EventLogConversion implements Conversion<EventLog, BEventLog>
     @Override
     public BEventLog to(EventLog eventLog) {
         return new BEventLog(
-                eventLog.getCreationDate(),
+                eventLog.creationDate(),
                 eventLog.description,
-                eventLog.getId());
+                eventLog.id());
     }
 }

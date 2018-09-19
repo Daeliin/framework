@@ -55,8 +55,8 @@ public class AccountDetailsServiceIT {
 
         Account signedUpAccount = accountDetailsService.signUp(signUpRequest);
 
-        assertThat(signedUpAccount.getId()).isNotNull();
-        assertThat(signedUpAccount.getCreationDate()).isNotNull();
+        assertThat(signedUpAccount.id()).isNotNull();
+        assertThat(signedUpAccount.creationDate()).isNotNull();
         assertThat(signedUpAccount.username).isEqualTo(signUpRequest.username);
         assertThat(signedUpAccount.email).isEqualTo(signUpRequest.email);
         assertThat(signedUpAccount.password).isNotNull();
@@ -139,7 +139,7 @@ public class AccountDetailsServiceIT {
         } catch (IllegalArgumentException e) {
         }
 
-        Account accountAfterResetPasswordTry = accountService.findOne(account.getId());
+        Account accountAfterResetPasswordTry = accountService.findOne(account.id());
 
         assertThat(accountAfterResetPasswordTry.password).isEqualTo(account.password);
     }

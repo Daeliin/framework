@@ -113,7 +113,7 @@ public abstract class ResourceController<V, T extends Persistable<ID>, ID, S ext
 
         T existingResource = service.findOne(resourceId);
 
-        return conversion.instantiate(service.update(conversion.map(resource, existingResource.getId(), existingResource.getCreationDate())));
+        return conversion.instantiate(service.update(conversion.map(resource, existingResource.id(), existingResource.creationDate())));
     }
 
     /**

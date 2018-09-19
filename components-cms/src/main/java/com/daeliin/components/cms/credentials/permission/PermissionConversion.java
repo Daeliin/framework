@@ -16,8 +16,8 @@ public final class PermissionConversion implements Conversion<Permission, BPermi
     @Override
     public BPermission to(Permission permission) {
         return new BPermission(
-                permission.getCreationDate(),
-                permission.getId(),
+                permission.creationDate(),
+                permission.id(),
                 permission.name);
     }
 }

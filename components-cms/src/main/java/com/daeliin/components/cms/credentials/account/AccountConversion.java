@@ -19,10 +19,10 @@ public final class AccountConversion implements Conversion<Account, BAccount> {
     @Override
     public BAccount to(Account account) {
         return new BAccount(
-            account.getCreationDate(),
+            account.creationDate(),
             account.email,
             account.enabled,
-            account.getId(),
+            account.id(),
             account.password,
             account.token,
             account.username);

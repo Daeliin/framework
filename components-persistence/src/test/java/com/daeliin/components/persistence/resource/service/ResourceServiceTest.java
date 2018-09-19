@@ -48,7 +48,7 @@ public class ResourceServiceTest {
     public void shouldThrowException_whenCreatingResourceWithAlreadyExistingId() {
         UuidResource alreadyExistingUuidPersistentResource = UuidResourceLibrary.uuidResource1();
 
-        doReturn(true).when(repositoryMock).exists(alreadyExistingUuidPersistentResource.getId());
+        doReturn(true).when(repositoryMock).exists(alreadyExistingUuidPersistentResource.id());
 
         service.create(UuidResourceLibrary.uuidResource1());
     }
@@ -88,7 +88,7 @@ public class ResourceServiceTest {
 
     @Test
     public void shouldCallRepositoryExistAndReturnTrue_whenResourceIdExists() {
-        String existingUuidEntityId = UuidResourceLibrary.uuidResource1().getId();
+        String existingUuidEntityId = UuidResourceLibrary.uuidResource1().id();
 
         doReturn(true).when(repositoryMock).exists(existingUuidEntityId);
 
@@ -114,7 +114,7 @@ public class ResourceServiceTest {
 
     @Test
     public void shouldCallRepositoryCountWithPredicateAndReturnTheSameResult_whenCountingWithPredicate() {
-        Predicate predicate = QUuidResource.uuidResource.uuid.eq(UuidResourceLibrary.uuidResource1().getId());
+        Predicate predicate = QUuidResource.uuidResource.uuid.eq(UuidResourceLibrary.uuidResource1().id());
 
         doReturn(1L).when(repositoryMock).count(predicate);
 
@@ -147,11 +147,11 @@ public class ResourceServiceTest {
     public void shouldCallRepositoryFindOneAndReturnResource_whenFindingResource() {
         UuidResource existingUuidEntity = UuidResourceLibrary.uuidResource1();
 
-        doReturn(Optional.of(conversion.to(existingUuidEntity))).when(repositoryMock).findOne(existingUuidEntity.getId());
+        doReturn(Optional.of(conversion.to(existingUuidEntity))).when(repositoryMock).findOne(existingUuidEntity.id());
 
-        UuidResource foundUuidEntity = service.findOne(existingUuidEntity.getId());
+        UuidResource foundUuidEntity = service.findOne(existingUuidEntity.id());
 
-        verify(repositoryMock).findOne(existingUuidEntity.getId());
+        verify(repositoryMock).findOne(existingUuidEntity.id());
         assertThat(foundUuidEntity).isEqualTo(existingUuidEntity);
     }
 
@@ -169,7 +169,7 @@ public class ResourceServiceTest {
 
     @Test
     public void shouldCallRepositoryFindOneWithPredicateAndReturnResource_whenFindingResourceWithPredicate() {
-        Predicate predicate = QUuidResource.uuidResource.uuid.eq(UuidResourceLibrary.uuidResource1().getId());
+        Predicate predicate = QUuidResource.uuidResource.uuid.eq(UuidResourceLibrary.uuidResource1().id());
         UuidResource existingUuidEntity = UuidResourceLibrary.uuidResource1();
 
         doReturn(Optional.of(conversion.to(existingUuidEntity))).when(repositoryMock).findOne(predicate);
@@ -200,8 +200,8 @@ public class ResourceServiceTest {
     @Test
     public void shouldCallRepositoryFindAllWithPredicateAndReturnResources_whenFindingResourcesWithPredicate() {
         Predicate predicate =
-                QUuidResource.uuidResource.uuid.eq(UuidResourceLibrary.uuidResource1().getId())
-                .or(QUuidResource.uuidResource.uuid.eq(UuidResourceLibrary.uuidResource2().getId()));
+                QUuidResource.uuidResource.uuid.eq(UuidResourceLibrary.uuidResource1().id())
+                .or(QUuidResource.uuidResource.uuid.eq(UuidResourceLibrary.uuidResource2().id()));
 
         Collection<UuidResource> existingUuidEntities = Arrays.asList(
                 UuidResourceLibrary.uuidResource1(),
@@ -247,8 +247,8 @@ public class ResourceServiceTest {
     @Test
     public void shouldCallRepositoryFindAllWithResourceIds_whenFindingResources() {
         Collection<String> uuidEntityIds = Arrays.asList(
-                UuidResourceLibrary.uuidResource1().getId(),
-                UuidResourceLibrary.uuidResource2().getId());
+                UuidResourceLibrary.uuidResource1().id(),
+                UuidResourceLibrary.uuidResource2().id());
 
         service.findAll(uuidEntityIds);
         verify(repositoryMock).findAll(uuidEntityIds);
@@ -272,7 +272,7 @@ public class ResourceServiceTest {
     public void shouldCallRepositorySaveWithResourceAndReturnResource_whenUpdatingResource() {
         UuidResource exitingUuidEntity = UuidResourceLibrary.uuidResource1();
 
-        doReturn(true).when(repositoryMock).exists(exitingUuidEntity.getId());
+        doReturn(true).when(repositoryMock).exists(exitingUuidEntity.id());
         doReturn(conversion.to(exitingUuidEntity)).when(repositoryMock).save(any(BUuidResource.class));
 
         UuidResource updatedUuidEntity = service.update(exitingUuidEntity);
@@ -297,8 +297,8 @@ public class ResourceServiceTest {
 
     @Test
     public void shouldCallRepositoryDelete_whenDeletingResource() {
-        service.delete(UuidResourceLibrary.uuidResource1().getId());
-        verify(repositoryMock).delete(UuidResourceLibrary.uuidResource1().getId());
+        service.delete(UuidResourceLibrary.uuidResource1().id());
+        verify(repositoryMock).delete(UuidResourceLibrary.uuidResource1().id());
     }
 
     @Test
@@ -309,7 +309,7 @@ public class ResourceServiceTest {
 
     @Test
     public void shouldCallRepositoryDeleteWithPredicate_whenDeletingResourcesWithPredicate() {
-        Predicate predicate = QUuidResource.uuidResource.uuid.eq(UuidResourceLibrary.uuidResource1().getId());
+        Predicate predicate = QUuidResource.uuidResource.uuid.eq(UuidResourceLibrary.uuidResource1().id());
 
         service.delete(predicate);
         verify(repositoryMock).delete(predicate);
@@ -320,9 +320,9 @@ public class ResourceServiceTest {
         UuidResource uuidEntity1 = UuidResourceLibrary.uuidResource1();
         UuidResource uuidEntity2 = UuidResourceLibrary.uuidResource2();
 
-        service.delete(Arrays.asList(uuidEntity1.getId(), uuidEntity2.getId()));
+        service.delete(Arrays.asList(uuidEntity1.id(), uuidEntity2.id()));
 
-        verify(repositoryMock).delete(Arrays.asList(uuidEntity1.getId(), uuidEntity2.getId()));
+        verify(repositoryMock).delete(Arrays.asList(uuidEntity1.id(), uuidEntity2.id()));
     }
 
     @Test
@@ -330,14 +330,14 @@ public class ResourceServiceTest {
         UuidResource uuidEntity = UuidResourceLibrary.uuidResource1();
 
         service.delete(uuidEntity);
-        verify(repositoryMock).delete(uuidEntity.getId());
+        verify(repositoryMock).delete(uuidEntity.id());
     }
 
     @Test
     public void shouldCallRepositoryDeleteWithResources_whenDeletingResources() {
         Collection<String> uuidEntityIds = Arrays.asList(
-                UuidResourceLibrary.uuidResource1().getId(),
-                UuidResourceLibrary.uuidResource2().getId());
+                UuidResourceLibrary.uuidResource1().id(),
+                UuidResourceLibrary.uuidResource2().id());
 
         service.delete(uuidEntityIds);
         verify(repositoryMock).delete(uuidEntityIds);

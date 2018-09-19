@@ -17,7 +17,7 @@ public final class CountryConversion implements Conversion<Country, BCountry> {
     public BCountry to(Country country) {
         return new BCountry(
                 country.code,
-                country.getCreationDate(),
+                country.creationDate(),
                 country.name);
     }
 }

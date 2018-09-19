@@ -27,9 +27,9 @@ public final class NewsConversion implements Conversion<News, BNews> {
         return new BNews(
                 news.authorId,
                 news.content,
-                news.getCreationDate(),
+                news.creationDate(),
                 news.description,
-                news.getId(),
+                news.id(),
                 news.publicationDate,
                 news.renderedContent,
                 news.source,

@@ -49,7 +49,7 @@ public class NewsServiceIT {
         dbFixture.noRollback();
 
         News news = NewsLibrary.publishedNews();
-        News foundNews = newsService.findOne(news.getId());
+        News foundNews = newsService.findOne(news.id());
 
         assertThat(foundNews).isEqualTo(foundNews);
     }
@@ -72,7 +72,7 @@ public class NewsServiceIT {
     public void shouldCheckThatNewsExists() {
         dbFixture.noRollback();
 
-        assertThat(newsService.exists(NewsLibrary.publishedNews().getId())).isTrue();
+        assertThat(newsService.exists(NewsLibrary.publishedNews().id())).isTrue();
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -100,7 +100,7 @@ public class NewsServiceIT {
         News news = new News(
                 " ",
                 LocalDateTime.of(2016, 5, 20, 14, 30, 0).toInstant(ZoneOffset.UTC),
-                AccountLibrary.admin().getId(),
+                AccountLibrary.admin().id(),
                 "Welcome to sample",
                 "welcome-to-sample",
                 "Today is the day we start sample.com",
@@ -112,7 +112,7 @@ public class NewsServiceIT {
 
         News createdNews = newsService.create(news);
 
-        assertThat(createdNews.getId()).isNotBlank();
+        assertThat(createdNews.id()).isNotBlank();
         assertThat(createdNews.title).isEqualTo(news.title);
         assertThat(createdNews.urlFriendlyTitle).isEqualTo(new UrlFriendlyString(news.title).value);
         assertThat(createdNews.description).isEqualTo(news.description);
@@ -148,7 +148,7 @@ public class NewsServiceIT {
     @Test
     public void shouldUpdateANewsTitleDescriptionContentAndSource() {
         News newsToUpdate = NewsLibrary.draftNews();
-        News news = new News(newsToUpdate.getId(), Instant.now(), "", "New title", "", "New desc", "New content", "New content",
+        News news = new News(newsToUpdate.id(), Instant.now(), "", "New title", "", "New desc", "New content", "New content",
                 "https://google.fr", null, NewsStatus.PUBLISHED);
 
         News updatedArtice = newsService.update(news);
@@ -159,8 +159,8 @@ public class NewsServiceIT {
         assertThat(updatedArtice.description).isEqualTo(news.description);
         assertThat(updatedArtice.content).isEqualTo(news.content);
         assertThat(updatedArtice.source).isEqualTo(news.source);
-        assertThat(updatedArtice.getId()).isEqualTo(newsToUpdate.getId());
-        assertThat(updatedArtice.getCreationDate()).isEqualTo(newsToUpdate.getCreationDate());
+        assertThat(updatedArtice.id()).isEqualTo(newsToUpdate.id());
+        assertThat(updatedArtice.creationDate()).isEqualTo(newsToUpdate.creationDate());
         assertThat(updatedArtice.authorId).isEqualTo(newsToUpdate.authorId);
     }
 
@@ -173,7 +173,7 @@ public class NewsServiceIT {
 
     @Test
     public void shouldMarkANewsAsDraft() {
-        News news = newsService.markAs(NewsLibrary.validatedNews().getId(), NewsStatus.DRAFT);
+        News news = newsService.markAs(NewsLibrary.validatedNews().id(), NewsStatus.DRAFT);
 
         assertThat(news.status).isEqualTo(NewsStatus.DRAFT);
         assertThat(news.publicationDate).isNull();
@@ -188,7 +188,7 @@ public class NewsServiceIT {
 
     @Test
     public void shouldMarkANewsAsValidated() {
-        News news = newsService.markAs(NewsLibrary.draftNews().getId(), NewsStatus.VALIDATED);
+        News news = newsService.markAs(NewsLibrary.draftNews().id(), NewsStatus.VALIDATED);
 
         assertThat(news.status).isEqualTo(NewsStatus.VALIDATED);
         assertThat(news.publicationDate).isNull();
@@ -203,7 +203,7 @@ public class NewsServiceIT {
 
     @Test
     public void shouldMarkANewsAsPublished() {
-        News news = newsService.markAs(NewsLibrary.validatedNews().getId(), NewsStatus.PUBLISHED);
+        News news = newsService.markAs(NewsLibrary.validatedNews().id(), NewsStatus.PUBLISHED);
 
         assertThat(news.status).isEqualTo(NewsStatus.PUBLISHED);
         assertThat(news.publicationDate).isNotNull();
@@ -213,7 +213,7 @@ public class NewsServiceIT {
     public void shouldFindAuthorByNews() {
         dbFixture.noRollback();
 
-        List<String> news = Arrays.asList(NewsLibrary.publishedNews().getId(), NewsLibrary.validatedNews().getId());
+        List<String> news = Arrays.asList(NewsLibrary.publishedNews().id(), NewsLibrary.validatedNews().id());
 
         Map<News, Account> authorByNews = newsService.authorByNews(news);
 

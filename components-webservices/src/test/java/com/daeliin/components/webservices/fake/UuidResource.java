@@ -15,6 +15,6 @@ public class UuidResource extends PersistentResource<String> implements Comparab
 
     @Override
     public int compareTo(UuidResource other) {
-        return getId().compareTo(other.getId());
+        return id().compareTo(other.id());
     }
 }

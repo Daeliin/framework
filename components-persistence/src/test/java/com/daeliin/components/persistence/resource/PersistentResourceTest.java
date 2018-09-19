@@ -22,21 +22,21 @@ public class PersistentResourceTest {
     public void shouldAssignADefaultCreationDate() {
         UuidResource newUUIDEntity = new UuidResource(UUID);
 
-        assertThat(newUUIDEntity.getCreationDate()).isNotNull();
+        assertThat(newUUIDEntity.creationDate()).isNotNull();
     }
 
     @Test
     public void shouldAssignAnUuid() {
         UuidResource newUUIDEntity = new UuidResource(UUID, CREATION_DATE);
 
-        assertThat(newUUIDEntity.getId()).isEqualTo(UUID);
+        assertThat(newUUIDEntity.id()).isEqualTo(UUID);
     }
 
     @Test
     public void shouldAssignACreationDate() {
         UuidResource newUUIDEntity = new UuidResource(UUID, CREATION_DATE);
 
-        assertThat(newUUIDEntity.getCreationDate()).isEqualTo(CREATION_DATE);
+        assertThat(newUUIDEntity.creationDate()).isEqualTo(CREATION_DATE);
     }
 
 
@@ -117,6 +117,6 @@ public class PersistentResourceTest {
     public void shouldPrintsItsUuidAndCreationDate() {
         UuidResource newUUIDEntity = new UuidResource(UUID, CREATION_DATE);
 
-        assertThat(newUUIDEntity.toString()).contains(newUUIDEntity.getId(), newUUIDEntity.getCreationDate().toString());
+        assertThat(newUUIDEntity.toString()).contains(newUUIDEntity.id(), newUUIDEntity.creationDate().toString());
     }
 }

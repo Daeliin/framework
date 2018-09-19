@@ -51,8 +51,8 @@ public class AccountService extends ResourceService<Account, BAccount, String, A
             }
 
             List<GrantedAuthority> authorities = new ArrayList<>();
-            Collection<Permission> permissions = permissionService.findForAccount(accountFromDatabase.getId());
-            permissions.forEach(accountPermission -> authorities.add(new SimpleGrantedAuthority("ROLE_" + accountPermission.getId())));
+            Collection<Permission> permissions = permissionService.findForAccount(accountFromDatabase.id());
+            permissions.forEach(accountPermission -> authorities.add(new SimpleGrantedAuthority("ROLE_" + accountPermission.id())));
 
             return new ImmutablePair<>(accountFromDatabase, authorities);
         });

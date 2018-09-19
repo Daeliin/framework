@@ -77,7 +77,7 @@ public class MembershipServiceIT {
 
         Account account = AccountLibrary.inactive();
 
-        membershipService.activate(account.getId(), "wrongToken");
+        membershipService.activate(account.id(), "wrongToken");
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -99,7 +99,7 @@ public class MembershipServiceIT {
         dbFixture.noRollback();
 
         Account account = AccountLibrary.admin();
-        membershipService.resetPassword(account.getId(), "wrongToken", "newPassword");
+        membershipService.resetPassword(account.id(), "wrongToken", "newPassword");
     }
 
     private int countAccountRows() throws Exception {

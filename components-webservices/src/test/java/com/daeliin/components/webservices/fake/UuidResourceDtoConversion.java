@@ -14,8 +14,8 @@ public final class UuidResourceDtoConversion implements ResourceDtoConversion<Uu
         }
 
         return new UuidResourceDto(
-                uuidEntity.getId(),
-                uuidEntity.getCreationDate(),
+                uuidEntity.id(),
+                uuidEntity.creationDate(),
                 uuidEntity.label);
     }
 
