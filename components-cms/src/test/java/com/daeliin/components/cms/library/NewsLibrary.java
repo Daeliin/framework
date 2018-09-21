@@ -2,6 +2,7 @@ package com.daeliin.components.cms.library;
 
 import com.daeliin.components.cms.news.News;
 import com.daeliin.components.cms.news.NewsStatus;
+import com.daeliin.components.cms.sql.BNews;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -23,6 +24,24 @@ public final class NewsLibrary {
                 NewsStatus.PUBLISHED);
     }
 
+    public static BNews publishedNewsRow() {
+        News publishedNews = publishedNews();
+
+        return new BNews(
+                publishedNews.authorId,
+                publishedNews.content,
+                publishedNews.creationDate(),
+                publishedNews.description,
+                publishedNews.id(),
+                publishedNews.publicationDate,
+                publishedNews.renderedContent,
+                publishedNews.source,
+                publishedNews.status.name(),
+                publishedNews.title,
+                publishedNews.urlFriendlyTitle
+        );
+    }
+
     public static News validatedNews() {
         return new News(
                 "NEWS2",
@@ -38,6 +57,24 @@ public final class NewsLibrary {
                 NewsStatus.VALIDATED);
     }
 
+    public static BNews validatedNewsRow() {
+        News validatedNews = validatedNews();
+
+        return new BNews(
+                validatedNews.authorId,
+                validatedNews.content,
+                validatedNews.creationDate(),
+                validatedNews.description,
+                validatedNews.id(),
+                validatedNews.publicationDate,
+                validatedNews.renderedContent,
+                validatedNews.source,
+                validatedNews.status.name(),
+                validatedNews.title,
+                validatedNews.urlFriendlyTitle
+        );
+    }
+
     public static News draftNews() {
         return new News(
             "NEWS3",
@@ -50,6 +87,24 @@ public final class NewsLibrary {
             "We go beta today.",
             null,
             null,
-            NewsStatus.VALIDATED);
+            NewsStatus.DRAFT);
+    }
+
+    public static BNews draftNewsRow() {
+        News draftNews = draftNews();
+
+        return new BNews(
+                draftNews.authorId,
+                draftNews.content,
+                draftNews.creationDate(),
+                draftNews.description,
+                draftNews.id(),
+                draftNews.publicationDate,
+                draftNews.renderedContent,
+                draftNews.source,
+                draftNews.status.name(),
+                draftNews.title,
+                draftNews.urlFriendlyTitle
+        );
     }
 }

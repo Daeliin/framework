@@ -1,6 +1,5 @@
 package com.daeliin.components.cms.news;
 
-import com.daeliin.components.cms.fixtures.NewsRows;
 import com.daeliin.components.cms.library.NewsLibrary;
 import com.daeliin.components.cms.library.PersistenceConversionTest;
 import com.daeliin.components.cms.sql.BNews;
@@ -20,6 +19,6 @@ public final class NewsConversionTest extends PersistenceConversionTest<News, BN
 
     @Override
     protected BNews converted() {
-        return NewsRows.publishedNews();
+        return NewsLibrary.publishedNewsRow();
     }
 }
