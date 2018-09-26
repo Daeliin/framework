@@ -18,29 +18,29 @@ import static java.util.stream.Collectors.toCollection;
 public interface ResourceDtoConversion<V, C extends Persistable<ID>, ID> {
 
     /**
-     * Instantiates an DTO object from a converted object.
+     * Builds a DTO object from a converted object.
      * @param conversion a converted object
      * @return the new DTO instance
      */
-    V instantiate(C conversion);
+    V from(C conversion);
 
     /**
-     * Maps a DTO object to a converted object.
+     * Converts a DTO object to a converted object.
      * @param object the DTO object to to
      * @param object the DTO id to to
      * @return the converted object
      */
-    C map(V object, ID id, Instant creationDate);
+    C to(V object, ID id, Instant creationDate);
 
     /**
-     * Instantiates a collection of DTO objects from a collection of converted objects.
+     * Builds a collection of DTO objects from a collection of converted objects.
      * @param conversions the converted objects to from
      * @return the new collection of DTO instance, in the same order as the converted objects
      */
-    default Set<V> instantiate(Collection<C> conversions) {
+    default Set<V> from(Collection<C> conversions) {
         return conversions
                 .stream()
-                .map(this::instantiate)
+                .map(this::from)
                 .collect(toCollection(LinkedHashSet::new));
     }
 }

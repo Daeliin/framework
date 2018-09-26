@@ -8,7 +8,7 @@ import java.util.UUID;
 public final class UuidResourceDtoConversion implements ResourceDtoConversion<UuidResourceDto, UuidResource, String> {
 
     @Override
-    public UuidResourceDto instantiate(UuidResource uuidEntity) {
+    public UuidResourceDto from(UuidResource uuidEntity) {
         if (uuidEntity == null) {
             return null;
         }
@@ -20,7 +20,7 @@ public final class UuidResourceDtoConversion implements ResourceDtoConversion<Uu
     }
 
     @Override
-    public UuidResource map(UuidResourceDto uuidEntityDto, String id, Instant localDateTime) {
+    public UuidResource to(UuidResourceDto uuidEntityDto, String id, Instant localDateTime) {
         if (uuidEntityDto == null) {
             return null;
         }

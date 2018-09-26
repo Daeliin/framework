@@ -89,7 +89,7 @@ public class ResourceControllerIT {
 
         int uuidPersistentResourceCountAfterCreate = countRows();
 
-        UuidResourceDto persistedUuidPersistentResourceDto = conversion.instantiate(service.findOne(returnedUuidPersistentResourceDto.id));
+        UuidResourceDto persistedUuidPersistentResourceDto = conversion.from(service.findOne(returnedUuidPersistentResourceDto.id));
 
         assertThat(uuidPersistentResourceDto.id).isNotBlank();
         assertThat(uuidPersistentResourceDto.creationDate).isNotNull();
@@ -271,7 +271,7 @@ public class ResourceControllerIT {
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(updatedUuidPersistentResourceDto)));
 
-        UuidResourceDto retrievedUuidPersistentResourceDto = conversion.instantiate(service.findOne(updatedUuidPersistentResourceDto.id));
+        UuidResourceDto retrievedUuidPersistentResourceDto = conversion.from(service.findOne(updatedUuidPersistentResourceDto.id));
 
         assertThat(retrievedUuidPersistentResourceDto.label).isEqualTo(updatedUuidPersistentResourceDto.label);
     }
@@ -306,7 +306,7 @@ public class ResourceControllerIT {
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(invalidUuidPersistentResourceDto)));
 
-        UuidResourceDto retrievedUuidPersistenceResourceDto = conversion.instantiate(service.findOne(invalidUuidPersistentResourceDto.id));
+        UuidResourceDto retrievedUuidPersistenceResourceDto = conversion.from(service.findOne(invalidUuidPersistentResourceDto.id));
 
         assertThat(retrievedUuidPersistenceResourceDto).isEqualToComparingFieldByFieldRecursively(UuidResourceDtoLibrary.uuidResourceDto1());
     }

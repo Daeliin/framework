@@ -58,7 +58,7 @@ public abstract class ResourceController<V, T extends Persistable<ID>, ID, S ext
     @ResponseBody
     @Override
     public V create(@RequestBody @Valid V resource) {
-        return conversion.instantiate(service.create(conversion.map(resource, null, Instant.now())));
+        return conversion.from(service.create(conversion.to(resource, null, Instant.now())));
     }
     
     /**
@@ -72,7 +72,7 @@ public abstract class ResourceController<V, T extends Persistable<ID>, ID, S ext
     @ResponseBody
     @Override
     public V getOne(@PathVariable ID resourceId) {
-        return conversion.instantiate(service.findOne(resourceId));
+        return conversion.from(service.findOne(resourceId));
     }
     
     /**
@@ -91,7 +91,7 @@ public abstract class ResourceController<V, T extends Persistable<ID>, ID, S ext
 
         Page<T> pageResult = service.findAll(predicate, pageRequest);
 
-        return new Page<>(conversion.instantiate(pageResult.items), pageResult.totalItems, pageResult.totalPages);
+        return new Page<>(conversion.from(pageResult.items), pageResult.totalItems, pageResult.totalPages);
     }
     
     /**
@@ -113,7 +113,7 @@ public abstract class ResourceController<V, T extends Persistable<ID>, ID, S ext
 
         T existingResource = service.findOne(resourceId);
 
-        return conversion.instantiate(service.update(conversion.map(resource, existingResource.id(), existingResource.creationDate())));
+        return conversion.from(service.update(conversion.to(resource, existingResource.id(), existingResource.creationDate())));
     }
 
     /**
