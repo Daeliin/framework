@@ -7,12 +7,12 @@ import com.daeliin.components.persistence.sql.BUuidResource;
 import com.daeliin.components.persistence.sql.QUuidResource;
 import com.daeliin.components.test.rule.DbFixture;
 import com.daeliin.components.test.rule.DbMemory;
-import org.junit.ClassRule;
 import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.inject.Inject;
 import java.time.Instant;
@@ -22,18 +22,19 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class ResourceRepositoryIT {
 
     @Inject
     private UuidResourceRepository repository;
 
-    @ClassRule
+    @RegisterExtension
     public static DbMemory dbMemory = new DbMemory();
 
-    @Rule
+    @RegisterExtension
     public DbFixture dbFixture = new DbFixture(dbMemory, JavaFixtures.uuidResources());
 
     @Test
@@ -50,13 +51,13 @@ public class ResourceRepositoryIT {
         assertThat(repository.idMapping()).isNotNull();
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void shouldThrowException_whenPersistingNull() {
         dbFixture.noRollback();
 
         BUuidResource nullUuidEntity = null;
 
-        repository.save(nullUuidEntity);
+        assertThrows(Exception.class, () -> repository.save(nullUuidEntity));
     }
 
     @Test

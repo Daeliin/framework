@@ -3,7 +3,7 @@ package com.daeliin.components.persistence.resource.cache;
 import com.daeliin.components.core.pagination.PageRequest;
 import com.daeliin.components.persistence.fake.UuidResourcePredicate;
 import com.daeliin.components.persistence.resource.predicate.PersistentResourcePredicate;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;

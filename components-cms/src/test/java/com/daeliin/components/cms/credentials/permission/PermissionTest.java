@@ -1,16 +1,17 @@
 package com.daeliin.components.cms.credentials.permission;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public final class PermissionTest {
 
-    @Test(expected = Exception.class)
+    @Test
     public void shouldThrowException_whenNameIsNull() {
-        new Permission("id", Instant.now(), null);
+        assertThrows(Exception.class, () -> new Permission("id", Instant.now(), null));
     }
 
     @Test

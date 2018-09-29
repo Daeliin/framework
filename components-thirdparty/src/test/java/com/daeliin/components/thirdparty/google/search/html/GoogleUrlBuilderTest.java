@@ -1,7 +1,7 @@
 package com.daeliin.components.thirdparty.google.search.html;
 
 import com.daeliin.components.thirdparty.google.search.html.GoogleUrlBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

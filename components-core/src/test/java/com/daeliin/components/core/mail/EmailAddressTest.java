@@ -1,25 +1,25 @@
 package com.daeliin.components.core.mail;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class EmailAddressTest {
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowException_whenNullAddress() {
-        String nullAddress = null;
-        new EmailAddress(nullAddress);
+        assertThrows(IllegalArgumentException.class, () -> new EmailAddress(null));
     }
     
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowException_whenBlankkAddress() {
-        new EmailAddress(" ");
+        assertThrows(IllegalArgumentException.class, () -> new EmailAddress(" "));
     }
     
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowException_whenInvalidAddress() {
-        new EmailAddress("a@");
+        assertThrows(IllegalArgumentException.class, () ->  new EmailAddress("a@"));
     }
     
     @Test

@@ -3,20 +3,21 @@ package com.daeliin.components.cms.membership.details;
 import com.daeliin.components.cms.credentials.account.Account;
 import com.daeliin.components.cms.library.AccountLibrary;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AccountEncryptionTest {
 
-    @Test(expected = Exception.class)
+    @Test
     public void shouldThrowException_whenUsernameIsNull() {
-        new AccountEncryption(null, "password");
+        assertThrows(Exception.class, () -> new AccountEncryption(null, "password"));
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void shouldThrowException_whenPasswordIsNull() {
-        new AccountEncryption("admin", null);
+        assertThrows(Exception.class, () -> new AccountEncryption("admin", null));
     }
 
     @Test

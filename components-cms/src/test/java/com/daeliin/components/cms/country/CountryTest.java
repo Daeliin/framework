@@ -1,21 +1,22 @@
 package com.daeliin.components.cms.country;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public final class CountryTest {
 
-    @Test(expected = Exception.class)
+    @Test
     public void shouldThrowException_whenCodeIsNull() {
-        new Country(null, Instant.now(), "France");
+        assertThrows(Exception.class, () -> new Country(null, Instant.now(), "France"));
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void shouldThrowException_whenNameIsNull() {
-        new Country("FR", Instant.now(), null);
+        assertThrows(Exception.class, () -> new Country("FR", Instant.now(), null));
     }
 
     @Test

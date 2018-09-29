@@ -4,7 +4,8 @@ import com.daeliin.components.thirdparty.google.search.GoogleSearchQuery;
 import com.daeliin.components.thirdparty.google.search.GoogleSearchResult;
 import com.daeliin.components.thirdparty.library.GoogleLibrary;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
@@ -23,7 +24,7 @@ public final class GoogleHtmlSearchTest {
 
     private GoogleHtmlSearch googleHtmlSearch;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         RestTemplate restTemplate = new RestTemplate();
 

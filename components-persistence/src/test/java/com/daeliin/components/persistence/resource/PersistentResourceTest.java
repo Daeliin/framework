@@ -1,11 +1,14 @@
 package com.daeliin.components.persistence.resource;
 
 import com.daeliin.components.persistence.fake.UuidResource;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+;
 
 
 public class PersistentResourceTest {
@@ -13,9 +16,9 @@ public class PersistentResourceTest {
     private static final String UUID = "c4726093-fa44-4b4c-8108-3fdcacffabd6";
     private static final Instant CREATION_DATE = Instant.now();
 
-    @Test(expected = Exception.class)
+    @Test
     public void shouldThrowException_whenCreationDateIsNull() {
-        new UuidResource(UUID, null);
+        assertThrows(Exception.class, () -> new UuidResource(UUID, null));
     }
 
     @Test
@@ -40,9 +43,9 @@ public class PersistentResourceTest {
     }
 
 
-    @Test(expected = Exception.class)
+    @Test
     public void shouldThrowException_whenUuidIsNull() {
-        new UuidResource(null, CREATION_DATE);
+        assertThrows(Exception.class, () -> new UuidResource(null, CREATION_DATE));
     }
 
     @Test

@@ -13,30 +13,30 @@ import com.daeliin.components.test.rule.DbFixture;
 import com.daeliin.components.test.rule.DbMemory;
 import com.google.common.collect.Sets;
 import com.querydsl.core.types.Predicate;
-import org.junit.ClassRule;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class BaseRepositoryIT {
 
     @Inject
     private UuidResourceBaseRepository repository;
 
-    @ClassRule
+    @RegisterExtension
     public static DbMemory dbMemory = new DbMemory();
 
-    @Rule
+    @RegisterExtension
     public DbFixture dbFixture = new DbFixture(dbMemory, JavaFixtures.uuidResources());
 
     @Test
@@ -211,12 +211,12 @@ public class BaseRepositoryIT {
         assertThat(page.totalPages).isEqualTo(2);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExpcetion_whenDeletingWithNullPredicate() {
         dbFixture.noRollback();
 
         Predicate nullPredicate = null;
-        repository.delete(nullPredicate);
+        assertThrows(IllegalArgumentException.class, () -> repository.delete(nullPredicate));
     }
 
     @Test

@@ -5,8 +5,8 @@ import com.daeliin.components.core.pagination.Sort;
 import com.daeliin.components.persistence.sql.QUuidResource;
 import com.google.common.collect.Sets;
 import com.querydsl.core.types.OrderSpecifier;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
@@ -16,7 +16,7 @@ public final class RowOrderTest {
 
     private RowOrder rowOrder;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         rowOrder = new RowOrder(QUuidResource.uuidResource);
     }

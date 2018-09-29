@@ -7,19 +7,19 @@ import com.daeliin.components.cms.library.AccountLibrary;
 import com.daeliin.components.cms.sql.QAccount;
 import com.daeliin.components.test.rule.DbFixture;
 import com.daeliin.components.test.rule.DbMemory;
-import org.junit.ClassRule;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.inject.Inject;
 import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class MembershipServiceIT {
 
@@ -29,20 +29,20 @@ public class MembershipServiceIT {
     @Inject
     private AccountService accountService;
 
-    @ClassRule
+    @RegisterExtension
     public static DbMemory dbMemory = new DbMemory();
 
-    @Rule
+    @RegisterExtension
     public DbFixture dbFixture = new DbFixture(dbMemory, JavaFixtures.account());
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void shouldThrowException_whenSigningUpExistingAccount() {
         dbFixture.noRollback();
 
         Account existingAccount = AccountLibrary.admin();
         SignUpRequest signUpRequest = new SignUpRequest(existingAccount.username, existingAccount.email, "password");
 
-        membershipService.signUp(signUpRequest);
+        assertThrows(IllegalStateException.class, () -> membershipService.signUp(signUpRequest));
     }
 
     @Test
@@ -64,42 +64,42 @@ public class MembershipServiceIT {
         assertThat(accountCountAfterSignUp).isEqualTo(accountCountBeforeSignUp);
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void shouldThrowException_whenActivatingNonExistentAccountId() {
         dbFixture.noRollback();
 
-        membershipService.activate("AOADAZD-65454", "ok");
+        assertThrows(NoSuchElementException.class, () -> membershipService.activate("AOADAZD-65454", "ok"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowException_whenTokenDoesntMatchWhenActivatingAccount() {
         dbFixture.noRollback();
 
         Account account = AccountLibrary.inactive();
 
-        membershipService.activate(account.id(), "wrongToken");
+        assertThrows(IllegalArgumentException.class, () ->  membershipService.activate(account.id(), "wrongToken"));
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void shouldThrowException_whenRequestingANewPasswordForNonExistingAccount() {
         dbFixture.noRollback();
 
-        membershipService.newPassword("AFEZAFEZ-6544");
+        assertThrows(NoSuchElementException.class, () -> membershipService.newPassword("AFEZAFEZ-6544"));
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void shouldThrowException_whenResetingPasswordForNonExistingAccount() {
         dbFixture.noRollback();
 
-        membershipService.resetPassword("AFEZAFEZ-6544", "token", "newPassword");
+        assertThrows(NoSuchElementException.class, () -> membershipService.resetPassword("AFEZAFEZ-6544", "token", "newPassword"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowException_whenTokenDoesntMatchWhenResetingPassword() {
         dbFixture.noRollback();
 
         Account account = AccountLibrary.admin();
-        membershipService.resetPassword(account.id(), "wrongToken", "newPassword");
+        assertThrows(IllegalArgumentException.class, () -> membershipService.resetPassword(account.id(), "wrongToken", "newPassword"));
     }
 
     private int countAccountRows() throws Exception {

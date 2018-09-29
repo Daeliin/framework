@@ -1,18 +1,19 @@
 package com.daeliin.components.cms.event;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public final class EventLogTest {
 
-    @Test(expected = Exception.class)
+    @Test
     public void shouldThrowException_whenDescriptionIsNull() {
-        new EventLog(UUID.randomUUID().toString(), Instant.now(), null);
+        assertThrows(Exception.class, () -> new EventLog(UUID.randomUUID().toString(), Instant.now(), null));
     }
 
     @Test

@@ -5,8 +5,8 @@ import com.daeliin.components.cms.credentials.permission.PermissionService;
 import com.daeliin.components.cms.fixtures.AccountRows;
 import com.daeliin.components.cms.sql.BAccount;
 import com.daeliin.components.cms.sql.QAccount;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -23,7 +23,7 @@ public final class AccountServiceTest {
     private PermissionService permissionServiceMock;
     private AccountService tested;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         accountRepositoryMock = mock(AccountRepository.class);
         permissionServiceMock = mock(PermissionService.class);

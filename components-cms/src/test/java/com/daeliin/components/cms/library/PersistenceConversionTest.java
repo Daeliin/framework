@@ -1,9 +1,10 @@
 package com.daeliin.components.cms.library;
 
 import com.daeliin.components.core.resource.Conversion;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public abstract class PersistenceConversionTest<O, C> {
 
@@ -13,11 +14,9 @@ public abstract class PersistenceConversionTest<O, C> {
 
     protected abstract C converted();
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void shouldThrowException_whenConvertingTogNull() {
-        O nullObject = null;
-
-        conversion().to(nullObject);
+        assertThrows(NullPointerException.class, () -> conversion().to((O) null));
     }
 
     @Test
@@ -27,11 +26,9 @@ public abstract class PersistenceConversionTest<O, C> {
         assertThat(converted).isEqualToComparingFieldByField(converted());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void shouldThrowException_whenConvertingFromNull() {
-        C nullObject = null;
-
-        conversion().from(nullObject);
+        assertThrows(NullPointerException.class, () -> conversion().from((C) null));
     }
 
     @Test

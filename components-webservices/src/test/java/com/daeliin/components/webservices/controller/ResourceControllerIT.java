@@ -9,14 +9,13 @@ import com.daeliin.components.webservices.fixtures.JavaFixtures;
 import com.daeliin.components.webservices.library.UuidResourceDtoLibrary;
 import com.daeliin.components.webservices.sql.QUuidResource;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.ClassRule;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -26,14 +25,13 @@ import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
+;
+
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 public class ResourceControllerIT {
@@ -49,10 +47,10 @@ public class ResourceControllerIT {
 
     private UuidResourceDtoConversion conversion = new UuidResourceDtoConversion();
 
-    @ClassRule
+    @RegisterExtension
     public static DbMemory dbMemory = new DbMemory();
 
-    @Rule
+    @RegisterExtension
     public DbFixture dbFixture = new DbFixture(dbMemory, JavaFixtures.uuidResources());
 
     @Test

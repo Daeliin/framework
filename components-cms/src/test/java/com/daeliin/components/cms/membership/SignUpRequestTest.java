@@ -1,14 +1,15 @@
 package com.daeliin.components.cms.membership;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public final class SignUpRequestTest {
 
-    @Test(expected = Exception.class)
+    @Test
     public void shouldThrowException_whenUsernameIsNull() {
-        new SignUpRequest(null, "john@daeliin.com", "password");
+        assertThrows(Exception.class, () ->  new SignUpRequest(null, "john@daeliin.com", "password"));
     }
 
     @Test
@@ -16,9 +17,9 @@ public final class SignUpRequestTest {
         assertThat(new SignUpRequest("john", "john@daeliin.com", "password").username).isEqualTo("john");
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void shouldThrowException_whenEmailIsNull() {
-        new SignUpRequest("john", null, "password");
+        assertThrows(Exception.class, () -> new SignUpRequest("john", null, "password"));
     }
 
     @Test
@@ -26,9 +27,9 @@ public final class SignUpRequestTest {
         assertThat(new SignUpRequest("john", "john@daeliin.com", "password").email).isEqualTo("john@daeliin.com");
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void shouldThrowException_whenClearPasswordIsNull() {
-        new SignUpRequest("john", "john@daeliin.com", null);
+        assertThrows(Exception.class, () -> new SignUpRequest("john", "john@daeliin.com", null));
     }
 
     @Test

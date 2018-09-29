@@ -1,14 +1,15 @@
 package com.daeliin.components.core.pagination;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public final class SortTest {
 
-    @Test(expected = Exception.class)
+    @Test
     public void shouldThrowException_whenPropertyIsNull() {
-        new Sort(null, Sort.Direction.ASC);
+        assertThrows(Exception.class, () -> new Sort(null, Sort.Direction.ASC));
     }
 
     @Test

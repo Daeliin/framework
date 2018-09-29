@@ -8,19 +8,19 @@ import com.daeliin.components.cms.membership.SignUpRequest;
 import com.daeliin.components.cms.sql.QAccount;
 import com.daeliin.components.test.rule.DbFixture;
 import com.daeliin.components.test.rule.DbMemory;
-import org.junit.ClassRule;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.inject.Inject;
 
 import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class AccountDetailsServiceIT {
 
@@ -30,10 +30,10 @@ public class AccountDetailsServiceIT {
     @Inject
     private AccountDetailsService accountDetailsService;
 
-    @ClassRule
+    @RegisterExtension
     public static DbMemory dbMemory = new DbMemory();
 
-    @Rule
+    @RegisterExtension
     public DbFixture dbFixture = new DbFixture(dbMemory,
         sequenceOf(
             JavaFixtures.account(),
@@ -42,11 +42,11 @@ public class AccountDetailsServiceIT {
         )
     );
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowIllegalArgumentException_whenSignUpRequestIsNull() {
         dbFixture.noRollback();
 
-        accountDetailsService.signUp(null);
+        assertThrows(IllegalArgumentException.class, () -> accountDetailsService.signUp(null));
     }
 
     @Test
@@ -77,13 +77,13 @@ public class AccountDetailsServiceIT {
         assertThat(accountCountAfterSignUp).isEqualTo(accountCountBeforeSignUp + 1);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowIllegalArgumentException_whenTokenDoesntMatchWhenActivatingIt() {
         dbFixture.noRollback();
 
         Account account = AccountLibrary.admin();
 
-        accountDetailsService.activate(account, "differentToken");
+        assertThrows(IllegalArgumentException.class, () -> accountDetailsService.activate(account, "differentToken"));
     }
 
     @Test
@@ -119,13 +119,13 @@ public class AccountDetailsServiceIT {
         assertThat(activatedAccount.enabled).isTrue();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowIllegalArgumentException_whenTokenDoesntMatchWhenResetingPassword() {
         dbFixture.noRollback();
 
         Account account = AccountLibrary.admin();
 
-        accountDetailsService.resetPassword(account, "differentToken", "newPassword");
+        assertThrows(IllegalArgumentException.class, () -> accountDetailsService.resetPassword(account, "differentToken", "newPassword"));
     }
 
     @Test

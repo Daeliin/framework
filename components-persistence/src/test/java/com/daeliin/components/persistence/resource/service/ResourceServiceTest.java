@@ -12,24 +12,17 @@ import com.daeliin.components.persistence.sql.BUuidResource;
 import com.daeliin.components.persistence.sql.QUuidResource;
 import com.google.common.collect.Sets;
 import com.querydsl.core.types.Predicate;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class ResourceServiceTest {
 
@@ -39,18 +32,18 @@ public class ResourceServiceTest {
 
     private UuidResourceService service;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         service = new UuidResourceService(repositoryMock);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void shouldThrowException_whenCreatingResourceWithAlreadyExistingId() {
         UuidResource alreadyExistingUuidPersistentResource = UuidResourceLibrary.uuidResource1();
 
         doReturn(true).when(repositoryMock).exists(alreadyExistingUuidPersistentResource.id());
 
-        service.create(UuidResourceLibrary.uuidResource1());
+        assertThrows(IllegalStateException.class, () -> service.create(UuidResourceLibrary.uuidResource1()));
     }
 
     @Test
@@ -122,11 +115,11 @@ public class ResourceServiceTest {
         verify(repositoryMock).count(predicate);
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void shouldThrowException_whenIdIsNull() {
         String nullId = null;
 
-        service.findOne(nullId);
+        assertThrows(NoSuchElementException.class, () -> service.findOne(nullId));
     }
 
     @Test
@@ -254,18 +247,18 @@ public class ResourceServiceTest {
         verify(repositoryMock).findAll(uuidEntityIds);
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void shouldThrowException_whenUpdatingNullResource() {
         UuidResource nullUuidEntity = null;
 
-        service.update(nullUuidEntity);
+        assertThrows(NoSuchElementException.class, () -> service.update(nullUuidEntity));
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void shouldThrowException_whenUpdatingNonExistingResource() {
         UuidResource nonExistingUuidEntity = new UuidResource("654684-64684", Instant.now(), "label-1");
 
-        service.update(nonExistingUuidEntity);
+        assertThrows(NoSuchElementException.class, () -> service.update(nonExistingUuidEntity));
     }
 
     @Test

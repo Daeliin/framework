@@ -1,19 +1,20 @@
 package com.daeliin.components.cms.credentials.account;
 
 import com.daeliin.components.cms.library.AccountLibrary;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public final class AccountTest {
 
-    @Test(expected = Exception.class)
+    @Test
     public void shouldThrowExeption_whenUsernameIsNull() {
-        new Account("ACCOUNT4", Instant.now(), null, "user@email.org", true,
+        assertThrows(Exception.class, () -> new Account("ACCOUNT4", Instant.now(), null, "user@email.org", true,
                 "$2a$10$ggIHKT/gYkYk0Bt2yP4xvOybahPn7GfSwC0T3fYhCzrZ9ta9LAYt6",
-                "b5e655641f1d05a415d5ea30d4fd25dcd03ea4a187c5d121d221454c03770f9f98101c206878b25697a79c924149da6802af8e97fbed4999c0dd838577590d9e");
+                "b5e655641f1d05a415d5ea30d4fd25dcd03ea4a187c5d121d221454c03770f9f98101c206878b25697a79c924149da6802af8e97fbed4999c0dd838577590d9e"));
     }
 
     @Test
@@ -25,11 +26,11 @@ public final class AccountTest {
         assertThat(account.username).isEqualTo("user");
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void shouldThrowExeption_whenEmailIsNull() {
-        new Account("ACCOUNT4", Instant.now(), "user", null, true,
+        assertThrows(Exception.class, () -> new Account("ACCOUNT4", Instant.now(), "user", null, true,
                 "$2a$10$ggIHKT/gYkYk0Bt2yP4xvOybahPn7GfSwC0T3fYhCzrZ9ta9LAYt6",
-                "b5e655641f1d05a415d5ea30d4fd25dcd03ea4a187c5d121d221454c03770f9f98101c206878b25697a79c924149da6802af8e97fbed4999c0dd838577590d9e");
+                "b5e655641f1d05a415d5ea30d4fd25dcd03ea4a187c5d121d221454c03770f9f98101c206878b25697a79c924149da6802af8e97fbed4999c0dd838577590d9e"));
     }
 
     @Test
@@ -41,11 +42,11 @@ public final class AccountTest {
         assertThat(account.email).isEqualTo("user@email.org");
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void shouldThrowExeption_whenPasswordIsNull() {
-        new Account("ACCOUNT4", Instant.now(), "user", "user@email.org", true,
+        assertThrows(Exception.class, () -> new Account("ACCOUNT4", Instant.now(), "user", "user@email.org", true,
                 null,
-                "b5e655641f1d05a415d5ea30d4fd25dcd03ea4a187c5d121d221454c03770f9f98101c206878b25697a79c924149da6802af8e97fbed4999c0dd838577590d9e");
+                "b5e655641f1d05a415d5ea30d4fd25dcd03ea4a187c5d121d221454c03770f9f98101c206878b25697a79c924149da6802af8e97fbed4999c0dd838577590d9e"));
     }
 
     @Test
@@ -57,11 +58,11 @@ public final class AccountTest {
         assertThat(account.password).isEqualTo("$2a$10$ggIHKT/gYkYk0Bt2yP4xvOybahPn7GfSwC0T3fYhCzrZ9ta9LAYt6");
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void shouldThrowExeption_whenTokenIsNull() {
-        new Account("ACCOUNT4", Instant.now(), "user", "user@email.org", true,
+        assertThrows(Exception.class, () -> new Account("ACCOUNT4", Instant.now(), "user", "user@email.org", true,
                 "$2a$10$ggIHKT/gYkYk0Bt2yP4xvOybahPn7GfSwC0T3fYhCzrZ9ta9LAYt6",
-                null);
+                null));
     }
 
     @Test

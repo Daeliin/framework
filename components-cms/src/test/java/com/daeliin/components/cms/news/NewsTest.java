@@ -1,12 +1,13 @@
 package com.daeliin.components.cms.news;
 
 import com.daeliin.components.cms.library.NewsLibrary;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public final class NewsTest {
 
@@ -21,9 +22,9 @@ public final class NewsTest {
                 news.publicationDate.toString());
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void shouldThrowException_whenAuthorIsNull() {
-        new News("ARTICLEID1", Instant.now(), null, "Hello world", "hello-world", "Desc", "Content", "Content", null, null, NewsStatus.DRAFT);
+        assertThrows(Exception.class, () -> new News("ARTICLEID1", Instant.now(), null, "Hello world", "hello-world", "Desc", "Content", "Content", null, null, NewsStatus.DRAFT));
     }
 
     @Test
@@ -54,9 +55,9 @@ public final class NewsTest {
         assertThat(news.description).isEqualTo("Desc");
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void shouldThrowException_whenContentIsNull() {
-        new News("ARTICLEID1", Instant.now(), "author", "Hello world", "hello-world", "Desc", null, null, null, null, NewsStatus.DRAFT);
+        assertThrows(Exception.class, () -> new News("ARTICLEID1", Instant.now(), "author", "Hello world", "hello-world", "Desc", null, null, null, null, NewsStatus.DRAFT));
     }
 
     @Test

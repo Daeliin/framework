@@ -4,11 +4,12 @@ import com.ninja_squad.dbsetup.DbSetup;
 import com.ninja_squad.dbsetup.DbSetupTracker;
 import com.ninja_squad.dbsetup.destination.DataSourceDestination;
 import com.ninja_squad.dbsetup.operation.Operation;
-import org.junit.rules.ExternalResource;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 
 import static java.util.Objects.requireNonNull;
 
-public final class DbFixture extends ExternalResource  {
+public final class DbFixture implements BeforeEachCallback {
 
     private final DbMemory dbMemory;
     private final Operation fixture;
@@ -21,9 +22,7 @@ public final class DbFixture extends ExternalResource  {
     }
 
     @Override
-    public void before() throws Throwable {
-        super.before();
-
+    public void beforeEach(ExtensionContext extensionContext) {
         DbSetup dbSetup = new DbSetup(new DataSourceDestination(dbMemory.dataSource()), fixture);
         dbSetupTracker.launchIfNecessary(dbSetup);
     }

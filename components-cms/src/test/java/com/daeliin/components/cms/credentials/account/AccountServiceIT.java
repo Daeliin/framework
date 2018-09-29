@@ -6,14 +6,13 @@ import com.daeliin.components.cms.fixtures.JavaFixtures;
 import com.daeliin.components.cms.library.AccountLibrary;
 import com.daeliin.components.test.rule.DbFixture;
 import com.daeliin.components.test.rule.DbMemory;
-import org.junit.ClassRule;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.inject.Inject;
 import java.util.Collection;
@@ -21,8 +20,9 @@ import java.util.NoSuchElementException;
 
 import static com.ninja_squad.dbsetup.operation.CompositeOperation.sequenceOf;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class AccountServiceIT {
 
@@ -32,10 +32,10 @@ public class AccountServiceIT {
     @Inject
     private PermissionService permissionService;
 
-    @ClassRule
+    @RegisterExtension
     public static DbMemory dbMemory = new DbMemory();
 
-    @Rule
+    @RegisterExtension
     public DbFixture dbFixture = new DbFixture(dbMemory,
             sequenceOf(
                     JavaFixtures.account(),
@@ -66,11 +66,11 @@ public class AccountServiceIT {
         assertThat(accountService.findByUsername(account.username)).isEqualTo(account);
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void shouldThrowException_whenFindingAnAccountByUsername_ifUsernameDoesntExist() {
         dbFixture.noRollback();
 
-        accountService.findByUsername("nonExistingUsername");
+        assertThrows(NoSuchElementException.class, () -> accountService.findByUsername("nonExistingUsername"));
     }
 
     @Test
@@ -81,11 +81,11 @@ public class AccountServiceIT {
         assertThat(accountService.findByUsernameAndEnabled(account.username)).isEqualTo(account);
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void shouldThrowException_whenFindingEnabledAccountByUsername_ifAccountIsDisabled() {
         dbFixture.noRollback();
 
-        accountService.findByUsernameAndEnabled(AccountLibrary.inactive().username);
+        assertThrows(NoSuchElementException.class, () -> accountService.findByUsernameAndEnabled(AccountLibrary.inactive().username));
     }
 
     @Test

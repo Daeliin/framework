@@ -1,16 +1,18 @@
 package com.daeliin.components.core.configuration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public final class ThreadPoolIT {
 

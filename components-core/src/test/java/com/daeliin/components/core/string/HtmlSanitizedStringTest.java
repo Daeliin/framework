@@ -1,7 +1,7 @@
 package com.daeliin.components.core.string;
 
 import org.jsoup.safety.Whitelist;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

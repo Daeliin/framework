@@ -7,12 +7,11 @@ import com.daeliin.components.cms.library.NewsLibrary;
 import com.daeliin.components.core.string.UrlFriendlyString;
 import com.daeliin.components.test.rule.DbFixture;
 import com.daeliin.components.test.rule.DbMemory;
-import org.junit.ClassRule;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.inject.Inject;
 import java.time.Instant;
@@ -25,18 +24,19 @@ import java.util.NoSuchElementException;
 
 import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class NewsServiceIT {
 
     @Inject
     private NewsService newsService;
 
-    @ClassRule
+    @RegisterExtension
     public static DbMemory dbMemory = new DbMemory();
 
-    @Rule
+    @RegisterExtension
     public DbFixture dbFixture = new DbFixture(dbMemory,
         sequenceOf(
             JavaFixtures.account(),
@@ -54,11 +54,11 @@ public class NewsServiceIT {
         assertThat(foundNews).isEqualTo(foundNews);
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void shouldThrowException_whenfindingANewsThatDoesntExist() {
         dbFixture.noRollback();
 
-        newsService.findOne("nonExistingId");
+        assertThrows(NoSuchElementException.class, () -> newsService.findOne("nonExistingId"));
     }
 
     @Test
@@ -75,7 +75,7 @@ public class NewsServiceIT {
         assertThat(newsService.exists(NewsLibrary.publishedNews().id())).isTrue();
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void shouldThrowException_whenCreatingNewsWithNonExistingAuthor() {
         dbFixture.noRollback();
 
@@ -92,7 +92,7 @@ public class NewsServiceIT {
                 LocalDateTime.of(2016, 5, 20, 15, 30, 0).toInstant(ZoneOffset.UTC),
                 NewsStatus.DRAFT);
 
-        newsService.create(news);
+        assertThrows(NoSuchElementException.class, () -> newsService.create(news));
     }
 
     @Test
@@ -123,26 +123,25 @@ public class NewsServiceIT {
         assertThat(createdNews.status).isEqualTo(NewsStatus.DRAFT);
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void shouldThrowException_whenUpdatingNonExistingNews() {
         dbFixture.noRollback();
 
-        News nullNews = null;
-        newsService.update(nullNews);
+        assertThrows(NoSuchElementException.class, () -> newsService.update((News) null));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void shouldThrowException_whenUpdatingValidatedNews() {
         dbFixture.noRollback();
 
-        newsService.update(NewsLibrary.validatedNews());
+        assertThrows(IllegalStateException.class, () -> newsService.update(NewsLibrary.validatedNews()));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void shouldThrowException_whenUpdatingPublishedNews() {
         dbFixture.noRollback();
 
-        newsService.update(NewsLibrary.publishedNews());
+        assertThrows(IllegalStateException.class, () -> newsService.update(NewsLibrary.publishedNews()));
     }
 
     @Test
@@ -164,11 +163,11 @@ public class NewsServiceIT {
         assertThat(updatedArtice.authorId).isEqualTo(newsToUpdate.authorId);
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void shouldThrowException_whenMarkingANonExistingNewsAsDraft() {
         dbFixture.noRollback();
 
-        newsService.markAs("nonExistingId", NewsStatus.DRAFT);
+        assertThrows(NoSuchElementException.class, () -> newsService.markAs("nonExistingId", NewsStatus.DRAFT));
     }
 
     @Test
@@ -179,11 +178,11 @@ public class NewsServiceIT {
         assertThat(news.publicationDate).isNull();
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void shouldThrowException_whenMArkingANonExistingNewsAsValidated() {
         dbFixture.noRollback();
 
-        newsService.markAs("nonExistingId", NewsStatus.VALIDATED);
+        assertThrows(NoSuchElementException.class, () -> newsService.markAs("nonExistingId", NewsStatus.VALIDATED));
     }
 
     @Test
@@ -194,11 +193,11 @@ public class NewsServiceIT {
         assertThat(news.publicationDate).isNull();
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void shouldThrowException_whenMarkingANonExistingNewsAsPublished() {
         dbFixture.noRollback();
 
-        newsService.markAs("nonExistingId", NewsStatus.PUBLISHED);
+        assertThrows(NoSuchElementException.class, () -> newsService.markAs("nonExistingId", NewsStatus.PUBLISHED));
     }
 
     @Test

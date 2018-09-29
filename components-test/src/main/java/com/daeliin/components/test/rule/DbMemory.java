@@ -4,7 +4,9 @@ import com.ninja_squad.dbsetup.DbSetup;
 import com.ninja_squad.dbsetup.Operations;
 import com.ninja_squad.dbsetup.destination.DataSourceDestination;
 import org.h2.jdbcx.JdbcDataSource;
-import org.junit.rules.ExternalResource;
+import org.junit.jupiter.api.extension.AfterAllCallback;
+import org.junit.jupiter.api.extension.BeforeAllCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 
 import javax.sql.DataSource;
 import java.nio.file.Files;
@@ -13,7 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public final class DbMemory extends ExternalResource {
+public final class DbMemory implements BeforeAllCallback, AfterAllCallback {
 
     private static final String APPLICATION_PROPERTIES_PATH = "/application.properties";
     private static final String DB_SCHEMA_SQL_PATH = "/db_schema.sql";
@@ -24,9 +26,16 @@ public final class DbMemory extends ExternalResource {
     private DataSource dataSource;
 
     @Override
-    public void before() throws Throwable {
-        super.before();
+    public void afterAll(ExtensionContext extensionContext) {
+        try {
+            dataSource.getConnection().close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    @Override
+    public void beforeAll(ExtensionContext extensionContext) throws Exception {
         Properties properties = new Properties();
         properties.load(getClass().getResourceAsStream(APPLICATION_PROPERTIES_PATH));
 
@@ -41,17 +50,6 @@ public final class DbMemory extends ExternalResource {
 
         DbSetup dbSetup = new DbSetup(new DataSourceDestination(dataSource), Operations.sql(createSchemaSql));
         dbSetup.launch();
-    }
-
-    @Override
-    public void after() {
-        super.after();
-
-        try {
-            dataSource.getConnection().close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public DataSource dataSource() {

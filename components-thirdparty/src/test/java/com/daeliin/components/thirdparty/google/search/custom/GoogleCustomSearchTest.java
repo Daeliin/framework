@@ -3,8 +3,8 @@ package com.daeliin.components.thirdparty.google.search.custom;
 import com.daeliin.components.thirdparty.google.search.GoogleSearchQuery;
 import com.daeliin.components.thirdparty.google.search.GoogleSearchResult;
 import com.daeliin.components.thirdparty.library.GoogleLibrary;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
@@ -23,7 +23,7 @@ public final class GoogleCustomSearchTest {
 
     private GoogleCustomSearch googleCustomSearch;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         RestTemplate restTemplate = new RestTemplate();
 
