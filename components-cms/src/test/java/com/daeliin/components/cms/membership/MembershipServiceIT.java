@@ -24,11 +24,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class MembershipServiceIT {
 
     @Inject
-    private MembershipService membershipService;
-
-    @Inject
     private AccountService accountService;
 
+    @Inject
+    private MembershipService tested;
+    
     @RegisterExtension
     public static DbMemory dbMemory = new DbMemory();
 
@@ -42,7 +42,7 @@ public class MembershipServiceIT {
         Account existingAccount = AccountLibrary.admin();
         SignUpRequest signUpRequest = new SignUpRequest(existingAccount.username, existingAccount.email, "password");
 
-        assertThrows(IllegalStateException.class, () -> membershipService.signUp(signUpRequest));
+        assertThrows(IllegalStateException.class, () -> tested.signUp(signUpRequest));
     }
 
     @Test
@@ -55,7 +55,7 @@ public class MembershipServiceIT {
         int accountCountBeforeSignUp = countAccountRows();
 
         try {
-            membershipService.signUp(signUpRequest);
+            tested.signUp(signUpRequest);
         } catch (IllegalStateException e) {
         }
 
@@ -68,7 +68,7 @@ public class MembershipServiceIT {
     public void shouldThrowException_whenActivatingNonExistentAccountId() {
         dbFixture.noRollback();
 
-        assertThrows(NoSuchElementException.class, () -> membershipService.activate("AOADAZD-65454", "ok"));
+        assertThrows(NoSuchElementException.class, () -> tested.activate("AOADAZD-65454", "ok"));
     }
 
     @Test
@@ -77,21 +77,21 @@ public class MembershipServiceIT {
 
         Account account = AccountLibrary.inactive();
 
-        assertThrows(IllegalArgumentException.class, () ->  membershipService.activate(account.id(), "wrongToken"));
+        assertThrows(IllegalArgumentException.class, () ->  tested.activate(account.id(), "wrongToken"));
     }
 
     @Test
     public void shouldThrowException_whenRequestingANewPasswordForNonExistingAccount() {
         dbFixture.noRollback();
 
-        assertThrows(NoSuchElementException.class, () -> membershipService.newPassword("AFEZAFEZ-6544"));
+        assertThrows(NoSuchElementException.class, () -> tested.newPassword("AFEZAFEZ-6544"));
     }
 
     @Test
     public void shouldThrowException_whenResetingPasswordForNonExistingAccount() {
         dbFixture.noRollback();
 
-        assertThrows(NoSuchElementException.class, () -> membershipService.resetPassword("AFEZAFEZ-6544", "token", "newPassword"));
+        assertThrows(NoSuchElementException.class, () -> tested.resetPassword("AFEZAFEZ-6544", "token", "newPassword"));
     }
 
     @Test
@@ -99,7 +99,7 @@ public class MembershipServiceIT {
         dbFixture.noRollback();
 
         Account account = AccountLibrary.admin();
-        assertThrows(IllegalArgumentException.class, () -> membershipService.resetPassword(account.id(), "wrongToken", "newPassword"));
+        assertThrows(IllegalArgumentException.class, () -> tested.resetPassword(account.id(), "wrongToken", "newPassword"));
     }
 
     private int countAccountRows() throws Exception {

@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class NewsServiceIT {
 
     @Inject
-    private NewsService newsService;
+    private NewsService tested;
 
     @RegisterExtension
     public static DbMemory dbMemory = new DbMemory();
@@ -49,7 +49,7 @@ public class NewsServiceIT {
         dbFixture.noRollback();
 
         News news = NewsLibrary.publishedNews();
-        News foundNews = newsService.findOne(news.id());
+        News foundNews = tested.findOne(news.id());
 
         assertThat(foundNews).isEqualTo(foundNews);
     }
@@ -58,21 +58,21 @@ public class NewsServiceIT {
     public void shouldThrowException_whenfindingANewsThatDoesntExist() {
         dbFixture.noRollback();
 
-        assertThrows(NoSuchElementException.class, () -> newsService.findOne("nonExistingId"));
+        assertThrows(NoSuchElementException.class, () -> tested.findOne("nonExistingId"));
     }
 
     @Test
     public void shouldCheckThatNewsDoesntExist() {
         dbFixture.noRollback();
 
-        assertThat(newsService.exists("ZFZEF-ZEF")).isFalse();
+        assertThat(tested.exists("ZFZEF-ZEF")).isFalse();
     }
 
     @Test
     public void shouldCheckThatNewsExists() {
         dbFixture.noRollback();
 
-        assertThat(newsService.exists(NewsLibrary.publishedNews().id())).isTrue();
+        assertThat(tested.exists(NewsLibrary.publishedNews().id())).isTrue();
     }
 
     @Test
@@ -92,7 +92,7 @@ public class NewsServiceIT {
                 LocalDateTime.of(2016, 5, 20, 15, 30, 0).toInstant(ZoneOffset.UTC),
                 NewsStatus.DRAFT);
 
-        assertThrows(NoSuchElementException.class, () -> newsService.create(news));
+        assertThrows(NoSuchElementException.class, () -> tested.create(news));
     }
 
     @Test
@@ -110,7 +110,7 @@ public class NewsServiceIT {
                 LocalDateTime.of(2016, 5, 20, 15, 30, 0).toInstant(ZoneOffset.UTC),
                 NewsStatus.DRAFT);
 
-        News createdNews = newsService.create(news);
+        News createdNews = tested.create(news);
 
         assertThat(createdNews.id()).isNotBlank();
         assertThat(createdNews.title).isEqualTo(news.title);
@@ -127,21 +127,21 @@ public class NewsServiceIT {
     public void shouldThrowException_whenUpdatingNonExistingNews() {
         dbFixture.noRollback();
 
-        assertThrows(NoSuchElementException.class, () -> newsService.update((News) null));
+        assertThrows(NoSuchElementException.class, () -> tested.update((News) null));
     }
 
     @Test
     public void shouldThrowException_whenUpdatingValidatedNews() {
         dbFixture.noRollback();
 
-        assertThrows(IllegalStateException.class, () -> newsService.update(NewsLibrary.validatedNews()));
+        assertThrows(IllegalStateException.class, () -> tested.update(NewsLibrary.validatedNews()));
     }
 
     @Test
     public void shouldThrowException_whenUpdatingPublishedNews() {
         dbFixture.noRollback();
 
-        assertThrows(IllegalStateException.class, () -> newsService.update(NewsLibrary.publishedNews()));
+        assertThrows(IllegalStateException.class, () -> tested.update(NewsLibrary.publishedNews()));
     }
 
     @Test
@@ -150,7 +150,7 @@ public class NewsServiceIT {
         News news = new News(newsToUpdate.id(), Instant.now(), "", "New title", "", "New desc", "New content", "New content",
                 "https://google.fr", null, NewsStatus.PUBLISHED);
 
-        News updatedArtice = newsService.update(news);
+        News updatedArtice = tested.update(news);
 
         assertThat(updatedArtice.status).isEqualTo(NewsStatus.DRAFT);
         assertThat(updatedArtice.title).isEqualTo(news.title);
@@ -167,12 +167,12 @@ public class NewsServiceIT {
     public void shouldThrowException_whenMarkingANonExistingNewsAsDraft() {
         dbFixture.noRollback();
 
-        assertThrows(NoSuchElementException.class, () -> newsService.markAs("nonExistingId", NewsStatus.DRAFT));
+        assertThrows(NoSuchElementException.class, () -> tested.markAs("nonExistingId", NewsStatus.DRAFT));
     }
 
     @Test
     public void shouldMarkANewsAsDraft() {
-        News news = newsService.markAs(NewsLibrary.validatedNews().id(), NewsStatus.DRAFT);
+        News news = tested.markAs(NewsLibrary.validatedNews().id(), NewsStatus.DRAFT);
 
         assertThat(news.status).isEqualTo(NewsStatus.DRAFT);
         assertThat(news.publicationDate).isNull();
@@ -182,12 +182,12 @@ public class NewsServiceIT {
     public void shouldThrowException_whenMArkingANonExistingNewsAsValidated() {
         dbFixture.noRollback();
 
-        assertThrows(NoSuchElementException.class, () -> newsService.markAs("nonExistingId", NewsStatus.VALIDATED));
+        assertThrows(NoSuchElementException.class, () -> tested.markAs("nonExistingId", NewsStatus.VALIDATED));
     }
 
     @Test
     public void shouldMarkANewsAsValidated() {
-        News news = newsService.markAs(NewsLibrary.draftNews().id(), NewsStatus.VALIDATED);
+        News news = tested.markAs(NewsLibrary.draftNews().id(), NewsStatus.VALIDATED);
 
         assertThat(news.status).isEqualTo(NewsStatus.VALIDATED);
         assertThat(news.publicationDate).isNull();
@@ -197,12 +197,12 @@ public class NewsServiceIT {
     public void shouldThrowException_whenMarkingANonExistingNewsAsPublished() {
         dbFixture.noRollback();
 
-        assertThrows(NoSuchElementException.class, () -> newsService.markAs("nonExistingId", NewsStatus.PUBLISHED));
+        assertThrows(NoSuchElementException.class, () -> tested.markAs("nonExistingId", NewsStatus.PUBLISHED));
     }
 
     @Test
     public void shouldMarkANewsAsPublished() {
-        News news = newsService.markAs(NewsLibrary.validatedNews().id(), NewsStatus.PUBLISHED);
+        News news = tested.markAs(NewsLibrary.validatedNews().id(), NewsStatus.PUBLISHED);
 
         assertThat(news.status).isEqualTo(NewsStatus.PUBLISHED);
         assertThat(news.publicationDate).isNotNull();
@@ -214,7 +214,7 @@ public class NewsServiceIT {
 
         List<String> news = Arrays.asList(NewsLibrary.publishedNews().id(), NewsLibrary.validatedNews().id());
 
-        Map<News, Account> authorByNews = newsService.authorByNews(news);
+        Map<News, Account> authorByNews = tested.authorByNews(news);
 
         assertThat(authorByNews.get(NewsLibrary.publishedNews())).isEqualTo(AccountLibrary.admin());
         assertThat(authorByNews.get(NewsLibrary.validatedNews())).isEqualTo(AccountLibrary.john());

@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class EventLogServiceIT {
 
     @Inject
-    private EventLogService eventLogService;
+    private EventLogService tested;
 
     @RegisterExtension
     public static DbMemory dbMemory = new DbMemory();
@@ -28,7 +28,7 @@ public class EventLogServiceIT {
 
     @Test
     public void shouldCreateAnEventLogFromDescription() {
-        EventLog eventLog = eventLogService.create("Test");
+        EventLog eventLog = tested.create("Test");
 
         assertThat(eventLog.id()).isNotBlank();
         assertThat(eventLog.creationDate()).isNotNull();

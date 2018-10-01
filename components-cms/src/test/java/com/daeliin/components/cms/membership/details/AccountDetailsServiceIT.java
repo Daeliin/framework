@@ -28,7 +28,7 @@ public class AccountDetailsServiceIT {
     private AccountService accountService;
 
     @Inject
-    private AccountDetailsService accountDetailsService;
+    private AccountDetailsService tested;
 
     @RegisterExtension
     public static DbMemory dbMemory = new DbMemory();
@@ -46,14 +46,14 @@ public class AccountDetailsServiceIT {
     public void shouldThrowIllegalArgumentException_whenSignUpRequestIsNull() {
         dbFixture.noRollback();
 
-        assertThrows(IllegalArgumentException.class, () -> accountDetailsService.signUp(null));
+        assertThrows(IllegalArgumentException.class, () -> tested.signUp(null));
     }
 
     @Test
     public void shouldSignUpAnAccount() {
         SignUpRequest signUpRequest = new SignUpRequest("jane", "jane@daeliin.com", "clearPassword");
 
-        Account signedUpAccount = accountDetailsService.signUp(signUpRequest);
+        Account signedUpAccount = tested.signUp(signUpRequest);
 
         assertThat(signedUpAccount.id()).isNotNull();
         assertThat(signedUpAccount.creationDate()).isNotNull();
@@ -70,7 +70,7 @@ public class AccountDetailsServiceIT {
 
         int accountCountBeforeSignUp = countRows();
 
-        accountDetailsService.signUp(signUpRequest);
+        tested.signUp(signUpRequest);
 
         int accountCountAfterSignUp = countRows();
 
@@ -83,7 +83,7 @@ public class AccountDetailsServiceIT {
 
         Account account = AccountLibrary.admin();
 
-        assertThrows(IllegalArgumentException.class, () -> accountDetailsService.activate(account, "differentToken"));
+        assertThrows(IllegalArgumentException.class, () -> tested.activate(account, "differentToken"));
     }
 
     @Test
@@ -93,7 +93,7 @@ public class AccountDetailsServiceIT {
         Account account = AccountLibrary.inactive();
 
         try {
-            account = accountDetailsService.activate(account, "differentToken");
+            account = tested.activate(account, "differentToken");
         } catch(IllegalArgumentException e) {
         }
 
@@ -104,7 +104,7 @@ public class AccountDetailsServiceIT {
     public void shouldAssignANewTokenToAccount_whenActivatingIt() {
         Account account = AccountLibrary.admin();
 
-        Account activatedAccount = accountDetailsService.activate(account, account.token);
+        Account activatedAccount = tested.activate(account, account.token);
 
         assertThat(activatedAccount.token).isNotBlank();
         assertThat(activatedAccount.token).isNotEqualTo(account.token);
@@ -114,7 +114,7 @@ public class AccountDetailsServiceIT {
     public void shouldActivateAnAccount() {
         Account account = AccountLibrary.inactive();
 
-        Account activatedAccount = accountDetailsService.activate(account, account.token);
+        Account activatedAccount = tested.activate(account, account.token);
 
         assertThat(activatedAccount.enabled).isTrue();
     }
@@ -125,7 +125,7 @@ public class AccountDetailsServiceIT {
 
         Account account = AccountLibrary.admin();
 
-        assertThrows(IllegalArgumentException.class, () -> accountDetailsService.resetPassword(account, "differentToken", "newPassword"));
+        assertThrows(IllegalArgumentException.class, () -> tested.resetPassword(account, "differentToken", "newPassword"));
     }
 
     @Test
@@ -135,7 +135,7 @@ public class AccountDetailsServiceIT {
         Account account = AccountLibrary.admin();
 
         try {
-            accountDetailsService.resetPassword(account, "differentToken", "newPassword");
+            tested.resetPassword(account, "differentToken", "newPassword");
         } catch (IllegalArgumentException e) {
         }
 
@@ -148,7 +148,7 @@ public class AccountDetailsServiceIT {
     public void shouldResetPassword() {
         Account account = AccountLibrary.admin();
 
-        Account accountAfterResetPassword = accountDetailsService.resetPassword(account, account.token, "newPassword");
+        Account accountAfterResetPassword = tested.resetPassword(account, account.token, "newPassword");
 
         assertThat(accountAfterResetPassword.password).isNotBlank();
         assertThat(accountAfterResetPassword.password).isNotEqualTo(account.password);
@@ -158,7 +158,7 @@ public class AccountDetailsServiceIT {
     public void shouldAssignANewTokenToAccount_whenResetingItsPassword() {
         Account account = AccountLibrary.admin();
 
-        Account accountAfterResetPassword = accountDetailsService.resetPassword(account, account.token, "newPassword");
+        Account accountAfterResetPassword = tested.resetPassword(account, account.token, "newPassword");
 
         assertThat(accountAfterResetPassword.token).isNotBlank();
         assertThat(accountAfterResetPassword.token).isNotEqualTo(account.token);

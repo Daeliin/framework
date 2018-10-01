@@ -21,13 +21,13 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 public final class GoogleCustomSearchTest {
 
-    private GoogleCustomSearch googleCustomSearch;
+    private GoogleCustomSearch tested;
 
     @BeforeEach
     public void setUp() throws Exception {
         RestTemplate restTemplate = new RestTemplate();
 
-        googleCustomSearch = new GoogleCustomSearch(restTemplate);
+        tested = new GoogleCustomSearch(restTemplate);
 
         String googleSearchResultJson = new String(Files.readAllBytes(Paths.get(GoogleLibrary.SEARCH_RESULT_CUSTOM_PATH)));
 
@@ -48,7 +48,7 @@ public final class GoogleCustomSearchTest {
 
     @Test
     public void shouldParseResults() {
-        Set<GoogleSearchResult> results = googleCustomSearch.search(new GoogleSearchQuery("architects spotify", 4), "key", "5");
+        Set<GoogleSearchResult> results = tested.search(new GoogleSearchQuery("architects spotify", 4), "key", "5");
 
         assertThat(results).containsExactly(
             new GoogleSearchResult("https://open.spotify.com/artist/3ZztVuWxHzNpl0THurTFCv"),

@@ -3,7 +3,6 @@ package com.daeliin.components.thirdparty.google.search.html;
 import com.daeliin.components.thirdparty.google.search.GoogleSearchQuery;
 import com.daeliin.components.thirdparty.google.search.GoogleSearchResult;
 import com.daeliin.components.thirdparty.library.GoogleLibrary;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
@@ -22,13 +21,13 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 public final class GoogleHtmlSearchTest {
 
-    private GoogleHtmlSearch googleHtmlSearch;
+    private GoogleHtmlSearch tested;
 
     @BeforeEach
     public void setUp() throws Exception {
         RestTemplate restTemplate = new RestTemplate();
 
-        googleHtmlSearch = new GoogleHtmlSearch(restTemplate);
+        tested = new GoogleHtmlSearch(restTemplate);
 
         String googleSearchResultHtml = new String(Files.readAllBytes(Paths.get(GoogleLibrary.SEARCH_RESULT_HTML_PATH)));
 
@@ -47,7 +46,7 @@ public final class GoogleHtmlSearchTest {
 
     @Test
     public void shouldParseResults() {
-        Set<GoogleSearchResult> results = googleHtmlSearch.search(new GoogleSearchQuery("test", 5));
+        Set<GoogleSearchResult> results = tested.search(new GoogleSearchQuery("test", 5));
 
         assertThat(results).containsExactly(
             new GoogleSearchResult("https://fr.wikipedia.org/wiki/Test"),
