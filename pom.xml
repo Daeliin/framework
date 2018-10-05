@@ -29,7 +29,7 @@
         <commons-codec.version>1.11</commons-codec.version>
         <guava.version>26.0-jre</guava.version>
         <junit-jupiter.version>5.3.1</junit-jupiter.version>
-        <mockito-core.version>2.21.0</mockito-core.version>
+        <mockito.version>2.23.0</mockito.version>
         <assertj.version>3.11.1</assertj.version>
         <dbsetup.version>2.1.0</dbsetup.version>
         <querydsl.version>4.2.1</querydsl.version>
@@ -138,7 +138,7 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
-                <version>${mockito-core.version}</version>
+                <version>${mockito.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.ninja-squad</groupId>
