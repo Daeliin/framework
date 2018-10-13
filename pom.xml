@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.daeliin.components</groupId>
+    <groupId>com.blebail.components</groupId>
     <artifactId>java-components</artifactId>
     <packaging>pom</packaging>
     <version>0.2-SNAPSHOT</version>
@@ -21,7 +21,7 @@
         <java.version>11</java.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <daeliin.components.version>0.2-SNAPSHOT</daeliin.components.version>
+        <blebail.components.version>0.2-SNAPSHOT</blebail.components.version>
         <javax-inject.version>1</javax-inject.version>
         <javax.annotation.version>1.3.2</javax.annotation.version>
         <commons-lang.version>3.8</commons-lang.version>
@@ -53,37 +53,37 @@
 
     <distributionManagement>
         <repository>
-            <id>daeliin-repository</id>
-            <url>scp://daeliin.com/repository/</url>
+            <id>blebail-repository</id>
+            <url>scp://blebail.com/repository/</url>
         </repository>
     </distributionManagement>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.daeliin.components</groupId>
+                <groupId>com.blebail.components</groupId>
                 <artifactId>components-test</artifactId>
-                <version>${daeliin.components.version}</version>
+                <version>${blebail.components.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.daeliin.components</groupId>
+                <groupId>com.blebail.components</groupId>
                 <artifactId>components-core</artifactId>
-                <version>${daeliin.components.version}</version>
+                <version>${blebail.components.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.daeliin.components</groupId>
+                <groupId>com.blebail.components</groupId>
                 <artifactId>components-persistence</artifactId>
-                <version>${daeliin.components.version}</version>
+                <version>${blebail.components.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.daeliin.components</groupId>
+                <groupId>com.blebail.components</groupId>
                 <artifactId>components-webservices</artifactId>
-                <version>${daeliin.components.version}</version>
+                <version>${blebail.components.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.daeliin.components</groupId>
+                <groupId>com.blebail.components</groupId>
                 <artifactId>components-cms</artifactId>
-                <version>${daeliin.components.version}</version>
+                <version>${blebail.components.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.querydsl</groupId>

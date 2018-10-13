@@ -5,18 +5,18 @@
     <packaging>jar</packaging>
     <version>0.2-SNAPSHOT</version>
     <name>components-thirdpary</name>
-    <description>Daeliin Java Third Party Components</description>
+    <description>Blebail Java Third Party Components</description>
 
     <parent>
-        <groupId>com.daeliin.components</groupId>
+        <groupId>com.blebail.components</groupId>
         <artifactId>java-components</artifactId>
         <version>0.2-SNAPSHOT</version>
     </parent>
 
     <dependencies>
-        <!-- Daeliin -->
+        <!-- Blebail -->
         <dependency>
-            <groupId>com.daeliin.components</groupId>
+            <groupId>com.blebail.components</groupId>
             <artifactId>components-core</artifactId>
         </dependency>
 
@@ -34,7 +34,7 @@
 
         <!-- Tests -->
         <dependency>
-            <groupId>com.daeliin.components</groupId>
+            <groupId>com.blebail.components</groupId>
             <artifactId>components-test</artifactId>
             <scope>test</scope>
         </dependency>

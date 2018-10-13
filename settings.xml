@@ -1,7 +1,7 @@
 <settings>
   <servers>
     <server>
-      <id>daeliin-repository</id>
+      <id>blebail-repository</id>
       <username>${env.MAVEN_DEPLOY_USERNAME}</username>
       <password>${env.MAVEN_DEPLOY_PASSWORD}</password>
     </server>

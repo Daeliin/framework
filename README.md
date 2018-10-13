@@ -17,6 +17,6 @@ Provides commons java components with Spring Boot.
 <repositories>
     <repository>
         <id>daeliin-repository</id>
-        <url>http://daeliin.com/repository/</url>
+        <url>http://blebail.com/repository/</url>
     </repository>   
 </repositories>

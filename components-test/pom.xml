@@ -7,10 +7,10 @@
     <packaging>jar</packaging>
     <version>0.2-SNAPSHOT</version>
     <name>components-test</name>
-    <description>Daeliin Java Test Components</description>
+    <description>Blebail Java Test Components</description>
 
     <parent>
-        <groupId>com.daeliin.components</groupId>
+        <groupId>com.blebail.components</groupId>
         <artifactId>java-components</artifactId>
         <version>0.2-SNAPSHOT</version>
     </parent>

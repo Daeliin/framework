@@ -5,18 +5,18 @@
     <packaging>jar</packaging>
     <version>0.2-SNAPSHOT</version>
     <name>components-cms</name>
-    <description>Daeliin Java CMS Components</description>
+    <description>Blebail Java CMS Components</description>
 
     <parent>
-        <groupId>com.daeliin.components</groupId>
+        <groupId>com.blebail.components</groupId>
         <artifactId>java-components</artifactId>
         <version>0.2-SNAPSHOT</version>
     </parent>
 
     <dependencies>
-        <!-- Daeliin -->
+        <!-- Blebail -->
         <dependency>
-            <groupId>com.daeliin.components</groupId>
+            <groupId>com.blebail.components</groupId>
             <artifactId>components-persistence</artifactId>
         </dependency>
 
@@ -42,7 +42,7 @@
 
         <!-- Test -->
         <dependency>
-            <groupId>com.daeliin.components</groupId>
+            <groupId>com.blebail.components</groupId>
             <artifactId>components-test</artifactId>
             <scope>test</scope>
         </dependency>
@@ -68,7 +68,7 @@
                     <exportBeans>true</exportBeans>
                     <beanPrefix>B</beanPrefix>
                     <beanAddFullConstructor>true</beanAddFullConstructor>
-                    <packageName>com.daeliin.components.cms.sql</packageName>
+                    <packageName>com.blebail.components.cms.sql</packageName>
                     <sourceFolder>${project.basedir}/target/generated-sources/java</sourceFolder>
                     <targetFolder>${project.basedir}/target/generated-sources/java</targetFolder>
                     <customTypes>
