@@ -20,7 +20,7 @@ import java.util.TreeSet;
  * @param <R> row type
  * @param <ID> resource id type
  */
-public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extends CrudRepository<R, ID>> implements PagingService<T, ID> {
+public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extends CrudRepository<R, ID>> implements CrudService<T, ID> {
 
     private static final String MESSAGE_RESOURCE_NOT_FOUND = "Resource was not found";
 

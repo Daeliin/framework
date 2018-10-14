@@ -13,7 +13,7 @@ import java.util.Optional;
  * @param <T> resource type
  * @param <ID> resource ID type
  */
-public interface PagingService<T extends Persistable<ID>, ID> {
+public interface CrudService<T extends Persistable<ID>, ID> {
 
     /**
      * Creates a resource.

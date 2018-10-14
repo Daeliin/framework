@@ -3,7 +3,7 @@ package com.blebail.components.webservices.controller;
 import com.blebail.components.core.pagination.Page;
 import com.blebail.components.core.pagination.PageRequest;
 import com.blebail.components.persistence.resource.Persistable;
-import com.blebail.components.persistence.resource.service.PagingService;
+import com.blebail.components.persistence.resource.service.CrudService;
 import com.blebail.components.webservices.dto.ResourceDtoConversion;
 import com.blebail.components.webservices.validation.PageRequestValidation;
 import com.querydsl.core.types.Predicate;
@@ -32,7 +32,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
  * @param <ID> resource ID type
  * @param <S> resource service
  */
-public abstract class ResourceController<V, T extends Persistable<ID>, ID, S extends PagingService<T, ID>> implements PagingController<V, ID> {
+public abstract class ResourceController<V, T extends Persistable<ID>, ID, S extends CrudService<T, ID>> implements PagingController<V, ID> {
     
     public static final String DEFAULT_PAGE = "0";
     public static final String DEFAULT_SIZE = "20";
