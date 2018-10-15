@@ -24,8 +24,8 @@
         <blebail.components.version>0.2-SNAPSHOT</blebail.components.version>
         <javax-inject.version>1</javax-inject.version>
         <javax.annotation.version>1.3.2</javax.annotation.version>
-        <commons-lang.version>3.8</commons-lang.version>
-        <commons-text.version>1.4</commons-text.version>
+        <commons-lang.version>3.8.1</commons-lang.version>
+        <commons-text.version>1.5</commons-text.version>
         <commons-codec.version>1.11</commons-codec.version>
         <guava.version>26.0-jre</guava.version>
         <junit-jupiter.version>5.3.1</junit-jupiter.version>
@@ -35,9 +35,9 @@
         <querydsl.version>4.2.1</querydsl.version>
         <jsoup.version>1.11.3</jsoup.version>
         <imgscalr.version>4.2</imgscalr.version>
-        <maven.wagon-ssh-plugin.version>2.10</maven.wagon-ssh-plugin.version>
-        <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
-        <maven-failsafe-plugin.version>2.22.0</maven-failsafe-plugin.version>
+        <maven.wagon-ssh-plugin.version>3.2.0</maven.wagon-ssh-plugin.version>
+        <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
+        <maven-failsafe-plugin.version>2.22.1</maven-failsafe-plugin.version>
         <jacoco.plugin.version>0.8.2</jacoco.plugin.version>
         <sql.schema>${project.basedir}/src/test/resources/db_schema.sql</sql.schema>
     </properties>
