@@ -9,7 +9,7 @@ import javax.inject.Inject;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
-@RequestMapping("/uuid")
+@RequestMapping("/uuid/resource")
 @RestController
 public class UuidResourceController extends ResourceController<UuidResourceDto, UuidResource, String, UuidResourceService> {
 

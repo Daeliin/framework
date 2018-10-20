@@ -6,6 +6,8 @@ import com.blebail.components.persistence.resource.repository.CrudRepository;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -16,12 +18,12 @@ import static java.util.stream.Collectors.toMap;
  * {@inheritDoc}
  * Caches resources in memory.
  */
-public abstract class CachedResourceService<T extends Persistable<ID>, R, ID, P extends CrudRepository<R, ID>>
+public abstract class CachedBaseService<T extends Persistable<ID>, R, ID, P extends CrudRepository<R, ID>>
         extends BaseService<T, R, ID, P> implements CachedService<ID> {
 
     protected final Map<ID, T> cache;
 
-    public CachedResourceService(P repository, Conversion<T, R> conversion) {
+    public CachedBaseService(P repository, Conversion<T, R> conversion) {
         super(repository, conversion);
         cache = new ConcurrentHashMap<>();
     }
@@ -57,9 +59,11 @@ public abstract class CachedResourceService<T extends Persistable<ID>, R, ID, P 
      */
     @Override
     public boolean exists(ID resourceId) {
-        if (cache.isEmpty()) {
-            invalidate();
+        if (resourceId == null) {
+            return false;
         }
+
+        loadCacheIfNecessary();
 
         return cache.containsKey(resourceId);
     }
@@ -69,9 +73,7 @@ public abstract class CachedResourceService<T extends Persistable<ID>, R, ID, P 
      */
     @Override
     public long count() {
-        if (cache.isEmpty()) {
-            invalidate();
-        }
+        loadCacheIfNecessary();
 
         return cache.size();
     }
@@ -81,11 +83,14 @@ public abstract class CachedResourceService<T extends Persistable<ID>, R, ID, P 
      */
     @Override
     public T findOne(ID resourceId) {
-        if (!cache.containsKey(resourceId)) {
-            invalidate();
+        if (resourceId == null) {
+            throw new NoSuchElementException();
         }
 
-        return cache.get(resourceId);
+        loadCacheIfNecessary();
+
+        return Optional.ofNullable(cache.get(resourceId))
+                .orElseThrow(NoSuchElementException::new);
     }
 
     /**
@@ -93,9 +98,7 @@ public abstract class CachedResourceService<T extends Persistable<ID>, R, ID, P 
      */
     @Override
     public Collection<T> findAll() {
-        if (cache.isEmpty()) {
-            invalidate();
-        }
+        loadCacheIfNecessary();
 
         return cache.values();
     }
@@ -105,15 +108,16 @@ public abstract class CachedResourceService<T extends Persistable<ID>, R, ID, P 
      */
     @Override
     public Collection<T> findAll(Collection<ID> resourcesIds) {
-        if (cache.isEmpty()) {
-            invalidate();
-        }
+        loadCacheIfNecessary();
 
         return cache.values().stream()
                 .filter(resource -> resourcesIds.contains(resource.id()))
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public T update(T resource) {
         T updatedResource = super.update(resource);
@@ -123,6 +127,9 @@ public abstract class CachedResourceService<T extends Persistable<ID>, R, ID, P 
         return updatedResource;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Collection<T> update(Collection<T> resources) {
         Collection<T> updatedResources = super.update(resources);
@@ -132,6 +139,9 @@ public abstract class CachedResourceService<T extends Persistable<ID>, R, ID, P 
         return updatedResources;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean delete(ID id) {
         boolean deleted = super.delete(id);
@@ -141,6 +151,9 @@ public abstract class CachedResourceService<T extends Persistable<ID>, R, ID, P 
         return deleted;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean delete(Collection<ID> resourceIds) {
         boolean deleted = super.delete(resourceIds);
@@ -150,6 +163,9 @@ public abstract class CachedResourceService<T extends Persistable<ID>, R, ID, P 
         return deleted;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean delete(T resource) {
         boolean deleted = super.delete(resource);
@@ -159,6 +175,9 @@ public abstract class CachedResourceService<T extends Persistable<ID>, R, ID, P 
         return deleted;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean deleteAll() {
         boolean deleted = super.deleteAll();
@@ -168,10 +187,19 @@ public abstract class CachedResourceService<T extends Persistable<ID>, R, ID, P 
         return deleted;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void invalidate() {
         cache.clear();
         
         super.findAll().forEach(resource -> cache.put(resource.id(), resource));
+    }
+
+    private void loadCacheIfNecessary() {
+        if (cache.isEmpty()) {
+            invalidate();
+        }
     }
 }

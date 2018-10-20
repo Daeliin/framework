@@ -55,7 +55,7 @@ public abstract class BaseService<T extends Persistable<ID>, R, ID, P extends Cr
      */
     @Override
     public boolean exists(ID resourceId) {
-        if(resourceId == null) {
+        if (resourceId == null) {
             return false;
         }
 

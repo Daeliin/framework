@@ -6,7 +6,7 @@ import java.util.Collection;
  * Exposes CRUD operations and pagination for a resource.
  * @param <T> resource type
  */
-public interface PagingController<T, ID> {
+public interface CrudController<T, ID> {
     
     /**
      * Exposes a create entry point.
@@ -21,7 +21,7 @@ public interface PagingController<T, ID> {
      * @return resource
      */
     T getOne(ID resourceId);
-    
+
     /**
      * Exposes an update by id entry point.
      * @param resourceId resource id
