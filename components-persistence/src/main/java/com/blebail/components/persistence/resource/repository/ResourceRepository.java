@@ -12,6 +12,9 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * {@inheritDoc}
+ */
 public abstract class ResourceRepository<R, ID> extends BaseRepository<R> implements CrudRepository<R, ID> {
 
     protected final SimpleExpression<ID> idPath;
@@ -23,6 +26,9 @@ public abstract class ResourceRepository<R, ID> extends BaseRepository<R> implem
         this.idMapping = Objects.requireNonNull(idMapping);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional
     @Override
     public R save(R resource) {
@@ -46,6 +52,9 @@ public abstract class ResourceRepository<R, ID> extends BaseRepository<R> implem
         return resource;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional
     @Override
     public Collection<R> save(Collection<R> resources) {
@@ -78,6 +87,9 @@ public abstract class ResourceRepository<R, ID> extends BaseRepository<R> implem
         return resources;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional(readOnly = true)
     @Override
     public Optional<R> findOne(ID resourceId) {
@@ -91,6 +103,9 @@ public abstract class ResourceRepository<R, ID> extends BaseRepository<R> implem
                 .fetchOne());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional(readOnly = true)
     @Override
     public Collection<R> findAll(Collection<ID> resourceIds) {
@@ -100,6 +115,9 @@ public abstract class ResourceRepository<R, ID> extends BaseRepository<R> implem
                 .fetch();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional(readOnly = true)
     @Override
     public boolean exists(ID resourceId) {
@@ -113,6 +131,9 @@ public abstract class ResourceRepository<R, ID> extends BaseRepository<R> implem
                 .fetchOne() != null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional
     @Override
     public boolean delete(ID resourceId) {
@@ -125,6 +146,9 @@ public abstract class ResourceRepository<R, ID> extends BaseRepository<R> implem
                 .execute() == 1;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional
     @Override
     public boolean delete(Collection<ID> resourceIds) {
@@ -133,11 +157,17 @@ public abstract class ResourceRepository<R, ID> extends BaseRepository<R> implem
                 .execute() == resourceIds.size();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SimpleExpression<ID> idPath(){
         return idPath;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Function<R, ID> idMapping() {
         return idMapping;

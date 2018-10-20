@@ -1,15 +1,13 @@
 package com.blebail.components.persistence.resource;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 
 import java.time.Instant;
 import java.util.Objects;
 
 /**
- * Resource saved in a RDBMS and identified by an id,
+ * {@inheritDoc}
  * Equality is only based on the id.
- * @param <ID> resource ID type
  */
 public abstract class PersistentResource<ID> implements Persistable<ID> {
     
@@ -25,10 +23,18 @@ public abstract class PersistentResource<ID> implements Persistable<ID> {
         this.creationDate = Objects.requireNonNull(creationDate);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ID id() {
         return id;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Instant creationDate() {
         return creationDate;
     }

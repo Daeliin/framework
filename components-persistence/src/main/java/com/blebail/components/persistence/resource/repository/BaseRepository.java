@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * @param <R> row type
+ * {@inheritDoc}
  */
 public class BaseRepository<R> implements PagingRepository<R> {
 
@@ -30,11 +30,17 @@ public class BaseRepository<R> implements PagingRepository<R> {
         this.rowOrder = new RowOrder(rowPath);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RelationalPathBase<R> rowPath() {
         return rowPath;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional(readOnly = true)
     @Override
     public Optional<R> findOne(Predicate predicate) {
@@ -48,6 +54,9 @@ public class BaseRepository<R> implements PagingRepository<R> {
             .fetchOne());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional(readOnly = true)
     @Override
     public Collection<R> findAll(Predicate predicate) {
@@ -61,12 +70,18 @@ public class BaseRepository<R> implements PagingRepository<R> {
         return query.fetch();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional(readOnly = true)
     @Override
     public Page<R> findAll(PageRequest pageRequest) {
         return findAll(null, pageRequest);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional(readOnly = true)
     @Override
     public Page<R> findAll(Predicate predicate, PageRequest pageRequest) {
@@ -87,6 +102,9 @@ public class BaseRepository<R> implements PagingRepository<R> {
         return new Page<>(query.fetch(), totalItems, totalPages);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional(readOnly = true)
     @Override
     public Collection<R> findAll() {
@@ -95,6 +113,9 @@ public class BaseRepository<R> implements PagingRepository<R> {
             .fetch();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional(readOnly = true)
     @Override
     public long count() {
@@ -103,6 +124,9 @@ public class BaseRepository<R> implements PagingRepository<R> {
             .fetchCount();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional(readOnly = true)
     @Override
     public long count(Predicate predicate) {
@@ -116,6 +140,9 @@ public class BaseRepository<R> implements PagingRepository<R> {
         return query.fetchCount();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional
     @Override
     public boolean delete(Predicate predicate) {
@@ -127,6 +154,9 @@ public class BaseRepository<R> implements PagingRepository<R> {
         return queryFactory.delete(rowPath).where(predicate).execute() > 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional
     @Override
     public boolean deleteAll() {

@@ -6,87 +6,22 @@ import com.blebail.components.core.resource.Conversion;
 import com.blebail.components.persistence.resource.Persistable;
 import com.blebail.components.persistence.resource.repository.CrudRepository;
 import com.querydsl.core.types.Predicate;
-import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
-import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.TreeSet;
 
 /**
- * Provides CRUD operations and pagination for a resource, with caching.
- * @param <T> resource type
- * @param <R> row type
- * @param <ID> resource id type
+ * {@inheritDoc}
  */
-public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extends CrudRepository<R, ID>> implements CrudService<T, ID> {
-
-    private static final String MESSAGE_RESOURCE_NOT_FOUND = "Resource was not found";
-
-    protected final P repository;
-    protected final Conversion<T, R> conversion;
+public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extends CrudRepository<R, ID>>
+        extends BaseService<T, R, ID, P> implements PagingService<T, ID> {
 
     public ResourceService(P repository, Conversion<T, R> conversion) {
-        this.repository = Objects.requireNonNull(repository);
-        this.conversion = Objects.requireNonNull(conversion);
+        super(repository, conversion);
     }
 
     /**
-     * Creates a resource.
-     * @param resource resource to create
-     * @return created resource
-     */
-    @Override
-    public T create(T resource) {
-        if (repository.exists(resource.id())) {
-            throw new IllegalStateException("Resource should not already exist when creating it");
-        }
-
-        R createdRow = repository.save(conversion.to(resource));
-
-        return conversion.from(createdRow);
-    }
-
-    /**
-     * Creates multiple resources.
-     * @param resources resources to create
-     * @return created resources
-     */
-    @Override
-    public Collection<T> create(Collection<T> resources) {
-        Collection<R> createdRows = repository.save(conversion.to(resources));
-
-        return conversion.from(createdRows);
-    }
-
-    /**
-     * Returns true if the resource exists, false otherwise
-     * @param resourceId id
-     * @return true of the resource exists, false otherwise
-     */
-    @Override
-    public boolean exists(ID resourceId) {
-        if(resourceId == null) {
-            return false;
-        }
-
-        return repository.exists(resourceId);
-    }
-
-    /**
-     * Returns the total number of resources.
-     * @return total number of resources
-     */
-    @Override
-    public long count() {
-        return repository.count();
-    }
-
-    /**
-     * Returns the total number of resources according to a predicate
-     * @param predicate the predicate
-     * @return total number of resources matching the predicate
+     * {@inheritDoc}
      */
     @Override
     public long count(Predicate predicate) {
@@ -94,24 +29,8 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
     }
 
     /**
-     * Finds a resource by its id.
-     * @param resourceId resource id
-     * @return resource
-     * @throws NoSuchElementException if the resource is not found
+     * {@inheritDoc}
      */
-    @Override
-    public T findOne(ID resourceId) {
-        if (resourceId == null) {
-            throw new NoSuchElementException(MESSAGE_RESOURCE_NOT_FOUND);
-        }
-
-        Optional<R> resourceRow = repository.findOne(resourceId);
-
-        R resource = resourceRow.orElseThrow(() -> new NoSuchElementException(MESSAGE_RESOURCE_NOT_FOUND));
-
-        return conversion.from(resource);
-    }
-
     @Override
     public Optional<T> findOne(Predicate predicate) {
         Optional<R> resource = repository.findOne(predicate);
@@ -120,23 +39,15 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
     }
 
     /**
-     * Finds every resources.
-     * @return every resources
+     * {@inheritDoc}
      */
-    @Override
-    public Collection<T> findAll() {
-        return new TreeSet<>(conversion.from(repository.findAll()));
-    }
-
     @Override
     public Collection<T> findAll(Predicate predicate) {
         return conversion.from(repository.findAll(predicate));
     }
 
     /**
-     * Finds a page of resources.
-     * @param pageRequest resource page request
-     * @return resource page
+     * {@inheritDoc}
      */
     @Override
     public Page<T> findAll(PageRequest pageRequest) {
@@ -146,10 +57,7 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
     }
 
     /**
-     * Finds a page of resources according to a predicate.
-     * @param predicate the predicate
-     * @param pageRequest resource page request
-     * @return resource page
+     * {@inheritDoc}
      */
     @Override
     public Page<T> findAll(Predicate predicate, PageRequest pageRequest) {
@@ -159,91 +67,10 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
     }
 
     /**
-     * Finds multiple resources by their ids.
-     * @param resourcesIds resources ids
-     * @return resources
+     * {@inheritDoc}
      */
-    @Override
-    public Collection<T> findAll(Collection<ID> resourcesIds) {
-        return new TreeSet(conversion.from(repository.findAll(resourcesIds)));
-    }
-
-    /**
-     * Updates a resource.
-     * @param resource resource to update
-     * @return updated resource
-     * @throws NoSuchElementException if the resource is not found
-     */
-    @Override
-    public T update(T resource) {
-        if (resource == null || !repository.exists(resource.id())) {
-            throw new NoSuchElementException(MESSAGE_RESOURCE_NOT_FOUND);
-        }
-
-        return conversion.from(repository.save(conversion.to(resource)));
-    }
-
-    /**
-     * Updates multiple resources.
-     * @param resources resources to update
-     * @return updated resources
-     */
-    @Override
-    public Collection<T> update(Collection<T> resources) {
-        Collection<R> mappedResources = conversion.to(resources);
-
-        return conversion.from(repository.save(mappedResources));
-    }
-
-    /**
-     * Delete a resource by its id.
-     * @param id id of the resource to delete
-     */
-    @Override
-    public boolean delete(ID id) {
-        if (id == null) {
-            return false;
-        }
-
-        return repository.delete(id);
-    }
-
     @Override
     public boolean delete(Predicate predicate) {
         return repository.delete(predicate);
-    }
-
-    /**
-     * Delete resources by their ids.
-     * @param resourceIds resources ids
-     */
-    @Override
-    public boolean delete(Collection<ID> resourceIds) {
-        if (CollectionUtils.isEmpty(resourceIds)) {
-            return false;
-        }
-
-        return repository.delete(resourceIds);
-    }
-
-    /**
-     * Deletes a resource.
-     * @param resource resource to delete
-     */
-    @Override
-    public boolean delete(T resource) {
-        if (resource == null ){
-            return false;
-        }
-
-        return repository.delete(resource.id());
-    }
-
-    /**
-     * Deletes all resources.
-     */
-    @Override
-    public boolean deleteAll() {
-        return repository.deleteAll();
     }
 }
