@@ -189,7 +189,7 @@ public abstract class CachedBaseService<T extends Persistable<ID>, R, ID, P exte
     public boolean deleteAll() {
         boolean deleted = super.deleteAll();
 
-        invalidate();
+        cache.clear();
 
         return deleted;
     }

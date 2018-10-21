@@ -301,10 +301,9 @@ public class CachedBaseServiceTest {
     }
 
     @Test
-    public void shouldCallRepositoryDeleteAll_whenDeletingAllResources() {
+    public void shouldCallRepositoryDeleteAllAbdReturn_whenDeletingAllResources() {
         tested.deleteAll();
         verify(repositoryMock).deleteAll();
-        verify(repositoryMock).findAll();
     }
 }
 
