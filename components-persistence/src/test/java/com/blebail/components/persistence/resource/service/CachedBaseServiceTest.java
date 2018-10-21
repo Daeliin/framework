@@ -241,7 +241,6 @@ public class CachedBaseServiceTest {
         UuidResource updatedUuidEntity = tested.update(exitingUuidEntity);
 
         verify(repositoryMock).save(any(BUuidResource.class));
-        verify(repositoryMock).findAll();
         assertThat(updatedUuidEntity).isEqualTo(exitingUuidEntity);
     }
 
@@ -257,7 +256,6 @@ public class CachedBaseServiceTest {
         Collection<UuidResource> updatedUuidEntities = tested.update(existingUuidEntities);
 
         verify(repositoryMock).save(any(Collection.class));
-        verify(repositoryMock).findAll();
         assertThat(updatedUuidEntities).containsAll(existingUuidEntities);
     }
 
@@ -267,7 +265,6 @@ public class CachedBaseServiceTest {
 
         tested.delete(existingUuidEntity.id());
         verify(repositoryMock).delete(existingUuidEntity.id());
-        verify(repositoryMock).findAll();
     }
 
     @Test
@@ -283,7 +280,6 @@ public class CachedBaseServiceTest {
         tested.delete(Arrays.asList(uuidEntity1.id(), uuidEntity2.id()));
 
         verify(repositoryMock).delete(Arrays.asList(uuidEntity1.id(), uuidEntity2.id()));
-        verify(repositoryMock).findAll();
     }
 
     @Test
@@ -292,7 +288,6 @@ public class CachedBaseServiceTest {
 
         tested.delete(uuidEntity);
         verify(repositoryMock).delete(uuidEntity.id());
-        verify(repositoryMock).findAll();
     }
 
     @Test
@@ -303,7 +298,6 @@ public class CachedBaseServiceTest {
 
         tested.delete(uuidEntityIds);
         verify(repositoryMock).delete(uuidEntityIds);
-        verify(repositoryMock).findAll();
     }
 
     @Test

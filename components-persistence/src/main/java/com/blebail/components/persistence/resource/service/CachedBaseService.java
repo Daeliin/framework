@@ -123,7 +123,7 @@ public abstract class CachedBaseService<T extends Persistable<ID>, R, ID, P exte
     public T update(T resource) {
         T updatedResource = super.update(resource);
 
-        invalidate();
+        cache.put(resource.id(), resource);
 
         return updatedResource;
     }
@@ -135,7 +135,7 @@ public abstract class CachedBaseService<T extends Persistable<ID>, R, ID, P exte
     public Collection<T> update(Collection<T> resources) {
         Collection<T> updatedResources = super.update(resources);
 
-        invalidate();
+        updatedResources.forEach(updatedResource -> cache.put(updatedResource.id(), updatedResource));
 
         return updatedResources;
     }
@@ -147,7 +147,9 @@ public abstract class CachedBaseService<T extends Persistable<ID>, R, ID, P exte
     public boolean delete(ID id) {
         boolean deleted = super.delete(id);
 
-        invalidate();
+        if (deleted) {
+            cache.remove(id);
+        }
 
         return deleted;
     }
@@ -159,7 +161,9 @@ public abstract class CachedBaseService<T extends Persistable<ID>, R, ID, P exte
     public boolean delete(Collection<ID> resourceIds) {
         boolean deleted = super.delete(resourceIds);
 
-        invalidate();
+        if (deleted) {
+            resourceIds.forEach(cache::remove);
+        }
 
         return deleted;
     }
@@ -171,7 +175,9 @@ public abstract class CachedBaseService<T extends Persistable<ID>, R, ID, P exte
     public boolean delete(T resource) {
         boolean deleted = super.delete(resource);
 
-        invalidate();
+        if (deleted) {
+            cache.remove(resource.id());
+        }
 
         return deleted;
     }
