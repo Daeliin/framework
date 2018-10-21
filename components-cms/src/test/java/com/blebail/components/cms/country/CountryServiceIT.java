@@ -34,14 +34,14 @@ public class CountryServiceIT {
     public void shouldThrowException_whenFindingNonExistingCountryCode() {
         dbFixture.noRollback();
 
-        assertThrows(NoSuchElementException.class, () -> countryService.findByCode("nope"));
+        assertThrows(NoSuchElementException.class, () -> countryService.findOne("nope"));
     }
 
     @Test
     public void shouldThrowException_whenFindingNullCountryCode() {
         dbFixture.noRollback();
 
-        assertThrows(NoSuchElementException.class, () -> countryService.findByCode(null));
+        assertThrows(NoSuchElementException.class, () -> countryService.findOne(null));
     }
 
     @Test
@@ -59,7 +59,7 @@ public class CountryServiceIT {
         dbFixture.noRollback();
         Country france = CountryLibrary.france();
 
-        Country foundCountry = countryService.findByCode(france.code);
+        Country foundCountry = countryService.findOne(france.code);
 
         assertThat(foundCountry).isEqualTo(france);
     }

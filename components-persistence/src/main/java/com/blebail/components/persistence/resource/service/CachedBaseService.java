@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -100,7 +101,7 @@ public abstract class CachedBaseService<T extends Persistable<ID>, R, ID, P exte
     public Collection<T> findAll() {
         loadCacheIfNecessary();
 
-        return cache.values();
+        return new TreeSet<>(cache.values());
     }
 
     /**
@@ -112,7 +113,7 @@ public abstract class CachedBaseService<T extends Persistable<ID>, R, ID, P exte
 
         return cache.values().stream()
                 .filter(resource -> resourcesIds.contains(resource.id()))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(TreeSet::new));
     }
 
     /**
