@@ -147,7 +147,7 @@ public class NewsServiceIT {
     @Test
     public void shouldUpdateANewsTitleDescriptionContentAndSource() {
         News newsToUpdate = NewsLibrary.draftNews();
-        News news = new News(newsToUpdate.id(), Instant.now(), "", "New title", "", "New desc", "New content", "New content",
+        News news = new News(newsToUpdate.id(), Instant.now(), "", "New title", "", "New desc", "New content", "New content rendered",
                 "https://google.fr", null, NewsStatus.PUBLISHED);
 
         News updatedArtice = tested.update(news);
@@ -157,6 +157,7 @@ public class NewsServiceIT {
         assertThat(updatedArtice.urlFriendlyTitle).isEqualTo(new UrlFriendlyString(news.title).value);
         assertThat(updatedArtice.description).isEqualTo(news.description);
         assertThat(updatedArtice.content).isEqualTo(news.content);
+        assertThat(updatedArtice.renderedContent).isEqualTo(news.renderedContent);
         assertThat(updatedArtice.source).isEqualTo(news.source);
         assertThat(updatedArtice.id()).isEqualTo(newsToUpdate.id());
         assertThat(updatedArtice.creationDate()).isEqualTo(newsToUpdate.creationDate());
