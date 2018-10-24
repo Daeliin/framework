@@ -181,7 +181,7 @@ public class NewsServiceIT {
     }
 
     @Test
-    public void shouldThrowException_whenMArkingANonExistingNewsAsValidated() {
+    public void shouldThrowException_whenMarkingANonExistingNewsAsValidated() {
         dbFixture.noRollback();
 
         assertThrows(NoSuchElementException.class, () -> tested.markAs("nonExistingId", PublicationStatus.VALIDATED));
