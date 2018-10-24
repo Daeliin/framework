@@ -4,6 +4,7 @@ import com.blebail.components.cms.credentials.account.Account;
 import com.blebail.components.cms.fixtures.JavaFixtures;
 import com.blebail.components.cms.library.AccountLibrary;
 import com.blebail.components.cms.library.NewsLibrary;
+import com.blebail.components.cms.publication.PublicationStatus;
 import com.blebail.components.core.string.UrlFriendlyString;
 import com.blebail.components.test.rule.DbFixture;
 import com.blebail.components.test.rule.DbMemory;
@@ -90,7 +91,7 @@ public class NewsServiceIT {
                 "We open our door today, you'll find content very soon.",
                 "https://google.fr",
                 LocalDateTime.of(2016, 5, 20, 15, 30, 0).toInstant(ZoneOffset.UTC),
-                NewsStatus.DRAFT);
+                PublicationStatus.DRAFT);
 
         assertThrows(NoSuchElementException.class, () -> tested.create(news));
     }
@@ -108,7 +109,7 @@ public class NewsServiceIT {
                 "We open our door today, you'll find content very soon.",
                 "https://google.fr",
                 LocalDateTime.of(2016, 5, 20, 15, 30, 0).toInstant(ZoneOffset.UTC),
-                NewsStatus.DRAFT);
+                PublicationStatus.DRAFT);
 
         News createdNews = tested.create(news);
 
@@ -120,7 +121,7 @@ public class NewsServiceIT {
         assertThat(createdNews.source).isEqualTo(news.source);
         assertThat(createdNews.authorId).isEqualTo(news.authorId);
         assertThat(createdNews.publicationDate).isNull();
-        assertThat(createdNews.status).isEqualTo(NewsStatus.DRAFT);
+        assertThat(createdNews.status).isEqualTo(PublicationStatus.DRAFT);
     }
 
     @Test
@@ -148,11 +149,11 @@ public class NewsServiceIT {
     public void shouldUpdateANewsTitleDescriptionContentAndSource() {
         News newsToUpdate = NewsLibrary.draftNews();
         News news = new News(newsToUpdate.id(), Instant.now(), "", "New title", "", "New desc", "New content", "New content rendered",
-                "https://google.fr", null, NewsStatus.PUBLISHED);
+                "https://google.fr", null, PublicationStatus.PUBLISHED);
 
         News updatedArtice = tested.update(news);
 
-        assertThat(updatedArtice.status).isEqualTo(NewsStatus.DRAFT);
+        assertThat(updatedArtice.status).isEqualTo(PublicationStatus.DRAFT);
         assertThat(updatedArtice.title).isEqualTo(news.title);
         assertThat(updatedArtice.urlFriendlyTitle).isEqualTo(new UrlFriendlyString(news.title).value);
         assertThat(updatedArtice.description).isEqualTo(news.description);
@@ -168,14 +169,14 @@ public class NewsServiceIT {
     public void shouldThrowException_whenMarkingANonExistingNewsAsDraft() {
         dbFixture.noRollback();
 
-        assertThrows(NoSuchElementException.class, () -> tested.markAs("nonExistingId", NewsStatus.DRAFT));
+        assertThrows(NoSuchElementException.class, () -> tested.markAs("nonExistingId", PublicationStatus.DRAFT));
     }
 
     @Test
     public void shouldMarkANewsAsDraft() {
-        News news = tested.markAs(NewsLibrary.validatedNews().id(), NewsStatus.DRAFT);
+        News news = tested.markAs(NewsLibrary.validatedNews().id(), PublicationStatus.DRAFT);
 
-        assertThat(news.status).isEqualTo(NewsStatus.DRAFT);
+        assertThat(news.status).isEqualTo(PublicationStatus.DRAFT);
         assertThat(news.publicationDate).isNull();
     }
 
@@ -183,14 +184,14 @@ public class NewsServiceIT {
     public void shouldThrowException_whenMArkingANonExistingNewsAsValidated() {
         dbFixture.noRollback();
 
-        assertThrows(NoSuchElementException.class, () -> tested.markAs("nonExistingId", NewsStatus.VALIDATED));
+        assertThrows(NoSuchElementException.class, () -> tested.markAs("nonExistingId", PublicationStatus.VALIDATED));
     }
 
     @Test
     public void shouldMarkANewsAsValidated() {
-        News news = tested.markAs(NewsLibrary.draftNews().id(), NewsStatus.VALIDATED);
+        News news = tested.markAs(NewsLibrary.draftNews().id(), PublicationStatus.VALIDATED);
 
-        assertThat(news.status).isEqualTo(NewsStatus.VALIDATED);
+        assertThat(news.status).isEqualTo(PublicationStatus.VALIDATED);
         assertThat(news.publicationDate).isNull();
     }
 
@@ -198,14 +199,14 @@ public class NewsServiceIT {
     public void shouldThrowException_whenMarkingANonExistingNewsAsPublished() {
         dbFixture.noRollback();
 
-        assertThrows(NoSuchElementException.class, () -> tested.markAs("nonExistingId", NewsStatus.PUBLISHED));
+        assertThrows(NoSuchElementException.class, () -> tested.markAs("nonExistingId", PublicationStatus.PUBLISHED));
     }
 
     @Test
     public void shouldMarkANewsAsPublished() {
-        News news = tested.markAs(NewsLibrary.validatedNews().id(), NewsStatus.PUBLISHED);
+        News news = tested.markAs(NewsLibrary.validatedNews().id(), PublicationStatus.PUBLISHED);
 
-        assertThat(news.status).isEqualTo(NewsStatus.PUBLISHED);
+        assertThat(news.status).isEqualTo(PublicationStatus.PUBLISHED);
         assertThat(news.publicationDate).isNotNull();
     }
 

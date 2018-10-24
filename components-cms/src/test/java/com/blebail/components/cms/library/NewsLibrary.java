@@ -1,7 +1,7 @@
 package com.blebail.components.cms.library;
 
 import com.blebail.components.cms.news.News;
-import com.blebail.components.cms.news.NewsStatus;
+import com.blebail.components.cms.publication.PublicationStatus;
 import com.blebail.components.cms.sql.BNews;
 
 import java.time.LocalDateTime;
@@ -21,7 +21,7 @@ public final class NewsLibrary {
                 "We open our door today, you'll find content very soon.",
                 "https://google.fr",
                 LocalDateTime.of(2016, 5, 20, 15, 30, 0).toInstant(ZoneOffset.UTC),
-                NewsStatus.PUBLISHED);
+                PublicationStatus.PUBLISHED);
     }
 
     public static BNews publishedNewsRow() {
@@ -54,7 +54,7 @@ public final class NewsLibrary {
                 "We go live today, here''s our first content.",
                 null,
                 null,
-                NewsStatus.VALIDATED);
+                PublicationStatus.VALIDATED);
     }
 
     public static BNews validatedNewsRow() {
@@ -87,7 +87,7 @@ public final class NewsLibrary {
             "We go beta today.",
             null,
             null,
-            NewsStatus.DRAFT);
+            PublicationStatus.DRAFT);
     }
 
     public static BNews draftNewsRow() {

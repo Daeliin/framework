@@ -3,6 +3,7 @@ package com.blebail.components.cms.news;
 import com.blebail.components.cms.credentials.account.Account;
 import com.blebail.components.cms.credentials.account.AccountService;
 import com.blebail.components.cms.event.EventLogService;
+import com.blebail.components.cms.publication.PublicationStatus;
 import com.blebail.components.cms.sql.BNews;
 import com.blebail.components.cms.sql.QAccount;
 import com.blebail.components.cms.sql.QNews;
@@ -54,7 +55,7 @@ public class NewsService extends ResourceService<News, BNews, String, NewsReposi
                 news.renderedContent,
                 news.source,
                 null,
-                NewsStatus.DRAFT);
+                PublicationStatus.DRAFT);
 
         News createdNews = super.create(newsToCreate);
 
@@ -72,7 +73,7 @@ public class NewsService extends ResourceService<News, BNews, String, NewsReposi
         BNews existingNews = repository.findOne(news.id())
             .orElseThrow(() -> new NoSuchElementException(String.format("News %s doesn't exist", news.id())));
 
-        if (NewsStatus.valueOf(existingNews.getStatus()) != NewsStatus.DRAFT) {
+        if (PublicationStatus.valueOf(existingNews.getStatus()) != PublicationStatus.DRAFT) {
             throw new IllegalStateException(String.format("News %s is not in draft, it can't be updated", news.id()));
         }
 
@@ -90,7 +91,7 @@ public class NewsService extends ResourceService<News, BNews, String, NewsReposi
     public boolean delete(String id) {
         News news = findOne(id);
 
-        if (news.status != NewsStatus.DRAFT) {
+        if (news.status != PublicationStatus.DRAFT) {
             throw new IllegalStateException(String.format("News %s is not in draft, it can't be deleted", news.id()));
         }
 
@@ -101,12 +102,12 @@ public class NewsService extends ResourceService<News, BNews, String, NewsReposi
         return deleted;
     }
 
-    public News markAs(String id, NewsStatus status) {
+    public News markAs(String id, PublicationStatus status) {
         BNews existingNews = repository.findOne(id).orElseThrow(() ->
             new NoSuchElementException(String.format("News %s doesn't exist", id)));
 
         existingNews.setStatus(status.name());
-        existingNews.setPublicationDate(status == NewsStatus.PUBLISHED ? Instant.now() : null);
+        existingNews.setPublicationDate(status == PublicationStatus.PUBLISHED ? Instant.now() : null);
 
         News updatedNews = conversion.from(repository.save(existingNews));
 

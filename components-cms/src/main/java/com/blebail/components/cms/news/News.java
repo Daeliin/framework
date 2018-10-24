@@ -1,5 +1,6 @@
 package com.blebail.components.cms.news;
 
+import com.blebail.components.cms.publication.PublicationStatus;
 import com.blebail.components.persistence.resource.PersistentResource;
 
 import java.time.Instant;
@@ -15,11 +16,11 @@ public class News extends PersistentResource<String> implements Comparable<News>
     public final String renderedContent;
     public final String source;
     public final Instant publicationDate;
-    public final NewsStatus status;
+    public final PublicationStatus status;
 
     public News(String id, Instant creationDate, String authorId, String title, String urlFriendlyTitle, String description,
                 String content, String renderedContent,
-                String source, Instant publicationDate, NewsStatus status) {
+                String source, Instant publicationDate, PublicationStatus status) {
         super(id, creationDate);
         this.authorId = Objects.requireNonNull(authorId);
         this.title = title;

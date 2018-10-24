@@ -1,5 +1,6 @@
 package com.blebail.components.cms.news;
 
+import com.blebail.components.cms.publication.PublicationStatus;
 import com.blebail.components.cms.sql.BNews;
 import com.blebail.components.core.resource.Conversion;
 import com.blebail.components.core.string.UrlFriendlyString;
@@ -19,7 +20,7 @@ public final class NewsConversion implements Conversion<News, BNews> {
                 bNews.getRenderedContent(),
                 bNews.getSource(),
                 bNews.getPublicationDate(),
-                NewsStatus.valueOf(bNews.getStatus()));
+                PublicationStatus.valueOf(bNews.getStatus()));
     }
 
     @Override
