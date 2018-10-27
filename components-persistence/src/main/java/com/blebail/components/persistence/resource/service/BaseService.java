@@ -157,7 +157,7 @@ public abstract class BaseService<T extends Persistable<ID>, R, ID, P extends Cr
             return false;
         }
 
-        return repository.delete(resource.id());
+        return delete(resource.id());
     }
 
     /**
