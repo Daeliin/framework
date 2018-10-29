@@ -3,6 +3,7 @@ package com.blebail.components.persistence.resource.repository;
 import com.blebail.components.persistence.fake.UuidResourceRepository;
 import com.blebail.components.persistence.fixtures.JavaFixtures;
 import com.blebail.components.persistence.fixtures.UuidResourceRows;
+import com.blebail.components.persistence.library.UuidResourceLibrary;
 import com.blebail.components.persistence.sql.BUuidResource;
 import com.blebail.components.persistence.sql.QUuidResource;
 import com.blebail.components.test.rule.DbFixture;
@@ -17,41 +18,45 @@ import javax.inject.Inject;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class ResourceRepositoryIT {
+class ResourceRepositoryIT {
 
     @Inject
     private UuidResourceRepository tested;
 
     @RegisterExtension
-    public static DbMemory dbMemory = new DbMemory();
+    static DbMemory dbMemory = new DbMemory();
 
     @RegisterExtension
-    public DbFixture dbFixture = new DbFixture(dbMemory, JavaFixtures.uuidResources());
+    DbFixture dbFixture = new DbFixture(dbMemory, JavaFixtures.uuidResources());
 
     @Test
-    public void shouldProvideTheIdPath() {
+    void shouldProvideTheIdPath() {
         dbFixture.noRollback();
 
         assertThat(tested.idPath()).isEqualTo(QUuidResource.uuidResource.uuid);
     }
 
     @Test
-    public void shouldProvideTheIdMapping() {
+    void shouldProvideTheIdMapping() {
         dbFixture.noRollback();
 
         assertThat(tested.idMapping()).isNotNull();
     }
 
     @Test
-    public void shouldThrowException_whenPersistingNull() {
+    void shouldThrowException_whenPersistingNull() {
         dbFixture.noRollback();
 
         BUuidResource nullUuidEntity = null;
@@ -60,7 +65,7 @@ public class ResourceRepositoryIT {
     }
 
     @Test
-    public void shouldPersistAResource() throws Exception {
+    void shouldPersistAResource() throws Exception {
         BUuidResource newUuuidPersistentResource = new BUuidResource(Instant.now(), "label100", UUID.randomUUID().toString());
         int uuidPersistentResourceCountBeforeCreate = countRows();
 
@@ -73,7 +78,7 @@ public class ResourceRepositoryIT {
     }
 
     @Test
-    public void shouldReturnThePersistedResource() {
+    void shouldReturnThePersistedResource() {
         BUuidResource newUuuidPersistentResource = new BUuidResource(Instant.now(), "label100", UUID.randomUUID().toString());
 
         BUuidResource returnedUuidEntity = tested.save(newUuuidPersistentResource);
@@ -82,7 +87,7 @@ public class ResourceRepositoryIT {
     }
 
     @Test
-    public void shouldPersistResources() throws Exception {
+    void shouldPersistResources() throws Exception {
         BUuidResource newUuuidPersistentResource1 = new BUuidResource(Instant.now(), "label101", UUID.randomUUID().toString());
         BUuidResource newUuuidPersistentResource2 = new BUuidResource(Instant.now(), "label102", UUID.randomUUID().toString());
         List<BUuidResource> newUuidEntities = Arrays.asList(newUuuidPersistentResource1, newUuuidPersistentResource2);
@@ -97,7 +102,7 @@ public class ResourceRepositoryIT {
     }
 
     @Test
-    public void shouldReturnThePersistedResources() {
+    void shouldReturnThePersistedResources() {
         BUuidResource newUuuidPersistentResource1 = new BUuidResource(Instant.now(), "label101", UUID.randomUUID().toString());
         BUuidResource newUuuidPersistentResource2 = new BUuidResource(Instant.now(), "label102", UUID.randomUUID().toString());
         List<BUuidResource> newUuidEntities = Arrays.asList(newUuuidPersistentResource1, newUuuidPersistentResource2);
@@ -108,28 +113,80 @@ public class ResourceRepositoryIT {
     }
 
     @Test
-    public void shouldCheckIfResourceExists() {
+    void shouldUpdateAResource() {
+        BUuidResource resourceToUpdate = new BUuidResource(Instant.now(), "newLabel", UuidResourceLibrary.uuidResource1().id());
+        tested.save(resourceToUpdate);
+
+        Optional<BUuidResource> updatedResource = tested.findOne(resourceToUpdate.getUuid());
+
+        assertThat(updatedResource).isNotEmpty();
+        assertThat(updatedResource.get()).isEqualToComparingFieldByField(resourceToUpdate);
+    }
+
+    @Test
+    void shouldReturnTheUpdatedResource() {
+        BUuidResource resourceToUpdate = new BUuidResource(Instant.now(), "newLabel", UuidResourceLibrary.uuidResource1().id());
+        BUuidResource updatedResource = tested.save(resourceToUpdate);
+
+        assertThat(updatedResource).isEqualToComparingFieldByField(resourceToUpdate);
+    }
+
+    @Test
+    void shouldUpdateResources() {
+        BUuidResource resourceToUpdate1 = new BUuidResource(Instant.now(), "newLabel1", UuidResourceLibrary.uuidResource1().id());
+        BUuidResource resourceToUpdate2 = new BUuidResource(Instant.now(), "newLabel2", UuidResourceLibrary.uuidResource2().id());
+        tested.save(Set.of(resourceToUpdate1, resourceToUpdate2));
+
+        Optional<BUuidResource> updatedResource1 = tested.findOne(resourceToUpdate1.getUuid());
+        Optional<BUuidResource> updatedResource2 = tested.findOne(resourceToUpdate2.getUuid());
+        Optional<BUuidResource> notUpdatedResource = tested.findOne(UuidResourceRows.uuidResource3().getUuid());
+
+        assertThat(updatedResource1).isNotEmpty();
+        assertThat(updatedResource1.get()).isEqualToComparingFieldByField(resourceToUpdate1);
+
+        assertThat(updatedResource2).isNotEmpty();
+        assertThat(updatedResource2.get()).isEqualToComparingFieldByField(resourceToUpdate2);
+
+        assertThat(notUpdatedResource).isNotEmpty();
+        assertThat(notUpdatedResource.get()).isEqualToComparingFieldByField(UuidResourceRows.uuidResource3());
+    }
+
+    @Test
+    void shouldReturnUpdatedResources() {
+        BUuidResource resourceToUpdate1 = new BUuidResource(Instant.now(), "newLabel1", UuidResourceLibrary.uuidResource1().id());
+        BUuidResource resourceToUpdate2 = new BUuidResource(Instant.now(), "newLabel2", UuidResourceLibrary.uuidResource2().id());
+        List<BUuidResource> updatedResources = List.copyOf(tested.save(Set.of(resourceToUpdate1, resourceToUpdate2)))
+                .stream()
+                .sorted(Comparator.comparing(BUuidResource::getLabel))
+                .collect(Collectors.toList());
+
+        assertThat(updatedResources.get(0)).isEqualToComparingFieldByField(resourceToUpdate1);
+        assertThat(updatedResources.get(1)).isEqualToComparingFieldByField(resourceToUpdate2);
+    }
+
+    @Test
+    void shouldCheckIfResourceExists() {
         dbFixture.noRollback();
 
         assertThat(tested.exists(UuidResourceRows.uuidResource1().getUuid())).isTrue();
     }
 
     @Test
-    public void shouldCheckIfResourceDoesntExist_whenIdDoesntExist() {
+    void shouldCheckIfResourceDoesntExist_whenIdDoesntExist() {
         dbFixture.noRollback();
 
         assertThat(tested.exists("894984-984")).isFalse();
     }
 
     @Test
-    public void shouldCheckIfResourceDoesntExist_whenIdIsNull() {
+    void shouldCheckIfResourceDoesntExist_whenIdIsNull() {
         dbFixture.noRollback();
 
         assertThat(tested.exists(null)).isFalse();
     }
 
     @Test
-    public void shouldFindResource() {
+    void shouldFindResource() {
         dbFixture.noRollback();
 
         BUuidResource uuidPersistentResource1 = UuidResourceRows.uuidResource1();
@@ -140,14 +197,14 @@ public class ResourceRepositoryIT {
     }
 
     @Test
-    public void shouldReturnEmpty_whenFindingNonExistingResource() {
+    void shouldReturnEmpty_whenFindingNonExistingResource() {
         dbFixture.noRollback();
 
         assertThat(tested.findOne("6846984-864684").isPresent()).isFalse();
     }
 
     @Test
-    public void shouldReturnEmpty_whenFindingNull() {
+    void shouldReturnEmpty_whenFindingNull() {
         dbFixture.noRollback();
 
         String nullId = null;
@@ -156,7 +213,7 @@ public class ResourceRepositoryIT {
     }
 
     @Test
-    public void shouldFindResources() {
+    void shouldFindResources() {
         dbFixture.noRollback();
 
         List<String> uuidPersistentResourceIds = Arrays.asList(UuidResourceRows.uuidResource1().getUuid(), UuidResourceRows.uuidResource2().getUuid());
@@ -168,7 +225,7 @@ public class ResourceRepositoryIT {
     }
 
     @Test
-    public void shouldReturnNoResources_whenFindingNonExistingResources() {
+    void shouldReturnNoResources_whenFindingNonExistingResources() {
         dbFixture.noRollback();
 
         Collection<BUuidResource> uuidEntities = tested.findAll(Arrays.asList("68464-684", "684684-444"));
@@ -177,7 +234,7 @@ public class ResourceRepositoryIT {
     }
 
     @Test
-    public void shouldReturnNoResources_whenFindingZeroResources() {
+    void shouldReturnNoResources_whenFindingZeroResources() {
         dbFixture.noRollback();
 
         Collection<BUuidResource> uuidEntities = tested.findAll(Arrays.asList());
@@ -186,7 +243,7 @@ public class ResourceRepositoryIT {
     }
 
     @Test
-    public void shouldReturnNoResources_whenFindingNulls() {
+    void shouldReturnNoResources_whenFindingNulls() {
         dbFixture.noRollback();
 
         Collection<BUuidResource> uuidEntities = tested.findAll(Arrays.asList(null, null));
@@ -195,7 +252,7 @@ public class ResourceRepositoryIT {
     }
 
     @Test
-    public void shouldReturnOnlyExistingResources_whenFindingEexistingAndNonExistingResources() {
+    void shouldReturnOnlyExistingResources_whenFindingEexistingAndNonExistingResources() {
         dbFixture.noRollback();
 
         List<String> uuidPersistentResourceIds = Arrays.asList(UuidResourceRows.uuidResource1().getUuid(), UuidResourceRows.uuidResource2().getUuid(), "646444-218");
@@ -207,19 +264,19 @@ public class ResourceRepositoryIT {
     }
 
     @Test
-    public void shouldReturnFalse_whenDeletingNonExistingResource() {
+    void shouldReturnFalse_whenDeletingNonExistingResource() {
         assertThat(tested.delete("96846846-4465")).isFalse();
     }
 
     @Test
-    public void shouldReturnFalse_whenDeletingNullId() {
+    void shouldReturnFalse_whenDeletingNullId() {
         String nullId = null;
 
         assertThat(tested.delete(nullId)).isFalse();
     }
 
     @Test
-    public void shouldNotDeleteAnyResources_whenDeletingNonExistingResource() throws Exception {
+    void shouldNotDeleteAnyResources_whenDeletingNonExistingResource() throws Exception {
         int uuidPersistentResourceCountBeforeDelete = countRows();
 
         tested.delete("6984684-685648");
@@ -230,7 +287,7 @@ public class ResourceRepositoryIT {
     }
 
     @Test
-    public void shouldNotDeleteAnyResources_whenDeletingNullId() throws Exception {
+    void shouldNotDeleteAnyResources_whenDeletingNullId() throws Exception {
         String nullId = null;
         int uuidPersistentResourceCountBeforeDelete = countRows();
 
@@ -242,7 +299,7 @@ public class ResourceRepositoryIT {
     }
 
     @Test
-    public void shouldDeleteAResource() throws Exception {
+    void shouldDeleteAResource() throws Exception {
         int uuidPersistentResourceCountBeforeCreate = countRows();
 
         tested.delete(UuidResourceRows.uuidResource1().getUuid());
@@ -253,14 +310,14 @@ public class ResourceRepositoryIT {
     }
 
     @Test
-    public void shouldReturnTrue_whenDeletingResource() {
+    void shouldReturnTrue_whenDeletingResource() {
         boolean delete = tested.delete(UuidResourceRows.uuidResource1().getUuid());
 
         assertThat(delete).isTrue();
     }
 
     @Test
-    public void shouldDeleteMultipleResources() throws Exception {
+    void shouldDeleteMultipleResources() throws Exception {
         List<String> uuidPersistentResourceIds = Arrays.asList(UuidResourceRows.uuidResource1().getUuid(), UuidResourceRows.uuidResource2().getUuid());
         int uuidPersistentResourceCountBeforeDelete = countRows();
 
@@ -272,7 +329,7 @@ public class ResourceRepositoryIT {
     }
 
     @Test
-    public void shouldReturnTrue_whenDeletingMultipleResources() {
+    void shouldReturnTrue_whenDeletingMultipleResources() {
         List<String> uuidPersistentResourceIds = Arrays.asList(UuidResourceRows.uuidResource1().getUuid(), UuidResourceRows.uuidResource2().getUuid());
         boolean delete = tested.delete(uuidPersistentResourceIds);
 
@@ -281,7 +338,7 @@ public class ResourceRepositoryIT {
 
 
     @Test
-    public void shouldNotDeleteAnyResources_whenDeletingNonExistingResources() throws Exception {
+    void shouldNotDeleteAnyResources_whenDeletingNonExistingResources() throws Exception {
         List<String> uuidPersistentResourceIds = Arrays.asList("1111-222", "313213-321321");
         int uuidPersistentResourceCountBeforeDelete = countRows();
 
@@ -293,7 +350,7 @@ public class ResourceRepositoryIT {
     }
 
     @Test
-    public void shouldReturnFalse_whenNotDeletingAnyResources() {
+    void shouldReturnFalse_whenNotDeletingAnyResources() {
         List<String> uuidPersistentResourceIds = Arrays.asList("1111-222", "313213-321321");
         boolean delete = tested.delete(uuidPersistentResourceIds);
 
@@ -301,7 +358,7 @@ public class ResourceRepositoryIT {
     }
 
     @Test
-    public void shouldDeleteOnlyExistingResources_whenDeletingExistingAndNonExistingResources() throws Exception {
+    void shouldDeleteOnlyExistingResources_whenDeletingExistingAndNonExistingResources() throws Exception {
         List<String> uuidPersistentResourceIds = Arrays.asList(UuidResourceRows.uuidResource1().getUuid(), UuidResourceRows.uuidResource2().getUuid(), "665321-111");
 
         int uuidPersistentResourceCountBeforeDelete = countRows();

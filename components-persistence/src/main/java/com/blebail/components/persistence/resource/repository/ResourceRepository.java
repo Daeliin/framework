@@ -70,7 +70,7 @@ public abstract class ResourceRepository<R, ID> extends BaseRepository<R> implem
             ID resourceId = idMapping.apply(resource);
 
             if (persistedResourceIds.contains(resourceId)) {
-                updateBatch.populate(resource).addBatch();
+                updateBatch.populate(resource).where(idPath.eq(resourceId)).addBatch();
             } else {
                 insertBatch.populate(resource).addBatch();
             }
