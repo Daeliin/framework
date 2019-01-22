@@ -41,7 +41,7 @@ public class CountryServiceIT {
     public void shouldThrowException_whenFindingNullCountryCode() {
         dbFixture.noRollback();
 
-        assertThrows(NoSuchElementException.class, () -> countryService.findOne(null));
+        assertThrows(IllegalArgumentException.class, () -> countryService.findOne(null));
     }
 
     @Test

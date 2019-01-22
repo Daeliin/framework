@@ -76,7 +76,7 @@ public abstract class BaseService<T extends Persistable<ID>, R, ID, P extends Cr
     @Override
     public T findOne(ID resourceId) {
         if (resourceId == null) {
-            throw new NoSuchElementException(MESSAGE_RESOURCE_NOT_FOUND);
+            throw new IllegalArgumentException(MESSAGE_RESOURCE_NOT_FOUND);
         }
 
         Optional<R> resourceRow = repository.findOne(resourceId);
@@ -107,7 +107,11 @@ public abstract class BaseService<T extends Persistable<ID>, R, ID, P extends Cr
      */
     @Override
     public T update(T resource) {
-        if (resource == null || !repository.exists(resource.id())) {
+        if (resource == null) {
+            throw new IllegalArgumentException();
+        }
+
+        if (!repository.exists(resource.id())) {
             throw new NoSuchElementException(MESSAGE_RESOURCE_NOT_FOUND);
         }
 

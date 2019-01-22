@@ -109,7 +109,7 @@ public class BaseServiceTest {
 
     @Test
     public void shouldThrowException_whenIdIsNull() {
-        assertThrows(NoSuchElementException.class, () -> tested.findOne(null));
+        assertThrows(IllegalArgumentException.class, () -> tested.findOne(null));
     }
 
     @Test
@@ -168,7 +168,7 @@ public class BaseServiceTest {
     public void shouldThrowException_whenUpdatingNullResource() {
         UuidResource nullUuidEntity = null;
 
-        assertThrows(NoSuchElementException.class, () -> tested.update(nullUuidEntity));
+        assertThrows(IllegalArgumentException.class, () -> tested.update(nullUuidEntity));
     }
 
     @Test
