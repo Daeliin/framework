@@ -27,7 +27,7 @@ public final class DbFixture implements BeforeEachCallback {
         dbSetupTracker.launchIfNecessary(dbSetup);
     }
 
-    public void noRollback() {
+    public void readOnly() {
         dbSetupTracker.skipNextLaunch();
     }
 }

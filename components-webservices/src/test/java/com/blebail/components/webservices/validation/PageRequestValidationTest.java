@@ -48,6 +48,11 @@ public class PageRequestValidationTest {
     }
 
     @Test
+    public void shouldThrowException_whenSizeIsGreatherThan100() {
+        assertThrows(IllegalArgumentException.class, () -> new PageRequestValidation("2", "101", "ASC", "id").validate());
+    }
+
+    @Test
     public void shouldAssignSize() {
         PageRequestValidation pageRequestValidation = new PageRequestValidation("1", "2", "ASC", "id");
 

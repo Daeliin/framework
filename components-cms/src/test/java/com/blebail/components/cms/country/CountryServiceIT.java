@@ -32,14 +32,14 @@ public class CountryServiceIT {
 
     @Test
     public void shouldThrowException_whenFindingNonExistingCountryCode() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         assertThrows(NoSuchElementException.class, () -> countryService.findOne("nope"));
     }
 
     @Test
     public void shouldThrowException_whenFindingNullCountryCode() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         assertThrows(IllegalArgumentException.class, () -> countryService.findOne(null));
     }
@@ -47,7 +47,7 @@ public class CountryServiceIT {
     @Test
     public void shouldFindAllCountries() {
 
-        dbFixture.noRollback();
+        dbFixture.readOnly();
         Collection<Country> allCountries = countryService.findAll();
 
         assertThat(allCountries).containsOnly(CountryLibrary.france(), CountryLibrary.belgium());
@@ -56,7 +56,7 @@ public class CountryServiceIT {
     @Test
     public void shouldFindACountryByCode() {
 
-        dbFixture.noRollback();
+        dbFixture.readOnly();
         Country france = CountryLibrary.france();
 
         Country foundCountry = countryService.findOne(france.code);

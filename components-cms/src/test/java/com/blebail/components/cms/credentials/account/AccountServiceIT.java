@@ -46,7 +46,7 @@ public class AccountServiceIT {
 
     @Test
     public void shoudLoadUserByUsername() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         Account account = AccountLibrary.admin();
 
@@ -60,7 +60,7 @@ public class AccountServiceIT {
 
     @Test
     public void shouldFindAnAccount_byUsername() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         Account account = AccountLibrary.admin();
         assertThat(accountService.findByUsername(account.username)).isEqualTo(account);
@@ -68,14 +68,14 @@ public class AccountServiceIT {
 
     @Test
     public void shouldThrowException_whenFindingAnAccountByUsername_ifUsernameDoesntExist() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         assertThrows(NoSuchElementException.class, () -> accountService.findByUsername("nonExistingUsername"));
     }
 
     @Test
     public void shouldFindAnEnabledAccount_byUsername() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         Account account = AccountLibrary.admin();
         assertThat(accountService.findByUsernameAndEnabled(account.username)).isEqualTo(account);
@@ -83,21 +83,21 @@ public class AccountServiceIT {
 
     @Test
     public void shouldThrowException_whenFindingEnabledAccountByUsername_ifAccountIsDisabled() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         assertThrows(NoSuchElementException.class, () -> accountService.findByUsernameAndEnabled(AccountLibrary.inactive().username));
     }
 
     @Test
     public void shouldCheckThatUsernameDoesntExists() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         assertThat(accountService.usernameExists("nonExistingUsername")).isFalse();
     }
 
     @Test
     public void shouldCheckThatUsernameAlreadyExists() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         assertThat(accountService.usernameExists(AccountLibrary.admin().username)).isTrue();
     }

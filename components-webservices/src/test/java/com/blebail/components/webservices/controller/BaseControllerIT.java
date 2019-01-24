@@ -98,7 +98,7 @@ public class BaseControllerIT {
 
     @Test
     public void shouldReturnHttpBadRequest_whenCreatingInvalidResource() throws Exception {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         UuidResourceDto invalidUuidPersistentResourceDto = new UuidResourceDto("id", Instant.now(), " ");
 
@@ -111,7 +111,7 @@ public class BaseControllerIT {
 
     @Test
     public void shouldNotPersistResource_whenCreatingInvalidResource() throws Exception {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         int uuidPersistentResourceCountBeforeCreate = countRows();
 
@@ -130,7 +130,7 @@ public class BaseControllerIT {
 
     @Test
     public void shouldReturnHttpOkAndResource_whenResourceExists() throws Exception {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         UuidResourceDto existingUuidPersistentResourceDto = UuidResourceDtoLibrary.uuidResourceDto1();
 
@@ -147,7 +147,7 @@ public class BaseControllerIT {
 
     @Test
     public void shouldReturnHttpNotFound_whenResourceDoesntExist() throws Exception {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         mockMvc
             .perform(get("/uuid/base/nonExistingId")
@@ -157,7 +157,7 @@ public class BaseControllerIT {
 
     @Test
     public void shouldReturnHttpOkAndAllResources() throws Exception {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         mockMvc
             .perform(get("/uuid/base")
@@ -204,7 +204,7 @@ public class BaseControllerIT {
 
     @Test
     public void shouldReturnHttpBadRequest_whenUpdatingInvalidResource() throws Exception {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         UuidResourceDto invalidUuidPersistentResourceDto = new UuidResourceDto(
                 UuidResourceDtoLibrary.uuidResourceDto1().id,
@@ -220,7 +220,7 @@ public class BaseControllerIT {
 
     @Test
     public void shouldNotUpdateResource_whenUpdatingInvalidResource() throws Exception {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         UuidResourceDto invalidUuidPersistentResourceDto = new UuidResourceDto(
                 UuidResourceDtoLibrary.uuidResourceDto1().id,
@@ -239,7 +239,7 @@ public class BaseControllerIT {
 
     @Test
     public void shouldReturnHttpNotFound_whenUpdatingNonExistingResource() throws Exception {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         UuidResourceDto updatedUuidPersistentResourceDto = new UuidResourceDto(
                 UuidResourceDtoLibrary.uuidResourceDto1().id,
@@ -270,7 +270,7 @@ public class BaseControllerIT {
 
     @Test
     public void shouldReturnHttpNotFound_whenDeletingNonExistingResource() throws Exception {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         mockMvc
             .perform(delete("/uuid/base/nonExistingId"))
@@ -317,7 +317,7 @@ public class BaseControllerIT {
 
     @Test
     public void shouldReturnHttpBadRequest_whenDeletingNull() throws Exception {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         mockMvc
             .perform(post("/uuid/base/deleteSeveral")

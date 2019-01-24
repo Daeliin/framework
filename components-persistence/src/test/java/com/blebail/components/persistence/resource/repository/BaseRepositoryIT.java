@@ -41,21 +41,21 @@ public class BaseRepositoryIT {
 
     @Test
     public void shouldProvideTheRowPath() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         assertThat(tested.rowPath()).isEqualTo(QUuidResource.uuidResource);
     }
 
     @Test
     public void shouldCountResources() throws Exception {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         assertThat(tested.count()).isEqualTo(countRows());
     }
 
     @Test
     public void shouldCountAllResources_whenCountingWithNullPredicate() throws Exception {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         Predicate nullPredicate = null;
         assertThat(tested.count(nullPredicate)).isEqualTo(countRows());
@@ -63,7 +63,7 @@ public class BaseRepositoryIT {
 
     @Test
     public void shouldReturnZero_whenCountingWithPredicateThatDoesntMachAnyResource() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         Predicate noMatchPredicate = QUuidResource.uuidResource.label.eq("Foo");
         assertThat(tested.count(noMatchPredicate)).isEqualTo(0);
@@ -71,7 +71,7 @@ public class BaseRepositoryIT {
 
     @Test
     public void shouldCountResourcesWithPredicate() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         Predicate predicate = QUuidResource.uuidResource.label.eq(UuidResourceRows.uuidResource1().getLabel())
             .or(QUuidResource.uuidResource.label.eq(UuidResourceRows.uuidResource2().getLabel()));
@@ -81,7 +81,7 @@ public class BaseRepositoryIT {
 
     @Test
     public void shouldReturnEmpty_whenFindingResourceWithNullPredicate() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         Predicate nullPredicate = null;
 
@@ -90,7 +90,7 @@ public class BaseRepositoryIT {
 
     @Test
     public void shouldReturnEmpty_whenPredicateDoesntMatchAnyRow() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         Predicate predicate = QUuidResource.uuidResource.label.eq("nonExistingLabel");
 
@@ -99,7 +99,7 @@ public class BaseRepositoryIT {
 
     @Test
     public void shouldFindResource_accordingToPredicate() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         Predicate predicate = QUuidResource.uuidResource.uuid.eq(UuidResourceRows.uuidResource1().getUuid());
 
@@ -108,7 +108,7 @@ public class BaseRepositoryIT {
 
     @Test
     public void shouldFindAllResources_whenPredicateIsNull() throws Exception {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         Predicate nullPredicate = null;
 
@@ -119,7 +119,7 @@ public class BaseRepositoryIT {
 
     @Test
     public void shouldReturnEmptyCollection_whenPredicateDoesntMatchAnyResource() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         Predicate labelIsEqualToFoo = QUuidResource.uuidResource.label.eq("Foo");
 
@@ -130,7 +130,7 @@ public class BaseRepositoryIT {
 
     @Test
     public void shouldFindResources_accordingToPredicate() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         Predicate labelStartsWithLabel = QUuidResource.uuidResource.label.startsWith("label");
 
@@ -146,7 +146,7 @@ public class BaseRepositoryIT {
 
     @Test
     public void shouldFindAllResources() throws Exception {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         Collection<BUuidResource> uuidEntities = tested.findAll();
 
@@ -155,7 +155,7 @@ public class BaseRepositoryIT {
 
     @Test
     public void shouldFindPage1WithSize5SortedByIdDesc() throws Exception {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         int uuidPersistentResourceCount = countRows();
 
@@ -176,7 +176,7 @@ public class BaseRepositoryIT {
 
     @Test
     public void shouldApplySortsInTheSameOrderAsTheyWereRequested() throws Exception {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         int uuidPersistentResourceCount = countRows();
 
@@ -196,7 +196,7 @@ public class BaseRepositoryIT {
 
     @Test
     public void shouldFindPageWithPredicate() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         Predicate uuidDoesntContain511 = QUuidResource.uuidResource.uuid.contains("511").not();
         PageRequest pageRequest = new PageRequest(0, 2, Sets.newLinkedHashSet(Arrays.asList(new Sort("label", Sort.Direction.ASC))));
@@ -213,7 +213,7 @@ public class BaseRepositoryIT {
 
     @Test
     public void shouldThrowExpcetion_whenDeletingWithNullPredicate() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         Predicate nullPredicate = null;
         assertThrows(IllegalArgumentException.class, () -> tested.delete(nullPredicate));
@@ -221,7 +221,7 @@ public class BaseRepositoryIT {
 
     @Test
     public void shouldNotDeleteAnyResource_whenDeletingWithPredicateThatDoesntMachAnyResource() throws Exception {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         int uuidPersistentResourceCount = countRows();
 

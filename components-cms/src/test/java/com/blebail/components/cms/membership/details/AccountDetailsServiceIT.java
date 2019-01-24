@@ -44,7 +44,7 @@ public class AccountDetailsServiceIT {
 
     @Test
     public void shouldThrowIllegalArgumentException_whenSignUpRequestIsNull() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         assertThrows(IllegalArgumentException.class, () -> tested.signUp(null));
     }
@@ -79,7 +79,7 @@ public class AccountDetailsServiceIT {
 
     @Test
     public void shouldThrowIllegalArgumentException_whenTokenDoesntMatchWhenActivatingIt() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         Account account = AccountLibrary.admin();
 
@@ -88,7 +88,7 @@ public class AccountDetailsServiceIT {
 
     @Test
     public void shouldNotActivateAccount_whenTokenDoesntMatch() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         Account account = AccountLibrary.inactive();
 
@@ -121,7 +121,7 @@ public class AccountDetailsServiceIT {
 
     @Test
     public void shouldThrowIllegalArgumentException_whenTokenDoesntMatchWhenResetingPassword() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         Account account = AccountLibrary.admin();
 
@@ -130,7 +130,7 @@ public class AccountDetailsServiceIT {
 
     @Test
     public void shouldNotResetPassword_whenTokenDoesntMatch() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         Account account = AccountLibrary.admin();
 

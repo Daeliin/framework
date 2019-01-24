@@ -46,7 +46,7 @@ public final class DbMemory implements BeforeAllCallback, AfterAllCallback {
 
         dataSource = jdbcDataSource;
 
-        String createSchemaSql = new String(Files.readAllBytes(Paths.get(getClass().getResource(DB_SCHEMA_SQL_PATH).toURI())));
+        String createSchemaSql = Files.readString(Paths.get(getClass().getResource(DB_SCHEMA_SQL_PATH).toURI()));
 
         DbSetup dbSetup = new DbSetup(new DataSourceDestination(dataSource), Operations.sql(createSchemaSql));
         dbSetup.launch();

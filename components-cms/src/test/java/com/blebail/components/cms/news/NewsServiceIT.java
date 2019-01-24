@@ -47,7 +47,7 @@ public class NewsServiceIT {
 
     @Test
     public void shouldFindNews() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         News news = NewsLibrary.publishedNews();
         News foundNews = tested.findOne(news.id());
@@ -57,28 +57,28 @@ public class NewsServiceIT {
 
     @Test
     public void shouldThrowException_whenfindingANewsThatDoesntExist() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         assertThrows(NoSuchElementException.class, () -> tested.findOne("nonExistingId"));
     }
 
     @Test
     public void shouldCheckThatNewsDoesntExist() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         assertThat(tested.exists("ZFZEF-ZEF")).isFalse();
     }
 
     @Test
     public void shouldCheckThatNewsExists() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         assertThat(tested.exists(NewsLibrary.publishedNews().id())).isTrue();
     }
 
     @Test
     public void shouldThrowException_whenCreatingNewsWithNonExistingAuthor() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         News news = new News(
                 "ARTICLE1",
@@ -126,21 +126,21 @@ public class NewsServiceIT {
 
     @Test
     public void shouldThrowException_whenUpdatingNonExistingNews() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         assertThrows(NoSuchElementException.class, () -> tested.update((News) null));
     }
 
     @Test
     public void shouldThrowException_whenUpdatingValidatedNews() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         assertThrows(IllegalStateException.class, () -> tested.update(NewsLibrary.validatedNews()));
     }
 
     @Test
     public void shouldThrowException_whenUpdatingPublishedNews() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         assertThrows(IllegalStateException.class, () -> tested.update(NewsLibrary.publishedNews()));
     }
@@ -167,7 +167,7 @@ public class NewsServiceIT {
 
     @Test
     public void shouldThrowException_whenMarkingANonExistingNewsAsDraft() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         assertThrows(NoSuchElementException.class, () -> tested.markAs("nonExistingId", PublicationStatus.DRAFT));
     }
@@ -182,7 +182,7 @@ public class NewsServiceIT {
 
     @Test
     public void shouldThrowException_whenMarkingANonExistingNewsAsValidated() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         assertThrows(NoSuchElementException.class, () -> tested.markAs("nonExistingId", PublicationStatus.VALIDATED));
     }
@@ -197,7 +197,7 @@ public class NewsServiceIT {
 
     @Test
     public void shouldThrowException_whenMarkingANonExistingNewsAsPublished() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         assertThrows(NoSuchElementException.class, () -> tested.markAs("nonExistingId", PublicationStatus.PUBLISHED));
     }
@@ -212,7 +212,7 @@ public class NewsServiceIT {
 
     @Test
     public void shouldFindAuthorByNews() {
-        dbFixture.noRollback();
+        dbFixture.readOnly();
 
         List<String> news = Arrays.asList(NewsLibrary.publishedNews().id(), NewsLibrary.validatedNews().id());
 

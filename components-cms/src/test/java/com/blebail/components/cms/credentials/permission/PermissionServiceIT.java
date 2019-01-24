@@ -45,6 +45,6 @@ public class PermissionServiceIT {
 
         assertThat(permissions).containsExactly(PermissionLibrary.admin());
 
-        dbFixture.noRollback();
+        dbFixture.readOnly();
     }
 }
