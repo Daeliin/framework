@@ -14,8 +14,6 @@ import static java.util.stream.Collectors.toCollection;
  */
 public class PageRequestValidation {
 
-    private static final int MAX_PAGE_SIZE = 100;
-
     private final String page;
     private final String size;
     private final String direction;
@@ -58,10 +56,6 @@ public class PageRequestValidation {
                 throw new IllegalArgumentException("Page size should be greater than 0");
             }
 
-            if (pageSizeValue > MAX_PAGE_SIZE) {
-                throw new IllegalArgumentException(String.format("Page size limit exceeded (> %s)", MAX_PAGE_SIZE));
-            }
-
             return pageSizeValue;
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Page size should be an integer");
@@ -79,8 +73,7 @@ public class PageRequestValidation {
             throw new IllegalArgumentException("Page direction must be 'asc' or 'desc'");
         }
 
-        return Arrays.asList(properties)
-                .stream()
+        return Arrays.stream(properties)
                 .map(property -> new Sort(property, sortDirection))
                 .collect(toCollection(LinkedHashSet::new));
     }
