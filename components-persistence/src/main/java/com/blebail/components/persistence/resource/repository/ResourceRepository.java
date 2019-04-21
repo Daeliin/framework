@@ -58,7 +58,7 @@ public abstract class ResourceRepository<R, ID> extends BaseRepository<R> implem
     @Transactional
     @Override
     public Collection<R> save(Collection<R> resources) {
-        Collection<ID> resourceIds = resources.stream().map(idMapping::apply).collect(Collectors.toList());
+        Collection<ID> resourceIds = resources.stream().map(idMapping).collect(Collectors.toList());
         Collection<ID> persistedResourceIds = findAllIds(resources);
         boolean insertBatchShouldBeExecuted = resourceIds.size() > persistedResourceIds.size();
         boolean updateBatchShouldBeExecuted = persistedResourceIds.size() > 0;
@@ -70,9 +70,12 @@ public abstract class ResourceRepository<R, ID> extends BaseRepository<R> implem
             ID resourceId = idMapping.apply(resource);
 
             if (persistedResourceIds.contains(resourceId)) {
-                updateBatch.populate(resource).where(idPath.eq(resourceId)).addBatch();
+                updateBatch.populate(resource)
+                        .where(idPath.eq(resourceId))
+                        .addBatch();
             } else {
-                insertBatch.populate(resource).addBatch();
+                insertBatch.populate(resource)
+                        .addBatch();
             }
         });
 
