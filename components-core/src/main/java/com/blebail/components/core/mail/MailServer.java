@@ -1,4 +1,4 @@
-package com.blebail.components.cms.mail;
+package com.blebail.components.core.mail;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

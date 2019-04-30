@@ -1,7 +1,7 @@
 package com.blebail.components.cms.membership.notifications;
 
 import com.blebail.components.cms.credentials.account.Account;
-import com.blebail.components.cms.mail.Mailing;
+import com.blebail.components.core.mail.Mailing;
 import com.blebail.components.core.mail.Mail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

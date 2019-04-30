@@ -1,7 +1,9 @@
 package com.blebail.components.core.mail;
 
+import com.google.common.base.MoreObjects;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -12,9 +14,15 @@ import java.util.Objects;
 public class Mail {
     
     private final String from;
+
     private final String to;
+
     private final String subject;
+
     private final String templateName;
+
+    private final String rawContent;
+
     private final Map<String, Object> parameters;
     
     private Mail(
@@ -22,21 +30,27 @@ public class Mail {
         final String to,
         final String subject,
         final String templateName,
+        final String rawContent,
         final Map<String, Object> parameters) {
         
         this.from = new EmailAddress(from).value;
         this.to = new EmailAddress(to).value;
         this.subject = subject;
 
-        if (StringUtils.isBlank(templateName)) {
-            throw new IllegalArgumentException("Mail template name must not be blank");
-        } else {
-            this.templateName = templateName;
+        if (StringUtils.isBlank(templateName) && StringUtils.isBlank(rawContent) ) {
+            throw new IllegalArgumentException("Mail should have either a template name or raw content");
         }
+
+        this.templateName = templateName;
+        this.rawContent = rawContent;
 
         this.parameters = parameters;
     }
-    
+
+    public boolean isRaw() {
+        return rawContent != null;
+    }
+
     public String from() {
         return this.from;
     }
@@ -52,6 +66,10 @@ public class Mail {
     public String templateName() {
         return this.templateName;
     }
+
+    public String rawContent() {
+        return this.rawContent;
+    }
     
     public Map<String, Object> parameters() {
         return this.parameters;
@@ -66,27 +84,42 @@ public class Mail {
                 Objects.equals(to, mail.to) &&
                 Objects.equals(subject, mail.subject) &&
                 Objects.equals(templateName, mail.templateName) &&
+                Objects.equals(rawContent, mail.rawContent) &&
                 Objects.equals(parameters, mail.parameters);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(from, to, subject, templateName, parameters);
+        return Objects.hash(from, to, subject, templateName, rawContent, parameters);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("from", from)
+                .add("to", to)
+                .add("subject", subject)
+                .add("templateName", templateName)
+                .add("rawContent", rawContent)
+                .add("parameters", parameters)
+                .toString();
     }
 
     public static From builder() {
         return new MailBuilder();
     }
-    
-    /**
-     * Builds a mail, example : 
-     * Mail mail = Mail.builder().from("from@mail.com").to("to@mail.com").subject("Subject").templateName("template.html").noParameters().build();
-     */
-    public static class MailBuilder implements From, To, Subject, Parameters, TemplateName {
+
+    public static class MailBuilder implements From, To, Subject, Parameters, Content {
         private String from;
+
         private String to;
+
         private String subject;
+
         private String templateName;
+
+        private String rawContent;
+
         private Map<String, Object> parameters;
 
         @Override
@@ -102,13 +135,13 @@ public class Mail {
         }
 
         @Override
-        public TemplateName subject(final String subject) {
+        public Content subject(final String subject) {
             this.subject = subject;
             return this;
         }
         
         @Override
-        public TemplateName noSubject() {
+        public Content noSubject() {
             this.subject = null;
             return this;
         }
@@ -118,10 +151,16 @@ public class Mail {
             this.templateName = templateName;
             return this;
         }
-        
+
+        @Override
+        public MailBuilder rawContent(String rawContent) {
+            this.rawContent = rawContent;
+            return this;
+        }
+
         @Override
         public MailBuilder noParameters() {
-            this.parameters = null;
+            this.parameters = new HashMap<>();
             return this;
         }
         
@@ -132,7 +171,7 @@ public class Mail {
         }
 
         public Mail build() throws IllegalArgumentException {
-            return new Mail(this.from, this.to, this.subject, this.templateName, this.parameters);
+            return new Mail(this.from, this.to, this.subject, this.templateName, this.rawContent, this.parameters);
         }
     }
     
@@ -145,16 +184,20 @@ public class Mail {
     }
 
     public interface Subject {
-        TemplateName subject(final String subject);
-        TemplateName noSubject();
+        Content subject(final String subject);
+
+        Content noSubject();
     }
     
-    public interface TemplateName {
+    public interface Content {
         Parameters templateName(final String templateName);
+
+        MailBuilder rawContent(final String rawContent);
     }
 
     public interface Parameters {
         MailBuilder noParameters();
+
         MailBuilder parameters(final Map<String, Object> parameters);
     }
 }
