@@ -99,7 +99,7 @@ public abstract class BaseService<T extends Persistable<ID>, R, ID, P extends Cr
      */
     @Override
     public Collection<T> findAll(Collection<ID> resourcesIds) {
-        return new TreeSet(conversion.from(repository.findAll(resourcesIds)));
+        return new TreeSet<>(conversion.from(repository.findAll(resourcesIds)));
     }
 
     /**
