@@ -29,7 +29,11 @@ public class Country extends PersistentResource<String> implements Comparable<Co
         if (this.equals(other)) {
             return 0;
         }
-        
+
+        if (this.name.equals(other.name)) {
+            return code.compareTo(other.code);
+        }
+
         return this.name.compareTo(other.name);
     }
 }
