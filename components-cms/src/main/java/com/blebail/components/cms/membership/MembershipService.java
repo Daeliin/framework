@@ -19,8 +19,11 @@ public class MembershipService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MembershipService.class);
 
     protected final AccountService accountService;
+
     protected final AccountDetailsService accountDetailsService;
+
     protected final EventLogService eventLogService;
+
     protected final MembershipNotifications membershipNotifications;
 
     @Inject

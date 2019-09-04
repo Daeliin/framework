@@ -41,7 +41,9 @@ public class CountryServiceIT {
     public void shouldThrowException_whenFindingNullCountryCode() {
         dbFixture.readOnly();
 
-        assertThrows(IllegalArgumentException.class, () -> countryService.findOne(null));
+        String nullId = null;
+
+        assertThrows(IllegalArgumentException.class, () -> countryService.findOne(nullId));
     }
 
     @Test

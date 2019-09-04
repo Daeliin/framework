@@ -108,7 +108,8 @@ public class CachedBaseServiceTest {
 
     @Test
     public void shouldThrowException_whenIdIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> tested.findOne(null));
+        String nullId = null;
+        assertThrows(IllegalArgumentException.class, () -> tested.findOne(nullId));
     }
 
     @Test

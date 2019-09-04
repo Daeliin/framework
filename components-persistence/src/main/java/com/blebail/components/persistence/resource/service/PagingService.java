@@ -9,11 +9,11 @@ import java.util.Collection;
 import java.util.Optional;
 
 /**
- * Provides CRUD operations and pagination for a resource.
+ * Provides pagination for a resource.
  * @param <T> resource type
  * @param <ID> resource ID type
  */
-public interface PagingService<T extends Persistable<ID>, ID> extends CrudService<T, ID> {
+public interface PagingService<T extends Persistable<ID>, ID> {
 
     /**
      * Finds a resource according to a predicate.

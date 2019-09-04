@@ -27,6 +27,7 @@ import static java.util.stream.Collectors.toSet;
 public class NewsService extends ResourceService<News, BNews, String, NewsRepository> {
 
     private final AccountService accountService;
+
     private final EventLogService eventLogService;
 
     @Inject

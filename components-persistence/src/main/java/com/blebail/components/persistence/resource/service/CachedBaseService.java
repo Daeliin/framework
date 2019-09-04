@@ -20,7 +20,7 @@ import static java.util.stream.Collectors.toMap;
  * Caches resources in memory.
  */
 public abstract class CachedBaseService<T extends Persistable<ID>, R, ID, P extends CrudRepository<R, ID>>
-        extends BaseService<T, R, ID, P> implements CachedService {
+        extends ResourceService<T, R, ID, P> implements CachedService {
 
     protected final Map<ID, T> cache;
 

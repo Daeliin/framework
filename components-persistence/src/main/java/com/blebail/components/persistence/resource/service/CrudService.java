@@ -5,11 +5,11 @@ import com.blebail.components.persistence.resource.Persistable;
 import java.util.Collection;
 
 /**
- * Provides CRUD operations for a resource.
+ * Provides CRUD operations and pagination for a resource.
  * @param <T> resource type
  * @param <ID> resource ID type
  */
-public interface CrudService<T extends Persistable<ID>, ID> {
+public interface CrudService<T extends Persistable<ID>, ID> extends PagingService<T, ID> {
 
     /**
      * Creates a resource.
