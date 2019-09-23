@@ -120,7 +120,7 @@ public class NewsServiceIT {
         assertThat(createdNews.content).isEqualTo(news.content);
         assertThat(createdNews.source).isEqualTo(news.source);
         assertThat(createdNews.authorId).isEqualTo(news.authorId);
-        assertThat(createdNews.publicationDate).isNull();
+        assertThat(createdNews.publicationDate).isEqualTo(news.publicationDate);
         assertThat(createdNews.status).isEqualTo(PublicationStatus.DRAFT);
     }
 
