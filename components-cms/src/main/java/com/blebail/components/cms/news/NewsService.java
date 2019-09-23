@@ -7,7 +7,6 @@ import com.blebail.components.cms.publication.PublicationStatus;
 import com.blebail.components.cms.sql.BNews;
 import com.blebail.components.cms.sql.QAccount;
 import com.blebail.components.cms.sql.QNews;
-import com.blebail.components.core.resource.Id;
 import com.blebail.components.core.string.UrlFriendlyString;
 import com.blebail.components.persistence.resource.service.ResourceService;
 import org.springframework.stereotype.Service;
@@ -45,20 +44,7 @@ public class NewsService extends ResourceService<News, BNews, String, NewsReposi
             throw new IllegalStateException(String.format("Account %s is not active", author.username));
         }
 
-        News newsToCreate = new News(
-                Id.random(),
-                Instant.now(),
-                news.authorId,
-                news.title,
-                news.urlFriendlyTitle,
-                news.description,
-                news.content,
-                news.renderedContent,
-                news.source,
-                null,
-                PublicationStatus.DRAFT);
-
-        News createdNews = super.create(newsToCreate);
+        News createdNews = super.create(news);
 
         eventLogService.create("A news has been created");
 

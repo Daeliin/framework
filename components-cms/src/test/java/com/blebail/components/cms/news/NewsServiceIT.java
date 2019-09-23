@@ -99,7 +99,7 @@ public class NewsServiceIT {
     @Test
     public void shouldCreateNews() {
         News news = new News(
-                " ",
+                "news1",
                 LocalDateTime.of(2016, 5, 20, 14, 30, 0).toInstant(ZoneOffset.UTC),
                 AccountLibrary.admin().id(),
                 "Welcome to sample",
@@ -113,9 +113,9 @@ public class NewsServiceIT {
 
         News createdNews = tested.create(news);
 
-        assertThat(createdNews.id()).isNotBlank();
+        assertThat(createdNews.id()).isEqualTo("news1");
         assertThat(createdNews.title).isEqualTo(news.title);
-        assertThat(createdNews.urlFriendlyTitle).isEqualTo(new UrlFriendlyString(news.title).value);
+        assertThat(createdNews.urlFriendlyTitle).isEqualTo(news.urlFriendlyTitle);
         assertThat(createdNews.description).isEqualTo(news.description);
         assertThat(createdNews.content).isEqualTo(news.content);
         assertThat(createdNews.source).isEqualTo(news.source);
