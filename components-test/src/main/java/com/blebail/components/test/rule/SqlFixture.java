@@ -7,26 +7,33 @@ import com.ninja_squad.dbsetup.operation.Operation;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-import static java.util.Objects.requireNonNull;
+import java.util.Objects;
 
-public final class DbFixture implements BeforeEachCallback {
+public final class SqlFixture implements BeforeEachCallback {
 
-    private final DbMemory dbMemory;
+    private final SqlMemoryDatabase sqlMemoryDatabase;
+
     private final Operation fixture;
+
     private final DbSetupTracker dbSetupTracker;
 
-    public DbFixture(DbMemory dbMemory, Operation fixture) {
-        this.dbMemory = requireNonNull(dbMemory);
-        this.fixture = requireNonNull(fixture);
+    public SqlFixture(SqlMemoryDatabase sqlMemoryDatabase, Operation fixture) {
+        this.sqlMemoryDatabase = Objects.requireNonNull(sqlMemoryDatabase);
+        this.fixture = Objects.requireNonNull(fixture);
         this.dbSetupTracker = new DbSetupTracker();
     }
 
     @Override
     public void beforeEach(ExtensionContext extensionContext) {
-        DbSetup dbSetup = new DbSetup(new DataSourceDestination(dbMemory.dataSource()), fixture);
+        DbSetup dbSetup = new DbSetup(new DataSourceDestination(sqlMemoryDatabase.dataSource()), fixture);
+
         dbSetupTracker.launchIfNecessary(dbSetup);
     }
 
+    /**
+     * Avoids initializing the database in the next test.
+     * Use only if the test does not make any modification, such as insert, update or delete, to the database.
+     */
     public void readOnly() {
         dbSetupTracker.skipNextLaunch();
     }

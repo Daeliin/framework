@@ -2,8 +2,8 @@ package com.blebail.components.cms.country;
 
 import com.blebail.components.cms.fixtures.JavaFixtures;
 import com.blebail.components.cms.library.CountryLibrary;
-import com.blebail.components.test.rule.DbFixture;
-import com.blebail.components.test.rule.DbMemory;
+import com.blebail.components.test.rule.SqlFixture;
+import com.blebail.components.test.rule.SqlMemoryDatabase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -25,10 +25,10 @@ public class CountryServiceIT {
     private CountryService countryService;
 
     @RegisterExtension
-    public static DbMemory dbMemory = new DbMemory();
+    public static SqlMemoryDatabase sqlMemoryDatabase = new SqlMemoryDatabase();
 
     @RegisterExtension
-    public DbFixture dbFixture = new DbFixture(dbMemory, JavaFixtures.country());
+    public SqlFixture dbFixture = new SqlFixture(sqlMemoryDatabase, JavaFixtures.country());
 
     @Test
     public void shouldThrowException_whenFindingNonExistingCountryCode() {

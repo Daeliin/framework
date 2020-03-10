@@ -9,8 +9,8 @@ import com.blebail.components.persistence.fixtures.JavaFixtures;
 import com.blebail.components.persistence.fixtures.UuidResourceRows;
 import com.blebail.components.persistence.sql.BUuidResource;
 import com.blebail.components.persistence.sql.QUuidResource;
-import com.blebail.components.test.rule.DbFixture;
-import com.blebail.components.test.rule.DbMemory;
+import com.blebail.components.test.rule.SqlFixture;
+import com.blebail.components.test.rule.SqlMemoryDatabase;
 import com.google.common.collect.Sets;
 import com.querydsl.core.types.Predicate;
 import org.junit.jupiter.api.Test;
@@ -34,10 +34,10 @@ public class BaseRepositoryIT {
     private UuidResourceBaseRepository tested;
 
     @RegisterExtension
-    public static DbMemory dbMemory = new DbMemory();
+    public static SqlMemoryDatabase sqlMemoryDatabase = new SqlMemoryDatabase();
 
     @RegisterExtension
-    public DbFixture dbFixture = new DbFixture(dbMemory, JavaFixtures.uuidResources());
+    public SqlFixture dbFixture = new SqlFixture(sqlMemoryDatabase, JavaFixtures.uuidResources());
 
     @Test
     public void shouldProvideTheRowPath() {
@@ -252,6 +252,6 @@ public class BaseRepositoryIT {
     }
 
     private int countRows() throws Exception {
-        return dbMemory.countRows(QUuidResource.uuidResource.getTableName());
+        return sqlMemoryDatabase.countRows(QUuidResource.uuidResource.getTableName());
     }
 }

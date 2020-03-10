@@ -5,8 +5,8 @@ import com.blebail.components.cms.credentials.account.AccountService;
 import com.blebail.components.cms.fixtures.JavaFixtures;
 import com.blebail.components.cms.library.AccountLibrary;
 import com.blebail.components.cms.sql.QAccount;
-import com.blebail.components.test.rule.DbFixture;
-import com.blebail.components.test.rule.DbMemory;
+import com.blebail.components.test.rule.SqlFixture;
+import com.blebail.components.test.rule.SqlMemoryDatabase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -30,10 +30,10 @@ public class MembershipServiceIT {
     private MembershipService tested;
     
     @RegisterExtension
-    public static DbMemory dbMemory = new DbMemory();
+    public static SqlMemoryDatabase sqlMemoryDatabase = new SqlMemoryDatabase();
 
     @RegisterExtension
-    public DbFixture dbFixture = new DbFixture(dbMemory, JavaFixtures.account());
+    public SqlFixture dbFixture = new SqlFixture(sqlMemoryDatabase, JavaFixtures.account());
 
     @Test
     public void shouldThrowException_whenSigningUpExistingAccount() {
@@ -103,6 +103,6 @@ public class MembershipServiceIT {
     }
 
     private int countAccountRows() throws Exception {
-        return dbMemory.countRows(QAccount.account.getTableName());
+        return sqlMemoryDatabase.countRows(QAccount.account.getTableName());
     }
 }

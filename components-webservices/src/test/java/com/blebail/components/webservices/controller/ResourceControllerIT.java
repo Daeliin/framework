@@ -1,7 +1,7 @@
 package com.blebail.components.webservices.controller;
 
-import com.blebail.components.test.rule.DbFixture;
-import com.blebail.components.test.rule.DbMemory;
+import com.blebail.components.test.rule.SqlFixture;
+import com.blebail.components.test.rule.SqlMemoryDatabase;
 import com.blebail.components.webservices.fake.UuidResourceDto;
 import com.blebail.components.webservices.fake.UuidResourceDtoConversion;
 import com.blebail.components.webservices.fake.UuidResourceService;
@@ -46,10 +46,10 @@ public class ResourceControllerIT {
     private UuidResourceDtoConversion conversion = new UuidResourceDtoConversion();
 
     @RegisterExtension
-    public static DbMemory dbMemory = new DbMemory();
+    public static SqlMemoryDatabase sqlMemoryDatabase = new SqlMemoryDatabase();
 
     @RegisterExtension
-    public DbFixture dbFixture = new DbFixture(dbMemory, JavaFixtures.uuidResources());
+    public SqlFixture dbFixture = new SqlFixture(sqlMemoryDatabase, JavaFixtures.uuidResources());
 
     @Test
     public void shouldReturnHttpCreatedAndCreatedResource() throws Exception {
@@ -397,6 +397,6 @@ public class ResourceControllerIT {
     }
 
     private int countRows() throws Exception {
-        return dbMemory.countRows(QUuidResource.uuidResource.getTableName());
+        return sqlMemoryDatabase.countRows(QUuidResource.uuidResource.getTableName());
     }
 }
