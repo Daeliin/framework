@@ -10,6 +10,8 @@ import javax.imageio.stream.FileImageOutputStream;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public final class JpgImage {
@@ -24,25 +26,44 @@ public final class JpgImage {
     }
 
     public void compressTo(File target) throws IOException {
-        BufferedImage resizedImage = resize();
         FileImageOutputStream targetOutputStream = new FileImageOutputStream(target);
-        IIOImage iioImage = new IIOImage(resizedImage, null, null);
+        BufferedImage resizedImage = resize();
 
-        ImageWriter imageWriter = ImageIO.getImageWritersByFormatName(format.extension()).next();
-        ImageWriteParam imageWriteParams = imageWriter.getDefaultWriteParam();
-        imageWriteParams.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-        imageWriteParams.setCompressionQuality(format.compression());
-        imageWriter.setOutput(targetOutputStream);
-        imageWriter.write(null, iioImage, imageWriteParams);
+        ImageWriter writer = getWriter();
+        ImageWriteParam writerSettings = getWriterSettings(writer);
 
-        imageWriter.dispose();
-        targetOutputStream.close();
-        resizedImage.flush();
-        resizedImage.flush();
+        try {
+            writer.setOutput(targetOutputStream);
+            writer.write(null, new IIOImage(resizedImage, null, null), writerSettings);
+        } finally {
+            writer.dispose();
+            targetOutputStream.close();
+            resizedImage.flush();
+        }
     }
 
     private BufferedImage resize() throws IOException {
-        BufferedImage originalImage = ImageIO.read(source);
-        return Scalr.resize(originalImage, Scalr.Mode.FIT_EXACT, format.width(), format.height());
+        BufferedImage sourceImage = ImageIO.read(source);
+
+        return Scalr.resize(sourceImage, Scalr.Mode.FIT_EXACT, format.width(), format.height());
+    }
+
+    private ImageWriter getWriter() {
+        Iterator<ImageWriter> imageWritersIterator = ImageIO.getImageWritersByFormatName(format.extension());
+
+        if (!imageWritersIterator.hasNext()) {
+            throw new NoSuchElementException(String.format("Could not find an image writer for %s format", format.extension()));
+        }
+
+        return imageWritersIterator.next();
+    }
+
+    private ImageWriteParam getWriterSettings(ImageWriter imageWriter) {
+        ImageWriteParam imageWriteParams = imageWriter.getDefaultWriteParam();
+
+        imageWriteParams.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+        imageWriteParams.setCompressionQuality(format.compression());
+
+        return imageWriteParams;
     }
 }
