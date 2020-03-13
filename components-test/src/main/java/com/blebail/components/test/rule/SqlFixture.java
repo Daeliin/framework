@@ -8,26 +8,39 @@ import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public final class SqlFixture implements BeforeEachCallback {
 
     private final SqlMemoryDatabase sqlMemoryDatabase;
 
-    private final Operation fixture;
+    private final Operation initialOperation;
 
     private final DbSetupTracker dbSetupTracker;
 
-    public SqlFixture(SqlMemoryDatabase sqlMemoryDatabase, Operation fixture) {
+    public SqlFixture(SqlMemoryDatabase sqlMemoryDatabase) {
+        this(sqlMemoryDatabase, null);
+    }
+
+    public SqlFixture(SqlMemoryDatabase sqlMemoryDatabase, Operation initialOperation) {
         this.sqlMemoryDatabase = Objects.requireNonNull(sqlMemoryDatabase);
-        this.fixture = Objects.requireNonNull(fixture);
+        this.initialOperation = Objects.requireNonNull(initialOperation);
         this.dbSetupTracker = new DbSetupTracker();
     }
 
     @Override
     public void beforeEach(ExtensionContext extensionContext) {
-        DbSetup dbSetup = new DbSetup(new DataSourceDestination(sqlMemoryDatabase.dataSource()), fixture);
+        Optional.ofNullable(initialOperation)
+                .map(this::dbSetup)
+                .ifPresent(dbSetupTracker::launchIfNecessary);
+    }
 
-        dbSetupTracker.launchIfNecessary(dbSetup);
+    public void inject(Operation operation) {
+        dbSetup(operation).launch();
+    }
+
+    public DbSetup dbSetup(Operation operation) {
+        return new DbSetup(new DataSourceDestination(sqlMemoryDatabase.dataSource()), operation);
     }
 
     /**
