@@ -5,27 +5,27 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public final class UserInputStringTest {
+public final class WebAppDirtyStringTest {
 
     @Test
     public void shouldRemoveScriptTag_byDefault() {
         String input = "Test<script>alert('ok');</script>";
 
-        assertThat(new UserInputString(input).sanitize()).isEqualTo("Test");
+        assertThat(new WebAppDirtyString(input).sanitize()).isEqualTo("Test");
     }
 
     @Test
     public void shouldRemoveAnyHtmlTag_byDefault() {
         String input = "This<br> is <a href=\"www.google.com\">a</a> <strong>test</strong>";
 
-        assertThat(new UserInputString(input).sanitize()).isEqualTo("This is a test");
+        assertThat(new WebAppDirtyString(input).sanitize()).isEqualTo("This is a test");
     }
 
     @Test
     public void shouldAllowRawLinks_byDefault() {
         String input = "https://www.google.com";
 
-        assertThat(new UserInputString(input).sanitize()).isEqualTo("https://www.google.com");
+        assertThat(new WebAppDirtyString(input).sanitize()).isEqualTo("https://www.google.com");
     }
 
     @Test
@@ -34,6 +34,6 @@ public final class UserInputStringTest {
 
         Whitelist whitelist = new Whitelist().addAttributes("a", "id", "class", "href", "target").addTags("a");
 
-        assertThat(new UserInputString(input, whitelist).sanitize()).isEqualTo(input);
+        assertThat(new WebAppDirtyString(input, whitelist).sanitize()).isEqualTo(input);
     }
 }
