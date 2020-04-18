@@ -3,7 +3,7 @@ package com.blebail.components.cms.news;
 import com.blebail.components.cms.publication.PublicationStatus;
 import com.blebail.components.cms.sql.BNews;
 import com.blebail.components.core.resource.Conversion;
-import com.blebail.components.core.string.UrlFriendlyString;
+import com.blebail.components.core.string.EnglishTitle;
 
 public final class NewsConversion implements Conversion<News, BNews> {
 
@@ -36,6 +36,6 @@ public final class NewsConversion implements Conversion<News, BNews> {
                 news.source,
                 news.status.name(),
                 news.title,
-                new UrlFriendlyString(news.title).value);
+                new EnglishTitle(news.title).toUrlFriendlyString());
     }
 }

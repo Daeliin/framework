@@ -5,7 +5,7 @@ import com.blebail.components.cms.fixtures.JavaFixtures;
 import com.blebail.components.cms.library.AccountLibrary;
 import com.blebail.components.cms.library.NewsLibrary;
 import com.blebail.components.cms.publication.PublicationStatus;
-import com.blebail.components.core.string.UrlFriendlyString;
+import com.blebail.components.core.string.EnglishTitle;
 import com.blebail.components.test.rule.SqlFixture;
 import com.blebail.components.test.rule.SqlMemoryDatabase;
 import org.junit.jupiter.api.Test;
@@ -155,7 +155,7 @@ public class NewsServiceIT {
 
         assertThat(updatedArtice.status).isEqualTo(PublicationStatus.DRAFT);
         assertThat(updatedArtice.title).isEqualTo(news.title);
-        assertThat(updatedArtice.urlFriendlyTitle).isEqualTo(new UrlFriendlyString(news.title).value);
+        assertThat(updatedArtice.urlFriendlyTitle).isEqualTo(new EnglishTitle(news.title).toUrlFriendlyString());
         assertThat(updatedArtice.description).isEqualTo(news.description);
         assertThat(updatedArtice.content).isEqualTo(news.content);
         assertThat(updatedArtice.renderedContent).isEqualTo(news.renderedContent);

@@ -7,7 +7,7 @@ import com.blebail.components.cms.publication.PublicationStatus;
 import com.blebail.components.cms.sql.BNews;
 import com.blebail.components.cms.sql.QAccount;
 import com.blebail.components.cms.sql.QNews;
-import com.blebail.components.core.string.UrlFriendlyString;
+import com.blebail.components.core.string.EnglishTitle;
 import com.blebail.components.persistence.resource.service.ResourceService;
 import org.springframework.stereotype.Service;
 
@@ -65,7 +65,7 @@ public class NewsService extends ResourceService<News, BNews, String, NewsReposi
         }
 
         existingNews.setTitle(news.title);
-        existingNews.setUrlFriendlyTitle(new UrlFriendlyString(news.title).value);
+        existingNews.setUrlFriendlyTitle(new EnglishTitle(news.title).toUrlFriendlyString());
         existingNews.setDescription(news.description);
         existingNews.setContent(news.content);
         existingNews.setRenderedContent(news.renderedContent);
