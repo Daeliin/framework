@@ -65,7 +65,7 @@ public class NewsService extends ResourceService<News, BNews, String, NewsReposi
         }
 
         existingNews.setTitle(news.title);
-        existingNews.setUrlFriendlyTitle(new EnglishTitle(news.title).toUrlFriendlyString());
+        existingNews.setUrlFriendlyTitle(news.title != null ? new EnglishTitle(news.title).toUrlFriendlyString() : null);
         existingNews.setDescription(news.description);
         existingNews.setContent(news.content);
         existingNews.setRenderedContent(news.renderedContent);

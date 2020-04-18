@@ -36,6 +36,6 @@ public final class NewsConversion implements Conversion<News, BNews> {
                 news.source,
                 news.status.name(),
                 news.title,
-                new EnglishTitle(news.title).toUrlFriendlyString());
+                news.title != null ? new EnglishTitle(news.title).toUrlFriendlyString() : null);
     }
 }
