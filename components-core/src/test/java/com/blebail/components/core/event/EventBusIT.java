@@ -18,7 +18,7 @@ public final class EventBusIT {
     private EventBus tested;
 
     @Test
-    void name() {
+    void shouldRegisterAListenerThenSendEventsAndThenUnregisterTheListener() {
         SomeListener someListener = new SomeListener();
 
         tested.register(someListener);
@@ -28,6 +28,10 @@ public final class EventBusIT {
         assertThat(someListener.lastEventMessage).isEqualTo("someMessage1");
 
         tested.post(new SomeEvent("someMessage2"));
+        assertThat(someListener.lastEventMessage).isEqualTo("someMessage2");
+
+        tested.unregister(someListener);
+        tested.post(new SomeEvent("someMessage3"));
         assertThat(someListener.lastEventMessage).isEqualTo("someMessage2");
     }
 
