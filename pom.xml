@@ -11,7 +11,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.6.RELEASE</version>
+        <version>2.2.7.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -32,7 +32,7 @@
         <dbsetup.version>2.1.0</dbsetup.version>
         <jsoup.version>1.13.1</jsoup.version>
         <imgscalr.version>4.2</imgscalr.version>
-        <maven.wagon-ssh-plugin.version>3.3.4</maven.wagon-ssh-plugin.version>
+        <maven.wagon-ssh-plugin.version>3.4.0</maven.wagon-ssh-plugin.version>
         <jacoco.plugin.version>0.8.5</jacoco.plugin.version>
         <sql.schema>${project.basedir}/src/test/resources/db_schema.sql</sql.schema>
     </properties>
