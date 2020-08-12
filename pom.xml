@@ -33,6 +33,7 @@
         <jsoup.version>1.13.1</jsoup.version>
         <imgscalr.version>4.2</imgscalr.version>
         <joda-time.version>2.10.6</joda-time.version>
+        <gitflow-plugin.version>1.14.0</gitflow-plugin.version>
         <maven.wagon-ssh-plugin.version>3.4.0</maven.wagon-ssh-plugin.version>
         <jacoco.plugin.version>0.8.5</jacoco.plugin.version>
         <sql.schema>${project.basedir}/src/test/resources/db_schema.sql</sql.schema>
@@ -209,6 +210,17 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <!-- Gitflow -->
+            <plugin>
+                <groupId>com.amashchenko.maven.plugin</groupId>
+                <artifactId>gitflow-maven-plugin</artifactId>
+                <version>${gitflow-plugin.version}</version>
+                <configuration>
+                    <postHotfixGoals>deploy</postHotfixGoals>
+                    <postReleaseGoals>deploy</postReleaseGoals>
+                </configuration>
             </plugin>
 
             <!-- Surefire -->
