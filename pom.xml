@@ -5,7 +5,7 @@
     <groupId>com.blebail.components</groupId>
     <artifactId>java-components</artifactId>
     <packaging>pom</packaging>
-    <version>0.2</version>
+    <version>0.3-SNAPSHOT</version>
     <description>Java Components Main</description>
 
     <parent>
@@ -21,7 +21,6 @@
         <java.version>11</java.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <blebail.components.version>0.2</blebail.components.version>
         <jakarta-inject.version>1.0</jakarta-inject.version>
         <jakarta-annotation.version>1.3.5</jakarta-annotation.version>
         <commons-text.version>1.8</commons-text.version>
@@ -60,27 +59,27 @@
             <dependency>
                 <groupId>com.blebail.components</groupId>
                 <artifactId>components-test</artifactId>
-                <version>${blebail.components.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.blebail.components</groupId>
                 <artifactId>components-core</artifactId>
-                <version>${blebail.components.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.blebail.components</groupId>
                 <artifactId>components-persistence</artifactId>
-                <version>${blebail.components.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.blebail.components</groupId>
                 <artifactId>components-webservices</artifactId>
-                <version>${blebail.components.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.blebail.components</groupId>
                 <artifactId>components-cms</artifactId>
-                <version>${blebail.components.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.querydsl</groupId>
