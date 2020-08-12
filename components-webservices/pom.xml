@@ -3,14 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>components-webservices</artifactId>
     <packaging>jar</packaging>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.2</version>
     <name>components-webservices</name>
     <description>Blebail Java Web Services Components</description>
     
     <parent>
         <groupId>com.blebail.components</groupId>
         <artifactId>java-components</artifactId>
-        <version>0.2-SNAPSHOT</version>
+        <version>0.2</version>
     </parent>
     
     <dependencies>
