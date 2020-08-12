@@ -4,9 +4,9 @@
 Provides commons java components with Spring Boot.
 
 ## Technical stack
-* Java : [Java 9](http://www.oracle.com/technetwork/java/javase/downloads/jdk9-downloads-3848520.html)
+* Java : [Java 11](https://jdk.java.net/11/)
 * Build : [Maven](https://maven.apache.org/)
-* Testing : [JUnit 4](http://junit.org)
+* Testing : [JUnit 5](https://junit.org/junit5/)
 * Data access : [Querydsl 4](http://www.querydsl.com/), [MySQL Dialect](https://www.mysql.com/)
 * Caching : [Caffeine 2.3](https://github.com/ben-manes/caffeine)
 * Web tier : [Spring Boot 2](https://projects.spring.io/spring-boot/)
@@ -16,7 +16,7 @@ Provides commons java components with Spring Boot.
 ```xml
 <repositories>
     <repository>
-        <id>daeliin-repository</id>
-        <url>http://daeliin.com/repository/</url>
+        <id>blebail-repository</id>
+        <url>http://blebail.com/repository/</url>
     </repository>   
 </repositories>

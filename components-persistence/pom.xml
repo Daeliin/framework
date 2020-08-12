@@ -3,20 +3,20 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>components-persistence</artifactId>
     <packaging>jar</packaging>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.2</version>
     <name>components-persistence</name>
-    <description>Daeliin Java Persistence Components</description>
+    <description>Blebail Java Persistence Components</description>
     
     <parent>
-        <groupId>com.daeliin.components</groupId>
+        <groupId>com.blebail.components</groupId>
         <artifactId>java-components</artifactId>
-        <version>0.2-SNAPSHOT</version>
+        <version>0.2</version>
     </parent>
 
     <dependencies>
-        <!-- Daeliin -->
+        <!-- Blebail -->
         <dependency>
-            <groupId>com.daeliin.components</groupId>
+            <groupId>com.blebail.components</groupId>
             <artifactId>components-core</artifactId>
         </dependency>
         
@@ -36,9 +36,9 @@
             <artifactId>querydsl-sql-spring</artifactId>
         </dependency>
 
-        <!-- Tests -->
+        <!-- Test -->
         <dependency>
-            <groupId>com.daeliin.components</groupId>
+            <groupId>com.blebail.components</groupId>
             <artifactId>components-test</artifactId>
             <scope>test</scope>
         </dependency>
@@ -59,12 +59,12 @@
                 </executions>
                 <configuration>
                     <jdbcDriver>org.h2.Driver</jdbcDriver>
-                    <jdbcUrl>jdbc:h2:mem:;DATABASE_TO_UPPER=false;DATABASE_TO_UPPER=false;INIT=runscript from '${sql.schema}'</jdbcUrl>
+                    <jdbcUrl>jdbc:h2:mem:;DATABASE_TO_UPPER=false;INIT=runscript from '${sql.schema}'</jdbcUrl>
                     <jdbcUser>sa</jdbcUser>
                     <exportBeans>true</exportBeans>
                     <beanPrefix>B</beanPrefix>
                     <beanAddFullConstructor>true</beanAddFullConstructor>
-                    <packageName>com.daeliin.components.persistence.sql</packageName>
+                    <packageName>com.blebail.components.persistence.sql</packageName>
                     <sourceFolder>${project.basedir}/target/generated-sources/java</sourceFolder>
                     <targetFolder>${project.basedir}/target/generated-sources/java</targetFolder>
                     <customTypes>
@@ -73,9 +73,9 @@
                 </configuration>
                 <dependencies>
                     <dependency>
-                        <groupId>javax.annotation</groupId>
-                        <artifactId>javax.annotation-api</artifactId>
-                        <version>${javax.annotation.version}</version>
+                        <groupId>jakarta.annotation</groupId>
+                        <artifactId>jakarta.annotation-api</artifactId>
+                        <version>${jakarta-annotation.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>com.h2database</groupId>

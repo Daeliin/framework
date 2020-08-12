@@ -1,0 +1,187 @@
+package com.blebail.components.persistence.resource.repository;
+
+import com.querydsl.core.types.dsl.SimpleExpression;
+import com.querydsl.sql.RelationalPathBase;
+import com.querydsl.sql.dml.SQLInsertClause;
+import com.querydsl.sql.dml.SQLUpdateClause;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+/**
+ * {@inheritDoc}
+ */
+public abstract class ResourceRepository<R, ID> extends BaseRepository<R> implements CrudRepository<R, ID> {
+
+    protected final SimpleExpression<ID> idPath;
+    protected final Function<R, ID> idMapping;
+
+    public ResourceRepository(RelationalPathBase<R> rowPath, SimpleExpression<ID> idPath, Function<R, ID> idMapping) {
+        super(rowPath);
+        this.idPath = Objects.requireNonNull(idPath);
+        this.idMapping = Objects.requireNonNull(idMapping);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional
+    @Override
+    public R save(R resource) {
+        if (resource == null) {
+            throw new IllegalArgumentException("Cannot create null resource");
+        }
+
+        ID resourceId = idMapping.apply(resource);
+
+        if (exists(resourceId)) {
+            queryFactory.update(rowPath)
+                    .populate(resource)
+                    .where(idPath.eq(resourceId))
+                    .execute();
+        } else {
+            queryFactory.insert(rowPath)
+                    .populate(resource)
+                    .execute();
+        }
+
+        return resource;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional
+    @Override
+    public Collection<R> save(Collection<R> resources) {
+        Collection<ID> resourceIds = resources.stream().map(idMapping).collect(Collectors.toList());
+        Collection<ID> persistedResourceIds = findAllIds(resources);
+        boolean insertBatchShouldBeExecuted = resourceIds.size() > persistedResourceIds.size();
+        boolean updateBatchShouldBeExecuted = persistedResourceIds.size() > 0;
+
+        SQLInsertClause insertBatch = queryFactory.insert(rowPath);
+        SQLUpdateClause updateBatch = queryFactory.update(rowPath);
+
+        resources.forEach(resource -> {
+            ID resourceId = idMapping.apply(resource);
+
+            if (persistedResourceIds.contains(resourceId)) {
+                updateBatch.populate(resource)
+                        .where(idPath.eq(resourceId))
+                        .addBatch();
+            } else {
+                insertBatch.populate(resource)
+                        .addBatch();
+            }
+        });
+
+        if (insertBatchShouldBeExecuted) {
+            insertBatch.execute();
+        }
+
+        if (updateBatchShouldBeExecuted) {
+            updateBatch.execute();
+        }
+
+        return resources;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<R> findOne(ID resourceId) {
+        if (resourceId == null) {
+            return Optional.empty();
+        }
+
+        return Optional.ofNullable(queryFactory.select(rowPath)
+                .from(rowPath)
+                .where(idPath.eq(resourceId))
+                .fetchOne());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public Collection<R> findAll(Collection<ID> resourceIds) {
+        return queryFactory.select(rowPath)
+                .from(rowPath)
+                .where(idPath.in(resourceIds))
+                .fetch();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public boolean exists(ID resourceId) {
+        if (resourceId == null) {
+            return false;
+        }
+
+        return queryFactory.select(idPath)
+                .from(rowPath)
+                .where(idPath.eq(resourceId))
+                .fetchOne() != null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional
+    @Override
+    public boolean delete(ID resourceId) {
+        if (resourceId == null) {
+            return false;
+        }
+
+        return queryFactory.delete(rowPath)
+                .where(idPath.eq(resourceId))
+                .execute() == 1;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional
+    @Override
+    public boolean delete(Collection<ID> resourceIds) {
+        return queryFactory.delete(rowPath)
+                .where(idPath.in(resourceIds))
+                .execute() == resourceIds.size();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SimpleExpression<ID> idPath(){
+        return idPath;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Function<R, ID> idMapping() {
+        return idMapping;
+    }
+
+    protected Collection<ID> findAllIds(Collection<R> resources) {
+        Collection<ID> resourceIds = resources.stream().map(idMapping::apply).collect(Collectors.toList());
+
+        return queryFactory.select(idPath)
+                .from(rowPath)
+                .where(idPath.in(resourceIds))
+                .fetch();
+    }
+}

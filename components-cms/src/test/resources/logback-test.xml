@@ -7,7 +7,7 @@
         </layout>
     </appender>
     
-    <logger name="com.daeliin.components.cms" level="DEBUG"/>   
+    <logger name="com.blebail.components.cms" level="DEBUG"/>   
     
     <root level="WARN">
         <appender-ref ref="STDOUT" />

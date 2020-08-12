@@ -3,21 +3,27 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>components-thirdparty</artifactId>
     <packaging>jar</packaging>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.2</version>
     <name>components-thirdpary</name>
-    <description>Daeliin Java Third Party Components</description>
+    <description>Blebail Java Third Party Components</description>
 
     <parent>
-        <groupId>com.daeliin.components</groupId>
+        <groupId>com.blebail.components</groupId>
         <artifactId>java-components</artifactId>
-        <version>0.2-SNAPSHOT</version>
+        <version>0.2</version>
     </parent>
 
     <dependencies>
-        <!-- Daeliin -->
+        <!-- Blebail -->
         <dependency>
-            <groupId>com.daeliin.components</groupId>
+            <groupId>com.blebail.components</groupId>
             <artifactId>components-core</artifactId>
+        </dependency>
+
+        <!-- Spring -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <!-- Json Path -->
@@ -28,14 +34,14 @@
 
         <!-- Tests -->
         <dependency>
-            <groupId>com.daeliin.components</groupId>
+            <groupId>com.blebail.components</groupId>
             <artifactId>components-test</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>4.3.13.RELEASE</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
