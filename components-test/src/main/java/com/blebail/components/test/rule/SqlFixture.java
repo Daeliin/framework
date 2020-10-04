@@ -24,7 +24,7 @@ public final class SqlFixture implements BeforeEachCallback {
 
     public SqlFixture(SqlMemoryDatabase sqlMemoryDatabase, Operation initialOperation) {
         this.sqlMemoryDatabase = Objects.requireNonNull(sqlMemoryDatabase);
-        this.initialOperation = Objects.requireNonNull(initialOperation);
+        this.initialOperation = initialOperation;
         this.dbSetupTracker = new DbSetupTracker();
     }
 
