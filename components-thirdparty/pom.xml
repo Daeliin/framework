@@ -3,14 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>components-thirdparty</artifactId>
     <packaging>jar</packaging>
-    <version>0.2</version>
+    <version>0.3</version>
     <name>components-thirdpary</name>
     <description>Blebail Java Third Party Components</description>
 
     <parent>
         <groupId>com.blebail.components</groupId>
         <artifactId>java-components</artifactId>
-        <version>0.2</version>
+        <version>0.3</version>
     </parent>
 
     <dependencies>
