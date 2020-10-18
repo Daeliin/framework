@@ -1,8 +1,8 @@
 package com.blebail.components.persistence.resource.service;
 
-import com.blebail.components.core.pagination.Page;
-import com.blebail.components.core.pagination.PageRequest;
 import com.blebail.components.persistence.resource.Persistable;
+import com.blebail.querydsl.crud.commons.page.Page;
+import com.blebail.querydsl.crud.commons.page.PageRequest;
 import com.querydsl.core.types.Predicate;
 
 import java.util.Collection;
@@ -27,14 +27,14 @@ public interface PagingService<T extends Persistable<ID>, ID> {
      * @param predicate the predicate
      * @return the resources matching the predicate
      */
-    Collection<T> findAll(Predicate predicate);
+    Collection<T> find(Predicate predicate);
 
     /**
      * Finds a page of resources.
      * @param pageRequest the resource page request
      * @return resource page
      */
-    Page<T> findAll(PageRequest pageRequest);
+    Page<T> find(PageRequest pageRequest);
 
     /**
      * Finds a resource page according to a predicate.
@@ -42,7 +42,7 @@ public interface PagingService<T extends Persistable<ID>, ID> {
      * @param pageRequest the resource page request
      * @return the resource page matching the predicate
      */
-    Page<T> findAll(Predicate predicate, PageRequest pageRequest);
+    Page<T> find(Predicate predicate, PageRequest pageRequest);
 
     /**
      * Returns the total number of resources according to a predicate

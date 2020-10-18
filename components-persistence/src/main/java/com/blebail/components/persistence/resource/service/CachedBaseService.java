@@ -2,7 +2,7 @@ package com.blebail.components.persistence.resource.service;
 
 import com.blebail.components.core.resource.Conversion;
 import com.blebail.components.persistence.resource.Persistable;
-import com.blebail.components.persistence.resource.repository.CrudRepository;
+import com.blebail.querydsl.crud.sync.repository.CrudRepository;
 
 import java.util.Collection;
 import java.util.Map;
@@ -108,7 +108,7 @@ public abstract class CachedBaseService<T extends Persistable<ID>, R, ID, P exte
      * {@inheritDoc}
      */
     @Override
-    public Collection<T> findAll(Collection<ID> resourcesIds) {
+    public Collection<T> find(Collection<ID> resourcesIds) {
         loadCacheIfNecessary();
 
         return cache.values().stream()

@@ -1,10 +1,10 @@
 package com.blebail.components.persistence.resource.service;
 
-import com.blebail.components.core.pagination.Page;
-import com.blebail.components.core.pagination.PageRequest;
 import com.blebail.components.core.resource.Conversion;
 import com.blebail.components.persistence.resource.Persistable;
-import com.blebail.components.persistence.resource.repository.CrudRepository;
+import com.blebail.querydsl.crud.commons.page.Page;
+import com.blebail.querydsl.crud.commons.page.PageRequest;
+import com.blebail.querydsl.crud.sync.repository.CrudRepository;
 import com.querydsl.core.types.Predicate;
 
 import java.util.Collection;
@@ -47,28 +47,28 @@ public abstract class BaseService<T extends Persistable<ID>, R, ID, P extends Cr
      * {@inheritDoc}
      */
     @Override
-    public Collection<T> findAll(Predicate predicate) {
-        return conversion.from(repository.findAll(predicate));
+    public Collection<T> find(Predicate predicate) {
+        return conversion.from(repository.find(predicate));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Page<T> findAll(PageRequest pageRequest) {
-        Page<R> rowPage = repository.findAll(pageRequest);
+    public Page<T> find(PageRequest pageRequest) {
+        Page<R> rowPage = repository.find(pageRequest);
 
-        return new Page<>(conversion.from(rowPage.items), rowPage.totalItems, rowPage.totalPages);
+        return new Page<>(conversion.from(rowPage.items()), rowPage.totalItems(), rowPage.totalPages());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Page<T> findAll(Predicate predicate, PageRequest pageRequest) {
-        Page<R> rowPage = repository.findAll(predicate, pageRequest);
+    public Page<T> find(Predicate predicate, PageRequest pageRequest) {
+        Page<R> rowPage = repository.find(predicate, pageRequest);
 
-        return new Page<>(conversion.from(rowPage.items), rowPage.totalItems, rowPage.totalPages);
+        return new Page<>(conversion.from(rowPage.items()), rowPage.totalItems(), rowPage.totalPages());
     }
 
     /**

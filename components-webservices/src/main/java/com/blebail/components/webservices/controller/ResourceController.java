@@ -1,11 +1,12 @@
 package com.blebail.components.webservices.controller;
 
-import com.blebail.components.core.pagination.Page;
-import com.blebail.components.core.pagination.PageRequest;
 import com.blebail.components.persistence.resource.Persistable;
 import com.blebail.components.persistence.resource.service.CrudService;
 import com.blebail.components.webservices.dto.ResourceDtoConversion;
-import com.blebail.components.webservices.validation.PageRequestValidation;
+import com.blebail.components.webservices.page.PageDto;
+import com.blebail.components.webservices.page.PageRequestValidation;
+import com.blebail.querydsl.crud.commons.page.Page;
+import com.blebail.querydsl.crud.commons.page.PageRequest;
 import com.querydsl.core.types.Predicate;
 
 import javax.inject.Inject;
@@ -39,12 +40,12 @@ public abstract class ResourceController<V, T extends Persistable<ID>, ID, S ext
      * @return resource page
      * @throws IllegalArgumentException if pageNumber &lt; 0, pageSize &lt; 0, direction doesnt equal "asc" or "desc
      */
-    public Page<V> getAll(Predicate predicate, String page, String size, String direction, String... properties) {
+    public PageDto<V> getAll(Predicate predicate, String page, String size, String direction, String... properties) {
         PageRequestValidation pageRequestValidation = new PageRequestValidation(page, size, direction, properties);
         PageRequest pageRequest = pageRequestValidation.validate();
 
-        Page<T> pageResult = service.findAll(predicate, pageRequest);
+        Page<T> pageResult = service.find(predicate, pageRequest);
 
-        return new Page<>(conversion.from(pageResult.items), pageResult.totalItems, pageResult.totalPages);
+        return new PageDto<>(new Page<>(conversion.from(pageResult.items()), pageResult.totalItems(), pageResult.totalPages()));
     }
 }

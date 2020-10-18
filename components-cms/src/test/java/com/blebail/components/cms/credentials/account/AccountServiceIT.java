@@ -4,8 +4,8 @@ import com.blebail.components.cms.credentials.permission.Permission;
 import com.blebail.components.cms.credentials.permission.PermissionService;
 import com.blebail.components.cms.fixtures.JavaFixtures;
 import com.blebail.components.cms.library.AccountLibrary;
-import com.blebail.components.test.rule.SqlFixture;
-import com.blebail.components.test.rule.SqlMemoryDatabase;
+import com.blebail.junit.SqlFixture;
+import com.blebail.junit.SqlMemoryDb;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -33,10 +33,10 @@ public class AccountServiceIT {
     private PermissionService permissionService;
 
     @RegisterExtension
-    public static SqlMemoryDatabase sqlMemoryDatabase = new SqlMemoryDatabase();
+    public static SqlMemoryDb sqlMemoryDb = new SqlMemoryDb();
 
     @RegisterExtension
-    public SqlFixture dbFixture = new SqlFixture(sqlMemoryDatabase,
+    public SqlFixture dbFixture = new SqlFixture(sqlMemoryDb::dataSource,
             sequenceOf(
                     JavaFixtures.account(),
                     JavaFixtures.permission(),

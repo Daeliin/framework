@@ -5,9 +5,10 @@ import com.blebail.components.cms.credentials.account.AccountService;
 import com.blebail.components.cms.fixtures.JavaFixtures;
 import com.blebail.components.cms.library.AccountLibrary;
 import com.blebail.components.cms.membership.SignUpRequest;
-import com.blebail.components.cms.sql.QAccount;
-import com.blebail.components.test.rule.SqlFixture;
-import com.blebail.components.test.rule.SqlMemoryDatabase;
+import com.blebail.junit.SqlFixture;
+import com.blebail.junit.SqlMemoryDb;
+import com.blebail.querydsl.crud.QAccount;
+import com.blebail.querydsl.crud.commons.utils.Factories;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -31,15 +32,15 @@ public class AccountDetailsServiceIT {
     private AccountDetailsService tested;
 
     @RegisterExtension
-    public static SqlMemoryDatabase sqlMemoryDatabase = new SqlMemoryDatabase();
+    public static SqlMemoryDb sqlMemoryDb = new SqlMemoryDb();
 
     @RegisterExtension
-    public SqlFixture dbFixture = new SqlFixture(sqlMemoryDatabase,
-        sequenceOf(
-            JavaFixtures.account(),
-            JavaFixtures.permission(),
-            JavaFixtures.account_permission()
-        )
+    public SqlFixture dbFixture = new SqlFixture(sqlMemoryDb::dataSource,
+            sequenceOf(
+                    JavaFixtures.account(),
+                    JavaFixtures.permission(),
+                    JavaFixtures.account_permission()
+            )
     );
 
     @Test
@@ -65,14 +66,14 @@ public class AccountDetailsServiceIT {
     }
 
     @Test
-    public void shouldCreateAnAccount_whenSigningUpAnAccount() throws Exception {
+    public void shouldCreateAnAccount_whenSigningUpAnAccount() {
         SignUpRequest signUpRequest = new SignUpRequest("jane", "jane@blebail.com", "clearPassword");
 
-        int accountCountBeforeSignUp = countRows();
+        long accountCountBeforeSignUp = countRows();
 
         tested.signUp(signUpRequest);
 
-        int accountCountAfterSignUp = countRows();
+        long accountCountAfterSignUp = countRows();
 
         assertThat(accountCountAfterSignUp).isEqualTo(accountCountBeforeSignUp + 1);
     }
@@ -94,7 +95,7 @@ public class AccountDetailsServiceIT {
 
         try {
             account = tested.activate(account, "differentToken");
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
         }
 
         assertThat(account.enabled).isFalse();
@@ -164,7 +165,10 @@ public class AccountDetailsServiceIT {
         assertThat(accountAfterResetPassword.token).isNotEqualTo(account.token);
     }
 
-    private int countRows() throws Exception {
-        return sqlMemoryDatabase.countRows(QAccount.account.getTableName());
+    private long countRows() {
+        return Factories.defaultQueryFactory(sqlMemoryDb.dataSource())
+                .select(QAccount.account)
+                .from(QAccount.account)
+                .fetchCount();
     }
 }

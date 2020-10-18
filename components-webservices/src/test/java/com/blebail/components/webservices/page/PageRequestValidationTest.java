@@ -1,6 +1,6 @@
-package com.blebail.components.webservices.validation;
+package com.blebail.components.webservices.page;
 
-import com.blebail.components.core.pagination.Sort;
+import com.blebail.querydsl.crud.commons.page.Sort;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PageRequestValidationTest {
-    
+
     @Test
     public void shouldThrowException_whenIndexIsNotANumber() {
         assertThrows(IllegalArgumentException.class, () -> new PageRequestValidation("notANumber", "10", "ASC", "id").validate());
@@ -29,7 +29,7 @@ public class PageRequestValidationTest {
     public void shouldAssignIndex() {
         PageRequestValidation pageRequestValidation = new PageRequestValidation("1", "10", "ASC", "id");
 
-        assertThat(pageRequestValidation.validate().index).isEqualTo(1);
+        assertThat(pageRequestValidation.validate().index()).isEqualTo(1);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class PageRequestValidationTest {
     public void shouldAssignSize() {
         PageRequestValidation pageRequestValidation = new PageRequestValidation("1", "2", "ASC", "id");
 
-        assertThat(pageRequestValidation.validate().size).isEqualTo(2);
+        assertThat(pageRequestValidation.validate().size()).isEqualTo(2);
     }
 
     @Test
@@ -61,7 +61,7 @@ public class PageRequestValidationTest {
 
     @Test
     public void shouldComputeSorts() {
-        Set<Sort> sorts = new PageRequestValidation("1", "2", "ASC", "id", "label").validate().sorts;
+        Set<Sort> sorts = new PageRequestValidation("1", "2", "ASC", "id", "label").validate().sorts();
 
         assertThat(sorts).containsOnly(new Sort("id", Sort.Direction.ASC), new Sort("label", Sort.Direction.ASC));
     }

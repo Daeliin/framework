@@ -57,7 +57,7 @@ public interface CrudService<T extends Persistable<ID>, ID> extends PagingServic
      * @param resourceIds resources ids
      * @return resources
      */
-    Collection<T> findAll(Collection<ID> resourceIds);
+    Collection<T> find(Collection<ID> resourceIds);
 
     /**
      * Returns true if the resource exists, false otherwise

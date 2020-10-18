@@ -111,9 +111,11 @@ public class NewsService extends ResourceService<News, BNews, String, NewsReposi
     }
 
     public Map<News, Account> authorByNews(Collection<String> newsIds) {
-        Collection<News> news = findAll(QNews.news.id.in(newsIds));
+        Collection<News> news = find(QNews.news.id.in(newsIds));
         Set<String> accountIds = news.stream().map(newsItem -> newsItem.authorId).collect(toSet());
-        Map<String, Account> accountById = accountService.findAll(QAccount.account.id.in(accountIds)).stream().collect(toMap(Account::id, Function.identity()));
+        Map<String, Account> accountById = accountService.find(QAccount.account.id.in(accountIds))
+                .stream()
+                .collect(toMap(Account::id, Function.identity()));
 
         return news.stream()
             .collect(toMap(Function.identity(), newsItem -> accountById.get(newsItem.authorId)));

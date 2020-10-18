@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 
 @Service
-public class UuidCachedBaseService extends CachedBaseService<UuidResource, BUuidResource, String, UuidResourceRepository> {
+public class UuidCachedBaseService extends CachedBaseService<UuidResource, BUuidResource, String, UuidCrudRepository> {
 
     @Inject
-    public UuidCachedBaseService(UuidResourceRepository repository) {
+    public UuidCachedBaseService(UuidCrudRepository repository) {
         super(repository, new UuidResourceConversion());
     }
 }

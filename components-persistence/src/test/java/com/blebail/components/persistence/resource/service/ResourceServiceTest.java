@@ -2,7 +2,7 @@ package com.blebail.components.persistence.resource.service;
 
 import com.blebail.components.persistence.fake.UuidResource;
 import com.blebail.components.persistence.fake.UuidResourceConversion;
-import com.blebail.components.persistence.fake.UuidResourceRepository;
+import com.blebail.components.persistence.fake.UuidCrudRepository;
 import com.blebail.components.persistence.fake.UuidResourceService;
 import com.blebail.components.persistence.library.UuidResourceLibrary;
 import com.blebail.components.persistence.sql.BUuidResource;
@@ -30,7 +30,7 @@ public class ResourceServiceTest {
 
     private UuidResourceConversion conversion = new UuidResourceConversion();
 
-    private UuidResourceRepository repositoryMock = mock(UuidResourceRepository.class);
+    private UuidCrudRepository repositoryMock = mock(UuidCrudRepository.class);
 
     private UuidResourceService tested;
 
@@ -161,8 +161,8 @@ public class ResourceServiceTest {
                 UuidResourceLibrary.uuidResource1().id(),
                 UuidResourceLibrary.uuidResource2().id());
 
-        tested.findAll(uuidEntityIds);
-        verify(repositoryMock).findAll(uuidEntityIds);
+        tested.find(uuidEntityIds);
+        verify(repositoryMock).find(uuidEntityIds);
     }
 
     @Test

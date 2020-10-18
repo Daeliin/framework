@@ -3,7 +3,7 @@ package com.blebail.components.persistence.resource.service;
 import com.blebail.components.persistence.fake.UuidCachedBaseService;
 import com.blebail.components.persistence.fake.UuidResource;
 import com.blebail.components.persistence.fake.UuidResourceConversion;
-import com.blebail.components.persistence.fake.UuidResourceRepository;
+import com.blebail.components.persistence.fake.UuidCrudRepository;
 import com.blebail.components.persistence.library.UuidResourceLibrary;
 import com.blebail.components.persistence.sql.BUuidResource;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +29,7 @@ public class CachedBaseServiceTest {
 
     private UuidResourceConversion conversion = new UuidResourceConversion();
 
-    private UuidResourceRepository repositoryMock = mock(UuidResourceRepository.class);
+    private UuidCrudRepository repositoryMock = mock(UuidCrudRepository.class);
 
     private UuidCachedBaseService tested;
 
@@ -190,9 +190,9 @@ public class CachedBaseServiceTest {
 
         doReturn(conversion.to(uuidEntities)).when(repositoryMock).findAll();
 
-        Collection<UuidResource> returnedUuidEntities = tested.findAll(uuidEntityIds);
+        Collection<UuidResource> returnedUuidEntities = tested.find(uuidEntityIds);
 
-        assertThat(returnedUuidEntities).containsOnlyElementsOf(uuidEntities);
+        assertThat(returnedUuidEntities).containsAll(uuidEntities);
 
         verify(repositoryMock).findAll();
     }
@@ -209,10 +209,10 @@ public class CachedBaseServiceTest {
 
         doReturn(conversion.to(uuidEntities)).when(repositoryMock).findAll();
 
-        tested.findAll(uuidEntityIds);
-        Collection<UuidResource> returnedUuidEntities = tested.findAll(uuidEntityIds);
+        tested.find(uuidEntityIds);
+        Collection<UuidResource> returnedUuidEntities = tested.find(uuidEntityIds);
 
-        assertThat(returnedUuidEntities).containsOnlyElementsOf(uuidEntities);
+        assertThat(returnedUuidEntities).containsAll(uuidEntities);
 
         verify(repositoryMock, times(1)).findAll();
     }

@@ -4,8 +4,8 @@ import com.blebail.components.cms.fixtures.AccountRows;
 import com.blebail.components.cms.fixtures.JavaFixtures;
 import com.blebail.components.cms.fixtures.PermissionRows;
 import com.blebail.components.cms.sql.BPermission;
-import com.blebail.components.test.rule.SqlFixture;
-import com.blebail.components.test.rule.SqlMemoryDatabase;
+import com.blebail.junit.SqlFixture;
+import com.blebail.junit.SqlMemoryDb;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -26,16 +26,15 @@ public class PermissionRepositoryTest {
     private PermissionRepository permissionRepository;
 
     @RegisterExtension
-    public static SqlMemoryDatabase sqlMemoryDatabase = new SqlMemoryDatabase();
+    public static SqlMemoryDb sqlMemoryDb = new SqlMemoryDb();
 
     @RegisterExtension
-    public SqlFixture dbFixture = new SqlFixture(sqlMemoryDatabase,
-        sequenceOf(
-            JavaFixtures.account(),
-            JavaFixtures.permission(),
-            JavaFixtures.account_permission()
-        )
-    );
+    public SqlFixture dbFixture = new SqlFixture(sqlMemoryDb::dataSource,
+            sequenceOf(
+                    JavaFixtures.account(),
+                    JavaFixtures.permission(),
+                    JavaFixtures.account_permission()
+            ));
 
     @Test
     public void shouldReturnEmptyCollection_whenFindingAccountPermissionOfNull() {

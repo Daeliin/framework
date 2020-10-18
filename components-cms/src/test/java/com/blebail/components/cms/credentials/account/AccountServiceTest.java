@@ -15,7 +15,10 @@ import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public final class AccountServiceTest {
 
@@ -36,7 +39,7 @@ public final class AccountServiceTest {
         BAccount account = AccountRows.admin();;
         Permission permission = new Permission("admin", Instant.now(), "ADMIN");
 
-        doReturn(List.of(account)).when(accountRepositoryMock).findAll(QAccount.account.username.equalsIgnoreCase(account.getUsername())
+        doReturn(List.of(account)).when(accountRepositoryMock).find(QAccount.account.username.equalsIgnoreCase(account.getUsername())
                 .and(QAccount.account.enabled.isTrue()));
 
         doReturn(Set.of(permission)).when(permissionServiceMock).findForAccount(account.getId());
@@ -47,7 +50,7 @@ public final class AccountServiceTest {
         assertThat(tomsearle.getUsername()).isEqualTo(account.getUsername());
         assertThat(tomsearle.getAuthorities()).extracting(GrantedAuthority::getAuthority).containsOnly("ROLE_admin");
 
-        verify(accountRepositoryMock).findAll(QAccount.account.username.equalsIgnoreCase(account.getUsername())
+        verify(accountRepositoryMock).find(QAccount.account.username.equalsIgnoreCase(account.getUsername())
                 .and(QAccount.account.enabled.isTrue()));
         verify(permissionServiceMock).findForAccount(account.getId());
     }
@@ -57,7 +60,7 @@ public final class AccountServiceTest {
         BAccount account = AccountRows.admin();;
         Permission permission = new Permission("admin", Instant.now(), "ADMIN");
 
-        doReturn(List.of(account)).when(accountRepositoryMock).findAll(QAccount.account.username.equalsIgnoreCase(account.getUsername())
+        doReturn(List.of(account)).when(accountRepositoryMock).find(QAccount.account.username.equalsIgnoreCase(account.getUsername())
                 .and(QAccount.account.enabled.isTrue()));
 
         doReturn(Set.of(permission)).when(permissionServiceMock).findForAccount(account.getId());
@@ -69,7 +72,7 @@ public final class AccountServiceTest {
         assertThat(tomsearle.getUsername()).isEqualTo(account.getUsername());
         assertThat(tomsearle.getAuthorities()).extracting(GrantedAuthority::getAuthority).containsOnly("ROLE_admin");
 
-        verify(accountRepositoryMock, times(1)).findAll(QAccount.account.username.equalsIgnoreCase(account.getUsername())
+        verify(accountRepositoryMock, times(1)).find(QAccount.account.username.equalsIgnoreCase(account.getUsername())
                 .and(QAccount.account.enabled.isTrue()));
         verify(permissionServiceMock, times(1)).findForAccount(account.getId());
     }
@@ -79,7 +82,7 @@ public final class AccountServiceTest {
         BAccount account = AccountRows.admin();;
         Permission permission = new Permission("admin", Instant.now(), "ADMIN");
 
-        doReturn(List.of(account)).when(accountRepositoryMock).findAll(QAccount.account.username.equalsIgnoreCase(account.getUsername())
+        doReturn(List.of(account)).when(accountRepositoryMock).find(QAccount.account.username.equalsIgnoreCase(account.getUsername())
                 .and(QAccount.account.enabled.isTrue()));
 
         doReturn(Set.of(permission)).when(permissionServiceMock).findForAccount(account.getId());
@@ -92,7 +95,7 @@ public final class AccountServiceTest {
         assertThat(tomsearle.getUsername()).isEqualTo(account.getUsername());
         assertThat(tomsearle.getAuthorities()).extracting(GrantedAuthority::getAuthority).containsOnly("ROLE_admin");
 
-        verify(accountRepositoryMock, times(2)).findAll(QAccount.account.username.equalsIgnoreCase(account.getUsername())
+        verify(accountRepositoryMock, times(2)).find(QAccount.account.username.equalsIgnoreCase(account.getUsername())
                 .and(QAccount.account.enabled.isTrue()));
         verify(permissionServiceMock, times(2)).findForAccount(account.getId());
     }
