@@ -131,20 +131,6 @@ public class NewsServiceIT {
     }
 
     @Test
-    public void shouldThrowException_whenUpdatingValidatedNews() {
-        dbFixture.readOnly();
-
-        assertThrows(IllegalStateException.class, () -> tested.update(NewsLibrary.validatedNews()));
-    }
-
-    @Test
-    public void shouldThrowException_whenUpdatingPublishedNews() {
-        dbFixture.readOnly();
-
-        assertThrows(IllegalStateException.class, () -> tested.update(NewsLibrary.publishedNews()));
-    }
-
-    @Test
     public void shouldUpdateANewsTitleDescriptionContentAndSource() {
         News newsToUpdate = NewsLibrary.draftNews();
         News news = new News(newsToUpdate.id(), Instant.now(), "", "New title", "", "New desc", "New content", "New content rendered",
