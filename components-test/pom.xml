@@ -5,14 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>components-test</artifactId>
     <packaging>jar</packaging>
-    <version>0.4-SNAPSHOT</version>
+    <version>0.4</version>
     <name>components-test</name>
     <description>Blebail Java Test Components</description>
 
     <parent>
         <groupId>com.blebail.components</groupId>
         <artifactId>java-components</artifactId>
-        <version>0.4-SNAPSHOT</version>
+        <version>0.4</version>
     </parent>
 
     <dependencies>
