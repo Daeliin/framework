@@ -1,13 +1,14 @@
 package com.blebail.components.webservices.controller;
 
-import com.blebail.components.test.rule.SqlFixture;
-import com.blebail.components.test.rule.SqlMemoryDatabase;
 import com.blebail.components.webservices.fake.UuidResourceDto;
 import com.blebail.components.webservices.fake.UuidResourceDtoConversion;
 import com.blebail.components.webservices.fake.UuidResourceService;
 import com.blebail.components.webservices.fixtures.JavaFixtures;
 import com.blebail.components.webservices.library.UuidResourceDtoLibrary;
 import com.blebail.components.webservices.sql.QUuidResource;
+import com.blebail.junit.SqlFixture;
+import com.blebail.junit.SqlMemoryDb;
+import com.blebail.querydsl.crud.commons.utils.Factories;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +26,10 @@ import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -46,18 +50,16 @@ public class ResourceControllerIT {
     private UuidResourceDtoConversion conversion = new UuidResourceDtoConversion();
 
     @RegisterExtension
-    public static SqlMemoryDatabase sqlMemoryDatabase = new SqlMemoryDatabase();
+    public static SqlMemoryDb sqlMemoryDb = new SqlMemoryDb();
 
     @RegisterExtension
-    public SqlFixture dbFixture = new SqlFixture(sqlMemoryDatabase, JavaFixtures.uuidResources());
+    public SqlFixture dbFixture = new SqlFixture(sqlMemoryDb::dataSource, JavaFixtures.uuidResources());
 
     @Test
     public void shouldReturnHttpCreatedAndCreatedResource() throws Exception {
         UuidResourceDto uuidPersistentResourceDto = new UuidResourceDto("id", Instant.now(), "label");
 
-        MvcResult result =
-            mockMvc
-                .perform(post("/uuid/resource")
+        MvcResult result = mockMvc.perform(post("/uuid/resource")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMapper.writeValueAsString(uuidPersistentResourceDto)))
                 .andExpect(status().isCreated())
@@ -73,17 +75,18 @@ public class ResourceControllerIT {
     @Test
     public void shouldPersistResource() throws Exception {
         UuidResourceDto uuidPersistentResourceDto = new UuidResourceDto("id", Instant.now(), "label");
-        int uuidPersistentResourceCountBeforeCreate = countRows();
+        long uuidPersistentResourceCountBeforeCreate = countRows();
 
-         UuidResourceDto returnedUuidPersistentResourceDto = jsonMapper.readValue(mockMvc
-                .perform(post("/uuid/resource")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonMapper.writeValueAsString(uuidPersistentResourceDto)))
-                .andReturn()
-                .getResponse()
-                .getContentAsString(), UuidResourceDto.class);
+        UuidResourceDto returnedUuidPersistentResourceDto = jsonMapper.readValue(
+                mockMvc.perform(post("/uuid/resource")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonMapper.writeValueAsString(uuidPersistentResourceDto)))
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString(), UuidResourceDto.class
+        );
 
-        int uuidPersistentResourceCountAfterCreate = countRows();
+        long uuidPersistentResourceCountAfterCreate = countRows();
 
         UuidResourceDto persistedUuidPersistentResourceDto = conversion.from(service.findOne(returnedUuidPersistentResourceDto.id));
 
@@ -99,27 +102,25 @@ public class ResourceControllerIT {
 
         UuidResourceDto invalidUuidPersistentResourceDto = new UuidResourceDto("id", Instant.now(), " ");
 
-        mockMvc
-            .perform(post("/uuid/resource")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(jsonMapper.writeValueAsString(invalidUuidPersistentResourceDto)))
-            .andExpect(status().isBadRequest());
+        mockMvc.perform(post("/uuid/resource")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonMapper.writeValueAsString(invalidUuidPersistentResourceDto)))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
     public void shouldNotPersistResource_whenCreatingInvalidResource() throws Exception {
         dbFixture.readOnly();
 
-        int uuidPersistentResourceCountBeforeCreate = countRows();
+        long uuidPersistentResourceCountBeforeCreate = countRows();
 
         UuidResourceDto invalidUuidPersistentResourceDto = new UuidResourceDto("id", Instant.now(), " ");
 
-        mockMvc
-            .perform(post("/uuid/resource")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(jsonMapper.writeValueAsString(invalidUuidPersistentResourceDto)));
+        mockMvc.perform(post("/uuid/resource")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonMapper.writeValueAsString(invalidUuidPersistentResourceDto)));
 
-        int uuidPersistentResourceCountAfterCreate = countRows();
+        long uuidPersistentResourceCountAfterCreate = countRows();
 
         assertThat(service.exists(invalidUuidPersistentResourceDto.id)).isFalse();
         assertThat(uuidPersistentResourceCountAfterCreate).isEqualTo(uuidPersistentResourceCountBeforeCreate);
@@ -131,9 +132,7 @@ public class ResourceControllerIT {
 
         UuidResourceDto existingUuidPersistentResourceDto = UuidResourceDtoLibrary.uuidResourceDto1();
 
-        MvcResult result =
-            mockMvc
-                .perform(get("/uuid/resource/" + existingUuidPersistentResourceDto.id)
+        MvcResult result = mockMvc.perform(get("/uuid/resource/" + existingUuidPersistentResourceDto.id)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -146,50 +145,46 @@ public class ResourceControllerIT {
     public void shouldReturnHttpNotFound_whenResourceDoesntExist() throws Exception {
         dbFixture.readOnly();
 
-        mockMvc
-            .perform(get("/uuid/resource/nonExistingId")
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isNotFound());
+        mockMvc.perform(get("/uuid/resource/nonExistingId")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     @Test
     public void shouldReturnHttpOkAndPage0WithSize20SortedByIdAsc_byDefault() throws Exception {
         dbFixture.readOnly();
 
-        mockMvc
-            .perform(get("/uuid/resource")
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.items", hasSize(4)))
-            .andExpect(jsonPath("$.totalPages").value(1))
-            .andExpect(jsonPath("$.totalItems").value(4))
-            .andExpect(jsonPath("$.nbItems").value(4));
+        mockMvc.perform(get("/uuid/resource")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items", hasSize(4)))
+                .andExpect(jsonPath("$.totalPages").value(1))
+                .andExpect(jsonPath("$.totalItems").value(4))
+                .andExpect(jsonPath("$.nbItems").value(4));
     }
 
     @Test
     public void shouldReturnHttpOkAndPage1WithSize2SortedByLabelDesc() throws Exception {
         dbFixture.readOnly();
 
-        mockMvc
-            .perform(get("/uuid/resource?page=1&size=2&direction=DESC&properties=label")
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.items", hasSize(2)))
-            .andExpect(jsonPath("$.totalPages").value(2))
-            .andExpect(jsonPath("$.totalItems").value(4))
-            .andExpect(jsonPath("$.nbItems").value(2))
-            .andExpect(jsonPath("$.items[0].label").value(UuidResourceDtoLibrary.uuidResourceDto2().label))
-            .andExpect(jsonPath("$.items[1].label").value(UuidResourceDtoLibrary.uuidResourceDto1().label));
+        mockMvc.perform(get("/uuid/resource?page=1&size=2&direction=DESC&properties=label")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items", hasSize(2)))
+                .andExpect(jsonPath("$.totalPages").value(2))
+                .andExpect(jsonPath("$.totalItems").value(4))
+                .andExpect(jsonPath("$.nbItems").value(2))
+                .andExpect(jsonPath("$.items[0].label").value(UuidResourceDtoLibrary.uuidResourceDto2().label))
+                .andExpect(jsonPath("$.items[1].label").value(UuidResourceDtoLibrary.uuidResourceDto1().label));
     }
 
     @Test
     public void shouldReturnPageSortedByLabelDescThenByIdDesc() throws Exception {
         dbFixture.readOnly();
 
-        mockMvc
-            .perform(get("/uuid/resource?direction=DESC&properties=label,id")
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
+        mockMvc.perform(get("/uuid/resource?direction=DESC&properties=label,id")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items[0].label").value(UuidResourceDtoLibrary.uuidResourceDto4().label))
                 .andExpect(jsonPath("$.items[1].label").value(UuidResourceDtoLibrary.uuidResourceDto3().label))
                 .andExpect(jsonPath("$.items[2].label").value(UuidResourceDtoLibrary.uuidResourceDto2().label))
@@ -200,40 +195,35 @@ public class ResourceControllerIT {
     public void shouldReturnHttpBadRequest_whenPageIsNotValid() throws Exception {
         dbFixture.readOnly();
 
-        mockMvc
-            .perform(get("/uuid/resource?page=-1")
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isBadRequest());
+        mockMvc.perform(get("/uuid/resource?page=-1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
 
-        mockMvc
-            .perform(get("/uuid/resource?page=invalidPageNumber")
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isBadRequest());
+        mockMvc.perform(get("/uuid/resource?page=invalidPageNumber")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
     public void shouldReturnHttpBadRequest_whenPageSizeIsNotValid() throws Exception {
         dbFixture.readOnly();
 
-        mockMvc
-            .perform(get("/uuid/resource?size=-1")
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isBadRequest());
+        mockMvc.perform(get("/uuid/resource?size=-1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
 
-        mockMvc
-            .perform(get("/uuid/resource?size=invalidPageSize")
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isBadRequest());
+        mockMvc.perform(get("/uuid/resource?size=invalidPageSize")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
     public void shouldReturnHttpBadRequest_whenPageDirectionIsNotValid() throws Exception {
         dbFixture.readOnly();
 
-        mockMvc
-            .perform(get("/uuid/resource?direction=invalidDirection")
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isBadRequest());
+        mockMvc.perform(get("/uuid/resource?direction=invalidDirection")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -243,9 +233,7 @@ public class ResourceControllerIT {
                 Instant.now(),
                 "newLabel");
 
-        MvcResult result =
-            mockMvc
-                .perform(put("/uuid/resource/" + updatedUuidPersistentResourceDto.id)
+        MvcResult result = mockMvc.perform(put("/uuid/resource/" + updatedUuidPersistentResourceDto.id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMapper.writeValueAsString(updatedUuidPersistentResourceDto)))
                 .andExpect(status().isOk())
@@ -262,10 +250,9 @@ public class ResourceControllerIT {
                 Instant.now(),
                 "newLabel");
 
-        mockMvc
-            .perform(put("/uuid/resource/" + updatedUuidPersistentResourceDto.id)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(jsonMapper.writeValueAsString(updatedUuidPersistentResourceDto)));
+        mockMvc.perform(put("/uuid/resource/" + updatedUuidPersistentResourceDto.id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonMapper.writeValueAsString(updatedUuidPersistentResourceDto)));
 
         UuidResourceDto retrievedUuidPersistentResourceDto = conversion.from(service.findOne(updatedUuidPersistentResourceDto.id));
 
@@ -281,11 +268,10 @@ public class ResourceControllerIT {
                 Instant.now(),
                 " ");
 
-        mockMvc
-            .perform(put("/uuid/resource/" + invalidUuidPersistentResourceDto.id)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(jsonMapper.writeValueAsString(invalidUuidPersistentResourceDto)))
-            .andExpect(status().isBadRequest());
+        mockMvc.perform(put("/uuid/resource/" + invalidUuidPersistentResourceDto.id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonMapper.writeValueAsString(invalidUuidPersistentResourceDto)))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -297,10 +283,9 @@ public class ResourceControllerIT {
                 Instant.now(),
                 " ");
 
-        mockMvc
-            .perform(put("/uuid/resource/" + invalidUuidPersistentResourceDto.id)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(jsonMapper.writeValueAsString(invalidUuidPersistentResourceDto)));
+        mockMvc.perform(put("/uuid/resource/" + invalidUuidPersistentResourceDto.id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonMapper.writeValueAsString(invalidUuidPersistentResourceDto)));
 
         UuidResourceDto retrievedUuidPersistenceResourceDto = conversion.from(service.findOne(invalidUuidPersistentResourceDto.id));
 
@@ -316,24 +301,21 @@ public class ResourceControllerIT {
                 Instant.now(),
                 "newLabel");
 
-        mockMvc
-            .perform(put("/uuid/resource/nonExistingId")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(jsonMapper.writeValueAsString(updatedUuidPersistentResourceDto)))
-            .andExpect(status().isNotFound());
+        mockMvc.perform(put("/uuid/resource/nonExistingId")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonMapper.writeValueAsString(updatedUuidPersistentResourceDto)))
+                .andExpect(status().isNotFound());
     }
 
     @Test
     public void shouldReturnHttpNoContent_whenDeletingAResource() throws Exception {
-        mockMvc
-                .perform(delete("/uuid/resource/" + UuidResourceDtoLibrary.uuidResourceDto1().id))
+        mockMvc.perform(delete("/uuid/resource/" + UuidResourceDtoLibrary.uuidResourceDto1().id))
                 .andExpect(status().isNoContent());
     }
 
     @Test
     public void shouldDeleteAResource() throws Exception {
-        mockMvc
-            .perform(delete("/uuid/resource/" + UuidResourceDtoLibrary.uuidResourceDto1().id));
+        mockMvc.perform(delete("/uuid/resource/" + UuidResourceDtoLibrary.uuidResourceDto1().id));
 
         assertThat(service.exists(UuidResourceDtoLibrary.uuidResourceDto1().id)).isFalse();
     }
@@ -342,30 +324,27 @@ public class ResourceControllerIT {
     public void shouldReturnHttpNotFound_whenDeletingNonExistingResource() throws Exception {
         dbFixture.readOnly();
 
-        mockMvc
-            .perform(delete("/uuid/resource/nonExistingId"))
-            .andExpect(status().isNotFound());
+        mockMvc.perform(delete("/uuid/resource/nonExistingId"))
+                .andExpect(status().isNotFound());
     }
 
     @Test
     public void shouldReturnHttpNoContent_whenDeletingResources() throws Exception {
-        mockMvc
-            .perform(post("/uuid/resource/deleteSeveral")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(jsonMapper.writeValueAsString(Arrays.asList(
-                    UuidResourceDtoLibrary.uuidResourceDto1().id,
-                    UuidResourceDtoLibrary.uuidResourceDto2().id))))
-            .andExpect(status().isNoContent());
+        mockMvc.perform(post("/uuid/resource/deleteSeveral")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonMapper.writeValueAsString(Arrays.asList(
+                        UuidResourceDtoLibrary.uuidResourceDto1().id,
+                        UuidResourceDtoLibrary.uuidResourceDto2().id))))
+                .andExpect(status().isNoContent());
     }
 
     @Test
     public void shouldDeleteResources() throws Exception {
-        mockMvc
-            .perform(post("/uuid/resource/deleteSeveral")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(jsonMapper.writeValueAsString(Arrays.asList(
-                    UuidResourceDtoLibrary.uuidResourceDto1().id,
-                    UuidResourceDtoLibrary.uuidResourceDto2().id))));
+        mockMvc.perform(post("/uuid/resource/deleteSeveral")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonMapper.writeValueAsString(Arrays.asList(
+                        UuidResourceDtoLibrary.uuidResourceDto1().id,
+                        UuidResourceDtoLibrary.uuidResourceDto2().id))));
 
         assertThat(service.exists(UuidResourceDtoLibrary.uuidResourceDto1().id)).isFalse();
         assertThat(service.exists(UuidResourceDtoLibrary.uuidResourceDto2().id)).isFalse();
@@ -373,13 +352,12 @@ public class ResourceControllerIT {
 
     @Test
     public void shouldDeletesExistingResources_whenDeletingNonExistingAndExistingResourceIds() throws Exception {
-        mockMvc
-            .perform(post("/uuid/resource/deleteSeveral")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(jsonMapper.writeValueAsString(Arrays.asList(
-                    UuidResourceDtoLibrary.uuidResourceDto1().id,
-                    UuidResourceDtoLibrary.uuidResourceDto2().id,
-                    "nonExistingId"))));
+        mockMvc.perform(post("/uuid/resource/deleteSeveral")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonMapper.writeValueAsString(Arrays.asList(
+                        UuidResourceDtoLibrary.uuidResourceDto1().id,
+                        UuidResourceDtoLibrary.uuidResourceDto2().id,
+                        "nonExistingId"))));
 
         assertThat(service.exists(UuidResourceDtoLibrary.uuidResourceDto1().id)).isFalse();
         assertThat(service.exists(UuidResourceDtoLibrary.uuidResourceDto2().id)).isFalse();
@@ -389,14 +367,16 @@ public class ResourceControllerIT {
     public void shouldReturnHttpBadRequest_whenDeletingNull() throws Exception {
         dbFixture.readOnly();
 
-        mockMvc
-            .perform(post("/uuid/resource/deleteSeveral")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(jsonMapper.writeValueAsString(null)))
-            .andExpect(status().isBadRequest());
+        mockMvc.perform(post("/uuid/resource/deleteSeveral")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonMapper.writeValueAsString(null)))
+                .andExpect(status().isBadRequest());
     }
 
-    private int countRows() throws Exception {
-        return sqlMemoryDatabase.countRows(QUuidResource.uuidResource.getTableName());
+    private long countRows() {
+        return Factories.defaultQueryFactory(sqlMemoryDb.dataSource())
+                .select(QUuidResource.uuidResource)
+                .from(QUuidResource.uuidResource)
+                .fetchCount();
     }
 }

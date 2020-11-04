@@ -65,7 +65,7 @@ public class AccountService extends ResourceService<Account, BAccount, String, A
     }
 
     public Account findByUsername(String username) {
-        BAccount bAccount = repository.findAll(QAccount.account.username.equalsIgnoreCase(username))
+        BAccount bAccount = repository.find(AccountMatchers.usernameEqualsCaseInsensitive(username))
                 .stream()
                 .findFirst()
                 .orElseThrow(NoSuchElementException::new);
@@ -74,7 +74,7 @@ public class AccountService extends ResourceService<Account, BAccount, String, A
     }
 
     public Account findByUsernameAndEnabled(String username) {
-        Collection<BAccount> bAccounts = repository.findAll(QAccount.account.username.equalsIgnoreCase(username)
+        Collection<BAccount> bAccounts = repository.find(AccountMatchers.usernameEqualsCaseInsensitive(username)
                 .and(QAccount.account.enabled.isTrue()));
 
 
@@ -84,7 +84,7 @@ public class AccountService extends ResourceService<Account, BAccount, String, A
     }
 
     public boolean usernameExists(String username) {
-        return !repository.findAll(QAccount.account.username.equalsIgnoreCase(username)).isEmpty();
+        return !repository.find(AccountMatchers.usernameEqualsCaseInsensitive(username)).isEmpty();
     }
 
     @Override

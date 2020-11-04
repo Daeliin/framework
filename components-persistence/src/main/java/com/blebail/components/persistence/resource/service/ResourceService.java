@@ -2,12 +2,11 @@ package com.blebail.components.persistence.resource.service;
 
 import com.blebail.components.core.resource.Conversion;
 import com.blebail.components.persistence.resource.Persistable;
-import com.blebail.components.persistence.resource.repository.CrudRepository;
+import com.blebail.querydsl.crud.sync.repository.CrudRepository;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeSet;
 
@@ -95,8 +94,8 @@ public abstract class ResourceService<T extends Persistable<ID>, R, ID, P extend
      * {@inheritDoc}
      */
     @Override
-    public Collection<T> findAll(Collection<ID> resourcesIds) {
-        return new TreeSet<>(conversion.from(repository.findAll(resourcesIds)));
+    public Collection<T> find(Collection<ID> resourcesIds) {
+        return new TreeSet<>(conversion.from(repository.find(resourcesIds)));
     }
 
     /**

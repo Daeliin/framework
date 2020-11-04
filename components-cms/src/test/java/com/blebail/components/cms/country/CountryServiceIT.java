@@ -2,8 +2,8 @@ package com.blebail.components.cms.country;
 
 import com.blebail.components.cms.fixtures.JavaFixtures;
 import com.blebail.components.cms.library.CountryLibrary;
-import com.blebail.components.test.rule.SqlFixture;
-import com.blebail.components.test.rule.SqlMemoryDatabase;
+import com.blebail.junit.SqlFixture;
+import com.blebail.junit.SqlMemoryDb;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -25,10 +25,10 @@ public class CountryServiceIT {
     private CountryService countryService;
 
     @RegisterExtension
-    public static SqlMemoryDatabase sqlMemoryDatabase = new SqlMemoryDatabase();
+    public static SqlMemoryDb sqlMemoryDb = new SqlMemoryDb();
 
     @RegisterExtension
-    public SqlFixture dbFixture = new SqlFixture(sqlMemoryDatabase, JavaFixtures.country());
+    public SqlFixture dbFixture = new SqlFixture(sqlMemoryDb::dataSource, JavaFixtures.country());
 
     @Test
     public void shouldThrowException_whenFindingNonExistingCountryCode() {
@@ -41,9 +41,7 @@ public class CountryServiceIT {
     public void shouldThrowException_whenFindingNullCountryCode() {
         dbFixture.readOnly();
 
-        String nullId = null;
-
-        assertThrows(IllegalArgumentException.class, () -> countryService.findOne(nullId));
+        assertThrows(IllegalArgumentException.class, () -> countryService.findOne((String) null));
     }
 
     @Test

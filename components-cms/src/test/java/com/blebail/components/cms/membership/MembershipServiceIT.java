@@ -4,9 +4,10 @@ import com.blebail.components.cms.credentials.account.Account;
 import com.blebail.components.cms.credentials.account.AccountService;
 import com.blebail.components.cms.fixtures.JavaFixtures;
 import com.blebail.components.cms.library.AccountLibrary;
-import com.blebail.components.cms.sql.QAccount;
-import com.blebail.components.test.rule.SqlFixture;
-import com.blebail.components.test.rule.SqlMemoryDatabase;
+import com.blebail.junit.SqlFixture;
+import com.blebail.junit.SqlMemoryDb;
+import com.blebail.querydsl.crud.QAccount;
+import com.blebail.querydsl.crud.commons.utils.Factories;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -28,12 +29,12 @@ public class MembershipServiceIT {
 
     @Inject
     private MembershipService tested;
-    
-    @RegisterExtension
-    public static SqlMemoryDatabase sqlMemoryDatabase = new SqlMemoryDatabase();
 
     @RegisterExtension
-    public SqlFixture dbFixture = new SqlFixture(sqlMemoryDatabase, JavaFixtures.account());
+    public static SqlMemoryDb sqlMemoryDb = new SqlMemoryDb();
+
+    @RegisterExtension
+    public SqlFixture dbFixture = new SqlFixture(sqlMemoryDb::dataSource, JavaFixtures.account());
 
     @Test
     public void shouldThrowException_whenSigningUpExistingAccount() {
@@ -46,20 +47,20 @@ public class MembershipServiceIT {
     }
 
     @Test
-    public void shouldNotCreateAccount_whenSigningUpExistingAccount() throws Exception {
+    public void shouldNotCreateAccount_whenSigningUpExistingAccount() {
         dbFixture.readOnly();
 
         Account existingAccount = AccountLibrary.admin();
         SignUpRequest signUpRequest = new SignUpRequest(existingAccount.username, existingAccount.email, "password");
 
-        int accountCountBeforeSignUp = countAccountRows();
+        long accountCountBeforeSignUp = countAccountRows();
 
         try {
             tested.signUp(signUpRequest);
         } catch (IllegalStateException e) {
         }
 
-        int accountCountAfterSignUp = countAccountRows();
+        long accountCountAfterSignUp = countAccountRows();
 
         assertThat(accountCountAfterSignUp).isEqualTo(accountCountBeforeSignUp);
     }
@@ -77,7 +78,7 @@ public class MembershipServiceIT {
 
         Account account = AccountLibrary.inactive();
 
-        assertThrows(IllegalArgumentException.class, () ->  tested.activate(account.id(), "wrongToken"));
+        assertThrows(IllegalArgumentException.class, () -> tested.activate(account.id(), "wrongToken"));
     }
 
     @Test
@@ -102,7 +103,10 @@ public class MembershipServiceIT {
         assertThrows(IllegalArgumentException.class, () -> tested.resetPassword(account.id(), "wrongToken", "newPassword"));
     }
 
-    private int countAccountRows() throws Exception {
-        return sqlMemoryDatabase.countRows(QAccount.account.getTableName());
+    private long countAccountRows() {
+        return Factories.defaultQueryFactory(sqlMemoryDb.dataSource())
+                .select(QAccount.account)
+                .from(QAccount.account)
+                .fetchCount();
     }
 }

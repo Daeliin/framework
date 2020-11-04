@@ -6,8 +6,8 @@ import com.blebail.components.cms.library.AccountLibrary;
 import com.blebail.components.cms.library.NewsLibrary;
 import com.blebail.components.cms.publication.PublicationStatus;
 import com.blebail.components.core.string.EnglishTitle;
-import com.blebail.components.test.rule.SqlFixture;
-import com.blebail.components.test.rule.SqlMemoryDatabase;
+import com.blebail.junit.SqlFixture;
+import com.blebail.junit.SqlMemoryDb;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -35,15 +35,14 @@ public class NewsServiceIT {
     private NewsService tested;
 
     @RegisterExtension
-    public static SqlMemoryDatabase sqlMemoryDatabase = new SqlMemoryDatabase();
+    public static SqlMemoryDb sqlMemoryDb = new SqlMemoryDb();
 
     @RegisterExtension
-    public SqlFixture dbFixture = new SqlFixture(sqlMemoryDatabase,
-        sequenceOf(
-            JavaFixtures.account(),
-            JavaFixtures.news()
-        )
-    );
+    public SqlFixture dbFixture = new SqlFixture(sqlMemoryDb::dataSource,
+            sequenceOf(
+                    JavaFixtures.account(),
+                    JavaFixtures.news()
+            ));
 
     @Test
     public void shouldFindNews() {
@@ -129,20 +128,6 @@ public class NewsServiceIT {
         dbFixture.readOnly();
 
         assertThrows(NoSuchElementException.class, () -> tested.update((News) null));
-    }
-
-    @Test
-    public void shouldThrowException_whenUpdatingValidatedNews() {
-        dbFixture.readOnly();
-
-        assertThrows(IllegalStateException.class, () -> tested.update(NewsLibrary.validatedNews()));
-    }
-
-    @Test
-    public void shouldThrowException_whenUpdatingPublishedNews() {
-        dbFixture.readOnly();
-
-        assertThrows(IllegalStateException.class, () -> tested.update(NewsLibrary.publishedNews()));
     }
 
     @Test

@@ -4,11 +4,14 @@ import com.blebail.components.cms.sql.BAccountPermission;
 import com.blebail.components.cms.sql.BPermission;
 import com.blebail.components.cms.sql.QAccountPermission;
 import com.blebail.components.cms.sql.QPermission;
-import com.blebail.components.persistence.resource.repository.ResourceRepository;
+import com.blebail.components.persistence.resource.repository.SpringCrudRepository;
+import com.blebail.querydsl.crud.commons.resource.IdentifiableQDSLResource;
 import com.google.common.base.Strings;
+import com.querydsl.sql.SQLQueryFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
@@ -20,10 +23,11 @@ import static java.util.stream.Collectors.toSet;
  */
 @Transactional
 @Component
-public class PermissionRepository extends ResourceRepository<BPermission, String> {
+public class PermissionRepository extends SpringCrudRepository<QPermission, BPermission, String> {
 
-    public PermissionRepository() {
-        super(QPermission.permission, QPermission.permission.id, BPermission::getId);
+    @Inject
+    public PermissionRepository(SQLQueryFactory queryFactory) {
+        super(new IdentifiableQDSLResource<>(QPermission.permission, QPermission.permission.id, BPermission::getId), queryFactory);
     }
 
     public Collection<BPermission> findForAccount(String accountId) {

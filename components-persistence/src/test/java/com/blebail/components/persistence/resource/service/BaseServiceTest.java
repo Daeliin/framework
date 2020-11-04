@@ -1,22 +1,22 @@
 package com.blebail.components.persistence.resource.service;
 
-import com.blebail.components.core.pagination.Page;
-import com.blebail.components.core.pagination.PageRequest;
-import com.blebail.components.core.pagination.Sort;
+import com.blebail.components.persistence.fake.UuidBaseService;
 import com.blebail.components.persistence.fake.UuidResource;
 import com.blebail.components.persistence.fake.UuidResourceConversion;
-import com.blebail.components.persistence.fake.UuidResourceRepository;
-import com.blebail.components.persistence.fake.UuidBaseService;
+import com.blebail.components.persistence.fake.UuidCrudRepository;
 import com.blebail.components.persistence.library.UuidResourceLibrary;
 import com.blebail.components.persistence.sql.BUuidResource;
 import com.blebail.components.persistence.sql.QUuidResource;
-import com.google.common.collect.Sets;
+import com.blebail.querydsl.crud.commons.page.Page;
+import com.blebail.querydsl.crud.commons.page.PageRequest;
+import com.blebail.querydsl.crud.commons.page.Sort;
 import com.querydsl.core.types.Predicate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,14 +26,16 @@ import static org.mockito.Mockito.verify;
 
 public class BaseServiceTest {
 
-    private UuidResourceConversion conversion = new UuidResourceConversion();
+    private UuidResourceConversion conversion;
 
-    private UuidResourceRepository repositoryMock = mock(UuidResourceRepository.class);
+    private UuidCrudRepository repositoryMock;
 
     private UuidBaseService tested;
 
     @BeforeEach
     public void setUp() {
+        conversion = new UuidResourceConversion();
+        repositoryMock = mock(UuidCrudRepository.class);
         tested = new UuidBaseService(repositoryMock);
     }
 
@@ -67,7 +69,7 @@ public class BaseServiceTest {
         doReturn(Optional.of(conversion.to(existingUuidEntity))).when(repositoryMock).findOne(predicate);
 
         Optional<UuidResource> foundUuidEntity = tested.findOne(predicate);
-    
+
         verify(repositoryMock).findOne(predicate);
         assertThat(foundUuidEntity).isNotEmpty();
         assertThat(foundUuidEntity.get()).isEqualTo(existingUuidEntity);
@@ -77,47 +79,47 @@ public class BaseServiceTest {
     public void shouldCallRepositoryFindAllWithPredicateAndReturnResources_whenFindingResourcesWithPredicate() {
         Predicate predicate =
                 QUuidResource.uuidResource.uuid.eq(UuidResourceLibrary.uuidResource1().id())
-                .or(QUuidResource.uuidResource.uuid.eq(UuidResourceLibrary.uuidResource2().id()));
+                        .or(QUuidResource.uuidResource.uuid.eq(UuidResourceLibrary.uuidResource2().id()));
 
         Collection<UuidResource> existingUuidEntities = Arrays.asList(
                 UuidResourceLibrary.uuidResource1(),
                 UuidResourceLibrary.uuidResource2());
 
-        doReturn(conversion.to(existingUuidEntities)).when(repositoryMock).findAll(predicate);
+        doReturn(conversion.to(existingUuidEntities)).when(repositoryMock).find(predicate);
 
-        Collection<UuidResource> foundUuidEntities = tested.findAll(predicate);
+        Collection<UuidResource> foundUuidEntities = tested.find(predicate);
 
-        verify(repositoryMock).findAll(predicate);
+        verify(repositoryMock).find(predicate);
         assertThat(foundUuidEntities).containsOnly(
                 UuidResourceLibrary.uuidResource1(),
                 UuidResourceLibrary.uuidResource2());
     }
-    
+
     @Test
     public void shouldCallRepositoryFindAllWithPageRequest_whenFindingAllResoucesWithPageRequest() {
-        PageRequest pageRequest = new PageRequest(1, 10, Sets.newLinkedHashSet(Arrays.asList(new Sort("uuid", Sort.Direction.ASC))));
+        PageRequest pageRequest = new PageRequest(1, 10, List.of(new Sort("uuid", Sort.Direction.ASC)));
 
         Page<BUuidResource> pageFake =
-                new Page<>(Arrays.asList(conversion.to(UuidResourceLibrary.uuidResource1())), 1, 1);
+                new Page<>(List.of(conversion.to(UuidResourceLibrary.uuidResource1())), 1, 1);
 
-        doReturn(pageFake).when(repositoryMock).findAll(pageRequest);
+        doReturn(pageFake).when(repositoryMock).find(pageRequest);
 
-        tested.findAll(pageRequest);
-        verify(repositoryMock).findAll(pageRequest);
+        tested.find(pageRequest);
+        verify(repositoryMock).find(pageRequest);
     }
 
     @Test
     public void shouldCallRepositoryFindAllWithPredicateAndPageRequest_whenFindingAllResoucesWithPredicateAndPageRequest() {
-        PageRequest pageRequest = new PageRequest(1, 10, Sets.newLinkedHashSet(Arrays.asList(new Sort("uuid", Sort.Direction.ASC))));
+        PageRequest pageRequest = new PageRequest(1, 10, List.of(new Sort("uuid", Sort.Direction.ASC)));
         Predicate predicate = QUuidResource.uuidResource.uuid.isNotNull();
 
         Page<BUuidResource> pageFake =
-                new Page<>(Arrays.asList(conversion.to(UuidResourceLibrary.uuidResource1())), 1, 1);
+                new Page<>(List.of(conversion.to(UuidResourceLibrary.uuidResource1())), 1, 1);
 
-        doReturn(pageFake).when(repositoryMock).findAll(predicate, pageRequest);
+        doReturn(pageFake).when(repositoryMock).find(predicate, pageRequest);
 
-        tested.findAll(predicate, pageRequest);
-        verify(repositoryMock).findAll(predicate, pageRequest);
+        tested.find(predicate, pageRequest);
+        verify(repositoryMock).find(predicate, pageRequest);
     }
 
     @Test

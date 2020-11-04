@@ -1,9 +1,13 @@
 package com.blebail.components.webservices.fake;
 
-import com.blebail.components.core.pagination.Page;
 import com.blebail.components.webservices.controller.ResourceController;
+import com.blebail.components.webservices.page.PageDto;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
 
@@ -21,7 +25,7 @@ public class UuidResourceController extends ResourceController<UuidResourceDto, 
     @RequestMapping(method = GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Page<UuidResourceDto> getAll(
+    public PageDto<UuidResourceDto> getAll(
             @RequestParam(value = "page", defaultValue = DEFAULT_PAGE) String page,
             @RequestParam(value = "size", defaultValue = DEFAULT_SIZE) String size,
             @RequestParam(value = "direction", defaultValue = DEFAULT_DIRECTION) String direction,

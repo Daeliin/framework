@@ -3,14 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>components-webservices</artifactId>
     <packaging>jar</packaging>
-    <version>0.3</version>
+    <version>0.4</version>
     <name>components-webservices</name>
     <description>Blebail Java Web Services Components</description>
     
     <parent>
         <groupId>com.blebail.components</groupId>
         <artifactId>java-components</artifactId>
-        <version>0.3</version>
+        <version>0.4</version>
     </parent>
     
     <dependencies>
@@ -34,6 +34,11 @@
         <dependency>
             <groupId>com.blebail.components</groupId>
             <artifactId>components-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.blebail.junit</groupId>
+            <artifactId>junit-sql</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

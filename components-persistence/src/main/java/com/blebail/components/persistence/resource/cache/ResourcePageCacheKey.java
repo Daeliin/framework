@@ -1,7 +1,7 @@
 package com.blebail.components.persistence.resource.cache;
 
-import com.blebail.components.core.pagination.PageRequest;
 import com.blebail.components.persistence.resource.predicate.PersistentResourcePredicate;
+import com.blebail.querydsl.crud.commons.page.PageRequest;
 
 import java.util.Objects;
 import java.util.Set;

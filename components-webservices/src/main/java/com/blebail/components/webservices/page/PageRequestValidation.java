@@ -1,13 +1,13 @@
-package com.blebail.components.webservices.validation;
+package com.blebail.components.webservices.page;
 
-import com.blebail.components.core.pagination.PageRequest;
-import com.blebail.components.core.pagination.Sort;
+
+import com.blebail.querydsl.crud.commons.page.PageRequest;
+import com.blebail.querydsl.crud.commons.page.Sort;
 
 import java.util.Arrays;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Objects;
-
-import static java.util.stream.Collectors.toCollection;
+import java.util.stream.Collectors;
 
 /**
  * Validates parameters of a page request.
@@ -62,7 +62,7 @@ public class PageRequestValidation {
         }
     }
     
-    private LinkedHashSet<Sort> validateSorts() {
+    private List<Sort> validateSorts() {
         Sort.Direction sortDirection;
 
         if ("asc".equalsIgnoreCase(direction)) {
@@ -75,6 +75,6 @@ public class PageRequestValidation {
 
         return Arrays.stream(properties)
                 .map(property -> new Sort(property, sortDirection))
-                .collect(toCollection(LinkedHashSet::new));
+                .collect(Collectors.toList());
     }
 }
