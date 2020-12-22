@@ -13,22 +13,22 @@ public class LoggingMembershipNotifications implements MembershipNotifications {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggingMembershipNotifications.class);
 
     @Override
-    public void signUp(Account account) {
+    public void onSignUp(Account account) {
         LOGGER.info("The account " + account + " signed up");
     }
 
     @Override
-    public void activate(Account account) {
+    public void onActivate(Account account) {
         LOGGER.info("The account " + account + " activated");
     }
 
     @Override
-    public void newPassword(Account account) {
+    public void onNewPassword(Account account) {
         LOGGER.info("The account " + account + " requested a new password");
     }
 
     @Override
-    public void resetPassword(Account account) {
+    public void onResetPassword(Account account) {
         LOGGER.info("The account " + account + " reseted its password");
     }
 }

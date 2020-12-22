@@ -47,7 +47,7 @@ public class MembershipService {
 
         Account account = accountDetailsService.signUp(signUpRequest);
         eventLogService.create(String.format("%s signed up", account.username));
-        membershipNotifications.signUp(account);
+        membershipNotifications.onSignUp(account);
 
         LOGGER.info(String.format("%s signed up", account));
 
@@ -64,7 +64,7 @@ public class MembershipService {
 
         account = accountDetailsService.activate(account, activationToken);
         eventLogService.create(String.format("%s activated its account", account.username));
-        membershipNotifications.activate(account);
+        membershipNotifications.onActivate(account);
         LOGGER.info(String.format("%s activated", account));
     }
 
@@ -76,7 +76,7 @@ public class MembershipService {
 
         Account account = accountService.findOne(accountId);
         eventLogService.create(String.format("%s requested a new password ", account.username));
-        membershipNotifications.newPassword(account);
+        membershipNotifications.onNewPassword(account);
 
         LOGGER.info(String.format("%s requested a new password", account));
     }
@@ -91,7 +91,7 @@ public class MembershipService {
 
         account = accountDetailsService.resetPassword(account, resetPasswordToken, newPassword);
         eventLogService.create(String.format("%s reseted its password ", account.username));
-        membershipNotifications.resetPassword(account);
+        membershipNotifications.onResetPassword(account);
         LOGGER.info(String.format("%s reseted its password", account));
     }
 }
