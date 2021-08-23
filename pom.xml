@@ -33,7 +33,7 @@
         <querydsl-crud.version>0.1</querydsl-crud.version>
         <junit-jupiter.version>5.7.0</junit-jupiter.version>
         <junit-sql.version>0.1</junit-sql.version>
-        <jsoup.version>1.13.1</jsoup.version>
+        <jsoup.version>1.14.2</jsoup.version>
         <imgscalr.version>4.2</imgscalr.version>
         <joda-time.version>2.10.6</joda-time.version>
         <sql.schema>${project.basedir}/src/test/resources/db/schema.sql</sql.schema>
