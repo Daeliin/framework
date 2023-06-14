@@ -29,7 +29,7 @@
         <commons-text.version>1.9</commons-text.version>
         <commons-codec.version>1.15</commons-codec.version>
         <commons-validator.version>1.7</commons-validator.version>
-        <guava.version>29.0-jre</guava.version>
+        <guava.version>32.0.0-jre</guava.version>
         <querydsl-crud.version>0.1</querydsl-crud.version>
         <junit-jupiter.version>5.7.0</junit-jupiter.version>
         <junit-sql.version>0.1</junit-sql.version>
